@@ -1,124 +1,199 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>8. Osztály - Matematika</title>
-  <!-- Tailwind CSS beágyazása -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome ikonok -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0369a1',
-              700: '#075985',
-              800: '#0c4a6e',
-            }
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8. Osztály - Matematika</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --accent-blue: #0284c7;
+            --border-color: #334155;
         }
-      }
-    }
-  </script>
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #1e293b;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .btn-back {
+            background-color: var(--accent-blue);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .layout {
+            display: flex;
+            max-width: 1300px;
+            margin: 20px auto;
+            gap: 20px;
+            padding: 0 15px;
+        }
+
+        /* BAL OLDALI SÁV: ARCHÍVUM / ELRAKTÁROZOTT ÓRÁK */
+        .sidebar {
+            width: 280px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .archive-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .archive-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .archive-item:hover {
+            background-color: #334155;
+            color: #38bdf8;
+        }
+
+        /* JOBB OLDALI FŐRÉSZ: AKTUÁLIS ÓRA */
+        .main-content {
+            flex-grow: 1;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .task-card-mini {
+            background-color: #0f172a;
+            border: 1px dashed var(--accent-blue);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .task-card-mini:hover {
+            background-color: #1a2638;
+        }
+
+        /* LEBEGŐ ABLAK (MODAL) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-width: 650px;
+            width: 90%;
+            padding: 25px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .modal-close:hover {
+            color: #ef4444;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+<body>
 
-  <!-- Fejléc / Navigáció -->
-  <header class="bg-brand-700 text-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <i class="fa-solid font-bold text-2xl fa-graduation-cap"></i>
-        <h1 class="text-xl font-bold tracking-wide">6. Osztály - Matematika</h1>
-      </div>
-      <a href="index.html" class="bg-brand-600 hover:bg-brand-800 text-white px-4 py-2 rounded-lg font-medium transition duration-200 flex items-center gap-2">
-        <i class="fa-solid fa-house"></i> Vissza a főoldalra
-      </a>
+    <header>
+        <h2>6. Osztály - Matematika</h2>
+        <a href="index.html" class="btn-back">⬅ Vissza a Főoldalra</a>
+    </header>
+
+    <div class="layout">
+        
+        <!-- OLDALSÁV (ARCHÍVUM SÁV A KORÁBBI ÓRÁKNAK) -->
+        <aside class="sidebar">
+            <h3>📂 Órai Archívum</h3>
+            <ul class="archive-list">
+                <li class="archive-item">📅 [Dátum] - Tananyag címe</li>
+                <li class="archive-item">📅 [Dátum] - Tananyag címe</li>
+                <li class="archive-item">📅 [Dátum] - Tananyag címe</li>
+            </ul>
+        </aside>
+
+        <!-- FŐTERÜLET (AKTUÁLIS ÓRAI TARTALOM) -->
+        <main class="main-content">
+            <h3>Aktuális órai tananyag</h3>
+            
+            <div class="task-card-mini" onclick="openModal('modal-task')">
+                <p><strong>Órai munka / Házi feladat / Szorgalmi előnézete</strong></p>
+                <p style="color: #94a3b8; font-size: 0.85rem;">🔍 Kattints ide a feladat teljes megnyitásához (Lebegő ablak)...</p>
+            </div>
+        </main>
+
     </div>
-  </header>
 
-  <!-- Fő tartalom -->
-  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full space-y-8">
-
-    <!-- 1. DOBOZ: ÓRAI FELADATOK -->
-    <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
-      <div class="bg-brand-600 text-white px-6 py-4 flex items-center gap-3">
-        <i class="fa-solid fa-book-open text-2xl"></i>
-        <h2 class="text-2xl font-bold">1. Órai feladatok</h2>
-      </div>
-      <div class="p-6 space-y-6">
-        
-        <!-- Minta Bejegyzés / Tananyag -->
-        <div class="border-b border-slate-100 pb-6 last:border-b-0 last:pb-0">
-          <h3 class="text-xl font-semibold text-brand-800 mb-2">Téma: Törtek egyszerűsítése és bővítése</h3>
-          <p class="text-slate-600 mb-4">Tankönyv: 45. oldal - 48. oldal</p>
-
-          <!-- Képek rácsa (Tankönyv címlap / Táblakép) -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-            <div>
-              <p class="text-sm font-medium text-slate-500 mb-1">Tankönyvi feladat / Cím:</p>
-              <img src="https://via.placeholder.com/600x400?text=Tankonyv+Cim" alt="Tankönyv kép" class="rounded-lg border border-slate-200 w-full object-cover max-h-60">
-            </div>
-            <div>
-              <p class="text-sm font-medium text-slate-500 mb-1">Táblakép #1:</p>
-              <img src="https://via.placeholder.com/600x400?text=Tablakep" alt="Táblakép" class="rounded-lg border border-slate-200 w-full object-cover max-h-60">
-            </div>
-          </div>
+    <!-- LEBEGŐ ABLAK (MODAL) -->
+    <div id="modal-task" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-task')">&times;</span>
+            <h3 style="color: #38bdf8;">Aktuális feladatsor</h3>
+            <p>[ Itt jelennek meg a részletes feladatok, képletek és megtekinthető megoldások ]</p>
         </div>
+    </div>
 
-      </div>
-    </section>
-
-    <!-- 2. DOBOZ: HÁZI FELADAT -->
-    <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
-      <div class="bg-amber-600 text-white px-6 py-4 flex items-center gap-3">
-        <i class="fa-solid fa-pen-to-square text-2xl"></i>
-        <h2 class="text-2xl font-bold">2. Házi feladat</h2>
-      </div>
-      <div class="p-6 space-y-4">
-        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
-          <h3 class="text-lg font-bold text-amber-900">Határidő: Következő óra (Péntek)</h3>
-          <p class="text-amber-800 mt-1"><strong>Munkafüzet:</strong> 22. oldal 3., 4. és 5. feladatok.</p>
-        </div>
-
-        <p class="text-slate-600">Fotó a házi feladatról és a kapcsolódó példákról:</p>
-        <div class="max-w-md">
-          <img src="https://via.placeholder.com/600x400?text=Hazi+Feladat+Foto" alt="Házi feladat" class="rounded-lg border border-slate-200 w-full object-cover">
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. DOBOZ: SZORGLMI FELADAT -->
-    <section class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
-      <div class="bg-emerald-600 text-white px-6 py-4 flex items-center gap-3">
-        <i class="fa-solid fa-star text-2xl"></i>
-        <h2 class="text-2xl font-bold">3. Szorgalmi feladat (Opcionális)</h2>
-      </div>
-      <div class="p-6 space-y-4">
-        <p class="text-slate-700">Aki szeretne piros pontot vagy ötöst szerezni, oldja meg az alábbi feladatot szorgalmiként:</p>
-        
-        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-          <p class="font-semibold text-emerald-900">Okosdobó / Online Gyakorló feladat:</p>
-          <p class="text-emerald-800 text-sm mt-1">Oldd meg a megadott törtekkel kapcsolatos online tesztet!</p>
-        </div>
-
-        <div class="max-w-md">
-          <img src="https://via.placeholder.com/600x400?text=Szorgalmi+Foto" alt="Szorgalmi feladat" class="rounded-lg border border-slate-200 w-full object-cover">
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Lábléc -->
-  <footer class="bg-slate-800 text-slate-400 text-center py-6 mt-12">
-    <p>© 2026 CsernyeSuli - Matematika Osztályoldal</p>
-  </footer>
+    <script>
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>

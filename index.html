@@ -37,7 +37,7 @@
         .card-box.hazi { border-top: 5px solid #e67e22; }
         .card-box.szorgalmi { border-top: 5px solid #2ecc71; }
         
-        .card-box h3 { color: #2c3e50; margin-bottom: 12px; display: flex; align-align: center; gap: 8px; }
+        .card-box h3 { color: #2c3e50; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
         /* Szerencsekerék stílusok */
         .wheel-container { position: relative; display: inline-block; margin: 15px 0; }
@@ -50,8 +50,8 @@
         .solution-btn { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-top: 8px; font-size: 14px; }
         .solution-text { display: none; font-size: 18px; font-weight: bold; color: #27ae60; margin-top: 8px; }
         
-        ul.task-list { margin-left: 20px; margin-top: 8px; }
-        ul.task-list li { margin-bottom: 5px; }
+        ul.task-list { margin-left: 20px; margin-top: 8px; list-style-type: none; }
+        ul.task-list li { margin-bottom: 8px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -80,7 +80,6 @@
                             <div class="lesson-date">09. 30.</div>
                             <div class="lesson-title">Műveletek egész számokkal</div>
                         </li>
-                        <!-- Ide kerülhetnek a későbbi / korábbi órák -->
                     </ul>
                 </div>
 
@@ -114,16 +113,16 @@
                         <h3>🏠 Házi feladat</h3>
                         <p>Számítsd ki a füzetedben a következő kifejezések értékét:</p>
                         <ul class="task-list">
-                            <li><b>1.</b> $(-12) + (+8) - (-5) = \dots$</li>
-                            <li><b>2.</b> $(+15) - (+20) + (-7) = \dots$</li>
-                            <li><b>3.</b> $(-8) - (-14) + (-6) = \dots$</li>
+                            <li><b>1.</b> (−12) + (+8) − (−5) = ...</li>
+                            <li><b>2.</b> (+15) − (+20) + (−7) = ...</li>
+                            <li><b>3.</b> (−8) − (−14) + (−6) = ...</li>
                         </ul>
                     </div>
 
                     <!-- 3. SZORGALMI FELADAT -->
                     <div class="card-box szorgalmi">
                         <h3>⭐ Szorgalmi feladat (Piros pontért)</h3>
-                        <p>Írj fel egy olyan 4 tagú egész számos műveletsort, amelynek a végeredménye pontosan <b>$-10$</b>! Ellenőrizd a levezetésed a füzetben!</p>
+                        <p>Írj fel egy olyan 4 tagú egész számos műveletsort, amelynek a végeredménye pontosan <b>−10</b>! Ellenőrizd a levezetésed a füzetben!</p>
                     </div>
 
                 </div>
@@ -157,7 +156,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Feladatok egész számokkal (pozitív és negatív számok)
+        // Feladatok egész számokkal
         const tasks = [
             { text: "(-5) + (+8) - (+3)", result: "0" },
             { text: "(+12) - (+15) + (-4)", result: "-7" },

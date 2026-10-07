@@ -3,269 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6. Osztályos Matematika Feladatok - 09. 30.</title>
+    <title>Matematika Portál - Főoldal</title>
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --accent-blue: #0284c7;
+            --accent-gold: #d97706;
+            --border-color: #334155;
+        }
+
         body {
-            background-color: #0f172a;
-            color: #e2e8f0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        /* 3 FŐGOMB FENT */
+        nav {
+            background-color: #1e293b;
             display: flex;
             justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .math-container {
-            max-width: 750px;
-            width: 100%;
-            margin: 20px auto;
-            padding: 25px;
-            background-color: #1e293b;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
-            color: #e2e8f0;
-        }
-
-        .header-box {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
-            border-left: 5px solid #38bdf8;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .header-box p {
-            margin: 6px 0;
-            font-weight: 600;
-            color: #e0f2fe;
-            font-size: 1rem;
-        }
-
-        .header-bullet {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #38bdf8;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .main-title {
-            color: #f8fafc;
-            font-size: 1.4rem;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #334155;
-            font-weight: bold;
-        }
-
-        .task-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            margin-bottom: 25px;
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .task-item:hover {
-            border-color: #475569;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .task-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        nav a {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 12px 28px;
             font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .task-label {
-            font-weight: 700;
-            color: #38bdf8;
-            min-width: 24px;
-        }
-
-        .task-formula {
-            display: flex;
-            align-items: center;
-        }
-
-        .task-formula img {
-            vertical-align: middle;
-            max-height: 48px;
-            filter: invert(1) hue-rotate(180deg); /* Sötét módhoz igazított képek */
-        }
-
-        .answer-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn-show {
-            background-color: #0284c7;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
             font-weight: 600;
-            transition: all 0.2s ease;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s;
         }
 
-        .btn-show:hover {
+        nav a:hover {
             background-color: #38bdf8;
             color: #0f172a;
         }
 
-        .result-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #10b981;
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* 3 OSZTÁLY DOBOZ / MONTÁZS */
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .class-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+        }
+
+        .class-card h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .montage-placeholder {
+            color: #94a3b8;
+            font-style: italic;
+            margin: 15px 0;
+            flex-grow: 1;
+        }
+
+        .btn-link {
+            display: inline-block;
+            background-color: #334155;
             color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 6px 18px;
-            border-radius: 8px;
-            min-width: 50px;
-            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            visibility: hidden;
+            text-decoration: none;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
-        .result-badge.visible {
-            opacity: 1;
-            transform: scale(1);
-            visibility: visible;
+        .btn-link:hover {
+            background-color: var(--accent-blue);
         }
 
-        @media (max-width: 600px) {
-            .task-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 16px;
-            }
+        /* ZRÍNYI MATEMATIKA VERSENY DOBOZ / FÜL */
+        .competition-card {
+            background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
 
-            .answer-container {
-                width: 100%;
-                justify-content: flex-end;
-                margin-top: 8px;
-            }
+        .competition-card h3 {
+            color: #f59e0b;
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="math-container">
-        <div class="header-box">
-            <p><span class="header-bullet"></span><strong>Hf.:</strong> a) és c)</p>
-            <p><span class="header-bullet"></span><strong>Többi:</strong> szorgalmi</p>
+    <header>
+        <h1>Matematika Portál</h1>
+        <p>Üdvözöljük a felkészítő és tananyag portálon!</p>
+    </header>
+
+    <!-- FELSŐ 3 OSZTÁLYGOMB -->
+    <nav>
+        <a href="6-osztaly.html">6. Osztály</a>
+        <a href="7-osztaly.html">7. Osztály</a>
+        <a href="8-osztaly.html">8. Osztály</a>
+    </nav>
+
+    <div class="container">
+        
+        <!-- 3 AKTUÁLIS MONTÁZS DOBOZ -->
+        <h2 style="text-align: center; margin-bottom: 20px;">Aktuális osztály-összefoglalók</h2>
+        
+        <div class="class-grid">
+            
+            <!-- 6. OSZTÁLY DOBOZ -->
+            <div class="class-card">
+                <h3>6. Osztály</h3>
+                <div class="montage-placeholder">
+                    [ A 6. osztály legfrissebb órai montázsa, házi feladata és szorgalmija helye ]
+                </div>
+                <a href="6-osztaly.html" class="btn-link">Megnyitás ➔</a>
+            </div>
+
+            <!-- 7. OSZTÁLY DOBOZ -->
+            <div class="class-card">
+                <h3>7. Osztály</h3>
+                <div class="montage-placeholder">
+                    [ A 7. osztály legfrissebb órai montázsa, házi feladata és szorgalmija helye ]
+                </div>
+                <a href="7-osztaly.html" class="btn-link">Megnyitás ➔</a>
+            </div>
+
+            <!-- 8. OSZTÁLY DOBOZ -->
+            <div class="class-card">
+                <h3>8. Osztály</h3>
+                <div class="montage-placeholder">
+                    [ A 8. osztály legfrissebb órai montázsa, házi feladata és szorgalmija helye ]
+                </div>
+                <a href="8-osztaly.html" class="btn-link">Megnyitás ➔</a>
+            </div>
+
         </div>
 
-        <div class="main-title">
-            Végezd el a kijelölt műveleteket! (09. 30.)
+        <!-- ZRÍNYI MATEMATIKA VERSENY DOBOZ (Előkészítve) -->
+        <div class="competition-card">
+            <h3>🏆 Zrínyi Ilona Matematika Verseny</h3>
+            <p style="color: #cbd5e1;">[ Külön részleg a versenyfelkészüléshez, feladatsorokhoz és tájékoztatókhoz ]</p>
         </div>
 
-        <ul class="task-list">
-            <!-- a) feladat -->
-            <li class="task-item">
-                <div class="task-content">
-                    <span class="task-label">a)</span>
-                    <span class="task-formula">
-                        <img src="https://latex.codecogs.com/svg.latex?(11-5)%5Ccdot%202%2B7%5Ccdot%204%3A2%20%3D" alt="(11-5)*2+7*4:2 =">
-                    </span>
-                </div>
-                <div class="answer-container">
-                    <button class="btn-show" onclick="toggleResult('res-a')">Megoldás mutatása</button>
-                    <span class="result-badge" id="res-a">26</span>
-                </div>
-            </li>
-
-            <!-- b) feladat -->
-            <li class="task-item">
-                <div class="task-content">
-                    <span class="task-label">b)</span>
-                    <span class="task-formula">
-                        <img src="https://latex.codecogs.com/svg.latex?4%5Ccdot%20%5Cfrac%7B1%7D%7B2%7D-0%2C5%20%3D" alt="4*(1/2)-0,5 =">
-                    </span>
-                </div>
-                <div class="answer-container">
-                    <button class="btn-show" onclick="toggleResult('res-b')">Megoldás mutatása</button>
-                    <span class="result-badge" id="res-b">1,5</span>
-                </div>
-            </li>
-
-            <!-- c) feladat -->
-            <li class="task-item">
-                <div class="task-content">
-                    <span class="task-label">c)</span>
-                    <span class="task-formula">
-                        <img src="https://latex.codecogs.com/svg.latex?(-3)-(-4)%2B(-1)%20%3D" alt="(-3)-(-4)+(-1) =">
-                    </span>
-                </div>
-                <div class="answer-container">
-                    <button class="btn-show" onclick="toggleResult('res-c')">Megoldás mutatása</button>
-                    <span class="result-badge" id="res-c">0</span>
-                </div>
-            </li>
-
-            <!-- d) feladat -->
-            <li class="task-item">
-                <div class="task-content">
-                    <span class="task-label">d)</span>
-                    <span class="task-formula">
-                        <img src="https://latex.codecogs.com/svg.latex?3%2C2%3A2%2B1%2C4%20%3D" alt="3,2:2+1,4 =">
-                    </span>
-                </div>
-                <div class="answer-container">
-                    <button class="btn-show" onclick="toggleResult('res-d')">Megoldás mutatása</button>
-                    <span class="result-badge" id="res-d">3</span>
-                </div>
-            </li>
-
-            <!-- e) feladat -->
-            <li class="task-item">
-                <div class="task-content">
-                    <span class="task-label">e)</span>
-                    <span class="task-formula">
-                        <img src="https://latex.codecogs.com/svg.latex?%5Cleft(%5Cfrac%7B4%7D%7B5%7D-0%2C4%5Cright)%3A2%20%3D" alt="(4/5 - 0,4):2 =">
-                    </span>
-                </div>
-                <div class="answer-container">
-                    <button class="btn-show" onclick="toggleResult('res-e')">Megoldás mutatása</button>
-                    <span class="result-badge" id="res-e">0,2</span>
-                </div>
-            </li>
-        </ul>
     </div>
 
-    <script>
-        function toggleResult(elementId) {
-            var badge = document.getElementById(elementId);
-            if (badge) {
-                badge.classList.toggle('visible');
-            }
-        }
-    </script>
 </body>
 </html>

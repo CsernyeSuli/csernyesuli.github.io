@@ -35,7 +35,7 @@
 
     <header>
         <h1>CsernyeSuli Oktatási Portál</h1>
-        <p>Inaktív külső linkek helyett beépített interaktív feladatok!</p>
+        <p>Interaktív matematika feladatok</p>
     </header>
 
     <nav>
@@ -86,7 +86,6 @@
     </div>
 
     <script>
-        // Osztályok közötti váltás
         function openClass(className) {
             const sections = document.querySelectorAll('.class-section');
             const buttons = document.querySelectorAll('.tab-btn');
@@ -98,13 +97,13 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Szerencsekerék Adatok (Könnyen szerkeszthető/bővíthető)
+        // Javított eredmények (egész számoknál nincs tizedesjegy)
         const tasks = [
             { text: "12,5 + 3,8 - 4,2", result: "12,1" },
             { text: "45,6 - 12,3 + 8,1", result: "41,4" },
-            { text: "100 - 34,5 - 12,5", result: "53,0" },
-            { text: "7,8 + 15,2 - 6,0", result: "17,0" },
-            { text: "50,5 - 20,2 + 5,7", result: "36,0" },
+            { text: "100 - 34,5 - 12,5", result: "53" },
+            { text: "7,8 + 15,2 - 6,0", result: "17" },
+            { text: "50,5 - 20,2 + 5,7", result: "36" },
             { text: "8,4 + 9,6 - 3,5", result: "14,5" }
         ];
 
@@ -117,7 +116,6 @@
         let isSpinning = false;
         let selectedTask = null;
 
-        // Kerék kirajzolása
         function drawWheel() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < numSegments; i++) {
@@ -130,7 +128,6 @@
                 ctx.fill();
                 ctx.stroke();
 
-                // Szöveg kirajzolása
                 ctx.save();
                 ctx.translate(150, 150);
                 ctx.rotate(angle + arcSize / 2);
@@ -142,7 +139,6 @@
             }
         }
 
-        // Pörgetés logika
         function spinWheel() {
             if (isSpinning) return;
             isSpinning = true;
@@ -150,7 +146,7 @@
             document.getElementById("solutionText").style.display = "none";
             document.getElementById("taskText").innerText = "Pörgés folyamatban...";
 
-            const spinAngle = Math.random() * 2000 + 2000; // Véletlenszerű forgás
+            const spinAngle = Math.random() * 2000 + 2000;
             const duration = 4000;
             const start = performance.now();
 
@@ -164,7 +160,6 @@
                 } else {
                     isSpinning = false;
                     const normalizedAngle = (2 * Math.PI - (currentAngle % (2 * Math.PI))) % (2 * Math.PI);
-                    // Korrigálás a felső mutatóhoz
                     const index = Math.floor(((normalizedAngle + Math.PI / 2) % (2 * Math.PI)) / arcSize);
                     selectedTask = tasks[index];
                     

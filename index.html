@@ -20,10 +20,10 @@
         .lesson-layout { display: flex; gap: 20px; flex-wrap: wrap; }
         
         /* Oldalsáv (Archívum) */
-        .sidebar { flex: 1; min-width: 250px; background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); height: fit-content; }
+        .sidebar { flex: 1; min-width: 260px; background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); height: fit-content; }
         .sidebar h3 { color: #2c3e50; margin-bottom: 12px; font-size: 16px; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
         .lesson-list { list-style: none; }
-        .lesson-item { padding: 10px; border-radius: 6px; cursor: pointer; margin-bottom: 6px; background: #f8f9fa; transition: 0.2s; border-left: 4px solid #3498db; }
+        .lesson-item { padding: 10px; border-radius: 6px; cursor: pointer; margin-bottom: 8px; background: #f8f9fa; transition: 0.2s; border-left: 4px solid #3498db; }
         .lesson-item:hover, .lesson-item.active { background: #e8f4fc; border-left-color: #1abc9c; }
         .lesson-date { font-size: 12px; color: #7f8c8d; font-weight: bold; }
         .lesson-title { font-size: 14px; color: #2c3e50; font-weight: 600; }
@@ -37,23 +37,28 @@
         .card-box.hazi { border-top: 5px solid #e67e22; }
         .card-box.szorgalmi { border-top: 5px solid #2ecc71; }
         
-        .card-box h3 { color: #2c3e50; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .card-box h3 { color: #2c3e50; margin-bottom: 12px; display: flex; align-align: center; gap: 8px; }
 
         /* Szerencsekerék stílusok */
         .wheel-container { position: relative; display: inline-block; margin: 15px 0; }
         canvas { border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .pointer { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #e74c3c; z-index: 10; }
-        .spin-btn { background-color: #e67e22; color: white; border: none; padding: 10px 24px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 20px; }
+        .spin-btn { background-color: #e67e22; color: white; border: none; padding: 10px 24px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 20px; transition: 0.2s; }
+        .spin-btn:hover { background-color: #d35400; }
+        
         .task-display { background: #ecf0f1; border-radius: 8px; padding: 15px; margin-top: 15px; text-align: center; }
-        .solution-btn { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-top: 8px; }
-        .solution-text { display: none; font-size: 16px; font-weight: bold; color: #27ae60; margin-top: 8px; }
+        .solution-btn { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-top: 8px; font-size: 14px; }
+        .solution-text { display: none; font-size: 18px; font-weight: bold; color: #27ae60; margin-top: 8px; }
+        
+        ul.task-list { margin-left: 20px; margin-top: 8px; }
+        ul.task-list li { margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>CsernyeSuli Oktatási Portál</h1>
-        <p>Órai munkák, házi feladatok és szorgalmi gyakorlók</p>
+        <p>Interaktív órai anyagok, házi feladatok és gyakorlók</p>
     </header>
 
     <nav>
@@ -69,16 +74,13 @@
                 
                 <!-- BAL OLDALSÁV: KORÁBBI ÓRÁK LISTÁJA -->
                 <div class="sidebar">
-                    <h3>📅 Korábbi órák / Archívum</h3>
+                    <h3>📅 Órák / Archívum</h3>
                     <ul class="lesson-list">
-                        <li class="lesson-item active" onclick="loadLesson('latest')">
-                            <div class="lesson-date">2026.10.07.</div>
-                            <div class="lesson-title">Összeadás, kivonás műveletsorok</div>
+                        <li class="lesson-item active">
+                            <div class="lesson-date">09. 30.</div>
+                            <div class="lesson-title">Műveletek egész számokkal</div>
                         </li>
-                        <li class="lesson-item" onclick="loadLesson('prev1')">
-                            <div class="lesson-date">2026.09.30.</div>
-                            <div class="lesson-title">Tizedestörtek kerekítése</div>
-                        </li>
+                        <!-- Ide kerülhetnek a későbbi / korábbi órák -->
                     </ul>
                 </div>
 
@@ -87,8 +89,8 @@
                     
                     <!-- 1. ÓRAI MUNKA -->
                     <div class="card-box orai">
-                        <h3>📖 Órai munka - <span id="currentLessonTitle">Összeadás, kivonás műveletsorok</span></h3>
-                        <p>Gyakoroljuk az összeadást és kivonást a szerencsekerék segítségével!</p>
+                        <h3>📖 Órai munka (09. 30.) - Műveletek egész számokkal</h3>
+                        <p>Gyakoroljuk az egész számok (pozitív és negatív számok) összeadását és kivonását a szerencsekerék segítségével!</p>
                         
                         <div style="text-align: center;">
                             <div class="wheel-container">
@@ -110,14 +112,18 @@
                     <!-- 2. HÁZI FELADAT -->
                     <div class="card-box hazi">
                         <h3>🏠 Házi feladat</h3>
-                        <p>Oldd meg a füzetben a Tankönyv 42. oldaláról a <b>3/a, b</b> és <b>4/a</b> feladatokat!</p>
-                        <p><i>Határidő: Következő matematika óra.</i></p>
+                        <p>Számítsd ki a füzetedben a következő kifejezések értékét:</p>
+                        <ul class="task-list">
+                            <li><b>1.</b> $(-12) + (+8) - (-5) = \dots$</li>
+                            <li><b>2.</b> $(+15) - (+20) + (-7) = \dots$</li>
+                            <li><b>3.</b> $(-8) - (-14) + (-6) = \dots$</li>
+                        </ul>
                     </div>
 
                     <!-- 3. SZORGALMI FELADAT -->
                     <div class="card-box szorgalmi">
                         <h3>⭐ Szorgalmi feladat (Piros pontért)</h3>
-                        <p>Készíts egy saját 3 tagú műveletsort tizedesviszonyokká alakítva, és számold ki a végeredményét a füzetedben!</p>
+                        <p>Írj fel egy olyan 4 tagú egész számos műveletsort, amelynek a végeredménye pontosan <b>$-10$</b>! Ellenőrizd a levezetésed a füzetben!</p>
                     </div>
 
                 </div>
@@ -151,14 +157,14 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Szerencsekerék beállítások
+        // Feladatok egész számokkal (pozitív és negatív számok)
         const tasks = [
-            { text: "12,5 + 3,8 - 4,2", result: "12,1" },
-            { text: "45,6 - 12,3 + 8,1", result: "41,4" },
-            { text: "100 - 34,5 - 12,5", result: "53" },
-            { text: "7,8 + 15,2 - 6,0", result: "17" },
-            { text: "50,5 - 20,2 + 5,7", result: "36" },
-            { text: "8,4 + 9,6 - 3,5", result: "14,5" }
+            { text: "(-5) + (+8) - (+3)", result: "0" },
+            { text: "(+12) - (+15) + (-4)", result: "-7" },
+            { text: "(-10) - (-6) + (+2)", result: "-2" },
+            { text: "(+7) + (-9) - (-5)", result: "3" },
+            { text: "(-15) + (-5) - (-10)", result: "-10" },
+            { text: "(+8) - (-12) + (-5)", result: "15" }
         ];
 
         const colors = ["#f1c40f", "#e67e22", "#e74c3c", "#9b59b6", "#3498db", "#2ecc71"];

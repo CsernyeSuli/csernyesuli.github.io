@@ -7,35 +7,53 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
-        header { background-color: #2c3e50; color: white; text-align: center; padding: 2rem 1rem; }
+        header { background-color: #2c3e50; color: white; text-align: center; padding: 1.5rem 1rem; }
         nav { background-color: #34495e; display: flex; justify-content: center; gap: 10px; padding: 10px; flex-wrap: wrap; }
         nav button { background-color: #1abc9c; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
         nav button:hover, nav button.active { background-color: #16a085; }
-        .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
+        
+        .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
         .class-section { display: none; }
         .class-section.active { display: block; }
         
-        /* Szerencsekerék stílusok */
-        .wheel-box { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; margin-top: 20px; }
-        .wheel-container { position: relative; display: inline-block; margin: 20px 0; }
-        canvas { border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid #e74c3c; z-index: 10; }
-        .spin-btn { background-color: #e67e22; color: white; border: none; padding: 12px 30px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 25px; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .spin-btn:hover { background-color: #d35400; transform: scale(1.05); }
+        /* Layout oldalsávval */
+        .lesson-layout { display: flex; gap: 20px; flex-wrap: wrap; }
         
-        /* Feladat megjelenítő */
-        .task-display { background: #ecf0f1; border-radius: 8px; padding: 20px; margin-top: 20px; text-align: center; }
-        .task-title { font-size: 14px; text-transform: uppercase; color: #7f8c8d; font-weight: bold; }
-        .task-text { font-size: 24px; font-weight: bold; color: #2c3e50; margin: 10px 0; }
-        .solution-btn { background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-size: 14px; }
-        .solution-text { display: none; font-size: 18px; font-weight: bold; color: #27ae60; margin-top: 10px; }
+        /* Oldalsáv (Archívum) */
+        .sidebar { flex: 1; min-width: 250px; background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); height: fit-content; }
+        .sidebar h3 { color: #2c3e50; margin-bottom: 12px; font-size: 16px; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
+        .lesson-list { list-style: none; }
+        .lesson-item { padding: 10px; border-radius: 6px; cursor: pointer; margin-bottom: 6px; background: #f8f9fa; transition: 0.2s; border-left: 4px solid #3498db; }
+        .lesson-item:hover, .lesson-item.active { background: #e8f4fc; border-left-color: #1abc9c; }
+        .lesson-date { font-size: 12px; color: #7f8c8d; font-weight: bold; }
+        .lesson-title { font-size: 14px; color: #2c3e50; font-weight: 600; }
+
+        /* Fő tartalom alapterület */
+        .main-content { flex: 3; min-width: 300px; }
+        
+        /* Modul kártyák */
+        .card-box { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card-box.orai { border-top: 5px solid #3498db; }
+        .card-box.hazi { border-top: 5px solid #e67e22; }
+        .card-box.szorgalmi { border-top: 5px solid #2ecc71; }
+        
+        .card-box h3 { color: #2c3e50; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
+        /* Szerencsekerék stílusok */
+        .wheel-container { position: relative; display: inline-block; margin: 15px 0; }
+        canvas { border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .pointer { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #e74c3c; z-index: 10; }
+        .spin-btn { background-color: #e67e22; color: white; border: none; padding: 10px 24px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 20px; }
+        .task-display { background: #ecf0f1; border-radius: 8px; padding: 15px; margin-top: 15px; text-align: center; }
+        .solution-btn { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-top: 8px; }
+        .solution-text { display: none; font-size: 16px; font-weight: bold; color: #27ae60; margin-top: 8px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>CsernyeSuli Oktatási Portál</h1>
-        <p>Interaktív matematika feladatok</p>
+        <p>Órai munkák, házi feladatok és szorgalmi gyakorlók</p>
     </header>
 
     <nav>
@@ -47,40 +65,78 @@
     <div class="container">
         <!-- 6. OSZTÁLY -->
         <section id="osztaly6" class="class-section active">
-            <h2>6. Osztály: Matematikai Szerencsekerék</h2>
-            <p>Pörgesd meg a kereket és oldd meg a kisorsolt összeadási/kivonási műveletsort!</p>
-
-            <div class="wheel-box">
-                <div class="wheel-container">
-                    <div class="pointer"></div>
-                    <canvas id="wheel" width="300" height="300"></canvas>
+            <div class="lesson-layout">
+                
+                <!-- BAL OLDALSÁV: KORÁBBI ÓRÁK LISTÁJA -->
+                <div class="sidebar">
+                    <h3>📅 Korábbi órák / Archívum</h3>
+                    <ul class="lesson-list">
+                        <li class="lesson-item active" onclick="loadLesson('latest')">
+                            <div class="lesson-date">2026.10.07.</div>
+                            <div class="lesson-title">Összeadás, kivonás műveletsorok</div>
+                        </li>
+                        <li class="lesson-item" onclick="loadLesson('prev1')">
+                            <div class="lesson-date">2026.09.30.</div>
+                            <div class="lesson-title">Tizedestörtek kerekítése</div>
+                        </li>
+                    </ul>
                 </div>
-                <div>
-                    <button class="spin-btn" onclick="spinWheel()">Pörgetés!</button>
-                </div>
 
-                <div class="task-display">
-                    <div class="task-title">Kiválasztott feladat</div>
-                    <div id="taskText" class="task-text">Pörgesd meg a kereket!</div>
-                    <button id="solutionBtn" class="solution-btn" style="display:none;" onclick="toggleSolution()">Eredmény mutatása</button>
-                    <div id="solutionText" class="solution-text"></div>
+                <!-- JOBB FŐABLAKPANEL: AKTUÁLIS ÓRA TARTALMA -->
+                <div class="main-content">
+                    
+                    <!-- 1. ÓRAI MUNKA -->
+                    <div class="card-box orai">
+                        <h3>📖 Órai munka - <span id="currentLessonTitle">Összeadás, kivonás műveletsorok</span></h3>
+                        <p>Gyakoroljuk az összeadást és kivonást a szerencsekerék segítségével!</p>
+                        
+                        <div style="text-align: center;">
+                            <div class="wheel-container">
+                                <div class="pointer"></div>
+                                <canvas id="wheel" width="260" height="260"></canvas>
+                            </div>
+                            <div>
+                                <button class="spin-btn" onclick="spinWheel()">Pörgetés!</button>
+                            </div>
+
+                            <div class="task-display">
+                                <div id="taskText" style="font-size:20px; font-weight:bold;">Pörgesd meg a kereket!</div>
+                                <button id="solutionBtn" class="solution-btn" style="display:none;" onclick="toggleSolution()">Eredmény mutatása</button>
+                                <div id="solutionText" class="solution-text"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. HÁZI FELADAT -->
+                    <div class="card-box hazi">
+                        <h3>🏠 Házi feladat</h3>
+                        <p>Oldd meg a füzetben a Tankönyv 42. oldaláról a <b>3/a, b</b> és <b>4/a</b> feladatokat!</p>
+                        <p><i>Határidő: Következő matematika óra.</i></p>
+                    </div>
+
+                    <!-- 3. SZORGALMI FELADAT -->
+                    <div class="card-box szorgalmi">
+                        <h3>⭐ Szorgalmi feladat (Piros pontért)</h3>
+                        <p>Készíts egy saját 3 tagú műveletsort tizedesviszonyokká alakítva, és számold ki a végeredményét a füzetedben!</p>
+                    </div>
+
                 </div>
             </div>
         </section>
 
         <!-- 7. OSZTÁLY -->
         <section id="osztaly7" class="class-section">
-            <h2>7. Osztályos Tananyagok</h2>
-            <div class="wheel-box">
-                <p>Itt alakítjuk ki a 7. osztályos saját interaktív feladatokat!</p>
+            <div class="card-box">
+                <h2>7. Osztályos Tananyagok</h2>
+                <p>A 7. osztályos elrendezés hamarosan feltöltésre kerül.</p>
             </div>
         </section>
 
         <!-- 8. OSZTÁLY -->
         <section id="osztaly8" class="class-section">
-            <h2>8. Osztályos Tananyagok</h2>
-            <div class="wheel-box">
-                <p>Itt alakítjuk ki a 8. osztályos saját interaktív feladatokat!</p>
+            <div class="card-box">
+                <h2>8. Osztályos Tananyagok</h2>
+                <p>A 8. osztályos elrendezés hamarosan feltöltésre kerül.</p>
             </div>
         </section>
     </div>
@@ -89,15 +145,13 @@
         function openClass(className) {
             const sections = document.querySelectorAll('.class-section');
             const buttons = document.querySelectorAll('.tab-btn');
-            
             sections.forEach(sec => sec.classList.remove('active'));
             buttons.forEach(btn => btn.classList.remove('active'));
-            
             document.getElementById(className).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // Javított eredmények (egész számoknál nincs tizedesjegy)
+        // Szerencsekerék beállítások
         const tasks = [
             { text: "12,5 + 3,8 - 4,2", result: "12,1" },
             { text: "45,6 - 12,3 + 8,1", result: "41,4" },
@@ -122,19 +176,19 @@
                 const angle = currentAngle + i * arcSize;
                 ctx.beginPath();
                 ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(150, 150);
-                ctx.arc(150, 150, 140, angle, angle + arcSize);
-                ctx.lineTo(150, 150);
+                ctx.moveTo(130, 130);
+                ctx.arc(130, 130, 120, angle, angle + arcSize);
+                ctx.lineTo(130, 130);
                 ctx.fill();
                 ctx.stroke();
 
                 ctx.save();
-                ctx.translate(150, 150);
+                ctx.translate(130, 130);
                 ctx.rotate(angle + arcSize / 2);
                 ctx.fillStyle = "white";
-                ctx.font = "bold 16px sans-serif";
+                ctx.font = "bold 14px sans-serif";
                 ctx.textAlign = "right";
-                ctx.fillText(`Feladat ${i + 1}`, 120, 5);
+                ctx.fillText(`Feladat ${i + 1}`, 105, 4);
                 ctx.restore();
             }
         }
@@ -144,10 +198,10 @@
             isSpinning = true;
             document.getElementById("solutionBtn").style.display = "none";
             document.getElementById("solutionText").style.display = "none";
-            document.getElementById("taskText").innerText = "Pörgés folyamatban...";
+            document.getElementById("taskText").innerText = "Pörgés...";
 
             const spinAngle = Math.random() * 2000 + 2000;
-            const duration = 4000;
+            const duration = 3000;
             const start = performance.now();
 
             function animate(time) {

@@ -116,7 +116,7 @@ h1 {
     flex-wrap: wrap;
 }
 
-/* Egyedi kártyák stílusa és lebegő kiemelkedés */
+/* Egyedi kártyák stílusa */
 .card {
     flex: 1;
     min-width: 220px;
@@ -126,6 +126,10 @@ h1 {
     padding: 20px;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     cursor: pointer;
+    
+    /* Függőleges elrendezés a kártyán belül */
+    display: flex;
+    flex-direction: column;
 }
 
 .card h3 {
@@ -138,12 +142,20 @@ h1 {
     font-size: 14px;
 }
 
-.card-link {
-    display: inline-block;
-    margin-top: 15px;
-    color: var(--accent-blue);
-    text-decoration: none;
-    font-weight: bold;
+/* Egyedi kártyák stílusa */
+.card {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    cursor: pointer;
+    
+    /* Függőleges elrendezés a kártyán belül */
+    display: flex;
+    flex-direction: column;
 }
 
 /* EGÉR HATÁS (HOVER): Kiemelkedés és finom világítás */

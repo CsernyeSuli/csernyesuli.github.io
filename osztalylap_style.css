@@ -13,28 +13,42 @@ body {
     color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 20px 0;
 }
 
+/* Fő konténer: ez határozza meg a teljes oldal szélességét (mind a fejléc, mind a dobozok ehhez igazodnak) */
+.main-container, header {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Fejléc stílusa (pontosan akkora szélességű lesz, mint az alsó dobozok) */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
+    background-color: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 30px;
+    margin-bottom: 25px;
 }
 
 h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 26px;
+    color: #ffffff;
 }
 
 .btn-home {
     background-color: var(--accent-blue);
     color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
     transition: background 0.2s;
@@ -44,35 +58,31 @@ h1 {
     background-color: #0369a1;
 }
 
-/* Fő konténer kinyújtása a képernyő szélességére */
+/* Az alsó fő konténer rács elrendezése */
 .main-container {
     display: flex;
-    gap: 20px;
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 10px;
-    box-sizing: border-box;
+    gap: 25px;
     flex-wrap: wrap;
 }
 
-/* Bal oldali Archívum doboz */
+/* Bal oldali Archívum doboz (kicsit nagyobb belső margóval a tágasabb hatásért) */
 .sidebar {
     flex: 1;
-    min-width: 260px;
+    min-width: 280px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px;
     height: fit-content;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .sidebar h3 {
     margin-top: 0;
     color: var(--accent-orange);
-    font-size: 18px;
+    font-size: 20px; /* Nagyobb, szembetűnőbb felirat */
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
 }
 
 .archive-list {
@@ -82,10 +92,11 @@ h1 {
 }
 
 .archive-item {
-    padding: 8px 0;
+    padding: 10px 0;
     border-bottom: 1px dashed var(--border-color);
     cursor: pointer;
     color: #94a3b8;
+    font-size: 15px;
     transition: color 0.2s;
 }
 
@@ -96,38 +107,37 @@ h1 {
 /* Jobb oldali gyűjtődoboz ("Aktuális óra tananyaga") */
 .content-wrapper {
     flex: 3;
-    min-width: 300px;
+    min-width: 320px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .content-wrapper h2 {
-    color: #38bdf8;
+    color: #38bdf8; /* Szebb, világosabb kék kiemelés */
     margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 20px;
+    margin-bottom: 20px;
+    font-size: 22px; /* Nagyobb, feltűnőbb cím */
 }
 
 .cards-grid {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
-/* Egyedi kártyák stílusa */
+/* Egyedi kártyák stílusa (nagyobb belső térrel és lebegő hatással) */
 .card {
     flex: 1;
-    min-width: 220px;
-    background: rgba(15, 23, 42, 0.6);
+    min-width: 240px;
+    background: rgba(15, 23, 42, 0.7);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    padding: 20px;
+    padding: 22px;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     cursor: pointer;
-    
-    /* Függőleges elrendezés a kártyán belül */
     display: flex;
     flex-direction: column;
 }
@@ -135,33 +145,28 @@ h1 {
 .card h3 {
     margin-top: 0;
     color: var(--accent-orange);
+    font-size: 18px;
 }
 
 .card p {
     color: #94a3b8;
     font-size: 14px;
+    line-height: 1.5;
 }
 
-/* Egyedi kártyák stílusa */
-.card {
-    flex: 1;
-    min-width: 220px;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    cursor: pointer;
-    
-    /* Függőleges elrendezés a kártyán belül */
-    display: flex;
-    flex-direction: column;
+.card-link {
+    display: inline-block;
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: auto;
+    padding-top: 15px;
 }
 
 /* EGÉR HATÁS (HOVER): Kiemelkedés és finom világítás */
 .card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
     border-color: #38bdf8;
 }
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>6. Osztály - Matematika</title>
@@ -289,7 +290,7 @@
         </div>
     </div>
 
-    <!-- LEBEGŐ ABLAK: HÁZI FELADAT -->
+  <!-- LEBEGŐ ABLAK: HÁZI FELADAT -->
     <div id="modal-hazi" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-hazi')">&times;</span>
@@ -298,7 +299,86 @@
                 <p><strong>Munkafüzet:</strong> 22. oldal 3. és 4. feladat</p>
                 <p><strong>Határidő:</strong> Következő óra</p>
                 <hr style="border-color: var(--border-color);">
-                <p style="color: #94a3b8; font-style: italic;">[ Házi feladat fotója / feladatsor helye ]</p>
+                
+                <!-- FELADATSOR MEGOLDO-GOMBOKKAL -->
+                <div style="text-align: left; margin-top: 15px;">
+                  <div style="font-weight: bold; margin-bottom: 12px; color: #f1f5f9; font-size: 16px;">Egész számok kiszámítása:</div>
+
+                  <!-- 1. Feladat -->
+                  <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">1) \(200 - 90 \cdot (-3) =\)</div>
+                    <input type="checkbox" id="hf1" style="display:none;">
+                    <label for="hf1" style="display:inline-block; background-color: #0284c7; color: white; padding: 5px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div style="display:none; margin-top: 10px; padding: 8px 12px; background-color: rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 15px; color: #4ade80;">
+                      \(200 - (-270) = 200 + 270 =\) <strong>470</strong>
+                    </div>
+                  </div>
+
+                  <!-- 2. Feladat -->
+                  <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">2) \(-4 \cdot (10 - 15) - 7 \cdot (-5) =\)</div>
+                    <input type="checkbox" id="hf2" style="display:none;">
+                    <label for="hf2" style="display:inline-block; background-color: #0284c7; color: white; padding: 5px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div style="display:none; margin-top: 10px; padding: 8px 12px; background-color: rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 15px; color: #4ade80;">
+                      \(-4 \cdot (-5) - (-35) = 20 + 35 =\) <strong>55</strong>
+                    </div>
+                  </div>
+
+                  <!-- 3. Feladat -->
+                  <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">3) \(-154 - 77 : 11 =\)</div>
+                    <input type="checkbox" id="hf3" style="display:none;">
+                    <label for="hf3" style="display:inline-block; background-color: #0284c7; color: white; padding: 5px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div style="display:none; margin-top: 10px; padding: 8px 12px; background-color: rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 15px; color: #4ade80;">
+                      \(-154 - 7 =\) <strong>-161</strong>
+                    </div>
+                  </div>
+
+                  <!-- 4. Feladat -->
+                  <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">4) \(3 \cdot 0 \cdot 4 - (-6) \cdot 10 =\)</div>
+                    <input type="checkbox" id="hf4" style="display:none;">
+                    <label for="hf4" style="display:inline-block; background-color: #0284c7; color: white; padding: 5px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div style="display:none; margin-top: 10px; padding: 8px 12px; background-color: rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 15px; color: #4ade80;">
+                      \(0 - (-60) = 0 + 60 =\) <strong>60</strong>
+                    </div>
+                  </div>
+
+                  <!-- 5. Feladat -->
+                  <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">5) \((-25) + (-19) \cdot 2 =\)</div>
+                    <input type="checkbox" id="hf5" style="display:none;">
+                    <label for="hf5" style="display:inline-block; background-color: #0284c7; color: white; padding: 5px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div style="display:none; margin-top: 10px; padding: 8px 12px; background-color: rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 15px; color: #4ade80;">
+                      \(-25 + (-38) =\) <strong>-63</strong>
+                    </div>
+                  </div>
+
+                  <!-- 6. Feladat -->
+                  <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">6) \((45 - 60 : 5) : (-11) =\)</div>
+                    <input type="checkbox" id="hf6" style="display:none;">
+                    <label for="hf6" style="display:inline-block; background-color: #0284c7; color: white; padding: 5px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div style="display:none; margin-top: 10px; padding: 8px 12px; background-color: rgba(34, 197, 94, 0.15); border-left: 3px solid #22c55e; border-radius: 4px; font-size: 15px; color: #4ade80;">
+                      \((45 - 12) : (-11) = 33 : (-11) =\) <strong>-3</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <style>
+                  input[type="checkbox"]:checked + label + div {
+                    display: block !important;
+                  }
+                  input[type="checkbox"]:checked + label {
+                    background-color: #ef4444 !important;
+                  }
+                  input[type="checkbox"]:checked + label::after {
+                    content: " elrejtése";
+                  }
+                  input[type="checkbox"]:not(:checked) + label::after {
+                    content: " megjelenítése";
+                  }
+                </style>
             </div>
         </div>
     </div>

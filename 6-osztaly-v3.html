@@ -314,6 +314,82 @@
                 margin-right: -15px;
             }
         }
+    /* VENN DIAGRAM KÖZÖS (ALAP) STÍLUSOK */
+.venn-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #0f172a;
+    margin: 15px auto;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.venn-circle {
+    position: absolute;
+    border-radius: 50%;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.venn-circle-a {
+    border: 3px solid #2980b9;
+    background-color: rgba(41, 128, 185, 0.25);
+}
+
+.venn-circle-b {
+    border: 3px solid #27ae60;
+    background-color: rgba(39, 174, 96, 0.25);
+}
+
+.venn-label {
+    position: absolute;
+    color: white;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.venn-label-a { background-color: #2980b9; top: -18px; left: 15px; }
+.venn-label-b { background-color: #27ae60; top: -18px; right: 15px; }
+
+.venn-text {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    z-index: 2;
+}
+
+.venn-text-a { left: 25%; font-size: 15px; color: var(--text-color); }
+.venn-text-b { left: 75%; font-size: 14px; color: var(--text-color); text-align: center; line-height: 1.2; }
+.venn-text-ab { left: 50%; font-size: 13px; color: #a855f7; text-align: center; line-height: 1.2; z-index: 5; }
+.venn-text-out { position: absolute; bottom: 8px; left: 12px; font-weight: bold; font-size: 14px; color: #ef4444; z-index: 2; }
+
+
+/* --- ASZTALI / LAPTOP NÉZET (SZÉLES KIJELZŐ) --- */
+@media (min-width: 769px) {
+    .venn-container { height: 210px; }
+    .venn-circle { top: 15px; width: 200px; height: 180px; }
+    .venn-circle-a { left: 10%; }
+    .venn-circle-b { right: 10%; }
+    .venn-text-ab { width: 120px; }
+}
+
+
+/* --- MOBIL NÉZET (KESKENY KIJELZŐ) --- */
+@media (max-width: 768px) {
+    .venn-container { height: 170px; }
+    .venn-circle { top: 10px; width: 62%; height: 150px; }
+    .venn-circle-a { left: 4%; }
+    .venn-circle-b { right: 4%; }
+    .venn-text-a { left: 22%; }
+    .venn-text-b { left: 78%; }
+    .venn-text-ab { width: 40%; font-size: 12px; }
+}
     </style>
 </head>
 <body>

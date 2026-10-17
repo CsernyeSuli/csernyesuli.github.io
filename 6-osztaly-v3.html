@@ -186,35 +186,31 @@
         }
 
        .modal-content {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            max-width: 950px; /* <--- Itt növeltük meg szélesebbre (volt 750px) */
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 25px;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            box-sizing: border-box;
-        }
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    max-width: 750px;
+    width: 92%; /* Biztosítja, hogy mobilon se lógjon ki és legyen margó oldalt */
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    box-sizing: border-box;
+    margin: auto; /* Középre igazítja a dobozt */
+}
 
         /* JOBB FELSŐ X BEZÁRÓ GOMB: Fixen rögzítve görgetés közben is */
 .modal-close {
-    position: sticky;
-    top: 0;
-    float: right;
+    position: absolute;
+    top: 15px;
+    right: 20px;
     font-size: 28px;
     font-weight: bold;
     color: #94a3b8;
     cursor: pointer;
     line-height: 1;
     z-index: 10;
-    margin-top: -10px;
-    margin-right: -10px;
-    padding: 5px;
-    background-color: var(--card-bg);
-    border-radius: 50%;
 }
 
 .modal-close:hover {
@@ -243,9 +239,9 @@
     }
 
     .modal-content {
-        max-width: 95% !important;
+        width: 95% !important;
         padding: 15px !important;
-        margin: 10px;
+        max-height: 90vh;
     }
 }
     </style>

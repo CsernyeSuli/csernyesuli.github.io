@@ -16,7 +16,7 @@ body {
     padding: 0;
 }
 
-/* FEJLÉC: Teljes szélességben kifutó, tiszta felső sáv */
+/* FEJLÉC: Teljes szélességű, tiszta felső sáv */
 header {
     background-color: rgba(30, 41, 59, 0.4);
     padding: 15px 40px;
@@ -29,14 +29,14 @@ header {
     margin-bottom: 30px;
 }
 
-header h2 {
+header h1, header h2 {
     margin: 0;
     font-size: 1.4rem;
     color: #ffffff;
     font-weight: 700;
 }
 
-.btn-back {
+.btn-back, .btn-home {
     background-color: var(--accent-blue);
     color: white;
     text-decoration: none;
@@ -47,22 +47,23 @@ header h2 {
     transition: background-color 0.2s, color 0.2s;
 }
 
-.btn-back:hover {
+.btn-back:hover, .btn-home:hover {
     background-color: #38bdf8;
     color: #0f172a;
 }
 
-/* FŐ ELRENDEZÉS KONTÉNER */
-.layout {
+/* FŐ ELRENDEZÉS KONTÉNER (Archívum + Jobb oldali blokk) */
+.layout, .main-container {
     display: flex;
     max-width: 1400px;
     margin: 0 auto 30px auto;
     gap: 20px;
     padding: 0 20px;
     box-sizing: border-box;
+    flex-wrap: wrap;
 }
 
-/* BAL OLDALI ARCHÍVUM SÁV */
+/* BAL OLDALI ARCHÍVUM SÁV DOBOZA */
 .sidebar {
     width: 260px;
     background-color: var(--card-bg);
@@ -71,6 +72,7 @@ header h2 {
     padding: 18px;
     flex-shrink: 0;
     height: fit-content;
+    box-sizing: border-box;
 }
 
 .sidebar h3 {
@@ -103,15 +105,17 @@ header h2 {
 }
 
 /* JOBB OLDALI FŐ TARTALOM DOBOZ */
-.main-content {
-    flex-grow: 1;
+.main-content, .content-wrapper {
+    flex: 1;
+    min-width: 300px;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 22px;
+    box-sizing: border-box;
 }
 
-.date-title {
+.date-title, .content-wrapper h2 {
     color: #38bdf8;
     margin-top: 0;
     margin-bottom: 18px;
@@ -120,14 +124,14 @@ header h2 {
 }
 
 /* 3 EGYMÁS MELLETTI DOBOZ RÁCSA */
-.task-grid {
+.task-grid, .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px;
 }
 
 /* KÁRTYÁK STÍLUSA */
-.task-card {
+.task-card, .card {
     background-color: #0f172a;
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -137,15 +141,16 @@ header h2 {
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
 }
 
-.task-card:hover {
+.task-card:hover, .card:hover {
     transform: translateY(-4px) scale(1.01);
     border-color: var(--accent-blue);
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
-.task-card h4 {
+.task-card h4, .card h3 {
     margin-top: 0;
     font-size: 1.1rem;
     display: flex;
@@ -153,13 +158,14 @@ header h2 {
     gap: 8px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
+    color: #38bdf8;
 }
 
 .card-orai h4 { color: #38bdf8; }
 .card-hazi h4 { color: var(--accent-orange); }
 .card-szorgalmi h4 { color: var(--accent-green); }
 
-.card-preview {
+.card-preview, .card p {
     color: #94a3b8;
     font-size: 0.88rem;
     margin: 12px 0;
@@ -167,8 +173,8 @@ header h2 {
     flex-grow: 1;
 }
 
-/* LINK GOMB: Mindig a kártya legalján egy vonalban */
-.click-hint {
+/* LINK GOMB: Mindig a kártya legalján, egy vonalban */
+.click-hint, .card-link {
     font-size: 0.85rem;
     color: #38bdf8;
     text-align: right;
@@ -176,9 +182,11 @@ header h2 {
     margin-top: auto;
     padding-top: 10px;
     white-space: nowrap;
+    display: block;
+    text-decoration: none;
 }
 
-/* LEBEGŐ ABLAKOK (MODAL) */
+/* LEBEGŐ ABLAKOK (MODAL STÍLUSOK) */
 .modal-overlay {
     position: fixed;
     top: 0;

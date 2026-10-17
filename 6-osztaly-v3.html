@@ -48,23 +48,26 @@
             color: #0f172a;
         }
 
+        /* ALAP ELRENDEZÉS (SZÁMÍTÓGÉP) */
         .layout {
             display: flex;
             max-width: 1400px;
             margin: 20px auto;
             gap: 20px;
             padding: 0 15px;
-        }
+            box-sizing: border-box;
+}
 
         /* BAL OLDALI ARCHÍVUM SÁV */
         .sidebar {
-            width: 260px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            flex-shrink: 0;
-        }
+    width: 260px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 15px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
 
         .sidebar h3 {
             margin-top: 0;
@@ -96,12 +99,13 @@
 
         /* JOBB OLDALI FŐ TARTALOM */
         .main-content {
-            flex-grow: 1;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-        }
+    flex-grow: 1;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
         .date-title {
             color: #38bdf8;
@@ -223,6 +227,27 @@
             margin: 10px 0;
             border: 1px solid var(--border-color);
         }
+        /* MOBILBARÁT BEÁLLÍTÁS (Ha a képernyő keskenyebb, mint 768px) */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column; /* Egymás alá pakolja az archívumot és a tartalmat */
+        padding: 0 10px;
+    }
+    
+    .sidebar {
+        width: 100%; /* Telefonon teljes szélességű lesz az archívum doboz */
+    }
+
+    header {
+        padding: 12px 15px; /* Kicsit keskenyebb felső sáv mobilon */
+    }
+
+    .modal-content {
+        max-width: 95% !important;
+        padding: 15px !important;
+        margin: 10px;
+    }
+}
     </style>
 </head>
 <body>

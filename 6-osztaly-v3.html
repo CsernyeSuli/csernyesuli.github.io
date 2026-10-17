@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6. Osztály - Matematika</title>
-    <style>
+<style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -56,18 +49,18 @@
             gap: 20px;
             padding: 0 15px;
             box-sizing: border-box;
-}
+        }
 
         /* BAL OLDALI ARCHÍVUM SÁV */
         .sidebar {
-    width: 260px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 15px;
-    flex-shrink: 0;
-    box-sizing: border-box;
-}
+            width: 260px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
 
         .sidebar h3 {
             margin-top: 0;
@@ -99,13 +92,13 @@
 
         /* JOBB OLDALI FŐ TARTALOM */
         .main-content {
-    flex-grow: 1;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-sizing: border-box;
-}
+            flex-grow: 1;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
         .date-title {
             color: #38bdf8;
@@ -185,37 +178,37 @@
             padding: 20px;
         }
 
-       .modal-content {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    max-width: 750px;
-    width: 92%; /* Biztosítja, hogy mobilon se lógjon ki és legyen margó oldalt */
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 20px;
-    position: relative;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    box-sizing: border-box;
-    margin: auto; /* Középre igazítja a dobozt */
-}
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            max-width: 750px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-sizing: border-box;
+            margin: auto;
+        }
 
-        /* JOBB FELSŐ X BEZÁRÓ GOMB: Fixen rögzítve görgetés közben is */
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #94a3b8;
-    cursor: pointer;
-    line-height: 1;
-    z-index: 10;
-}
+        /* JOBB FELSŐ X BEZÁRÓ GOMB */
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+            z-index: 10;
+        }
 
-.modal-close:hover {
-    color: #ef4444;
-}
+        .modal-close:hover {
+            color: #ef4444;
+        }
 
         .modal-body img {
             max-width: 100%;
@@ -223,27 +216,28 @@
             margin: 10px 0;
             border: 1px solid var(--border-color);
         }
+
         /* MOBILBARÁT BEÁLLÍTÁS (Ha a képernyő keskenyebb, mint 768px) */
-@media (max-width: 768px) {
-    .layout {
-        flex-direction: column; /* Egymás alá pakolja az archívumot és a tartalmat */
-        padding: 0 10px;
-    }
-    
-    .sidebar {
-        width: 100%; /* Telefonon teljes szélességű lesz az archívum doboz */
-    }
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+                padding: 0 10px;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
 
-    header {
-        padding: 12px 15px; /* Kicsit keskenyebb felső sáv mobilon */
-    }
+            header {
+                padding: 12px 15px;
+            }
 
-    .modal-content {
-        width: 95% !important;
-        padding: 15px !important;
-        max-height: 90vh;
-    }
-}
+            .modal-content {
+                width: 95% !important;
+                padding: 15px !important;
+                max-height: 90vh;
+            }
+        }
     </style>
 </head>
 <body>

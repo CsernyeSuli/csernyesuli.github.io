@@ -18,7 +18,7 @@ body {
 
 /* FEJLÉC: Teljes szélességű, tiszta felső sáv rgba(30, 41, 59, 0.4);*/
 header {
-    background-color: #1e293b;
+    background-color: rgba(30, 41, 59, 1);
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;

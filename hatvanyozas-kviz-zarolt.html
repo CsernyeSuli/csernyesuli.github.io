@@ -120,14 +120,20 @@
             font-weight: bold;
         }
 
-        .btn-help-screenshot {
-            display: inline-block;
+        .submission-instruction {
             margin-top: 15px;
+            font-size: 1em;
+            font-weight: normal;
+        }
+
+        .btn-how-to {
+            display: inline-block;
+            margin-top: 8px;
             background-color: #2980b9;
             color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 0.85em;
+            padding: 6px 14px;
+            border-radius: 5px;
+            font-size: 0.9em;
             font-weight: bold;
             text-decoration: none;
             cursor: pointer;
@@ -135,7 +141,7 @@
             transition: background 0.2s ease;
         }
 
-        .btn-help-screenshot:hover {
+        .btn-how-to:hover {
             background-color: #1f618d;
         }
 
@@ -510,7 +516,10 @@
 
         <div id="result-box">
             <div id="result-text"></div>
-            <button class="btn-help-screenshot" onclick="openHelpModal()">📸 Hogy kell képernyőképet küldeni?</button>
+            <div class="submission-instruction">
+                Küldd be az eredményt a Classroomba! 
+                <button class="btn-how-to" onclick="openHelpModal()">Hogyan?</button>
+            </div>
         </div>
     </div>
 
@@ -524,17 +533,14 @@
         </div>
     </div>
 
-    <!-- 2. Képernyőkép és Classroom Súgó Lebegőablak (Csak gombra kattintva nyílik) -->
+    <!-- 2. Lenovo Súgó Lebegőablak (Gombra kattintva nyílik) -->
     <div id="helpModal" class="modal-overlay">
         <div class="modal-content modal-help">
             <h2>📸 Hogyan küldd be az eredményt?</h2>
             
             <div class="step-box">
-                <b>1. LÉPÉS: Készíts képernyőképet (Screenshot)</b>
-                <ul>
-                    <li><b>Android tablet / Samsung:</b> Nyomd meg egyszerre a <b>Hangerő LE</b> és a <b>BEKAPCSOLÓ</b> gombot!</li>
-                    <li><b>iPad:</b> Nyomd meg egyszerre a <b>Felső gombot</b> és a <b>Főgombot (Home)</b>!</li>
-                </ul>
+                <b>1. LÉPÉS: Készíts képernyőképet Lenovo tableten</b>
+                <p>Húzd le kétszer egymás után a képernyő tetejét a gyorsmenühöz, majd keresd meg és koppints a <b>Képernyőkép</b> ikonra a jobb oldalon!</p>
             </div>
 
             <div class="step-box">
@@ -621,7 +627,6 @@
             resultBox.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Súgó ablak nyitása/zárása
         function openHelpModal() {
             document.getElementById("helpModal").style.display = "flex";
         }
@@ -634,7 +639,6 @@
             document.getElementById("warningModal").style.display = "none";
         }
 
-        // Lapelhagyási figyelmeztetések
         document.addEventListener("mouseleave", function(e) {
             if (e.clientY < 10) {
                 document.getElementById("warningModal").style.display = "flex";
@@ -651,7 +655,6 @@
             }
         });
 
-        // Másolásvédelem
         document.addEventListener('copy', function(e) { e.preventDefault(); });
         document.addEventListener('cut', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {

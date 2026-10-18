@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Osztály - Hatványozás Elméleti Összefoglaló</title>
+    <style>
+        /* Alapbeállítások és másolásvédelem CSS szinten */
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+
+        .card {
+            background-color: #eef7fc;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .formula {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #d35400;
+            background-color: #fef5e7;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-quiz {
+            background-color: #27ae60;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-quiz:hover {
+            background-color: #219150;
+            transform: scale(1.03);
+        }
+
+        /* Lapelhagyás-figyelő Figyelmeztető Ablak (Modal) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 450px;
+            border: 4px solid #e74c3c;
+            box-shadow: 0 5px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .modal-content h2 {
+            color: #c0392b;
+            margin-top: 0;
+        }
+
+        .modal-content button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+
+    <div class="container">
+        <h1>Hatványozás - Elméleti Összefoglaló (7. Osztály)</h1>
+        
+        <p><i>Készíts részletes jegyzetet a füzetedbe az alábbi elméleti anyag alapján! A jegyzetelést követően a lap alján található gombbal tudsz továbblépni a kvízre.</i></p>
+
+        <div class="card">
+            <h2>1. Mi a hatványozás?</h2>
+            <p>A hatványozás **azonos tényezős szorzások** rövidített írásmódja.</p>
+            <p><span class="formula">a<sup>n</sup> = a · a · ... · a</span> (n tényező)</p>
+            <ul>
+                <li><b>a (Alap):</b> A szám, amelyet önmagával megszorzunk.</li>
+                <li><b>n (Hatványkitevő):</b> Megmutatja, hányszor írjuk le az alapot tényezőként.</li>
+                <li><b>a<sup>n</sup> (Hatványérték):</b> A művelet végeredménye.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>2. Speciális esetek és előjelszabályok</h2>
+            <ul>
+                <li>Bármely nem-nulla szám 1. hatványa önmaga: <span class="formula">a<sup>1</sup> = a</span></li>
+                <li>Bármely nem-nulla szám 0. hatványa 1: <span class="formula">a<sup>0</sup> = 1</span></li>
+                <li><b>Pozitív alap</b> esetén a hatványérték mindig pozitív.</li>
+                <li><b>Negatív alap</b> esetén:
+                    <ul>
+                        <li><b>Páros kitevőnél</b> az eredmény <b>pozitív</b> (pl. (-3)<sup>2</sup> = 9).</li>
+                        <li><b>Páratlan kitevőnél</b> az eredmény <b>negatív</b> (pl. (-2)<sup>3</sup> = -8).</li>
+                    </ul>
+                </li>
+                <li><i>Vigyázat!</i> <span class="formula">-3<sup>2</sup> = -9</span> (mivel a negatív előjel nem része a hatványnak), míg <span class="formula">(-3)<sup>2</sup> = 9</span>!</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>3. A hatványozás azonosságai</h2>
+            
+            <h3>Azonos alapú hatványok:</h3>
+            <ul>
+                <li><b>Azonos alapú hatványok szorzása:</b> Az alapot változatlanul hagyjuk, a kitevőket <b>összeadjuk</b>.<br>
+                <span class="formula">a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></span></li>
+                
+                <li><b>Azonos alapú hatványok osztása:</b> Az alapot változatlanul hagyjuk, a kitevőket <b>kivonjuk</b>.<br>
+                <span class="formula">a<sup>m</sup> : a<sup>n</sup> = a<sup>m-n</sup></span></li>
+                
+                <li><b>Hatvány hatványozása:</b> Az alapot változatlanul hagyjuk, a kitevőket <b>összeszorozzuk</b>.<br>
+                <span class="formula">(a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup></span></li>
+            </ul>
+
+            <h3>Azonos kitevőjű hatványok:</h3>
+            <ul>
+                <li><b>Azonos kitevőjű hatványok szorzása:</b> Az alapokat összeszorozzuk, a kitevőt változatlanul hagyjuk.<br>
+                <span class="formula">a<sup>n</sup> · b<sup>n</sup> = (a · b)<sup>n</sup></span></li>
+                
+                <li><b>Azonos kitevőjű hatványok osztása:</b> Az alapokat elosztjuk, a kitevőt változatlanul hagyjuk.<br>
+                <span class="formula">a<sup>n</sup> : b<sup>n</sup> = (a : b)<sup>n</sup></span></li>
+            </ul>
+        </div>
+
+        <div class="btn-container">
+            <a href="hatvanyozas-kviz-zarolt.html" class="btn-quiz">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ! ➔</a>
+        </div>
+    </div>
+
+    <!-- Lapelhagyás Figyelmeztető Ablak (Ajtólecsapó) -->
+    <div id="warningModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚠️ FIGYELEM! LAPELHAGYÁS ÉSZLELVE!</h2>
+            <p>Elhagytad az elméleti anyag felületét! A feladat végrehajtása közben tilos más ablakra, fülre vagy alkalmazásra átváltani!</p>
+            <p><b>A tevékenységed rögzítésre került.</b></p>
+            <button onclick="closeModal()">Visszatérek a jegyzeteléshez</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Lapelhagyás-figyelő (Ajtólecsapó funkció)
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        function closeModal() {
+            document.getElementById("warningModal").style.display = "none";
+        }
+
+        // 2. Szövegmásolási és gombkombinációs védelem
+        document.addEventListener('copy', function(e) { e.preventDefault(); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            // F12, Ctrl+Shift+I, Ctrl+C, Ctrl+U tiltása
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+                (e.ctrlKey && e.keyCode === 67) || 
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

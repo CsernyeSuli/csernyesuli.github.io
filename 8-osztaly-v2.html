@@ -397,13 +397,13 @@
 <body>
 
     <header>
-        <h2>8. Osztály - Matematika</h2>
+        <h2>6. Osztály - Matematika</h2>
         <a href="index.html" class="btn-back">⬅ Vissza a Főoldalra</a>
     </header>
 
     <div class="layout">
         
-        <!-- BAL OLDALSÁV: ARCHÍVUM -->
+        <!-- BAL OLDALSÁV: ARCHÍVUM (Csak a tartalom méretére nő) -->
         <aside class="sidebar">
             <h3>📂 Órai Archívum</h3>
             <ul class="archive-list">
@@ -447,7 +447,7 @@
 
             </div>
 
-            <!-- IDE KERÜLT A BEKÜLDÖTT MATEMATIKA SZÖVEG -->
+            <!-- KIEGÉSZÍTETT MATEMATIKA SZÖVEG -->
             <div class="math-notes">
                 <h3>🧮 Elméleti összefoglaló: A hatványozás</h3>
                 
@@ -472,8 +472,8 @@
                 <ul class="notes-list">
                     <li><strong>Azonos alapú hatványok szorzása:</strong> A közös alapot a kitevők összegére emeljük</li>
                     <li><strong>Azonos alapú hatványok osztása/hányadosa:</strong> A közös alapot a kitevők különbségére emeljük</li>
-                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára</li>
-                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
                     <li><strong>Szorzat hatványa:</strong> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
                     <li><strong>Osztás/hányados hatványa:</strong> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
                     <li><strong>Azonos kitevőjű hatványok szorzása:</strong> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
@@ -536,14 +536,20 @@
         </div>
     </div>
 
-    <!-- STÍLUSOK AZ ÚJ SZÖVEGES RÉSZHEZ (A head részbe is teheted, vagy maradhat itt alul) -->
     <style>
+        /* ÚJ: Biztosítja, hogy az oldalsáv magassága csak a saját tartalmáig érjen */
+        .sidebar {
+            align-self: flex-start;
+            /* Ide jöhetnek a korábbi .sidebar stílusaid (pl. background, padding, border-radius) */
+        }
+
+        /* Szöveges rész formázása */
         .math-notes {
             margin-top: 40px;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05); /* Enyhe áttetsző háttér */
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            border-left: 5px solid #38bdf8; /* Kék díszcsík az oldalához */
+            border-left: 5px solid #38bdf8;
         }
         .math-notes h3 {
             margin-top: 0;
@@ -552,7 +558,7 @@
         .math-notes h4 {
             margin-top: 25px;
             margin-bottom: 10px;
-            color: #f43f5e; /* Pirosas kiemelés az azonosságoknak/eseteknek */
+            color: #f43f5e;
         }
         .qa-section p {
             margin-bottom: 15px;

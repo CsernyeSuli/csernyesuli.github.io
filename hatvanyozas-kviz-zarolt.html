@@ -64,7 +64,6 @@
             margin-bottom: 12px;
         }
 
-        /* Törhetetlen matematikai kifejezések */
         .math-expr {
             white-space: nowrap;
             display: inline-block;
@@ -121,6 +120,25 @@
             font-weight: bold;
         }
 
+        .btn-help-screenshot {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s ease;
+        }
+
+        .btn-help-screenshot:hover {
+            background-color: #1f618d;
+        }
+
         .correct-card {
             border-left-color: #27ae60 !important;
             background-color: #e8f8f5 !important;
@@ -131,7 +149,7 @@
             background-color: #fadbd8 !important;
         }
 
-        /* Figyelmeztető Ablak (Modal) */
+        /* Modal ablakok */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -144,36 +162,61 @@
 
         .modal-content {
             background: #ffffff;
-            padding: 30px;
+            padding: 25px 30px;
             border-radius: 12px;
-            text-align: center;
-            max-width: 480px;
+            text-align: left;
+            max-width: 520px;
+            width: 90%;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-warning {
             border: 4px solid #e74c3c;
-            box-shadow: 0 5px 25px rgba(231, 76, 60, 0.4);
+            text-align: center;
         }
+        .modal-warning h2 { color: #c0392b; margin-top: 0; }
 
-        .modal-content h2 {
-            color: #c0392b;
+        .modal-help {
+            border: 4px solid #2980b9;
+        }
+        .modal-help h2 {
+            color: #2980b9;
             margin-top: 0;
+            text-align: center;
+            border-bottom: 2px solid #eef7fc;
+            padding-bottom: 10px;
         }
 
-        .modal-content button {
-            background-color: #e74c3c;
+        .step-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .btn-close-modal {
+            display: block;
+            width: 100%;
+            background-color: #2980b9;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px;
             font-size: 1em;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
     <div class="container">
-        <h1>Hatványozás Tudáspróba Kvíz (Teljes Körű)</h1>
+        <h1>Hatványozás Tudáspróba Kvíz</h1>
         <p><i>Használd a füzetedet a jegyzetek áttekintésére és a számolások elvégzésére! Válaszolj mind a 28 kérdésre, majd kattints a kiértékelés gombra!</i></p>
 
         <form id="quizForm">
@@ -239,9 +282,9 @@
                 </div>
             </div>
 
-            <!-- 7. Kérdés (BEUGRATÓS 0^0 KÉRDÉS) -->
+            <!-- 7. Kérdés -->
             <div class="question-card" id="q7-card">
-                <div class="question-title">7. ⚠️ Beugrató: Mennyi a <span class="math-expr">0<sup>0</sup></span> (nulla a nulladikon) értéke?</div>
+                <div class="question-title">7. Mennyi a <span class="math-expr">0<sup>0</sup></span> (nulla a nulladikon) értéke?</div>
                 <div class="options">
                     <label><input type="radio" name="q7" value="A"> 1</label>
                     <label><input type="radio" name="q7" value="B"> 0</label>
@@ -382,7 +425,7 @@
                 </div>
             </div>
 
-            <!-- 21. Kérdés (FORMÁZOTT JAVÍTOTT BETŰS KÉPLET) -->
+            <!-- 21. Kérdés -->
             <div class="question-card" id="q21-card">
                 <div class="question-title">21. Végezd el a betűs kifejezés szorzását: <span class="math-expr">x<sup>4</sup> · x<sup>5</sup></span></div>
                 <div class="options">
@@ -465,16 +508,47 @@
             <button type="button" class="btn-submit" onclick="checkAnswers()">Kvíz Kiértékelése</button>
         </form>
 
-        <div id="result-box"></div>
+        <div id="result-box">
+            <div id="result-text"></div>
+            <button class="btn-help-screenshot" onclick="openHelpModal()">📸 Hogy kell képernyőképet küldeni?</button>
+        </div>
     </div>
 
-    <!-- Figyelmeztető Ablak -->
+    <!-- 1. Lapelhagyási Figyelmeztető Ablak -->
     <div id="warningModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content modal-warning">
             <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
             <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
             <p><b>Maradjon az oldalon és folytassa a kvízt!</b></p>
-            <button onclick="closeModal()">Visszatérek a kvízhez</button>
+            <button onclick="closeWarningModal()">Visszatérek a kvízhez</button>
+        </div>
+    </div>
+
+    <!-- 2. Képernyőkép és Classroom Súgó Lebegőablak (Csak gombra kattintva nyílik) -->
+    <div id="helpModal" class="modal-overlay">
+        <div class="modal-content modal-help">
+            <h2>📸 Hogyan küldd be az eredményt?</h2>
+            
+            <div class="step-box">
+                <b>1. LÉPÉS: Készíts képernyőképet (Screenshot)</b>
+                <ul>
+                    <li><b>Android tablet / Samsung:</b> Nyomd meg egyszerre a <b>Hangerő LE</b> és a <b>BEKAPCSOLÓ</b> gombot!</li>
+                    <li><b>iPad:</b> Nyomd meg egyszerre a <b>Felső gombot</b> és a <b>Főgombot (Home)</b>!</li>
+                </ul>
+            </div>
+
+            <div class="step-box">
+                <b>2. LÉPÉS: Csatold a Google Tanteremben</b>
+                <ol>
+                    <li>Lépj be a <b>Google Classroom</b> alkalmazásba a feladathoz!</li>
+                    <li>Kattints a <b>+ Hozzáadás vagy létrehozás</b> gombra!</li>
+                    <li>Válaszd a <b>Fájl / Képek / Galéria</b> lehetőséget!</li>
+                    <li>Jelöld ki a legutóbb készített képernyőképedet!</li>
+                    <li>Kattints a zöld <b>Leadás / Megjelölés készként</b> gombra!</li>
+                </ol>
+            </div>
+
+            <button class="btn-close-modal" onclick="closeHelpModal()">Értem, bezárás</button>
         </div>
     </div>
 
@@ -486,7 +560,7 @@
             q4: 'B',
             q5: 'A',
             q6: 'C',
-            q7: 'C', // 0^0 nem értelmezett!
+            q7: 'C',
             q8: 'B',
             q9: 'A',
             q10: 'A',
@@ -500,9 +574,9 @@
             q18: 'A',
             q19: 'B',
             q20: 'B',
-            q21: 'B', // x^9
-            q22: 'A', // a^6
-            q23: 'C', // y^12
+            q21: 'B',
+            q22: 'A',
+            q23: 'C',
             q24: 'A',
             q25: 'A',
             q26: 'B',
@@ -530,10 +604,11 @@
             }
 
             const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
             resultBox.style.display = 'block';
             
             const percentage = Math.round((score / total) * 100);
-            resultBox.innerHTML = `Eredményed: ${score} / ${total} pont (${percentage}%)`;
+            resultText.innerHTML = `Eredményed: ${score} / ${total} pont (${percentage}%)`;
 
             if (percentage >= 75) {
                 resultBox.style.backgroundColor = '#d4edda';
@@ -544,6 +619,19 @@
             }
 
             resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Súgó ablak nyitása/zárása
+        function openHelpModal() {
+            document.getElementById("helpModal").style.display = "flex";
+        }
+
+        function closeHelpModal() {
+            document.getElementById("helpModal").style.display = "none";
+        }
+
+        function closeWarningModal() {
+            document.getElementById("warningModal").style.display = "none";
         }
 
         // Lapelhagyási figyelmeztetések
@@ -562,10 +650,6 @@
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
-
-        function closeModal() {
-            document.getElementById("warningModal").style.display = "none";
-        }
 
         // Másolásvédelem
         document.addEventListener('copy', function(e) { e.preventDefault(); });

@@ -80,7 +80,6 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            text-decoration: none;
             display: inline-block;
             transition: background 0.3s ease, transform 0.2s ease;
         }
@@ -90,7 +89,7 @@
             transform: scale(1.03);
         }
 
-        /* Figyelmeztető Ablak (Modal) */
+        /* Figyelmeztető és Megerősítő Ablakok (Modalok) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -107,17 +106,19 @@
             border-radius: 12px;
             text-align: center;
             max-width: 480px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Csalásbiztos piros ablak */
+        .modal-warning {
             border: 4px solid #e74c3c;
-            box-shadow: 0 5px 25px rgba(231, 76, 60, 0.4);
         }
-
-        .modal-content h2 {
+        .modal-warning h2 {
             color: #c0392b;
-            margin-top: 0;
             border-bottom: none;
+            margin-top: 0;
         }
-
-        .modal-content button {
+        .modal-warning button {
             background-color: #e74c3c;
             color: white;
             border: none;
@@ -127,6 +128,38 @@
             border-radius: 6px;
             cursor: pointer;
             margin-top: 15px;
+        }
+
+        /* Megerősítő zöld/kék ablak */
+        .modal-confirm {
+            border: 4px solid #27ae60;
+        }
+        .modal-confirm h2 {
+            color: #27ae60;
+            border-bottom: none;
+            margin-top: 0;
+        }
+        .btn-confirm-yes {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-confirm-no {
+            background-color: #7f8c8d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
         }
     </style>
 </head>
@@ -172,42 +205,72 @@
         </div>
 
         <div class="btn-container">
-            <a href="hatvanyozas-kviz-zarolt.html" class="btn-quiz">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ! ➔</a>
+            <button class="btn-quiz" onclick="openConfirmModal()">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ! ➔</button>
         </div>
     </div>
 
-    <!-- Figyelmeztető Ablak (Ajtólecsapó / Előzetes figyelmeztető) -->
+    <!-- 1. Csalásbiztos Figyelmeztető Ablak -->
     <div id="warningModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content modal-warning">
             <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
             <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
             <p><b>Maradjon az oldalon és folytassa a feladatot!</b></p>
-            <button onclick="closeModal()">Visszatérek a jegyzeteléshez</button>
+            <button onclick="closeWarningModal()">Visszatérek a jegyzeteléshez</button>
+        </div>
+    </div>
+
+    <!-- 2. Megerősítő Ablak a Gombra Kattintva -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-content modal-confirm">
+            <h2>📝 Megerősítés</h2>
+            <p>Biztosan végeztél a jegyzeteléssel a füzetedben, és készen állsz a kvíz elindítására?</p>
+            <button class="btn-confirm-yes" onclick="goToQuiz()">Igen, mehet a kvíz!</button>
+            <button class="btn-confirm-no" onclick="closeConfirmModal()">Még jegyzetelek</button>
         </div>
     </div>
 
     <script>
-        // 1. Megelőző figyelmeztetés: amikor az egér elhagyja az ablak felső részét (böngészősáv / fülek felé)
+        let isNavigatingToQuiz = false;
+
+        // Megerősítő ablak nyitása/zárása gombnyomásra
+        function openConfirmModal() {
+            document.getElementById("confirmModal").style.display = "flex";
+        }
+
+        function closeConfirmModal() {
+            document.getElementById("confirmModal").style.display = "none";
+        }
+
+        // Átlépés a kvízre
+        function goToQuiz() {
+            isNavigatingToQuiz = true; // Kikapcsolja a riasztást a navigálás idejére
+            window.location.href = "hatvanyozas-kviz-zarolt.html";
+        }
+
+        // Csalásbiztos figyelmeztető ablak zárása
+        function closeWarningModal() {
+            document.getElementById("warningModal").style.display = "none";
+        }
+
+        // 1. Megelőző figyelmeztetés: amikor az egér elhagyja az ablak felső részét
         document.addEventListener("mouseleave", function(e) {
-            if (e.clientY < 10) {
+            if (!isNavigatingToQuiz && e.clientY < 10) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
 
-        // 2. Utólagos fülváltás/fókuszvesztés figyelése (pl. Alt+Tab vagy érintőképernyő esetén)
+        // 2. Utólagos fülváltás/fókuszvesztés figyelése
         window.addEventListener("blur", function() {
-            document.getElementById("warningModal").style.display = "flex";
+            if (!isNavigatingToQuiz) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
         });
 
         document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
+            if (!isNavigatingToQuiz && document.hidden) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
-
-        function closeModal() {
-            document.getElementById("warningModal").style.display = "none";
-        }
 
         // Másolásvédelem
         document.addEventListener('copy', function(e) { e.preventDefault(); });

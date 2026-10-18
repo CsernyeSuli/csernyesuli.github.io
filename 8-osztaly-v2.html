@@ -331,6 +331,31 @@
         function openModal(id) {
             document.getElementById(id).style.display = 'flex';
         }
+Mi a hatvány? -> Ismételt szorzás
+Miből áll a hatvány alak? -> Hatvány alapból és kitevőből
+Mit mutat meg a hatvány alap? -> A hatvány alapot kell szorozni önmagával
+Mit jelent a hatvány kitevő? -> Darabszámot, hogy az ismételt szorzásban hány tényező van
+A hatvány alak mire írható át -> Szorzat alakba, ismételt szorzásba a hatvány alappal
+
+Speciális esetek
+
+- Minden szám 1. hatványa egyenlő önmagával
+- Minden szám 0. hatványa 1, kivéve a 0-át, 0 a nulladikon nem értelmezett
+- az 1 bármelyik hatványa 1
+- Negatív szám páros kitevőjű hatványa pozitív érték
+- Negatív szám páratlan kitevőjű hatványa negatív érték
+
+Hatványozás azonosságai
+
+- Azonos alapú hatványok szorzása -> A közös alapot a kitevők összegére emeljük
+- Azonos alapú hatványok osztása/hányadosa -> A közös alapot a kitevők különbségére emeljük
+- Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára
+- Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára
+- Szorzat hatványa -> A tényezőket a szorzat kitevőjére emelve összeszorozzuk
+- Osztás/hányados hatványa -> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk
+- Azonos kitevőjű hatványok szorzása -> A hatvány alapok szorzatát a közös kitevőre emeljük
+- Azonos kitevőjű hatványok osztása/hányadosa -> A hatvány alapok hányadosát a közös kitevőre emeljük
+- Hatvány hatványozása -> A hatvány alapot a kitevők szorzatára emeljük
 
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';

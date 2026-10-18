@@ -80,6 +80,7 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            text-decoration: none;
             display: inline-block;
             transition: background 0.3s ease, transform 0.2s ease;
         }
@@ -89,7 +90,7 @@
             transform: scale(1.03);
         }
 
-        /* Figyelmeztető és Megerősítő Ablakok (Modalok) */
+        /* Modal ablakok */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -109,7 +110,6 @@
             box-shadow: 0 5px 25px rgba(0,0,0,0.3);
         }
 
-        /* Csalásbiztos piros ablak */
         .modal-warning {
             border: 4px solid #e74c3c;
         }
@@ -130,7 +130,6 @@
             margin-top: 15px;
         }
 
-        /* Megerősítő zöld/kék ablak */
         .modal-confirm {
             border: 4px solid #27ae60;
         }
@@ -149,6 +148,8 @@
             border-radius: 6px;
             cursor: pointer;
             margin: 10px 5px;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-confirm-no {
             background-color: #7f8c8d;
@@ -205,7 +206,8 @@
         </div>
 
         <div class="btn-container">
-            <button class="btn-quiz" onclick="openConfirmModal()">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ! ➔</button>
+            <!-- Kattintásra JavaScript-tel nyitjuk a megerősítést, megakadályozva az alapértelmezett ugrást -->
+            <a href="#" class="btn-quiz" onclick="openConfirmModal(event)">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ! ➔</a>
         </div>
     </div>
 
@@ -219,12 +221,13 @@
         </div>
     </div>
 
-    <!-- 2. Megerősítő Ablak a Gombra Kattintva -->
+    <!-- 2. Megerősítő Ablak -->
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-content modal-confirm">
             <h2>📝 Megerősítés</h2>
             <p>Biztosan végeztél a jegyzeteléssel a füzetedben, és készen állsz a kvíz elindítására?</p>
-            <button class="btn-confirm-yes" onclick="goToQuiz()">Igen, mehet a kvíz!</button>
+            <!-- Itt a zöld gomb már közvetlenül a kvíz oldalra mutat, és engedélyezi a navigációt -->
+            <a href="hatvanyozas-kviz-zarolt.html" class="btn-confirm-yes" onclick="allowNavigation()">Igen, mehet a kvíz!</a>
             <button class="btn-confirm-no" onclick="closeConfirmModal()">Még jegyzetelek</button>
         </div>
     </div>
@@ -232,8 +235,8 @@
     <script>
         let isNavigatingToQuiz = false;
 
-        // Megerősítő ablak nyitása/zárása gombnyomásra
-        function openConfirmModal() {
+        function openConfirmModal(event) {
+            event.preventDefault(); // Megakadályozza, hogy a # miatt ugráljon az oldal
             document.getElementById("confirmModal").style.display = "flex";
         }
 
@@ -241,25 +244,22 @@
             document.getElementById("confirmModal").style.display = "none";
         }
 
-        // Átlépés a kvízre
-        function goToQuiz() {
-            isNavigatingToQuiz = true; // Kikapcsolja a riasztást a navigálás idejére
-            window.location.href = "hatvanyozas-kviz-zarolt.html";
+        function allowNavigation() {
+            isNavigatingToQuiz = true; // Jelzi, hogy ez szándékos elhagyás
         }
 
-        // Csalásbiztos figyelmeztető ablak zárása
         function closeWarningModal() {
             document.getElementById("warningModal").style.display = "none";
         }
 
-        // 1. Megelőző figyelmeztetés: amikor az egér elhagyja az ablak felső részét
+        // Egér elhagyása felső irányba
         document.addEventListener("mouseleave", function(e) {
             if (!isNavigatingToQuiz && e.clientY < 10) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
 
-        // 2. Utólagos fülváltás/fókuszvesztés figyelése
+        // Fókuszvesztés / fülváltás
         window.addEventListener("blur", function() {
             if (!isNavigatingToQuiz) {
                 document.getElementById("warningModal").style.display = "flex";

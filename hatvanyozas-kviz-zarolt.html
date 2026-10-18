@@ -1,1 +1,563 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Osztály - Hatványozás Tudáspróba Kvíz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 10px;
+        }
+
+        .section-header {
+            background-color: #eef7fc;
+            border-left: 5px solid #3498db;
+            padding: 10px 15px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+
+        .question-card {
+            background-color: #f8f9fa;
+            border-left: 5px solid #2980b9;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        .options label {
+            display: block;
+            background: #ffffff;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .options label:hover {
+            background-color: #e9ecef;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background-color: #27ae60;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        .btn-submit:hover {
+            background-color: #219150;
+        }
+
+        #result-box {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .correct-card {
+            border-left-color: #27ae60 !important;
+            background-color: #e8f8f5 !important;
+        }
+
+        .incorrect-card {
+            border-left-color: #e74c3c !important;
+            background-color: #fadbd8 !important;
+        }
+
+        /* Figyelmeztető Ablak (Modal) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 480px;
+            border: 4px solid #e74c3c;
+            box-shadow: 0 5px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .modal-content h2 {
+            color: #c0392b;
+            margin-top: 0;
+        }
+
+        .modal-content button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+
+    <div class="container">
+        <h1>Hatványozás Tudáspróba Kvíz (Teljes Körű)</h1>
+        <p><i>Használd a füzetedet a jegyzetek áttekintésére és a számolások elvégzésére! Válaszolj mind a 27 kérdésre, majd kattints a kiértékelés gombra!</i></p>
+
+        <form id="quizForm">
+            <div class="section-header">I. RÉSZ: ELMÉLETI ISMERETEK</div>
+
+            <!-- 1. Kérdés -->
+            <div class="question-card" id="q1-card">
+                <div class="question-title">1. Mi a hatvány?</div>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="A"> Ismételt összeadás</label>
+                    <label><input type="radio" name="q1" value="B"> Ismételt szorzás</label>
+                    <label><input type="radio" name="q1" value="C"> Ismételt osztás</label>
+                </div>
+            </div>
+
+            <!-- 2. Kérdés -->
+            <div class="question-card" id="q2-card">
+                <div class="question-title">2. Miből áll a hatvány alak?</div>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="A"> Csak egy számból és egy előjelből</label>
+                    <label><input type="radio" name="q2" value="B"> Hatvány alapból és kitevőből</label>
+                    <label><input type="radio" name="q2" value="C"> Számlálóból és nevezőből</label>
+                </div>
+            </div>
+
+            <!-- 3. Kérdés -->
+            <div class="question-card" id="q3-card">
+                <div class="question-title">3. Mit mutat meg a hatvány alap?</div>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="A"> A hatvány alapot kell szorozni önmagával</label>
+                    <label><input type="radio" name="q3" value="B"> A művelet végeredményét</label>
+                    <label><input type="radio" name="q3" value="C"> A kivonások számát</label>
+                </div>
+            </div>
+
+            <!-- 4. Kérdés -->
+            <div class="question-card" id="q4-card">
+                <div class="question-title">4. Mit jelent a hatvány kitevő?</div>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="A"> Azt a számot, amit önmagával szorzunk</label>
+                    <label><input type="radio" name="q4" value="B"> Darabszámot, hogy az ismételt szorzásban hány tényező van</label>
+                    <label><input type="radio" name="q4" value="C"> A hatványértéket</label>
+                </div>
+            </div>
+
+            <!-- 5. Kérdés -->
+            <div class="question-card" id="q5-card">
+                <div class="question-title">5. A hatvány alak mire írható át?</div>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="A"> Szorzat alakba, ismételt szorzásba a hatvány alappal</label>
+                    <label><input type="radio" name="q5" value="B"> Összeg alakba, ismételt összeadásba</label>
+                    <label><input type="radio" name="q5" value="C"> Egyszerű tizedestörtbe</label>
+                </div>
+            </div>
+
+            <!-- 6. Kérdés -->
+            <div class="question-card" id="q6-card">
+                <div class="question-title">6. Mennyi minden szám 0. hatványa (kivéve a 0-át)?</div>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="A"> 0</label>
+                    <label><input type="radio" name="q6" value="B"> Önmaga</label>
+                    <label><input type="radio" name="q6" value="C"> 1</label>
+                </div>
+            </div>
+
+            <!-- 7. Kérdés -->
+            <div class="question-card" id="q7-card">
+                <div class="question-title">7. Milyen értéket ad egy negatív szám páros kitevőjű hatványa?</div>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="A"> Negatív értéket</label>
+                    <label><input type="radio" name="q7" value="B"> Pozitív értéket</label>
+                    <label><input type="radio" name="q7" value="C"> Nullát</label>
+                </div>
+            </div>
+
+            <!-- 8. Kérdés -->
+            <div class="question-card" id="q8-card">
+                <div class="question-title">8. Milyen értéket ad egy negatív szám páratlan kitevőjű hatványa?</div>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="A"> Negatív értéket</label>
+                    <label><input type="radio" name="q8" value="B"> Pozitív értéket</label>
+                    <label><input type="radio" name="q8" value="C"> Mindig 1-et</label>
+                </div>
+            </div>
+
+            <!-- 9. Kérdés -->
+            <div class="question-card" id="q9-card">
+                <div class="question-title">9. Hogy végezzük el az azonos alapú hatványok szorzását?</div>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="A"> A közös alapot a kitevők összegére emeljük</label>
+                    <label><input type="radio" name="q9" value="B"> A közös alapot a kitevők szorzatára emeljük</label>
+                    <label><input type="radio" name="q9" value="C"> Az alapokat és a kitevőket is összeadjuk</label>
+                </div>
+            </div>
+
+            <!-- 10. Kérdés -->
+            <div class="question-card" id="q10-card">
+                <div class="question-title">10. Hogy végezzük el az azonos alapú hatványok osztását/hányadosát?</div>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="A"> A közös alapot a kitevők összegére emeljük</label>
+                    <label><input type="radio" name="q10" value="B"> A közös alapot a kitevők különbségére emeljük</label>
+                    <label><input type="radio" name="q10" value="C"> Az alapokat elosztjuk, a kitevőket összeadjuk</label>
+                </div>
+            </div>
+
+            <!-- 11. Kérdés -->
+            <div class="question-card" id="q11-card">
+                <div class="question-title">11. Hogyan bontható fel bármelyik hatvány azonos alapú hatványok szorzatára?</div>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="A"> Ha azokat megfelelő kitevőkre emeljük, amelyek összege adja az eredeti kitevőt</label>
+                    <label><input type="radio" name="q11" value="B"> Ha a kitevőket változatlanul hagyjuk</label>
+                    <label><input type="radio" name="q11" value="C"> Sehogy sem bontható fel</label>
+                </div>
+            </div>
+
+            <!-- 12. Kérdés -->
+            <div class="question-card" id="q12-card">
+                <div class="question-title">12. Mi a szorzat hatványának a szabálya?</div>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="A"> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</label>
+                    <label><input type="radio" name="q12" value="B"> A tényezőket összeadjuk és a kitevővel szorozzuk</label>
+                    <label><input type="radio" name="q12" value="C"> Csak az első tényezőt emeljük a kitevőre</label>
+                </div>
+            </div>
+
+            <!-- 13. Kérdés -->
+            <div class="question-card" id="q13-card">
+                <div class="question-title">13. Mi az osztás/hányados hatványának a szabálya?</div>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="A"> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</label>
+                    <label><input type="radio" name="q13" value="B"> Az osztást kivonássá alakítjuk</label>
+                    <label><input type="radio" name="q13" value="C"> A kitevőket elosztjuk egymással</label>
+                </div>
+            </div>
+
+            <!-- 14. Kérdés -->
+            <div class="question-card" id="q14-card">
+                <div class="question-title">14. Hogy végezzük el az azonos kitevőjű hatványok szorzását?</div>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="A"> A hatvány alapok szorzatát a közös kitevőre emeljük</label>
+                    <label><input type="radio" name="q14" value="B"> A hatvány alapok összegét a közös kitevőre emeljük</label>
+                    <label><input type="radio" name="q14" value="C"> A kitevőket összeszorozzuk</label>
+                </div>
+            </div>
+
+            <!-- 15. Kérdés -->
+            <div class="question-card" id="q15-card">
+                <div class="question-title">15. Hogy végezzük el az azonos kitevőjű hatványok osztását/hányadosát?</div>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="A"> A hatvány alapok hányadosát a közös kitevőre emeljük</label>
+                    <label><input type="radio" name="q15" value="B"> A hatvány alapok különbségét a közös kitevőre emeljük</label>
+                    <label><input type="radio" name="q15" value="C"> A kitevőket kivonjuk</label>
+                </div>
+            </div>
+
+            <!-- 16. Kérdés -->
+            <div class="question-card" id="q16-card">
+                <div class="question-title">16. Hogyan működik a hatvány hatványozása?</div>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="A"> A hatvány alapot a kitevők összegére emeljük</label>
+                    <label><input type="radio" name="q16" value="B"> A hatvány alapot a kitevők szorzatára emeljük</label>
+                    <label><input type="radio" name="q16" value="C"> A hatvány alapot a kitevők hányadosára emeljük</label>
+                </div>
+            </div>
+
+
+            <div class="section-header">II. RÉSZ: KONKRÉT SZÁMOLÓS ÉS BETŰS (ALGEBRAI) PÉLDÁK</div>
+
+            <!-- 17. Kérdés -->
+            <div class="question-card" id="q17-card">
+                <div class="question-title">17. Végezd el az azonos alapú hatványok szorzását: 5<sup>3</sup> · 5<sup>4</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q17" value="A"> 5<sup>7</sup></label>
+                    <label><input type="radio" name="q17" value="B"> 5<sup>12</sup></label>
+                    <label><input type="radio" name="q17" value="C"> 25<sup>7</sup></label>
+                </div>
+            </div>
+
+            <!-- 18. Kérdés -->
+            <div class="question-card" id="q18-card">
+                <div class="question-title">18. Végezd el az azonos alapú hatványok osztását: 2<sup>8</sup> : 2<sup>3</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q18" value="A"> 2<sup>11</sup></label>
+                    <label><input type="radio" name="q18" value="B"> 2<sup>5</sup></label>
+                    <label><input type="radio" name="q18" value="C"> 1<sup>5</sup></label>
+                </div>
+            </div>
+
+            <!-- 19. Kérdés -->
+            <div class="question-card" id="q19-card">
+                <div class="question-title">19. Számítsd ki a hatvány hatványozását: (7<sup>3</sup>)<sup>2</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q19" value="A"> 7<sup>5</sup></label>
+                    <label><input type="radio" name="q19" value="B"> 7<sup>6</sup></label>
+                    <label><input type="radio" name="q19" value="C"> 7<sup>9</sup></label>
+                </div>
+            </div>
+
+            <!-- 20. Kérdés (BETŰS MAGASABB SZINTŰ) -->
+            <div class="question-card" id="q20-card">
+                <div class="question-title">20. Végezd el az alábbi betűs kifejezés szorzását (ahol x elem Q): x<sup>4</sup> · x<sup>5</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="A"> x<sup>20</sup></label>
+                    <label><input type="radio" name="q20" value="B"> x<sup>9</sup></label>
+                    <label><input type="radio" name="q20" value="C"> 2x<sup>9</sup></label>
+                </div>
+            </div>
+
+            <!-- 21. Kérdés (BETŰS MAGASABB SZINTŰ) -->
+            <div class="question-card" id="q21-card">
+                <div class="question-title">21. Végezd el a betűs hatványok osztását: a<sup>10</sup> : a<sup>4</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q21" value="A"> a<sup>6</sup></label>
+                    <label><input type="radio" name="q21" value="B"> a<sup>40</sup></label>
+                    <label><input type="radio" name="q21" value="C"> a<sup>14</sup></label>
+                </div>
+            </div>
+
+            <!-- 22. Kérdés (BETŰS MAGASABB SZINTŰ) -->
+            <div class="question-card" id="q22-card">
+                <div class="question-title">22. Végezd el a betűs hatvány hatványozását: (y<sup>3</sup>)<sup>4</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q22" value="A"> y<sup>7</sup></label>
+                    <label><input type="radio" name="q22" value="B"> y<sup>81</sup></label>
+                    <label><input type="radio" name="q22" value="C"> y<sup>12</sup></label>
+                </div>
+            </div>
+
+            <!-- 23. Kérdés -->
+            <div class="question-card" id="q23-card">
+                <div class="question-title">23. Végezd el az azonos kitevőjű hatványok szorzását: 10<sup>5</sup> · 2<sup>5</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q23" value="A"> 20<sup>5</sup></label>
+                    <label><input type="radio" name="q23" value="B"> 20<sup>10</sup></label>
+                    <label><input type="radio" name="q23" value="C"> 12<sup>5</sup></label>
+                </div>
+            </div>
+
+            <!-- 24. Kérdés -->
+            <div class="question-card" id="q24-card">
+                <div class="question-title">24. Végezd el az azonos kitevőjű hatványok osztását: 12<sup>4</sup> : 3<sup>4</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q24" value="A"> 4<sup>4</sup></label>
+                    <label><input type="radio" name="q24" value="B"> 4<sup>0</sup></label>
+                    <label><input type="radio" name="q24" value="C"> 9<sup>4</sup></label>
+                </div>
+            </div>
+
+            <!-- 25. Kérdés -->
+            <div class="question-card" id="q25-card">
+                <div class="question-title">25. Számítsd ki a pontos értékeket: (-3)<sup>2</sup> és -3<sup>2</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q25" value="A"> Mindkettő 9</label>
+                    <label><input type="radio" name="q25" value="B"> (-3)<sup>2</sup> = 9 és -3<sup>2</sup> = -9</label>
+                    <label><input type="radio" name="q25" value="C"> Mindkettő -9</label>
+                </div>
+            </div>
+
+            <!-- 26. Kérdés -->
+            <div class="question-card" id="q26-card">
+                <div class="question-title">26. Számítsd ki a pontos értéket: (-2)<sup>3</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q26" value="A"> 8</label>
+                    <label><input type="radio" name="q26" value="B"> -8</label>
+                    <label><input type="radio" name="q26" value="C"> -6</label>
+                </div>
+            </div>
+
+            <!-- 27. Kérdés -->
+            <div class="question-card" id="q27-card">
+                <div class="question-title">27. Számítsd ki a hatványértéket: 2026<sup>0</sup> + 1<sup>2026</sup></div>
+                <div class="options">
+                    <label><input type="radio" name="q27" value="A"> 2</label>
+                    <label><input type="radio" name="q27" value="B"> 2027</label>
+                    <label><input type="radio" name="q27" value="C"> 0</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn-submit" onclick="checkAnswers()">Kvíz Kiértékelése</button>
+        </form>
+
+        <div id="result-box"></div>
+    </div>
+
+    <!-- Figyelmeztető Ablak -->
+    <div id="warningModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
+            <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
+            <p><b>Maradjon az oldalon és folytassa a kvízt!</b></p>
+            <button onclick="closeModal()">Visszatérek a kvízhez</button>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            q1: 'B',
+            q2: 'B',
+            q3: 'A',
+            q4: 'B',
+            q5: 'A',
+            q6: 'C',
+            q7: 'B',
+            q8: 'A',
+            q9: 'A',
+            q10: 'B',
+            q11: 'A',
+            q12: 'A',
+            q13: 'A',
+            q14: 'A',
+            q15: 'A',
+            q16: 'B',
+            q17: 'A',
+            q18: 'B',
+            q19: 'B',
+            q20: 'B', // x^9
+            q21: 'A', // a^6
+            q22: 'C', // y^12
+            q23: 'A',
+            q24: 'A',
+            q25: 'B',
+            q26: 'B',
+            q27: 'A'
+        };
+
+        function checkAnswers() {
+            let score = 0;
+            const total = Object.keys(answers).length;
+
+            for (let i = 1; i <= total; i++) {
+                const qKey = 'q' + i;
+                const card = document.getElementById(qKey + '-card');
+                const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+
+                card.classList.remove('correct-card', 'incorrect-card');
+
+                if (selected && selected.value === answers[qKey]) {
+                    score++;
+                    card.classList.add('correct-card');
+                } else {
+                    card.classList.add('incorrect-card');
+                }
+            }
+
+            const resultBox = document.getElementById('result-box');
+            resultBox.style.display = 'block';
+            
+            const percentage = Math.round((score / total) * 100);
+            resultBox.innerHTML = `Eredményed: ${score} / ${total} pont (${percentage}%)`;
+
+            if (percentage >= 75) {
+                resultBox.style.backgroundColor = '#d4edda';
+                resultBox.style.color = '#155724';
+            } else {
+                resultBox.style.backgroundColor = '#f8d7da';
+                resultBox.style.color = '#721c24';
+            }
+
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Lapelhagyási figyelmeztetések
+        document.addEventListener("mouseleave", function(e) {
+            if (e.clientY < 10) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        window.addEventListener("blur", function() {
+            document.getElementById("warningModal").style.display = "flex";
+        });
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        function closeModal() {
+            document.getElementById("warningModal").style.display = "none";
+        }
+
+        // Másolásvédelem
+        document.addEventListener('copy', function(e) { e.preventDefault(); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+                (e.ctrlKey && e.keyCode === 67) || 
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

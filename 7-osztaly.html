@@ -16,6 +16,29 @@
             --border-color: #334155;
         }
 
+        /* BÖNGÉSZŐ GÖRDÍTŐSÁV JAVÍTÁS */
+        /* Firefox-hoz */
+        html {
+            scrollbar-color: #38bdf8 #0f172a;
+            scrollbar-width: thin;
+        }
+
+        /* Chrome, Edge, Brave és Safari böngészőkhöz (Közvetlenül a globális szelektorra kötve) */
+        ::-webkit-scrollbar {
+            width: 12px !important; /* Kicsit szélesebb, hogy biztosan felülbírálja a gyári értéket */
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a !important; /* Mély sötétkék háttér, megegyezik az oldaladdal */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #38bdf8 !important; /* Világoskék csúszka */
+            border-radius: 6px !important;
+            border: 3px solid #0f172a !important; /* Sötét keret, ami által vékonyabbnak és elegánsabbnak tűnik */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #0284c7 !important; /* Sötétebb kék, ha ráviszed az egeret */
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -26,7 +49,7 @@
 
         header {
             background: #1e293b;
-            padding: 0px 40px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -48,27 +71,24 @@
             color: #0f172a;
         }
 
-        /* ALAP ELRENDEZÉS (SZÁMÍTÓGÉP) */
         .layout {
             display: flex;
             max-width: 1400px;
             margin: 20px auto;
             gap: 20px;
             padding: 0 15px;
-            box-sizing: border-box;
         }
 
-        /* BAL OLDALI ARCHÍVUM SÁV */
+        /* BAL OLDALI ARCHÍVUM SÁV (Tisztított verzió duplikáció nélkül) */
         .sidebar {
+            align-self: flex-start; /* Csak a tartalom méretére nő */
             width: 260px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 15px;
             flex-shrink: 0;
-            box-sizing: border-box;
         }
-
         .sidebar h3 {
             margin-top: 0;
             color: #38bdf8;

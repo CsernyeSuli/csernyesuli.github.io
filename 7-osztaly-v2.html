@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7. Osztály - Matematika</title>
-    <style>
+   <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -15,26 +15,27 @@
             --border-color: #334155;
         }
 
-        /* GÖRDÍTŐSÁV STÍLUSOK (Minden modern böngészőhöz) */
-        html, body {
-            scrollbar-color: #38bdf8 var(--bg-color); /* Firefox */
-            scrollbar-width: thin; 
+        /* BÖNGÉSZŐ GÖRDÍTŐSÁV JAVÍTÁS */
+        /* Firefox-hoz */
+        html {
+            scrollbar-color: #38bdf8 #0f172a;
+            scrollbar-width: thin;
         }
 
-        /* Gördítősáv Chrome, Edge, Brave és Safari böngészőkhöz */
+        /* Chrome, Edge, Brave és Safari böngészőkhöz (Közvetlenül a globális szelektorra kötve) */
         ::-webkit-scrollbar {
-            width: 10px; /* kicsit vastagabb, hogy könnyebb legyen megfogni */
+            width: 12px !important; /* Kicsit szélesebb, hogy biztosan felülbírálja a gyári értéket */
         }
         ::-webkit-scrollbar-track {
-            background: var(--bg-color); /* Sötétkék háttér */
+            background: #0f172a !important; /* Mély sötétkék háttér, megegyezik az oldaladdal */
         }
         ::-webkit-scrollbar-thumb {
-            background: #38bdf8; /* Világoskék csúszka */
-            border-radius: 5px;  /* Lekerekített szélek */
-            border: 2px solid var(--bg-color); /* Kis rés a csúszka és a sín széle között, ettől még szebb lesz */
+            background-color: #38bdf8 !important; /* Világoskék csúszka */
+            border-radius: 6px !important;
+            border: 3px solid #0f172a !important; /* Sötét keret, ami által vékonyabbnak és elegánsabbnak tűnik */
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-blue); /* Sötétebb kék, ha rárántod az egeret */
+            background-color: #0284c7 !important; /* Sötétebb kék, ha ráviszed az egeret */
         }
 
         body {
@@ -77,9 +78,9 @@
             padding: 0 15px;
         }
 
-        /* BAL OLDALI ARCHÍVUM SÁV (Összevont, tiszta verzió) */
+        /* BAL OLDALI ARCHÍVUM SÁV (Tisztított verzió duplikáció nélkül) */
         .sidebar {
-            align-self: flex-start; /* Így csak a saját tartalmáig nyúlik le */
+            align-self: flex-start; /* Csak a tartalom méretére nő */
             width: 260px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -87,7 +88,6 @@
             padding: 15px;
             flex-shrink: 0;
         }
-
 
         .sidebar h3 {
             margin-top: 0;

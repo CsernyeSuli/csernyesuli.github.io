@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>7. Osztály - Hatványozás Elméleti Összefoglaló</title>
     <style>
-        /* Alapbeállítások és másolásvédelem CSS szinten */
         * {
             box-sizing: border-box;
             user-select: none;
@@ -42,25 +41,16 @@
         h2 {
             color: #2980b9;
             margin-top: 25px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
         }
 
         .card {
             background-color: #eef7fc;
             border-left: 5px solid #3498db;
-            padding: 15px;
+            padding: 15px 20px;
             margin: 15px 0;
             border-radius: 4px;
-        }
-
-        .formula {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #d35400;
-            background-color: #fef5e7;
-            padding: 5px 10px;
-            border-radius: 4px;
-            display: inline-block;
-            margin: 5px 0;
         }
 
         ul {
@@ -69,6 +59,11 @@
 
         li {
             margin-bottom: 8px;
+        }
+
+        .arrow {
+            font-weight: bold;
+            color: #d35400;
         }
 
         .btn-container {
@@ -95,7 +90,7 @@
             transform: scale(1.03);
         }
 
-        /* Lapelhagyás-figyelő Figyelmeztető Ablak (Modal) */
+        /* Figyelmeztető Ablak (Modal) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -111,7 +106,7 @@
             padding: 30px;
             border-radius: 12px;
             text-align: center;
-            max-width: 450px;
+            max-width: 480px;
             border: 4px solid #e74c3c;
             box-shadow: 0 5px 25px rgba(231, 76, 60, 0.4);
         }
@@ -119,14 +114,16 @@
         .modal-content h2 {
             color: #c0392b;
             margin-top: 0;
+            border-bottom: none;
         }
 
         .modal-content button {
             background-color: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 1em;
+            font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
             margin-top: 15px;
@@ -136,59 +133,41 @@
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
     <div class="container">
-        <h1>Hatványozás - Elméleti Összefoglaló (7. Osztály)</h1>
-        
+        <h1>Elméleti összefoglaló: A hatványozás</h1>
         <p><i>Készíts részletes jegyzetet a füzetedbe az alábbi elméleti anyag alapján! A jegyzetelést követően a lap alján található gombbal tudsz továbblépni a kvízre.</i></p>
 
         <div class="card">
-            <h2>1. Mi a hatványozás?</h2>
-            <p>A hatványozás **azonos tényezős szorzások** rövidített írásmódja.</p>
-            <p><span class="formula">a<sup>n</sup> = a · a · ... · a</span> (n tényező)</p>
+            <h2>Alapfogalmak</h2>
+            <p><b>Mi a hatvány?</b><br><span class="arrow">➔</span> Ismételt szorzás</p>
+            <p><b>Miből áll a hatvány alak?</b><br><span class="arrow">➔</span> Hatvány alapból és kitevőből</p>
+            <p><b>Mit mutat meg a hatvány alap?</b><br><span class="arrow">➔</span> A hatvány alapot kell szorozni önmagával</p>
+            <p><b>Mit jelent a hatvány kitevő?</b><br><span class="arrow">➔</span> Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
+            <p><b>A hatvány alak mire írható át?</b><br><span class="arrow">➔</span> Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
+        </div>
+
+        <div class="card">
+            <h2>⚠️ Speciális esetek</h2>
             <ul>
-                <li><b>a (Alap):</b> A szám, amelyet önmagával megszorzunk.</li>
-                <li><b>n (Hatványkitevő):</b> Megmutatja, hányszor írjuk le az alapot tényezőként.</li>
-                <li><b>a<sup>n</sup> (Hatványérték):</b> A művelet végeredménye.</li>
+                <li>Minden szám 1. hatványa egyenlő önmagával</li>
+                <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
+                <li>Az 1 bármelyik hatványa 1</li>
+                <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
+                <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
             </ul>
         </div>
 
         <div class="card">
-            <h2>2. Speciális esetek és előjelszabályok</h2>
+            <h2>✨ Hatványozás azonosságai</h2>
             <ul>
-                <li>Bármely nem-nulla szám 1. hatványa önmaga: <span class="formula">a<sup>1</sup> = a</span></li>
-                <li>Bármely nem-nulla szám 0. hatványa 1: <span class="formula">a<sup>0</sup> = 1</span></li>
-                <li><b>Pozitív alap</b> esetén a hatványérték mindig pozitív.</li>
-                <li><b>Negatív alap</b> esetén:
-                    <ul>
-                        <li><b>Páros kitevőnél</b> az eredmény <b>pozitív</b> (pl. (-3)<sup>2</sup> = 9).</li>
-                        <li><b>Páratlan kitevőnél</b> az eredmény <b>negatív</b> (pl. (-2)<sup>3</sup> = -8).</li>
-                    </ul>
-                </li>
-                <li><i>Vigyázat!</i> <span class="formula">-3<sup>2</sup> = -9</span> (mivel a negatív előjel nem része a hatványnak), míg <span class="formula">(-3)<sup>2</sup> = 9</span>!</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2>3. A hatványozás azonosságai</h2>
-            
-            <h3>Azonos alapú hatványok:</h3>
-            <ul>
-                <li><b>Azonos alapú hatványok szorzása:</b> Az alapot változatlanul hagyjuk, a kitevőket <b>összeadjuk</b>.<br>
-                <span class="formula">a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></span></li>
-                
-                <li><b>Azonos alapú hatványok osztása:</b> Az alapot változatlanul hagyjuk, a kitevőket <b>kivonjuk</b>.<br>
-                <span class="formula">a<sup>m</sup> : a<sup>n</sup> = a<sup>m-n</sup></span></li>
-                
-                <li><b>Hatvány hatványozása:</b> Az alapot változatlanul hagyjuk, a kitevőket <b>összeszorozzuk</b>.<br>
-                <span class="formula">(a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup></span></li>
-            </ul>
-
-            <h3>Azonos kitevőjű hatványok:</h3>
-            <ul>
-                <li><b>Azonos kitevőjű hatványok szorzása:</b> Az alapokat összeszorozzuk, a kitevőt változatlanul hagyjuk.<br>
-                <span class="formula">a<sup>n</sup> · b<sup>n</sup> = (a · b)<sup>n</sup></span></li>
-                
-                <li><b>Azonos kitevőjű hatványok osztása:</b> Az alapokat elosztjuk, a kitevőt változatlanul hagyjuk.<br>
-                <span class="formula">a<sup>n</sup> : b<sup>n</sup> = (a : b)<sup>n</sup></span></li>
+                <li><b>Azonos alapú hatványok szorzása:</b> A közös alapot a kitevők összegére emeljük</li>
+                <li><b>Azonos alapú hatványok osztása/hányadosa:</b> A közös alapot a kitevők különbségére emeljük</li>
+                <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
+                <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
+                <li><b>Szorzat hatványa:</b> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
+                <li><b>Osztás/hányados hatványa:</b> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
+                <li><b>Azonos kitevőjű hatványok szorzása:</b> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
+                <li><b>Azonos kitevőjű hatványok osztása/hányadosa:</b> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
+                <li><b>Hatvány hatványozása:</b> A hatvány alapot a kitevők szorzatára emeljük</li>
             </ul>
         </div>
 
@@ -197,18 +176,29 @@
         </div>
     </div>
 
-    <!-- Lapelhagyás Figyelmeztető Ablak (Ajtólecsapó) -->
+    <!-- Figyelmeztető Ablak (Ajtólecsapó / Előzetes figyelmeztető) -->
     <div id="warningModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>⚠️ FIGYELEM! LAPELHAGYÁS ÉSZLELVE!</h2>
-            <p>Elhagytad az elméleti anyag felületét! A feladat végrehajtása közben tilos más ablakra, fülre vagy alkalmazásra átváltani!</p>
-            <p><b>A tevékenységed rögzítésre került.</b></p>
+            <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
+            <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
+            <p><b>Maradjon az oldalon és folytassa a feladatot!</b></p>
             <button onclick="closeModal()">Visszatérek a jegyzeteléshez</button>
         </div>
     </div>
 
     <script>
-        // 1. Lapelhagyás-figyelő (Ajtólecsapó funkció)
+        // 1. Megelőző figyelmeztetés: amikor az egér elhagyja az ablak felső részét (böngészősáv / fülek felé)
+        document.addEventListener("mouseleave", function(e) {
+            if (e.clientY < 10) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        // 2. Utólagos fülváltás/fókuszvesztés figyelése (pl. Alt+Tab vagy érintőképernyő esetén)
+        window.addEventListener("blur", function() {
+            document.getElementById("warningModal").style.display = "flex";
+        });
+
         document.addEventListener("visibilitychange", function() {
             if (document.hidden) {
                 document.getElementById("warningModal").style.display = "flex";
@@ -219,11 +209,10 @@
             document.getElementById("warningModal").style.display = "none";
         }
 
-        // 2. Szövegmásolási és gombkombinációs védelem
+        // Másolásvédelem
         document.addEventListener('copy', function(e) { e.preventDefault(); });
         document.addEventListener('cut', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
-            // F12, Ctrl+Shift+I, Ctrl+C, Ctrl+U tiltása
             if (e.keyCode === 123 || 
                 (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
                 (e.ctrlKey && e.keyCode === 67) || 

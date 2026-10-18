@@ -397,7 +397,7 @@
 <body>
 
     <header>
-        <h2>6. Osztály - Matematika</h2>
+        <h2>8. Osztály - Matematika</h2>
         <a href="index.html" class="btn-back">⬅ Vissza a Főoldalra</a>
     </header>
 
@@ -412,7 +412,7 @@
             </ul>
         </aside>
 
-        <!-- JOBB OLDALI FŐTERÜLET (3 VÍZSZINTES DOBOZZAL) -->
+        <!-- JOBB OLDALI FŐTERÜLET -->
         <main class="main-content">
             <h3 class="date-title">Aktuális óra tananyaga</h3>
 
@@ -446,11 +446,47 @@
                 </div>
 
             </div>
+
+            <!-- IDE KERÜLT A BEKÜLDÖTT MATEMATIKA SZÖVEG -->
+            <div class="math-notes">
+                <h3>🧮 Elméleti összefoglaló: A hatványozás</h3>
+                
+                <div class="qa-section">
+                    <p><strong>Mi a hatvány?</strong><br>➔ Ismételt szorzás</p>
+                    <p><strong>Miből áll a hatvány alak?</strong><br>➔ Hatvány alapból és kitevőből</p>
+                    <p><strong>Mit mutat meg a hatvány alap?</strong><br>➔ A hatvány alapot kell szorozni önmagával</p>
+                    <p><strong>Mit jelent a hatvány kitevő?</strong><br>➔ Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
+                    <p><strong>A hatvány alak mire írható át?</strong><br>➔ Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
+                </div>
+
+                <h4>⚠️ Speciális esetek</h4>
+                <ul class="notes-list">
+                    <li>Minden szám 1. hatványa egyenlő önmagával</li>
+                    <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
+                    <li>Az 1 bármelyik hatványa 1</li>
+                    <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
+                    <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
+                </ul>
+
+                <h4>✨ Hatványozás azonosságai</h4>
+                <ul class="notes-list">
+                    <li><strong>Azonos alapú hatványok szorzása:</strong> A közös alapot a kitevők összegére emeljük</li>
+                    <li><strong>Azonos alapú hatványok osztása/hányadosa:</strong> A közös alapot a kitevők különbségére emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára</li>
+                    <li><strong>Szorzat hatványa:</strong> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
+                    <li><strong>Osztás/hányados hatványa:</strong> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
+                    <li><strong>Azonos kitevőjű hatványok szorzása:</strong> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
+                    <li><strong>Azonos kitevőjű hatványok osztása/hányadosa:</strong> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
+                    <li><strong>Hatvány hatványozása:</strong> A hatvány alapot a kitevők szorzatára emeljük</li>
+                </ul>
+            </div>
+
         </main>
 
     </div>
 
-    <!-- LEBEGŐ ABLAK: ÓRAI FELADATOK -->
+    <!-- LEBEGŐ ABLAKOK (MODAL-OK) -->
     <div id="modal-orai" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-orai')">&times;</span>
@@ -460,13 +496,11 @@
                 <p><strong>Tankönyv:</strong> 45. oldal 1., 2. feladatok</p>
                 <hr style="border-color: var(--border-color);">
                 <p><strong>Táblakép:</strong></p>
-                <!-- Ide helyezhető el a táblakép képe -->
                 <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
             </div>
         </div>
     </div>
 
-    <!-- LEBEGŐ ABLAK: HÁZI FELADAT -->
     <div id="modal-hazi" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-hazi')">&times;</span>
@@ -480,7 +514,6 @@
         </div>
     </div>
 
-    <!-- LEBEGŐ ABLAK: SZORGALMI FELADAT -->
     <div id="modal-szorgalmi" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-szorgalmi')">&times;</span>
@@ -493,7 +526,6 @@
         </div>
     </div>
 
-    <!-- LEBEGŐ ABLAK: ARCHÍVUM TARTALOM -->
     <div id="modal-archive" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-archive')">&times;</span>
@@ -504,40 +536,42 @@
         </div>
     </div>
 
+    <!-- STÍLUSOK AZ ÚJ SZÖVEGES RÉSZHEZ (A head részbe is teheted, vagy maradhat itt alul) -->
+    <style>
+        .math-notes {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05); /* Enyhe áttetsző háttér */
+            border-radius: 8px;
+            border-left: 5px solid #38bdf8; /* Kék díszcsík az oldalához */
+        }
+        .math-notes h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+        .math-notes h4 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #f43f5e; /* Pirosas kiemelés az azonosságoknak/eseteknek */
+        }
+        .qa-section p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .notes-list {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .notes-list li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+    </style>
+
     <script>
         function openModal(id) {
             document.getElementById(id).style.display = 'flex';
         }
-<div class="modal-body"><p>
-Ami illik tudni a hatványozásról!
-Mi a hatvány? -> Ismételt szorzás
-Miből áll a hatvány alak? -> Hatvány alapból és kitevőből
-Mit mutat meg a hatvány alap? -> A hatvány alapot kell szorozni önmagával
-Mit jelent a hatvány kitevő? -> Darabszámot, hogy az ismételt szorzásban hány tényező van
-A hatvány alak mire írható át -> Szorzat alakba, ismételt szorzásba a hatvány alappal
-
-Speciális esetek
-
-- Minden szám 1. hatványa egyenlő önmagával
-- Minden szám 0. hatványa 1, kivéve a 0-át, 0 a nulladikon nem értelmezett
-- az 1 bármelyik hatványa 1
-- Negatív szám páros kitevőjű hatványa pozitív érték
-- Negatív szám páratlan kitevőjű hatványa negatív érték
-
-Hatványozás azonosságai
-
-- Azonos alapú hatványok szorzása -> A közös alapot a kitevők összegére emeljük
-- Azonos alapú hatványok osztása/hányadosa -> A közös alapot a kitevők különbségére emeljük
-- Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára
-- Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára
-- Szorzat hatványa -> A tényezőket a szorzat kitevőjére emelve összeszorozzuk
-- Osztás/hányados hatványa -> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk
-- Azonos kitevőjű hatványok szorzása -> A hatvány alapok szorzatát a közös kitevőre emeljük
-- Azonos kitevőjű hatványok osztása/hányadosa -> A hatvány alapok hányadosát a közös kitevőre emeljük
-- Hatvány hatványozása -> A hatvány alapot a kitevők szorzatára emeljük
-</p>
-    </div>
-
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';
         }

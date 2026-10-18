@@ -15,6 +15,28 @@
             --border-color: #334155;
         }
 
+        /* GÖRDÍTŐSÁV STÍLUSOK (Minden modern böngészőhöz) */
+        html, body {
+            scrollbar-color: #38bdf8 var(--bg-color); /* Firefox */
+            scrollbar-width: thin; 
+        }
+
+        /* Gördítősáv Chrome, Edge, Brave és Safari böngészőkhöz */
+        ::-webkit-scrollbar {
+            width: 10px; /* kicsit vastagabb, hogy könnyebb legyen megfogni */
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color); /* Sötétkék háttér */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8; /* Világoskék csúszka */
+            border-radius: 5px;  /* Lekerekített szélek */
+            border: 2px solid var(--bg-color); /* Kis rés a csúszka és a sín széle között, ettől még szebb lesz */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue); /* Sötétebb kék, ha rárántod az egeret */
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -54,24 +76,10 @@
             gap: 20px;
             padding: 0 15px;
         }
-        /* ÚJ: A gördítősáv átszínezése az oldal színeihez */
-        html {
-            scrollbar-color: #38bdf8 #1e293b; /* Világoskék csúszka, sötétkék háttér */
-            scrollbar-width: thin;
-        }
 
-        /* A korábbi stílusaid változatlanul folytatódnak... */
+        /* BAL OLDALI ARCHÍVUM SÁV (Összevont, tiszta verzió) */
         .sidebar {
-            align-self: flex-start;
-        }
-        
-        .math-notes {
-            margin-top: 40px;
-            /* ... */
-        }
-
-        /* BAL OLDALI ARCHÍVUM SÁV */
-        .sidebar {
+            align-self: flex-start; /* Így csak a saját tartalmáig nyúlik le */
             width: 260px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -79,6 +87,7 @@
             padding: 15px;
             flex-shrink: 0;
         }
+
 
         .sidebar h3 {
             margin-top: 0;

@@ -74,22 +74,60 @@
             margin-top: 30px;
         }
 
-        .rule-box {
+        .rule-card {
             background-color: #f8f9fa;
-            border-left: 4px solid #27ae60;
+            border-left: 4px solid #3498db;
             padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
+            margin: 12px 0;
+            border-radius: 6px;
         }
 
-        .math-expr {
-            white-space: nowrap;
-            display: inline-block;
-            background-color: #eef7fc;
-            padding: 2px 8px;
-            border-radius: 4px;
+        .rule-card .q-title {
             font-weight: bold;
             color: #2c3e50;
+            font-size: 1.05em;
+            margin-bottom: 4px;
+        }
+
+        .rule-card .a-text {
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .special-box {
+            background-color: #fcf3cf;
+            border-left: 5px solid #f1c40f;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .special-box h3 {
+            margin-top: 0;
+            color: #b7950b;
+        }
+
+        .identity-box {
+            background-color: #e8f8f5;
+            border-left: 5px solid #27ae60;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .identity-box h3 {
+            margin-top: 0;
+            color: #1e8449;
+        }
+
+        .identity-box ul, .special-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .identity-box li, .special-box li {
+            margin-bottom: 8px;
         }
 
         .btn-next {
@@ -160,9 +198,8 @@
             <p>A mai órán teljesen önálló tempóban fogtok dolgozni a tableteken. Kövessétek pontosan az alábbi lépéseket:</p>
             
             <div class="intro-steps">
-                <p>📖 <b>Olvasás:</b> Nyissátok meg a csatolt weboldalon az „Elméleti összefoglaló: A hatványozás” című anyagot!</p>
                 <p>📝 <b>Jegyzetelés:</b> Készítsetek részletes jegyzetet a füzetetekbe! Írjátok ki a legfontosabb fogalmazásokat, a speciális eseteket és a hatványozás azonosságait! <i>(A jó füzetjegyzet lesz a kulcs a következő lépéshez.)</i></p>
-                <p>🧠 <b>Kvíz indítása:</b> Ha elkészültetek a jegyzettel, kattintsatok az oldal alján lévő zöld gombra (VÉGEZTEM A JEGYZETELÉSEL – IRÁNY A KVÍZ!)!</p>
+                <p>🧠 <b>Kvíz indítása:</b> Ha elkészültetek a jegyzettel, kattintsatok az oldal alján lévő zöld gombra (VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!)!</p>
                 <p>🎯 <b>Tudáspróba:</b> Oldjátok meg a kvíz feladatait! A füzetetekben lévő saját jegyzeteiteket nyugodtan használhatjátok és lapozhatjátok a válaszok keresése közben.</p>
                 <p>📸 <b>Leadás és Értékelés:</b> Ha végeztetek, kattintsatok a „Kvíz Kiértékelése” gombra, készítsetek egy képernyőképet az eredményetekről, beadás után lesz ellenőrizve a teljesítményetek.</p>
             </div>
@@ -171,92 +208,66 @@
                 <b>⚠️ FONTOS BIZTONSÁGI SZABÁLYOK:</b>
                 <ul>
                     <li>A kvíz oldalon a szövegmásolás és kijelölés le van tiltva.</li>
-                    <li>A lap elhagyása szigorúan TILOS! Ha átváltasz egy másik böngészőfülre, ablakra vagy alkalmazásra, a rendszer azonnal értesíti a felelős tanárt!</li>
+                    <li>A lap elhagyása szigorúan TILOS! Kérjük, tartsd be a szabályokat, és maradj ezen az oldalon az óra ideje alatt!</li>
                 </ul>
                 <p>Jó munkát kívánok mindenkinek!</p>
             </div>
         </div>
 
-        <!-- ELMÉLETI ANYAG -->
+        <!-- ELMÉLETI ÖSSZEFOGLALÓ -->
         <h2 class="section-title">Elméleti összefoglaló: A hatványozás</h2>
-        
-        <p>A hatványozás egy rövidített írásmód az ismételt szorzás kifejezésére.</p>
 
-        <div class="rule-box">
-            <b>1. A hatvány fogalma és elemei:</b><br>
-            A hatvány alak: <span class="math-expr">a<sup>n</sup></span><br>
-            • <b>a (hatványalap):</b> A szám, amit önmagával szorzunk.<br>
-            • <b>n (hatványkitevő):</b> Azt mutatja meg, hogy a hatványalapot hányszor vesszük tényezőül a szorzásban.
+        <div class="rule-card">
+            <div class="q-title">Mi a hatvány?</div>
+            <div class="a-text">➔ Ismételt szorzás</div>
         </div>
 
-        <div class="rule-box">
-            <b>2. Speciális esetek:</b><br>
-            • Bármely szám 1. hatványa önmaga: <span class="math-expr">a<sup>1</sup> = a</span><br>
-            • Bármely nem-nulla szám 0. hatványa 1: <span class="math-expr">a<sup>0</sup> = 1</span> (ahol a ≠ 0)<br>
-            • <b>Fontos kivétel:</b> A <span class="math-expr">0<sup>0</sup></span> (nulla a nulladikon) <b>nem értelmezett</b>!
+        <div class="rule-card">
+            <div class="q-title">Miből áll a hatvány alak?</div>
+            <div class="a-text">➔ Hatvány alapból és kitevőből</div>
         </div>
 
-        <div class="rule-box">
-            <b>3. Negatív számok hatványozása:</b><br>
-            • Negatív szám <b>páros</b> kitevőjű hatványa mindig <b>pozitív</b>. Pl.: <span class="math-expr">(-3)<sup>2</sup> = 9</span><br>
-            • Negatív szám <b>páratlan</b> kitevőjű hatványa mindig <b>negatív</b>. Pl.: <span class="math-expr">(-2)<sup>3</sup> = -8</span><br>
-            • Vigyázat a zárójellel! <span class="math-expr">(-3)<sup>2</sup> = 9</span>, de <span class="math-expr">-3<sup>2</sup> = -9</span>!
+        <div class="rule-card">
+            <div class="q-title">Mit mutat meg a hatvány alap?</div>
+            <div class="a-text">➔ A hatvány alapot kell szorozni önmagával</div>
         </div>
 
-        <div class="rule-box">
-            <b>4. A hatványozás azonosságai:</b><br>
-            • <b>Azonos alapú hatványok szorzása:</b> A közös alapot a kitevők összegére emeljük: <span class="math-expr">a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></span><br>
-            • <b>Azonos alapú hatványok osztása:</b> A közös alapot a kitevők különbségére emeljük: <span class="math-expr">a<sup>m</sup> : a<sup>n</sup> = a<sup>m-n</sup></span><br>
-            • <b>Hatvány hatványozása:</b> Az alapot a kitevők szorzatára emeljük: <span class="math-expr">(a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup></span><br>
-            • <b>Azonos kitevőjű hatványok szorzása:</b> Az alapok szorzatát a közös kitevőre emeljük: <span class="math-expr">a<sup>n</sup> · b<sup>n</sup> = (a · b)<sup>n</sup></span><br>
-            • <b>Azonos kitevőjű hatványok osztása:</b> Az alapok hányadosát a közös kitevőre emeljük: <span class="math-expr">a<sup>n</sup> : b<sup>n</sup> = (a : b)<sup>n</sup></span>
+        <div class="rule-card">
+            <div class="q-title">Mit jelent a hatvány kitevő?</div>
+            <div class="a-text">➔ Darabszámot, hogy az ismételt szorzásban hány tényező van</div>
         </div>
 
-        <a href="hatvanyozas-kviz-zarolt.html" class="btn-next">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</a>
-    </div>
-
-    <!-- Lapelhagyási Figyelmeztetés -->
-    <div id="warningModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
-            <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
-            <p><b>Maradjon az oldalon és folytassa az olvasást!</b></p>
-            <button onclick="closeWarningModal()">Visszatérek a tananyaghoz</button>
+        <div class="rule-card">
+            <div class="q-title">A hatvány alak mire írható át?</div>
+            <div class="a-text">➔ Szorzat alakba, ismételt szorzásba a hatvány alappal</div>
         </div>
-    </div>
 
-    <script>
-        function closeWarningModal() {
-            document.getElementById("warningModal").style.display = "none";
-        }
+        <!-- SPECIÁLIS ESETEK -->
+        <div class="special-box">
+            <h3>⚠️ Speciális esetek</h3>
+            <ul>
+                <li>Minden szám 1. hatványa egyenlő önmagával</li>
+                <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
+                <li>Az 1 bármelyik hatványa 1</li>
+                <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
+                <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
+            </ul>
+        </div>
 
-        document.addEventListener("mouseleave", function(e) {
-            if (e.clientY < 10) {
-                document.getElementById("warningModal").style.display = "flex";
-            }
-        });
+        <!-- AZONOSSÁGOK -->
+        <div class="identity-box">
+            <h3>✨ Hatványozás azonosságai</h3>
+            <ul>
+                <li><b>Azonos alapú hatványok szorzása:</b> A közös alapot a kitevők összegére emeljük</li>
+                <li><b>Azonos alapú hatványok osztása/hányadosa:</b> A közös alapot a kitevők különbségére emeljük</li>
+                <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
+                <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
+                <li><b>Szorzat hatványa:</b> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
+                <li><b>Osztás/hányados hatványa:</b> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
+                <li><b>Azonos kitevőjű hatványok szorzása:</b> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
+                <li><b>Azonos kitevőjű hatványok osztása/hányadosa:</b> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
+                <li><b>Hatvány hatványozása:</b> A hatvány alapot a kitevők szorzatára emeljük</li>
+            </ul>
+        </div>
 
-        window.addEventListener("blur", function() {
-            document.getElementById("warningModal").style.display = "flex";
-        });
-
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                document.getElementById("warningModal").style.display = "flex";
-            }
-        });
-
-        document.addEventListener('copy', function(e) { e.preventDefault(); });
-        document.addEventListener('cut', function(e) { e.preventDefault(); });
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123 || 
-                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
-                (e.ctrlKey && e.keyCode === 67) || 
-                (e.ctrlKey && e.keyCode === 85)) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    </script>
-</body>
-</html>
+        <a href="hatvanyozas-kviz

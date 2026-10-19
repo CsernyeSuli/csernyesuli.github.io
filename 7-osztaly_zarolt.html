@@ -138,12 +138,13 @@
             text-align: center;
             font-size: 1.2em;
             font-weight: bold;
-            padding: 15px;
+            padding: 18px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            margin-top: 40px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
             transition: background 0.2s ease;
         }
 
@@ -198,7 +199,7 @@
             <p>A mai órán teljesen önálló tempóban fogtok dolgozni a tableteken. Kövessétek pontosan az alábbi lépéseket:</p>
             
             <div class="intro-steps">
-                <p>📝 <b>Jegyzetelés:</b> Készítsetek részletes jegyzetet a füzetetekbe! Írjátok ki a legfontosabb fogalmakat, a speciális eseteket és a hatványozás azonosságait! <i>(A jó füzetjegyzet lesz a kulcs a következő lépéshez.)</i></p>
+                <p>📝 <b>Jegyzetelés:</b> Készítsetek részletes jegyzetet a füzetetekbe! Írjátok ki a legfontosabb fogalmazásokat, a speciális eseteket és a hatványozás azonosságait! <i>(A jó füzetjegyzet lesz a kulcs a következő lépéshez.)</i></p>
                 <p>🧠 <b>Kvíz indítása:</b> Ha elkészültetek a jegyzettel, kattintsatok az oldal alján lévő zöld gombra (VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!)!</p>
                 <p>🎯 <b>Tudáspróba:</b> Oldjátok meg a kvíz feladatait! A füzetetekben lévő saját jegyzeteiteket nyugodtan használhatjátok és lapozhatjátok a válaszok keresése közben.</p>
                 <p>📸 <b>Leadás és Értékelés:</b> Ha végeztetek, kattintsatok a „Kvíz Kiértékelése” gombra, készítsetek egy képernyőképet az eredményetekről, beadás után lesz ellenőrizve a teljesítményetek.</p>
@@ -270,4 +271,52 @@
             </ul>
         </div>
 
-        <a href="hatvanyozas-kviz
+        <!-- KVÍZ GOMB -->
+        <a href="hatvanyozas-kviz-zarolt.html" class="btn-next">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</a>
+
+    </div>
+
+    <!-- Lapelhagyási Figyelmeztetés -->
+    <div id="warningModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
+            <p>A lap elhagyására készül! Kérjük, tartsd be az órai szabályokat, maradj az oldalon és folytasd az olvasást!</p>
+            <button onclick="closeWarningModal()">Visszatérek a tananyaghoz</button>
+        </div>
+    </div>
+
+    <script>
+        function closeWarningModal() {
+            document.getElementById("warningModal").style.display = "none";
+        }
+
+        document.addEventListener("mouseleave", function(e) {
+            if (e.clientY < 10) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        window.addEventListener("blur", function() {
+            document.getElementById("warningModal").style.display = "flex";
+        });
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        document.addEventListener('copy', function(e) { e.preventDefault(); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+                (e.ctrlKey && e.keyCode === 67) || 
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

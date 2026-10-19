@@ -8,6 +8,29 @@
             --border-color: #334155;
         }
 
+        /* BÖNGÉSZŐ GÖRDÍTŐSÁV JAVÍTÁS */
+        /* Firefox-hoz */
+        html {
+            scrollbar-color: #38bdf8 #0f172a;
+            scrollbar-width: thin;
+        }
+
+        /* Chrome, Edge, Brave és Safari böngészőkhöz (Közvetlenül a globális szelektorra kötve) */
+        ::-webkit-scrollbar {
+            width: 12px !important; /* Kicsit szélesebb, hogy biztosan felülbírálja a gyári értéket */
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a !important; /* Mély sötétkék háttér, megegyezik az oldaladdal */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #38bdf8 !important; /* Világoskék csúszka */
+            border-radius: 6px !important;
+            border: 3px solid #0f172a !important; /* Sötét keret, ami által vékonyabbnak és elegánsabbnak tűnik */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #0284c7 !important; /* Sötétebb kék, ha ráviszed az egeret */
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -18,7 +41,7 @@
 
         header {
             background: #1e293b;
-            padding: 0px 40px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -40,27 +63,24 @@
             color: #0f172a;
         }
 
-        /* ALAP ELRENDEZÉS (SZÁMÍTÓGÉP) */
         .layout {
             display: flex;
             max-width: 1400px;
             margin: 20px auto;
             gap: 20px;
             padding: 0 15px;
-            box-sizing: border-box;
         }
 
-        /* BAL OLDALI ARCHÍVUM SÁV */
+        /* BAL OLDALI ARCHÍVUM SÁV (Tisztított verzió duplikáció nélkül) */
         .sidebar {
+            align-self: flex-start; /* Csak a tartalom méretére nő */
             width: 260px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 15px;
             flex-shrink: 0;
-            box-sizing: border-box;
         }
-
         .sidebar h3 {
             margin-top: 0;
             color: #38bdf8;
@@ -306,82 +326,12 @@
                 margin-right: -15px;
             }
         }
-    /* VENN DIAGRAM KÖZÖS (ALAP) STÍLUSOK */
-.venn-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    background-color: #0f172a;
-    margin: 15px auto;
-    box-sizing: border-box;
-    overflow: hidden;
+    /* Globális link stílus a jó olvashatóságért */
+a {
+    color: #0284c7; /* Ugyanaz a világoskék, mint a gombok */
+    text-decoration: underline; /* Aláhúzás a jobb felismerhetőségért */
 }
 
-.venn-circle {
-    position: absolute;
-    border-radius: 50%;
-    box-sizing: border-box;
-    z-index: 1;
+a:hover {
+    color: #38bdf8; /* Világosabb kék, ha ráviszik az egeret */
 }
-
-.venn-circle-a {
-    border: 3px solid #2980b9;
-    background-color: rgba(41, 128, 185, 0.25);
-}
-
-.venn-circle-b {
-    border: 3px solid #27ae60;
-    background-color: rgba(39, 174, 96, 0.25);
-}
-
-.venn-label {
-    position: absolute;
-    color: white;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 11px;
-}
-
-.venn-label-a { background-color: #2980b9; top: -18px; left: 15px; }
-.venn-label-b { background-color: #27ae60; top: -18px; right: 15px; }
-
-.venn-text {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
-    z-index: 2;
-}
-
-.venn-text-a { left: 25%; font-size: 15px; color: var(--text-color); }
-.venn-text-b { left: 75%; font-size: 14px; color: var(--text-color); text-align: center; line-height: 1.2; }
-.venn-text-ab { left: 50%; font-size: 13px; color: #a855f7; text-align: center; line-height: 1.2; z-index: 5; }
-.venn-text-out { position: absolute; bottom: 8px; left: 12px; font-weight: bold; font-size: 14px; color: #ef4444; z-index: 2; }
-
-
-/* --- ASZTALI / LAPTOP NÉZET (SZÉLES KIJELZŐ) --- */
-@media (min-width: 769px) {
-    .venn-container { height: 200px; }
-    .venn-circle { top: 15px; width: 54%; height: 170px; }
-    .venn-circle-a { left: 6%; }
-    .venn-circle-b { right: 6%; }
-    .venn-text-a { left: 22%; }
-    .venn-text-b { left: 78%; }
-    .venn-text-ab { width: 35%; font-size: 18px; }
-}
-
-
-/* --- MOBIL NÉZET (KESKENY KIJELZŐ) --- */
-@media (max-width: 768px) {
-    .venn-container { height: 170px; }
-    .venn-circle { top: 10px; width: 62%; height: 150px; }
-    .venn-circle-a { left: 4%; }
-    .venn-circle-b { right: 4%; }
-    .venn-text-a { left: 22%; }
-    .venn-text-b { left: 78%; }
-    .venn-text-ab { width: 40%; font-size: 12px; }
-}
-    </style>

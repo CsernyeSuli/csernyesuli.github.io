@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDVE MATEK - Feladatok és Megoldások</title>
+    <style>
+        :root {
+            --bg-main: #0b192c;
+            --bg-card: #1e3e62;
+            --text-main: #ffffff;
+            --text-accent: #00b4d8;
+            --orange-accent: #ff6f3c;
+            --yellow-accent: #ffbb33;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-card);
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            color: var(--text-main);
+        }
+
+        .btn-back {
+            background-color: var(--text-accent);
+            color: var(--bg-main);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #0096c7;
+        }
+
+        .task-card {
+            background-color: var(--bg-card);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .task-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-accent);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .task-desc {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        details {
+            background-color: rgba(11, 25, 44, 0.6);
+            border-radius: 6px;
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+        }
+
+        summary {
+            font-weight: bold;
+            color: var(--yellow-accent);
+            cursor: pointer;
+            outline: none;
+        }
+
+        summary:hover {
+            color: var(--orange-accent);
+        }
+
+        .solution {
+            margin-top: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>MEDVE MATEK FELADATOK</h1>
+            <a href="7-osztaly.html" class="btn-back">← Vissza a Főoldalra</a>
+        </header>
+
+        <!-- 1. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">1. Feladat: Tigris és Malacka</h2>
+            <div class="task-desc">
+                Tigris a Százholdas Pagonyban sétálgatva észrevette Malackát, ezért elkezdett egyenes vonalban futni felé. Malacka azonban megijedt a lépések hangjától, így harmadakkora sebességgel elkezdett elfutni Tigris elől. Sőt, amikor Tigris Malacka kiindulási helyén járt, akkor Malacka megkétszerezte a sebességét. Így végül 240 méter megtétele után érte csak utol Tigris Malackát. Hány méterre voltak egymástól, mikor Tigris futni kezdett?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 120 méter.<br>
+                    <strong>Levezetés:</strong> Az 1. szakaszon Tigris $d$ métert tesz meg, Malacka $d/3$-at. A 2. szakaszon Malacka sebessége $2v/3$-ra nő, Tigris relatív sebessége $v/3$, így a megmaradt $d/3$ előny leküzdéséhez Tigrisnek újabb $d$ métert kell futnia. A teljes út $2d = 240\text{ m} \implies d = 120\text{ m}$.
+                </div>
+            </details>
+        </div>
+
+        <!-- 2. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">2. Feladat: A Számsorozat</h2>
+            <div class="task-desc">
+                Egy számsorozat első három tagja 3, 2, 2, valamint azt is tudjuk, hogy a sorozatban a második tagtól kezdve bármelyik tag két szomszédját összeszorozva ugyanazt a számot kapjuk eredményül. Mennyi a számsorozat első 2026 tagjának az összege?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 5065.<br>
+                    <strong>Levezetés:</strong> A sorozat tagjai: 3, 2, 2, 3, 3, 2, 2, 3... A 4-es periódusok összege: $3+2+2+3 = 10$. $2026 = 506 \times 4 + 2$. Így az összeg $506 \times 10 + 3 + 2 = 5065$.
+                </div>
+            </details>
+        </div>
+
+        <!-- 3. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">3. Feladat: Ron Weasley Dobókockái</h2>
+            <div class="task-desc">
+                Ron szabályos dobókockákat csent el, amik egy nagy kockává álltak össze az azonos pötty számú lapjaik mentén. A nagy kocka külső lapjain összesen 1029 pötty található. Hány dobókocka volt a dobozban?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 343 dobókocka.<br>
+                    <strong>Levezetés:</strong> A szemközti lapok összege 7, így a $N \times N \times N$-es nagy kocka külső felszínén lévő pöttyök száma $21 N^2 = 1029 \implies N = 7$. A kockák száma $N^3 = 7^3 = 343$.
+                </div>
+            </details>
+        </div>
+
+        <!-- 4. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">4. Feladat: Kártyakeverő Gép</h2>
+            <div class="task-desc">
+                Dexter kártyakeverő gépe meghatározott módon keveri meg a 13 lapos paklit. Dee Dee egymás után többször átengedte a paklit a gépen, amíg visszakapta az eredeti sorrendet. Hányszor adta be a kártyákat?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 20-szor.<br>
+                    <strong>Levezetés:</strong> A permutáció diszjunkt ciklusainak hossza: 1, 1, 5, 4, 2. Az eredeti állapothoz szükséges keverések száma ezen ciklushosszak legkisebb közös többszöröse: $\text{LKKT}(1, 1, 5, 4, 2) = 20$.
+                </div>
+            </details>
+        </div>
+
+        <!-- 5. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">5. Feladat: Zoey és Mira Számai</h2>
+            <div class="task-desc">
+                Zoey leírta az összes ötjegyű számot. Mira mindegyik számjegy alá odaírta, hogy az a számjegy hányszor szerepel abban a számban. Hány különböző számot írt le Mira?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 42.<br>
+                    <strong>Levezetés:</strong> Az ötjegyű számok számjegyeinek partíciói alapján 42 különböző gyakorisági mintázat alakítható ki.
+                </div>
+            </details>
+        </div>
+
+        <!-- 6. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">6. Feladat: MacKocka Játékgyár</h2>
+            <div class="task-desc">
+                Brumi vett néhány építőkockát, amikből kirakható egy csupa sárga, csupa zöld és csupa lila külső felületű $3 \times 3 \times 3$-as nagy kocka is. Legkevesebb hány építőkockát vett Brumi?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 27 építőkocka.<br>
+                    <strong>Levezetés:</strong> Megfelelő lapfestéssel (2 sárga, 2 zöld, 2 lila lap kockánként) mind a 27 kocka univerzálisan elforgatható a kívánt pozíciókba.
+                </div>
+            </details>
+        </div>
+
+        <!-- 7. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">7. Feladat: Dörmögő Dömötör Gyertyái</h2>
+            <div class="task-desc">
+                Dömötör 30 darabos gyertyakészlete a 3 gyereke születésnapjain fogy el teljesen. Hány munkatársa lehet legfeljebb, ha mindegyikük különböző, de matematikailag helyes tippet adott a gyerekek korára?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> 3 munkatárs.<br>
+                    <strong>Levezetés:</strong> Az $\frac{a(a+1)}{2} + \frac{b(b+1)}{2} + \frac{c(c+1)}{2} = 30$ egyenletnek 3 megoldása van egész számokként: (7,1,1), (6,3,2) és (4,4,4).
+                </div>
+            </details>
+        </div>
+
+        <!-- 8. Feladat -->
+        <div class="task-card">
+            <h2 class="task-title">8. Feladat: Dzsepettó Vászondarabjai</h2>
+            <div class="task-desc">
+                Pinokkió azt a kockát szeretné, aminek a csomagolásán a piros vonalak egy háromszöggé állnak össze. Melyik vászondarabból fog ez elkészülni (A, B, C vagy D)?
+            </div>
+            <details>
+                <summary>Megoldás megjelenítése</summary>
+                <div class="solution">
+                    <strong>Eredmény:</strong> D.<br>
+                    <strong>Levezetés:</strong> Összehajtás után a D jelű vászondarabon lévő piros szakaszok képeznek folytonos, zárt háromszöget a kocka lapjain.
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+</body>
+</html>

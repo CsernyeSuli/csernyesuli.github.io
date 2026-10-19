@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7. Osztály - Hatványozás Elméleti Összefoglaló</title>
+    <title>Hatványozás - Elméleti összefoglaló</title>
     <style>
         * {
             box-sizing: border-box;
@@ -31,66 +31,89 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-        }
-
-        h2 {
-            color: #2980b9;
-            margin-top: 25px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-        }
-
-        .card {
+        .intro-box {
             background-color: #eef7fc;
-            border-left: 5px solid #3498db;
-            padding: 15px 20px;
+            border-left: 5px solid #2980b9;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+        }
+
+        .intro-box h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .intro-box h2 {
+            color: #2980b9;
+            font-size: 1.3em;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .intro-steps p {
+            margin: 10px 0;
+        }
+
+        .warning-text {
+            background-color: #fdf2e9;
+            border-left: 4px solid #e67e22;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        h2.section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #27ae60;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        .rule-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
             margin: 15px 0;
             border-radius: 4px;
         }
 
-        ul {
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        .arrow {
+        .math-expr {
+            white-space: nowrap;
+            display: inline-block;
+            background-color: #eef7fc;
+            padding: 2px 8px;
+            border-radius: 4px;
             font-weight: bold;
-            color: #d35400;
+            color: #2c3e50;
         }
 
-        .btn-container {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .btn-quiz {
+        .btn-next {
+            display: block;
+            width: 100%;
             background-color: #27ae60;
             color: white;
-            padding: 15px 30px;
-            font-size: 1.1em;
+            text-align: center;
+            font-size: 1.2em;
             font-weight: bold;
+            padding: 15px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: background 0.3s ease, transform 0.2s ease;
+            margin-top: 40px;
+            transition: background 0.2s ease;
         }
 
-        .btn-quiz:hover {
+        .btn-next:hover {
             background-color: #219150;
-            transform: scale(1.03);
         }
 
-        /* Modal ablakok */
+        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -107,18 +130,12 @@
             border-radius: 12px;
             text-align: center;
             max-width: 480px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            border: 4px solid #e74c3c;
+            box-shadow: 0 5px 25px rgba(231, 76, 60, 0.4);
         }
 
-        .modal-warning {
-            border: 4px solid #e74c3c;
-        }
-        .modal-warning h2 {
-            color: #c0392b;
-            border-bottom: none;
-            margin-top: 0;
-        }
-        .modal-warning button {
+        .modal-content h2 { color: #c0392b; margin-top: 0; }
+        .modal-content button {
             background-color: #e74c3c;
             color: white;
             border: none;
@@ -129,150 +146,106 @@
             cursor: pointer;
             margin-top: 15px;
         }
-
-        .modal-confirm {
-            border: 4px solid #27ae60;
-        }
-        .modal-confirm h2 {
-            color: #27ae60;
-            border-bottom: none;
-            margin-top: 0;
-        }
-        .btn-confirm-yes {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1em;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 10px 5px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-confirm-no {
-            background-color: #7f8c8d;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1em;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 10px 5px;
-        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
     <div class="container">
-        <h1>Elméleti összefoglaló: A hatványozás</h1>
-        <p><i>Készíts részletes jegyzetet a füzetedbe az alábbi elméleti anyag alapján! A jegyzetelést követően a lap alján található gombbal tudsz továbblépni a kvízre.</i></p>
+        
+        <!-- BEVEZETŐ UTASÍTÁSOK -->
+        <div class="intro-box">
+            <h1>CÍM: Hatványozás- elméleti összefoglaló</h1>
+            <h2>Önálló tananyag-feldolgozás és tudáspróba</h2>
+            <p>Kedves Tanulók!</p>
+            <p>A mai órán teljesen önálló tempóban fogtok dolgozni a tableteken. Kövessétek pontosan az alábbi lépéseket:</p>
+            
+            <div class="intro-steps">
+                <p>📖 <b>Olvasás:</b> Nyissátok meg a csatolt weboldalon az „Elméleti összefoglaló: A hatványozás” című anyagot!</p>
+                <p>📝 <b>Jegyzetelés:</b> Készítsetek részletes jegyzetet a füzetetekbe! Írjátok ki a legfontosabb fogalmazásokat, a speciális eseteket és a hatványozás azonosságait! <i>(A jó füzetjegyzet lesz a kulcs a következő lépéshez.)</i></p>
+                <p>🧠 <b>Kvíz indítása:</b> Ha elkészültetek a jegyzettel, kattintsatok az oldal alján lévő zöld gombra (VÉGEZTEM A JEGYZETELÉSEL – IRÁNY A KVÍZ!)!</p>
+                <p>🎯 <b>Tudáspróba:</b> Oldjátok meg a kvíz feladatait! A füzetetekben lévő saját jegyzeteiteket nyugodtan használhatjátok és lapozhatjátok a válaszok keresése közben.</p>
+                <p>📸 <b>Leadás és Értékelés:</b> Ha végeztetek, kattintsatok a „Kvíz Kiértékelése” gombra, készítsetek egy képernyőképet az eredményetekről, beadás után lesz ellenőrizve a teljesítményetek.</p>
+            </div>
 
-        <div class="card">
-            <h2>Alapfogalmak</h2>
-            <p><b>Mi a hatvány?</b><br><span class="arrow">➔</span> Ismételt szorzás</p>
-            <p><b>Miből áll a hatvány alak?</b><br><span class="arrow">➔</span> Hatvány alapból és kitevőből</p>
-            <p><b>Mit mutat meg a hatvány alap?</b><br><span class="arrow">➔</span> A hatvány alapot kell szorozni önmagával</p>
-            <p><b>Mit jelent a hatvány kitevő?</b><br><span class="arrow">➔</span> Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
-            <p><b>A hatvány alak mire írható át?</b><br><span class="arrow">➔</span> Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
+            <div class="warning-text">
+                <b>⚠️ FONTOS BIZTONSÁGI SZABÁLYOK:</b>
+                <ul>
+                    <li>A kvíz oldalon a szövegmásolás és kijelölés le van tiltva.</li>
+                    <li>A lap elhagyása szigorúan TILOS! Ha átváltasz egy másik böngészőfülre, ablakra vagy alkalmazásra, a rendszer azonnal értesíti a felelős tanárt!</li>
+                </ul>
+                <p>Jó munkát kívánok mindenkinek!</p>
+            </div>
         </div>
 
-        <div class="card">
-            <h2>⚠️ Speciális esetek</h2>
-            <ul>
-                <li>Minden szám 1. hatványa egyenlő önmagával</li>
-                <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
-                <li>Az 1 bármelyik hatványa 1</li>
-                <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
-                <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
-            </ul>
+        <!-- ELMÉLETI ANYAG -->
+        <h2 class="section-title">Elméleti összefoglaló: A hatványozás</h2>
+        
+        <p>A hatványozás egy rövidített írásmód az ismételt szorzás kifejezésére.</p>
+
+        <div class="rule-box">
+            <b>1. A hatvány fogalma és elemei:</b><br>
+            A hatvány alak: <span class="math-expr">a<sup>n</sup></span><br>
+            • <b>a (hatványalap):</b> A szám, amit önmagával szorzunk.<br>
+            • <b>n (hatványkitevő):</b> Azt mutatja meg, hogy a hatványalapot hányszor vesszük tényezőül a szorzásban.
         </div>
 
-        <div class="card">
-            <h2>✨ Hatványozás azonosságai</h2>
-            <ul>
-                <li><b>Azonos alapú hatványok szorzása:</b> A közös alapot a kitevők összegére emeljük</li>
-                <li><b>Azonos alapú hatványok osztása/hányadosa:</b> A közös alapot a kitevők különbségére emeljük</li>
-                <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
-                <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
-                <li><b>Szorzat hatványa:</b> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
-                <li><b>Osztás/hányados hatványa:</b> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
-                <li><b>Azonos kitevőjű hatványok szorzása:</b> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
-                <li><b>Azonos kitevőjű hatványok osztása/hányadosa:</b> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
-                <li><b>Hatvány hatványozása:</b> A hatvány alapot a kitevők szorzatára emeljük</li>
-            </ul>
+        <div class="rule-box">
+            <b>2. Speciális esetek:</b><br>
+            • Bármely szám 1. hatványa önmaga: <span class="math-expr">a<sup>1</sup> = a</span><br>
+            • Bármely nem-nulla szám 0. hatványa 1: <span class="math-expr">a<sup>0</sup> = 1</span> (ahol a ≠ 0)<br>
+            • <b>Fontos kivétel:</b> A <span class="math-expr">0<sup>0</sup></span> (nulla a nulladikon) <b>nem értelmezett</b>!
         </div>
 
-        <div class="btn-container">
-            <!-- Kattintásra JavaScript-tel nyitjuk a megerősítést, megakadályozva az alapértelmezett ugrást -->
-            <a href="#" class="btn-quiz" onclick="openConfirmModal(event)">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ! ➔</a>
+        <div class="rule-box">
+            <b>3. Negatív számok hatványozása:</b><br>
+            • Negatív szám <b>páros</b> kitevőjű hatványa mindig <b>pozitív</b>. Pl.: <span class="math-expr">(-3)<sup>2</sup> = 9</span><br>
+            • Negatív szám <b>páratlan</b> kitevőjű hatványa mindig <b>negatív</b>. Pl.: <span class="math-expr">(-2)<sup>3</sup> = -8</span><br>
+            • Vigyázat a zárójellel! <span class="math-expr">(-3)<sup>2</sup> = 9</span>, de <span class="math-expr">-3<sup>2</sup> = -9</span>!
         </div>
+
+        <div class="rule-box">
+            <b>4. A hatványozás azonosságai:</b><br>
+            • <b>Azonos alapú hatványok szorzása:</b> A közös alapot a kitevők összegére emeljük: <span class="math-expr">a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></span><br>
+            • <b>Azonos alapú hatványok osztása:</b> A közös alapot a kitevők különbségére emeljük: <span class="math-expr">a<sup>m</sup> : a<sup>n</sup> = a<sup>m-n</sup></span><br>
+            • <b>Hatvány hatványozása:</b> Az alapot a kitevők szorzatára emeljük: <span class="math-expr">(a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup></span><br>
+            • <b>Azonos kitevőjű hatványok szorzása:</b> Az alapok szorzatát a közös kitevőre emeljük: <span class="math-expr">a<sup>n</sup> · b<sup>n</sup> = (a · b)<sup>n</sup></span><br>
+            • <b>Azonos kitevőjű hatványok osztása:</b> Az alapok hányadosát a közös kitevőre emeljük: <span class="math-expr">a<sup>n</sup> : b<sup>n</sup> = (a : b)<sup>n</sup></span>
+        </div>
+
+        <a href="hatvanyozas-kviz-zarolt.html" class="btn-next">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</a>
     </div>
 
-    <!-- 1. Csalásbiztos Figyelmeztető Ablak -->
+    <!-- Lapelhagyási Figyelmeztetés -->
     <div id="warningModal" class="modal-overlay">
-        <div class="modal-content modal-warning">
+        <div class="modal-content">
             <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
             <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
-            <p><b>Maradjon az oldalon és folytassa a feladatot!</b></p>
-            <button onclick="closeWarningModal()">Visszatérek a jegyzeteléshez</button>
-        </div>
-    </div>
-
-    <!-- 2. Megerősítő Ablak -->
-    <div id="confirmModal" class="modal-overlay">
-        <div class="modal-content modal-confirm">
-            <h2>📝 Megerősítés</h2>
-            <p>Biztosan végeztél a jegyzeteléssel a füzetedben, és készen állsz a kvíz elindítására?</p>
-            <!-- Itt a zöld gomb már közvetlenül a kvíz oldalra mutat, és engedélyezi a navigációt -->
-            <a href="hatvanyozas-kviz-zarolt.html" class="btn-confirm-yes" onclick="allowNavigation()">Igen, mehet a kvíz!</a>
-            <button class="btn-confirm-no" onclick="closeConfirmModal()">Még jegyzetelek</button>
+            <p><b>Maradjon az oldalon és folytassa az olvasást!</b></p>
+            <button onclick="closeWarningModal()">Visszatérek a tananyaghoz</button>
         </div>
     </div>
 
     <script>
-        let isNavigatingToQuiz = false;
-
-        function openConfirmModal(event) {
-            event.preventDefault(); // Megakadályozza, hogy a # miatt ugráljon az oldal
-            document.getElementById("confirmModal").style.display = "flex";
-        }
-
-        function closeConfirmModal() {
-            document.getElementById("confirmModal").style.display = "none";
-        }
-
-        function allowNavigation() {
-            isNavigatingToQuiz = true; // Jelzi, hogy ez szándékos elhagyás
-        }
-
         function closeWarningModal() {
             document.getElementById("warningModal").style.display = "none";
         }
 
-        // Egér elhagyása felső irányba
         document.addEventListener("mouseleave", function(e) {
-            if (!isNavigatingToQuiz && e.clientY < 10) {
+            if (e.clientY < 10) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
 
-        // Fókuszvesztés / fülváltás
         window.addEventListener("blur", function() {
-            if (!isNavigatingToQuiz) {
-                document.getElementById("warningModal").style.display = "flex";
-            }
+            document.getElementById("warningModal").style.display = "flex";
         });
 
         document.addEventListener("visibilitychange", function() {
-            if (!isNavigatingToQuiz && document.hidden) {
+            if (document.hidden) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
 
-        // Másolásvédelem
         document.addEventListener('copy', function(e) { e.preventDefault(); });
         document.addEventListener('cut', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {

@@ -130,20 +130,6 @@
             margin-bottom: 8px;
         }
 
-        /* A zöld gomb feletti egyszerű figyelmeztető doboz */
-        .simple-warning {
-            background-color: #fcf3cf;
-            border-left: 5px solid #f39c12;
-            color: #7f8c8d;
-            padding: 15px 20px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 1em;
-            text-align: center;
-        }
-
         .btn-next {
             display: block;
             width: 100%;
@@ -157,7 +143,7 @@
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            margin-top: 10px;
+            margin-top: 30px;
             box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
             transition: background 0.2s ease;
         }
@@ -165,6 +151,30 @@
         .btn-next:hover {
             background-color: #219150;
         }
+
+        /* Modal ablakok */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 480px;
+            border: 4px solid #2980b9;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h2 { color: #2980b9; margin-top: 0; }
+        .modal-content p { font-size: 1.05em; color: #333; }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
@@ -251,17 +261,66 @@
             </ul>
         </div>
 
-        <!-- EGYSZERŰ FIGYELMEZTETŐ DOBOZ A GOMB FELETT -->
-        <div class="simple-warning">
-            ⚠️ Figyelem! Mielőtt továbblépsz, győződj meg róla, hogy minden jegyzetet hiánytalanul leírtál a füzetedbe!
-        </div>
-
         <!-- KVÍZ GOMB -->
-        <a href="hatvanyozas-kviz-zarolt.html" class="btn-next">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</a>
+        <button type="button" class="btn-next" onclick="openQuizModal()">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</button>
 
     </div>
 
+    <!-- Továbblépést megerősítő Modal ablak -->
+    <div id="quizModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚠️ BIZTOSAN VÉGEZTÉL?</h2>
+            <p>Ha továbblépsz a kvízre, a füzetjegyzetelést már lezártad.</p>
+            <p><b>Biztosan elkészültél a füzetjegyzeteddel?</b></p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button onclick="closeQuizModal()" style="background-color: #7f8c8d; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer;">Visszatérek a tananyaghoz</button>
+                <button onclick="proceedToQuiz()" style="background-color: #27ae60; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer;">Igen, tovább a kvízre</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lapelhagyási Figyelmeztető Ablak -->
+    <div id="warningModal" class="modal-overlay">
+        <div class="modal-content" style="border-color: #e74c3c;">
+            <h2 style="color: #c0392b;">⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
+            <p>A lap elhagyására készül! Kérjük, tartsd be az órai szabályokat, maradj az oldalon és folytasd a jegyzetelést!</p>
+            <button onclick="closeWarningModal()" style="background-color: #e74c3c; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 15px;">Visszatérek a tananyaghoz</button>
+        </div>
+    </div>
+
     <script>
+        function openQuizModal() {
+            document.getElementById("quizModal").style.display = "flex";
+        }
+
+        function closeQuizModal() {
+            document.getElementById("quizModal").style.display = "none";
+        }
+
+        function proceedToQuiz() {
+            window.location.href = "hatvanyozas-kviz-zarolt.html";
+        }
+
+        function closeWarningModal() {
+            document.getElementById("warningModal").style.display = "none";
+        }
+
+        document.addEventListener("mouseleave", function(e) {
+            if (e.clientY < 10) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
+        window.addEventListener("blur", function() {
+            document.getElementById("warningModal").style.display = "flex";
+        });
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
+        });
+
         document.addEventListener('copy', function(e) { e.preventDefault(); });
         document.addEventListener('cut', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
@@ -276,6 +335,3 @@
     </script>
 </body>
 </html>
-```eof
-
-A fájl tartalmazza az elméleti blokk alján a hiányzó figyelmeztető dobozt és alatta közvetlenül a zöld gombot.

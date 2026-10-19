@@ -82,7 +82,6 @@
             padding: 15px 20px;
             margin: 20px 0;
             border-radius: 6px;
-            transition: all 0.3s ease;
         }
 
         .question-title {
@@ -218,8 +217,6 @@
             max-width: 520px;
             width: 90%;
             box-shadow: 0 5px 25px rgba(0,0,0,0.4);
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
         .modal-warning {
@@ -574,17 +571,20 @@
         </div>
     </div>
 
-    <!-- 1. Lapelhagyási Figyelmeztető Ablak -->
+    <!-- Lapelhagyási / Bezárási Figyelmeztető Ablak -->
     <div id="warningModal" class="modal-overlay">
         <div class="modal-content modal-warning">
-            <h2>⚠️ FIGYELEM! LAPELHAGYÁS VESZÉLYE!</h2>
-            <p>A lap elhagyására készül! Ha átvált egy másik lapra vagy ablakra, a rendszer azonnal értesíti a felelős tanárt!</p>
-            <p><b>Maradjon az oldalon és folytassa a kvízt!</b></p>
-            <button onclick="closeWarningModal()">Visszatérek a kvízhez</button>
+            <h2>⚠️ FIGYELEM! KÉSZÍTTÉL KÉPERNYŐFOTÓT?</h2>
+            <p>A lap elhagyására vagy bezárására készül! Ha elhagyod az oldalt anélkül, hogy készítettél volna egy képernyőfotót az eredményedről, <b>az eredményed elveszik</b>!</p>
+            <p><b>Biztosan készítettél képernyőfotót az eredményről?</b></p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button onclick="closeWarningModal()" style="background-color: #27ae60; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer;">Mégsem, visszatérek</button>
+                <button onclick="allowAndLeave()" style="background-color: #e74c3c; color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer;">Igen, lefotóztam</button>
+            </div>
         </div>
     </div>
 
-    <!-- 2. Lenovo Képernyőkép Súgó Ablak -->
+    <!-- Lenovo Képernyőkép Súgó Ablak -->
     <div id="helpModal" class="modal-overlay">
         <div class="modal-content modal-help">
             <h2>📸 Képernyőkép készítése Lenovo tableten</h2>
@@ -603,35 +603,12 @@
 
     <script>
         const answers = {
-            q1: 'B',
-            q2: 'B',
-            q3: 'A',
-            q4: 'B',
-            q5: 'A',
-            q6: 'C',
-            q7: 'C',
-            q8: 'B',
-            q9: 'A',
-            q10: 'A',
-            q11: 'B',
-            q12: 'A',
-            q13: 'A',
-            q14: 'A',
-            q15: 'A',
-            q16: 'A',
-            q17: 'B',
-            q18: 'A',
-            q19: 'B',
-            q20: 'B',
-            q21: 'B',
-            q22: 'A',
-            q23: 'C',
-            q24: 'A',
-            q25: 'A',
-            q26: 'B',
-            q27: 'B',
-            q28: 'A'
+            q1: 'B', q2: 'B', q3: 'A', q4: 'B', q5: 'A', q6: 'C', q7: 'C', q8: 'B', q9: 'A', q10: 'A',
+            q11: 'B', q12: 'A', q13: 'A', q14: 'A', q15: 'A', q16: 'A', q17: 'B', q18: 'A', q19: 'B', q20: 'B',
+            q21: 'B', q22: 'A', q23: 'C', q24: 'A', q25: 'A', q26: 'B', q27: 'B', q28: 'A'
         };
+
+        let bypassWarning = false;
 
         function checkAnswers() {
             const nameInput = document.getElementById('studentName').value.trim();
@@ -696,18 +673,27 @@
             document.getElementById("warningModal").style.display = "none";
         }
 
+        function allowAndLeave() {
+            bypassWarning = true;
+            document.getElementById("warningModal").style.display = "none";
+            window.history.back();
+        }
+
+        // Lap elhagyási és ablak bezárási védelmek
         document.addEventListener("mouseleave", function(e) {
-            if (e.clientY < 10) {
+            if (e.clientY < 10 && !bypassWarning) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });
 
         window.addEventListener("blur", function() {
-            document.getElementById("warningModal").style.display = "flex";
+            if (!bypassWarning) {
+                document.getElementById("warningModal").style.display = "flex";
+            }
         });
 
         document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
+            if (document.hidden && !bypassWarning) {
                 document.getElementById("warningModal").style.display = "flex";
             }
         });

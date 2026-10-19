@@ -271,8 +271,8 @@
             </ul>
         </div>
 
-        <!-- KVÍZ GOMB -->
-        <a href="hatvanyozas-kviz-zarolt.html" class="btn-next">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</a>
+        <!-- KVÍZ GOMB MEGERŐSÍTÉSSEL -->
+        <button type="button" class="btn-next" onclick="confirmQuizStart()">VÉGEZTEM A JEGYZETELÉSSEL – IRÁNY A KVÍZ!</button>
 
     </div>
 
@@ -286,6 +286,13 @@
     </div>
 
     <script>
+        function confirmQuizStart() {
+            const confirmed = confirm("Biztosan végeztél a jegyzet elkészítésével?\n\nA kvíz megnyitása után már nem éred el az elméleti összefoglalót!");
+            if (confirmed) {
+                window.location.href = "hatvanyozas-kviz-zarolt.html";
+            }
+        }
+
         function closeWarningModal() {
             document.getElementById("warningModal").style.display = "none";
         }

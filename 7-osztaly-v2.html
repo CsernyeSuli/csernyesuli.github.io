@@ -17,24 +17,26 @@
         }
 
         /* BÖNGÉSZŐ GÖRDÍTŐSÁV JAVÍTÁS */
+        /* Firefox-hoz */
         html {
             scrollbar-color: #38bdf8 #0f172a;
             scrollbar-width: thin;
         }
 
+        /* Chrome, Edge, Brave és Safari böngészőkhöz (Közvetlenül a globális szelektorra kötve) */
         ::-webkit-scrollbar {
-            width: 12px !important;
+            width: 12px !important; /* Kicsit szélesebb, hogy biztosan felülbírálja a gyári értéket */
         }
         ::-webkit-scrollbar-track {
-            background: #0f172a !important;
+            background: #0f172a !important; /* Mély sötétkék háttér, megegyezik az oldaladdal */
         }
         ::-webkit-scrollbar-thumb {
-            background-color: #38bdf8 !important;
+            background-color: #38bdf8 !important; /* Világoskék csúszka */
             border-radius: 6px !important;
-            border: 3px solid #0f172a !important;
+            border: 3px solid #0f172a !important; /* Sötét keret, ami által vékonyabbnak és elegánsabbnak tűnik */
         }
         ::-webkit-scrollbar-thumb:hover {
-            background-color: #0284c7 !important;
+            background-color: #0284c7 !important; /* Sötétebb kék, ha ráviszed az egeret */
         }
 
         body {
@@ -77,8 +79,9 @@
             padding: 0 15px;
         }
 
+        /* BAL OLDALI ARCHÍVUM SÁV (Tisztított verzió duplikáció nélkül) */
         .sidebar {
-            align-self: flex-start;
+            align-self: flex-start; /* Csak a tartalom méretére nő */
             width: 260px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -114,6 +117,7 @@
             color: #38bdf8;
         }
 
+        /* JOBB OLDALI FŐ TARTALOM */
         .main-content {
             flex-grow: 1;
             background-color: var(--card-bg);
@@ -130,6 +134,7 @@
             font-size: 1.3rem;
         }
 
+        /* 3 EGYMÁS MELLETTI DOBOZ */
         .task-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -183,6 +188,7 @@
             font-weight: 600;
         }
 
+        /* LEBEGŐ ABLAK HÁTTÉR (Középre igazítva, biztonságos margóval) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -199,11 +205,12 @@
             box-sizing: border-box;
         }
 
+        /* LEBEGŐ ABLAK TARTALOM */
         .modal-content {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 14px;
-            max-width: 800px;
+            max-width: 750px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
@@ -214,6 +221,7 @@
             margin: 0 auto;
         }
 
+        /* BEZÁRÓ GOMB: Sticky, pontosan a belső paddinghez igazítva, hogy ne csússzon el */
         .modal-close {
             position: sticky;
             top: -20px;
@@ -235,6 +243,14 @@
             color: #ef4444;
         }
 
+        .modal-body img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        /* MATEMATIKAI FELADATOK ÉS MEGOLDÁSOK STÍLUSA */
         .feladat-container {
             background-color: #0f172a;
             border: 1px solid var(--border-color);
@@ -288,87 +304,35 @@
             border-radius: 0 8px 8px 0;
             padding: 12px;
             margin-top: 10px;
-            color: #cbd5e1;
-            line-height: 1.6;
         }
 
+        /* MOBILBARÁT BEÁLLÍTÁS */
         @media (max-width: 768px) {
             .layout {
                 flex-direction: column;
                 padding: 0 10px;
             }
+            
             .sidebar {
                 width: 100%;
             }
+
             header {
                 padding: 12px 15px;
             }
+
             .modal-content {
                 width: 100% !important;
                 padding: 15px !important;
                 max-height: 90vh;
             }
+
             .modal-close {
                 top: -15px;
                 right: -15px;
                 margin-top: -15px;
                 margin-right: -15px;
             }
-        }
-
-        .math-notes {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border-left: 5px solid #38bdf8;
-        }
-        .math-notes h3 {
-            margin-top: 0;
-            color: #38bdf8;
-        }
-        .math-notes h4 {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: #f43f5e;
-        }
-        .qa-section p {
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        .notes-list {
-            padding-left: 20px;
-            margin-bottom: 20px;
-        }
-        .notes-list li {
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-        
-        .video-links-box {
-            margin-top: 25px;
-            padding: 15px;
-            background-color: rgba(2, 132, 199, 0.1);
-            border: 1px dashed var(--accent-blue);
-            border-radius: 8px;
-        }
-        .video-links-box h4 {
-            margin-top: 0;
-            color: #38bdf8;
-        }
-        .video-links-box ul {
-            padding-left: 20px;
-            margin-bottom: 0;
-        }
-        .video-links-box li {
-            margin-bottom: 8px;
-        }
-        .video-links-box a {
-            color: #38bdf8;
-            text-decoration: underline;
-        }
-        .video-links-box a:hover {
-            color: #ffffff;
         }
     </style>
 </head>
@@ -381,7 +345,7 @@
 
     <div class="layout">
         
-        <!-- BAL OLDALSÁV: ARCHÍVUM -->
+        <!-- BAL OLDALSÁV: ARCHÍVUM (Csak a tartalom méretére nő) -->
         <aside class="sidebar">
             <h3>📂 Órai Archívum</h3>
             <ul class="archive-list">
@@ -414,11 +378,11 @@
                     <span class="click-hint">Kattints a megnyitáshoz ➔</span>
                 </div>
 
-                <!-- 3. SZORGALMI FELADAT DOBOZ -->
+                <!-- 3. SZORGLMI FELADAT DOBOZ -->
                 <div class="task-card card-szorgalmi" onclick="openModal('modal-szorgalmi')">
                     <h4>⭐ Szorgalmi feladat</h4>
                     <div class="card-preview">
-                        Medve Matek kihívások, logikai rejtvények és emelt szintű példák.
+                        Interaktív játék, Szerencsekerék és szorgalmi példák.
                     </div>
                     <span class="click-hint">Kattints a megnyitáshoz ➔</span>
                 </div>
@@ -434,43 +398,34 @@
                     <p><strong>Miből áll a hatvány alak?</strong><br>➔ Hatvány alapból és kitevőből</p>
                     <p><strong>Mit mutat meg a hatvány alap?</strong><br>➔ A hatvány alapot kell szorozni önmagával</p>
                     <p><strong>Mit jelent a hatvány kitevő?</strong><br>➔ Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
+                    <p><strong>A hatvány alak mire írható át?</strong><br>➔ Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
                 </div>
 
-                <!-- VIDEÓS SEGÍTSÉGEK SZEKCIÓ -->
-                <div class="video-links-box">
-                    <h4>📺 Videós segítség és gyakorlás</h4>
-                    <ul>
-                        <li><a href="https://www.youtube.com/watch?v=lRVM_529V14" target="_blank">MŰVELETEK A HATVÁNYOKKAL bevezető</a></li>
-                        <li><a href="https://videotanar.com/index.php?grp=5500138" target="_blank">HATVÁNYOK (KIDOLGOZOTT FELADATOK - 2)</a></li>
-                    </ul>
-                </div>
+                <h4>⚠️ Speciális esetek</h4>
+                <ul class="notes-list">
+                    <li>Minden szám 1. hatványa egyenlő önmagával</li>
+                    <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
+                    <li>Az 1 bármelyik hatványa 1</li>
+                    <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
+                    <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
+                </ul>
+
+                <h4>✨ Hatványozás azonosságai</h4>
+                <ul class="notes-list">
+                    <li><strong>Azonos alapú hatványok szorzása:</strong> A közös alapot a kitevők összegére emeljük</li>
+                    <li><strong>Azonos alapú hatványok osztása/hányadosa:</strong> A közös alapot a kitevők különbségére emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li><strong>Szorzat hatványa:</strong> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
+                    <li><strong>Osztás/hányados hatványa:</strong> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
+                    <li><strong>Azonos kitevőjű hatványok szorzása:</strong> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
+                    <li><strong>Azonos kitevőjű hatványok osztása/hányadosa:</strong> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
+                    <li><strong>Hatvány hatványozása:</strong> A hatvány alapot a kitevők szorzatára emeljük</li>
+                </ul>
             </div>
 
         </main>
 
-    </div>
-
-    <!-- KVÍZ INDÍTÓ GOMB ÉS ÚTMUTATÓ -->
-    <div style="text-align: center; margin: 30px 0;">
-        <p style="color: #cbd5e1; margin-bottom: 12px; font-size: 15px;">
-            Az órai elméleti összefoglalót és a kvízt a gombra kattintva érheted el.<br>
-            A kvíz eredményéről készíts képernyőfotót, és küld el a <a href="mailto:csernyei.iskola@gmail.com" style="color: #38bdf8; font-weight: bold;">csernyei.iskola@gmail.com</a> címre e-mailben!
-        </p>
-        <a href="https://csernyesuli.github.io/hatvanyozas.html" target="_blank" style="
-            display: inline-block;
-            background-color: #ff9800;
-            color: white;
-            padding: 12px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s, background-color 0.2s;
-        " onmouseover="this.style.backgroundColor='#e65100'; this.style.transform='scale(1.05)';" 
-           onmouseout="this.style.backgroundColor='#ff9800'; this.style.transform='scale(1)';">
-            ✨ INTERAKTÍV HATVÁNYOZÁS KVÍZ INDÍTÁSA
-        </a>
     </div>
 
     <!-- LEBEGŐ ABLAKOK (MODAL-OK) -->
@@ -481,6 +436,9 @@
             <div class="modal-body">
                 <p><strong>Cím / Téma:</strong> Törtek egyszerűsítése és bővítése</p>
                 <p><strong>Tankönyv:</strong> 45. oldal 1., 2. feladatok</p>
+                <hr style="border-color: var(--border-color);">
+                <p><strong>Táblakép:</strong></p>
+                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
             </div>
         </div>
     </div>
@@ -492,128 +450,52 @@
             <div class="modal-body">
                 <p><strong>Munkafüzet:</strong> 22. oldal 3. és 4. feladat</p>
                 <p><strong>Határidő:</strong> Következő óra</p>
+                <hr style="border-color: var(--border-color);">
+                <p style="color: #94a3b8; font-style: italic;">[ Házi feladat fotója / feladatsor helye ]</p>
             </div>
         </div>
     </div>
 
-    <!-- SZORGALMI LEBEGŐ ABLAK - MEDVE MATEK FELADATOKKAL -->
+    <!-- ITT FRISSÍTVE: SZORGALMI LEBEGŐ ABLAK A KÉRT TARTALOMMAL ÉS LINKEKKEL -->
     <div id="modal-szorgalmi" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-szorgalmi')">&times;</span>
-            <h3 style="color: var(--accent-green); margin-top:0;">⭐ Medve Matek Szorgalmi Feladatok</h3>
-            
+            <h3 style="color: var(--accent-green); margin-top:0;">⭐ Szorgalmi feladat</h3>
             <div class="modal-body">
-                
-                <!-- 1. Feladat -->
-                <div class="feladat-container">
-                    <h3>1. Feladat: Tigris és Malacka</h3>
-                    <p>Tigris a Százholdas Pagonyban sétálgatva észrevette Malackát, ezért elkezdett egyenes vonalban futni felé. Malacka azonban megijedt a lépések hangjától, így harmadakkora sebességgel elkezdett elfutni Tigris elől. Sőt, amikor Tigris Malacka kiindulási helyén járt, akkor Malacka megkétszerezte a sebességét. Így végül 240 méter megtétele után érte csak utol Tigris Malackát. Hány méterre voltak egymástól, mikor Tigris futni kezdett?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 120 méter.<br>
-                            <strong>Levezetés:</strong> Az 1. szakaszon Tigris \(d\) métert tesz meg, Malacka \(\frac{d}{3}\)-at. A 2. szakaszon Malacka sebessége \(\frac{2v}{3}\)-ra nő, Tigris relatív sebessége pedig \(\frac{v}{3}\), így a megmaradt \(\frac{d}{3}\) előny leküzdéséhez Tigrisnek újabb \(d\) métert kell futnia. A teljes út: 
-                            \[2d = 240 \implies d = 120\text{ méter}.\]
-                        </div>
-                    </details>
+                <p style="line-height: 1.6; margin-bottom: 20px;">
+                    A linken elérheted az órai elméleti összefoglalót és a kvízt.
+                </p>
+
+                <!-- KVÍZ GOMB -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="https://csernyesuli.github.io/hatvanyozas.html" target="_blank" style="
+                        display: inline-block;
+                        background-color: #ff9800;
+                        color: white;
+                        padding: 12px 25px;
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-decoration: none;
+                        border-radius: 25px;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        transition: transform 0.2s, background-color 0.2s;
+                    " onmouseover="this.style.backgroundColor='#e65100'; this.style.transform='scale(1.05)';" 
+                       onmouseout="this.style.backgroundColor='#ff9800'; this.style.transform='scale(1)';">
+                        ✨ KVÍZ INDÍTÁSA
+                    </a>
                 </div>
 
-                <!-- 2. Feladat -->
-                <div class="feladat-container">
-                    <h3>2. Feladat: A Számsorozat</h3>
-                    <p>Egy számsorozat első három tagja 3, 2, 2, valamint azt is tudjuk, hogy a sorozatban a második tagtól kezdve bármelyik tag két szomszédját összeszorozva ugyanazt a számot kapjuk eredményül. Mennyi a számsorozat első 2026 tagjának az összege?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 5065.<br>
-                            <strong>Levezetés:</strong> A sorozat tagjai: 3, 2, 2, 3, 3, 2, 2, 3... A 4-es periódusok összege: \(3 + 2 + 2 + 3 = 10\). Mivel \(2026 = 506 \times 4 + 2\), így az összeg: 
-                            \[506 \times 10 + 3 + 2 = 5065.\]
-                        </div>
-                    </details>
-                </div>
+                <p style="color: #cbd5e1; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
+                    A kvíz eredményéről készíts képernyőfotót és küld el a <a href="mailto:csernyei.iskola@gmail.com" style="color: #38bdf8; font-weight: bold;">csernyei.iskola@gmail.com</a> címre emailben.
+                </p>
 
-                <!-- 3. Feladat -->
-                <div class="feladat-container">
-                    <h3>3. Feladat: Ron Weasley Dobókockái</h3>
-                    <p>Ron szabályos dobókockákat csent el, amik egy nagy kockává álltak össze az azonos pötty számú lapjaik mentén. A nagy kocka külső lapjain összesen 1029 pötty található. Hány dobókocka volt a dobozban?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 343 dobókocka.<br>
-                            <strong>Levezetés:</strong> A szemközti lapok összege 7, így az \(N \times N \times N\)-es nagy kocka külső felszínén lévő pöttyök száma \(21N^2 = 1029\), amiből \(N = 7\). A kockák száma: 
-                            \[N^3 = 7^3 = 343.\]
-                        </div>
-                    </details>
-                </div>
+                <hr style="border-color: var(--border-color); margin: 20px 0;">
 
-                <!-- 4. Feladat -->
-                <div class="feladat-container">
-                    <h3>4. Feladat: Kártyakeverő Gép</h3>
-                    <p>Dexter kártyakeverő gépe meghatározott módon keveri meg a 13 lapos paklit. Dee Dee egymás után többször átengedte a paklit a gépen, amíg visszakapta az eredeti sorrendet. Hányszor adta be a kártyákat?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 20-szor.<br>
-                            <strong>Levezetés:</strong> A permutáció diszjunkt ciklusainak hossza: 1, 1, 5, 4, 2. Az eredeti állapothoz szükséges keverések száma ezen ciklushosszak legkisebb közös többszöröse: 
-                            \[\text{LKKT}(1, 1, 5, 4, 2) = 20.\]
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 5. Feladat -->
-                <div class="feladat-container">
-                    <h3>5. Feladat: Zoey és Mira Számai</h3>
-                    <p>Zoey leírta az összes ötjegyű számot. Mira mindegyik számjegy alá odaírta, hogy az a számjegy hányszor szerepel abban a számban. Hány különböző számot írt le Mira?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 42.<br>
-                            <strong>Levezetés:</strong> Az ötjegyű számok számjegyeinek partíciói alapján 42 különböző gyakorisági mintázat alakítható ki.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 6. Feladat -->
-                <div class="feladat-container">
-                    <h3>6. Feladat: MacKocka Játékgyár</h3>
-                    <p>Brumi vett néhány építőkockát, amikből kirakható egy csupa sárga, csupa zöld és csupa lila külső felületű \(3 \times 3 \times 3\)-as nagy kocka is. Legkevesebb hány építőkockát vett Brumi?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 27 építőkocka.<br>
-                            <strong>Levezetés:</strong> Megfelelő lapfestéssel (2 sárga, 2 zöld, 2 lila lap kockánként) mind a 27 kocka univerzálisan elforgatható a kívánt pozíciókba.
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 7. Feladat -->
-                <div class="feladat-container">
-                    <h3>7. Feladat: Dörmögő Dömötör Gyertyái</h3>
-                    <p>Dömötör 30 darabos gyertyakészlete a 3 gyereke születésnapjain fogy el teljesen. Hány munkatársa lehet legfeljebb, ha mindegyikük különböző, de matematikailag helyes tippet adott a gyerekek korára?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> 3 munkatárs.<br>
-                            <strong>Levezetés:</strong> Az életkorok négyzetes összegeire vonatkozó egyenlet:
-                            \[\frac{a(a+1)}{2} + \frac{b(b+1)}{2} + \frac{c(c+1)}{2} = 30\]
-                            Ennek pontosan 3 egész megoldása van: \((7,1,1)\), \((6,3,2)\) és \((4,4,4)\).
-                        </div>
-                    </details>
-                </div>
-
-                <!-- 8. Feladat -->
-                <div class="feladat-container">
-                    <h3>8. Feladat: Dzsepettó Vászondarabjai</h3>
-                    <p>Pinokkió azt a kockát szeretné, amelynek a csomagolásán a piros vonalak egy háromszöggé állnak össze. Melyik vászondarabból fog ez elkészülni (A, B, C vagy D)?</p>
-                    <details>
-                        <summary>Megoldás megjelenítése</summary>
-                        <div class="solution-content">
-                            <strong>Eredmény:</strong> D.<br>
-                            <strong>Levezetés:</strong> Összehajtás után a D jelű vászondarabon lévő piros szakaszok képeznek folytonos, zárt háromszöget a kocka lapjain.
-                        </div>
-                    </details>
-                </div>
-
+                <h4 style="color: #38bdf8; margin-bottom: 10px;">Videós segítség:</h4>
+                <ul style="padding-left: 20px; line-height: 1.8;">
+                    <li><a href="https://www.youtube.com/watch?v=lRVM_529V14" target="_blank" style="color: #38bdf8; text-decoration: underline;">MŰVELETEK A HATVÁNYOKKAL bevezető</a></li>
+                    <li><a href="https://videotanar.com/index.php?grp=5500138" target="_blank" style="color: #38bdf8; text-decoration: underline;">HATVÁNYOK (KIDOLGOZOTT FELADATOK - 2)</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -627,6 +509,43 @@
             </div>
         </div>
     </div>
+
+    <style>
+        /* ÚJ: Biztosítja, hogy az oldalsáv magassága csak a saját tartalmáig érjen */
+        .sidebar {
+            align-self: flex-start;
+        }
+
+        /* Szöveges rész formázása */
+        .math-notes {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 5px solid #38bdf8;
+        }
+        .math-notes h3 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+        .math-notes h4 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #f43f5e;
+        }
+        .qa-section p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .notes-list {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .notes-list li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+    </style>
 
     <script>
         function openModal(id) {

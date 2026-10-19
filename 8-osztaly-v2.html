@@ -432,27 +432,27 @@
                 <div class="task-card card-orai" onclick="openModal('modal-orai')">
                     <h4>📘 Órai feladatok</h4>
                     <div class="card-preview">
-                        Tankönyvi tananyag, táblakép és az órán megoldott példák.
+                        Egyéni feldolgozás: Hatványozás - elméleti összefoglaló és kvíz
                     </div>
-                    <span class="click-hint">Kattints a megnyitáshoz ➔</span>
+                    <span class="click-hint">Részletek ➔</span>
                 </div>
 
                 <!-- 2. HÁZI FELADAT DOBOZ -->
                 <div class="task-card card-hazi" onclick="openModal('modal-hazi')">
                     <h4>✏️ Házi feladat</h4>
                     <div class="card-preview">
-                        Munkafüzeti feladatok, oldalszámok és határidő.
+                        Szerkesztés alatt.
                     </div>
-                    <span class="click-hint">Kattints a megnyitáshoz ➔</span>
+                    <span class="click-hint">Részletek ➔</span>
                 </div>
 
                 <!-- 3. SZORGLMI FELADAT DOBOZ -->
                 <div class="task-card card-szorgalmi" onclick="openModal('modal-szorgalmi')">
                     <h4>⭐ Szorgalmi feladat</h4>
                     <div class="card-preview">
-                        Interaktív játék, Szerencsekerék és szorgalmi példák.
+                        Az órai online elméleti összefoglalalást és a kvízt újra megcsinálhatod, ha sikererrel jársz javíthatsz az órai eredményeden.
                     </div>
-                    <span class="click-hint">Kattints a megnyitáshoz ➔</span>
+                    <span class="click-hint">Részletek ➔</span>
                 </div>
 
             </div>
@@ -516,7 +516,7 @@
             <span class="modal-close" onclick="closeModal('modal-hazi')">&times;</span>
             <h3 style="color: var(--accent-orange); margin-top:0;">✏️ Házi feladat</h3>
             <div class="modal-body">
-                <p><strong>Munkafüzet:</strong> 22. oldal 3. és 4. feladat</p>
+                <p><strong>Szerkesztés alatt:</strong> ------------------------</p>
                 <p><strong>Határidő:</strong> Következő óra</p>
                 <hr style="border-color: var(--border-color);">
                 <p style="color: #94a3b8; font-style: italic;">[ Házi feladat fotója / feladatsor helye ]</p>
@@ -529,10 +529,46 @@
             <span class="modal-close" onclick="closeModal('modal-szorgalmi')">&times;</span>
             <h3 style="color: var(--accent-green); margin-top:0;">⭐ Szorgalmi feladat</h3>
             <div class="modal-body">
-                <p>Szerencsekerék interaktív szorgalmi feladat vagy plusz gyakorló példák piros pontért!</p>
+                <p><strong>Cím / Téma:</strong> Hatványozás - elméleti összefoglaló és értékelő kvíz</p>
+                <!-- KIEGÉSZÍTETT MATEMATIKA SZÖVEG -->
+            <div class="math-notes">
+                <h3>🧮 Elméleti összefoglaló: A hatványozás</h3>
+                
+                <div class="qa-section">
+                    <p><strong>Mi a hatvány?</strong><br>➔ Ismételt szorzás</p>
+                    <p><strong>Miből áll a hatvány alak?</strong><br>➔ Hatvány alapból és kitevőből</p>
+                    <p><strong>Mit mutat meg a hatvány alap?</strong><br>➔ A hatvány alapot kell szorozni önmagával</p>
+                    <p><strong>Mit jelent a hatvány kitevő?</strong><br>➔ Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
+                    <p><strong>A hatvány alak mire írható át?</strong><br>➔ Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
+                </div>
+
+                <h4>⚠️ Speciális esetek</h4>
+                <ul class="notes-list">
+                    <li>Minden szám 1. hatványa egyenlő önmagával</li>
+                    <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
+                    <li>Az 1 bármelyik hatványa 1</li>
+                    <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
+                    <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
+                </ul>
+
+                <h4>✨ Hatványozás azonosságai</h4>
+                <ul class="notes-list">
+                    <li><strong>Azonos alapú hatványok szorzása:</strong> A közös alapot a kitevők összegére emeljük</li>
+                    <li><strong>Azonos alapú hatványok osztása/hányadosa:</strong> A közös alapot a kitevők különbségére emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li><strong>Szorzat hatványa:</strong> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
+                    <li><strong>Osztás/hányados hatványa:</strong> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
+                    <li><strong>Azonos kitevőjű hatványok szorzása:</strong> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
+                    <li><strong>Azonos kitevőjű hatványok osztása/hányadosa:</strong> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
+                    <li><strong>Hatvány hatványozása:</strong> A hatvány alapot a kitevők szorzatára emeljük</li>
+                </ul>
+            </div>Egyéni feldolgozás: <a href="https://csernyesuli.github.io/hatvanyozas.html">Hatványozás - elméleti összegolaló és kvíz</a> 
                 <hr style="border-color: var(--border-color);">
-                <p style="color: #94a3b8; font-style: italic;">[ Szorgalmi feladat leírása / linkje ]</p>
+                <p><strong>Táblakép:</strong></p>
+                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
             </div>
+           <!-- LEBEGŐ ABLAKOK (MODAL-OK) --> </div>-->
         </div>
     </div>
 

@@ -202,6 +202,21 @@
             color: white;
         }
 
+        /* Sikeres záró oldal dizájn */
+        .success-card {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: #065f46;
+        }
+
+        .success-card h2 {
+            color: #047857;
+            margin-bottom: 15px;
+        }
+
         /* Biztonsági sötétítő modal */
         .modal {
             display: none;
@@ -325,6 +340,17 @@
             </div>
         </div>
 
+        <!-- 3. LAP: Záró / Eredményjelző oldal -->
+        <div class="page" id="page-success">
+            <div class="success-card">
+                <h2>🎉 Köszönjük a kitöltést!</h2>
+                <p id="successMessage" style="font-size: 1.1rem; color: #065f46; margin-bottom: 20px;">
+                    Dolgozatodat sikeresen rögzítettük és elküldtük a tanár úrnak.
+                </p>
+                <button type="button" class="btn btn-next" onclick="location.reload()">Újrakezdés</button>
+            </div>
+        </div>
+
     </form>
 </div>
 
@@ -338,18 +364,15 @@
 </div>
 
 <script>
-    // --- EMAILJS INICIALIZÁLÁSA ---
-    (function(){
-        emailjs.init("hsRvek-Jff5scNP1B");
-    })();
-
     let currentPage = 0;
-    const totalPages = 2; // Most már 2 feladatoldal van
+    const totalPages = 2; 
     let quizStarted = false;
 
     function updateProgress() {
-        const progress = (currentPage / totalPages) * 100;
-        document.getElementById('progressBar').style.width = progress + '%';
+        if (currentPage <= totalPages) {
+            const progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
     }
 
     function startQuiz() {
@@ -408,7 +431,7 @@
         updateProgress();
     }
 
-    // --- BEKÜLDÉS E-MAILBEN ---
+    // --- BEKÜLDÉS E-MAILBEN ÉS ZÁRÓ OLDAL MEGJELENÍTÉSE ---
     function submitQuiz() {
         quizStarted = false; 
         const studentName = document.getElementById('studentName').value.trim();
@@ -429,12 +452,17 @@
             details: detailsText
         };
 
-        emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams)
+        // Küldés az EmailJS-nek a kulcs explicit átadásával
+        emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams, "hsRvek-Jff5scNP1B")
             .then(function(response) {
-               alert("Köszönjük! A dolgozatodat sikeresen elküldtük a tanár úrnak.");
-               location.reload();
+               // Sikeres küldés után átváltunk a záró oldalra
+               document.getElementById('successMessage').innerHTML = `<strong>${studentName}</strong> nevű tanuló dolgozatát sikeresen elküldtük a tanár úrnak!`;
+               const pages = document.querySelectorAll('.page');
+               pages[currentPage].classList.remove('active');
+               document.getElementById('page-success').classList.add('active');
+               document.getElementById('progressBar').style.width = '100%';
             }, function(error) {
-               alert("Hiba történt a beküldés során. Kérlek, próbáld újra!");
+               alert("Hiba történt az e-mail küldése során. Kérlek, szólj a tanárnak!");
                console.log("FAILED...", error);
             });
     }

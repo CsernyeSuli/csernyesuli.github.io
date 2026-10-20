@@ -6,9 +6,6 @@
     <title>Matematika Dolgozat - Hatványozás</title>
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <!-- MathJax a gyönyörű matematikai jelekért -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -149,20 +146,15 @@
             border-color: var(--primary);
         }
 
-        /* Stabil felső index (kitevő) elrendezés Flexboxszal */
-        .math-power {
-            display: inline-flex;
-            align-items: baseline;
-            gap: 2px;
-        }
-
-        .base-num {
-            font-weight: 600;
+        /* Tökéletes felső index kitevő mező */
+        sup.exponent-sup {
+            margin-left: 2px;
+            margin-right: 4px;
         }
 
         input.exponent-box {
-            width: 30px !important;
-            height: 26px !important;
+            width: 32px !important;
+            height: 24px !important;
             font-size: 0.8rem !important;
             font-weight: bold;
             text-align: center;
@@ -170,8 +162,8 @@
             border-radius: 4px;
             outline: none;
             background: #fff;
-            transform: translateY(-8px); /* Biztosan felső indexbe tolja tableten is */
-            margin-left: 1px;
+            padding: 0;
+            vertical-align: baseline;
             -webkit-user-select: text;
             user-select: text;
         }
@@ -310,24 +302,21 @@
             <h2>1. Oldal: Egészítsd ki a következő egyenlőségeket!</h2>
             
             <div class="example-box">
-                <strong>Például:</strong> \(2 \cdot 2 \cdot 2 \cdot 2 = 2^4 = 16\)
+                <strong>Például:</strong> 2 · 2 · 2 · 2 = 2<sup>4</sup> = 16
             </div>
 
             <div class="exercise-item">
-                <strong>1. a)</strong> \(5 \cdot 5 \cdot 5 =\) 
-                <span class="math-power"><span class="base-num">5</span><input type="text" class="exponent-box" id="q1a_exp"></span> \()=\) 
+                <strong>1. a)</strong> 5 · 5 · 5 = 5<sup class="exponent-sup"><input type="text" class="exponent-box" id="q1a_exp"></sup> = 
                 <input type="text" class="input-box" id="q1a_val">
             </div>
 
             <div class="exercise-item">
-                <strong>1. b)</strong> \(10 \cdot 10 \cdot 10 \cdot 10 \cdot 10 \cdot 10 =\) 
-                <span class="math-power"><span class="base-num">10</span><input type="text" class="exponent-box" id="q1b_exp"></span> \()=\) 
+                <strong>1. b)</strong> 10 · 10 · 10 · 10 · 10 · 10 = 10<sup class="exponent-sup"><input type="text" class="exponent-box" id="q1b_exp"></sup> = 
                 <input type="text" class="input-box" id="q1b_val" style="width: 120px;">
             </div>
 
             <div class="exercise-item">
-                <strong>1. c)</strong> \((-0,1) \cdot (-0,1) \cdot (-0,1) \cdot (-0,1) \cdot (-0,1) \cdot (-0,1) =\) 
-                <span class="math-power"><span class="base-num">\((-0,1)\)</span><input type="text" class="exponent-box" id="q1c_exp"></span> \()=\) 
+                <strong>1. c)</strong> (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = (-0,1)<sup class="exponent-sup"><input type="text" class="exponent-box" id="q1c_exp"></sup> = 
                 <input type="text" class="input-box" id="q1c_val" style="width: 120px;">
             </div>
 
@@ -343,34 +332,29 @@
 
             <div class="example-box">
                 <strong>2.</strong> Figyeld meg, majd fogalmazd meg az összefüggést!<br>
-                \(3^5 \cdot 3^7 = (3 \cdot 3 \cdot 3 \cdot 3 \cdot 3) \cdot (3 \cdot 3 \cdot 3 \cdot 3 \cdot 3 \cdot 3 \cdot 3) = 3^{5+7} = 3^{12}\)<br>
+                3<sup>5</sup> · 3<sup>7</sup> = (3 · 3 · 3 · 3 · 3) · (3 · 3 · 3 · 3 · 3 · 3 · 3) = 3<sup>5+7</sup> = 3<sup>12</sup><br>
                 <small style="color: #64748b;">(5 tényező · 7 tényező = összesen 12 tényező)</small><br><br>
                 Az előzőhöz hasonlóan értelmezd a következő hatványok szorzatát:
             </div>
 
             <div class="exercise-item">
-                <strong>a)</strong> \(7^5 \cdot 7^7 =\) 
-                <span class="math-power"><span class="base-num">7</span><input type="text" class="exponent-box" id="q2a_exp"></span>
+                <strong>a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7<sup class="exponent-sup"><input type="text" class="exponent-box" id="q2a_exp"></sup>
             </div>
 
             <div class="exercise-item">
-                <strong>b)</strong> \(5^3 \cdot 5^7 =\) 
-                <span class="math-power"><span class="base-num">5</span><input type="text" class="exponent-box" id="q2b_exp"></span>
+                <strong>b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5<sup class="exponent-sup"><input type="text" class="exponent-box" id="q2b_exp"></sup>
             </div>
 
             <div class="exercise-item">
-                <strong>c)</strong> \(7^3 \cdot 7 =\) 
-                <span class="math-power"><span class="base-num">7</span><input type="text" class="exponent-box" id="q2c_exp"></span>
+                <strong>c)</strong> 7<sup>3</sup> · 7 = 7<sup class="exponent-sup"><input type="text" class="exponent-box" id="q2c_exp"></sup>
             </div>
 
             <div class="exercise-item">
-                <strong>d)</strong> \(3^5 \cdot 3^2 \cdot 3^4 =\) 
-                <span class="math-power"><span class="base-num">3</span><input type="text" class="exponent-box" id="q2d_exp"></span>
+                <strong>d)</strong> 3<sup>5</sup> · 3<sup>2</sup> · 3<sup>4</sup> = 3<sup class="exponent-sup"><input type="text" class="exponent-box" id="q2d_exp"></sup>
             </div>
 
             <div class="exercise-item">
-                <strong>e)</strong> \(9^2 \cdot 9^0 \cdot 9^1 =\) 
-                <span class="math-power"><span class="base-num">9</span><input type="text" class="exponent-box" id="q2e_exp"></span>
+                <strong>e)</strong> 9<sup>2</sup> · 9<sup>0</sup> · 9<sup>1</sup> = 9<sup class="exponent-sup"><input type="text" class="exponent-box" id="q2e_exp"></sup>
             </div>
 
             <div class="nav-buttons">

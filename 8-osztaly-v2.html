@@ -102,12 +102,24 @@
             border-color: var(--primary);
         }
 
+        /* Példa doboz */
+        .example-box {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            color: #b45309;
+            font-weight: 600;
+        }
+
         .exercise-item {
             background: #f1f5f9;
             border-radius: 10px;
-            padding: 18px 20px;
-            margin-bottom: 18px;
-            font-size: 1.15rem;
+            padding: 16px 20px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
@@ -116,7 +128,7 @@
 
         /* Normál beviteli mező */
         input.input-box {
-            width: 45px;
+            width: 90px;
             height: 38px;
             text-align: center;
             font-size: 1rem;
@@ -153,32 +165,6 @@
 
         input.exponent-box:focus {
             border-color: var(--primary);
-        }
-
-        /* Tört formázás */
-        .fraction {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            vertical-align: middle;
-            margin: 0 4px;
-        }
-
-        .fraction .numerator {
-            border-bottom: 2px solid var(--text);
-            padding-bottom: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .fraction .denominator {
-            padding-top: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
         }
 
         .nav-buttons {
@@ -283,20 +269,24 @@
             </div>
         </div>
 
-        <!-- 1. LAP: 1. és 2. feladat -->
+        <!-- 1. LAP: 1. Feladat (a, b, c részekkel) -->
         <div class="page" id="page-1">
-            <h2>1. Oldal: Hatvány fogalma és szorzata</h2>
+            <h2>1. Oldal: Egészítsd ki a következő egyenlőségeket!</h2>
             
-            <div class="exercise-item">
-                <strong>1.</strong> 5 · 5 · 5 = 5<input type="text" class="exponent-box" id="q1_exp"> = <input type="text" class="input-box" id="q1_val">
+            <div class="example-box">
+                <strong>Például:</strong> 2 · 2 · 2 · 2 = 2<sup>4</sup> = 16
             </div>
 
             <div class="exercise-item">
-                <strong>2.a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7<input type="text" class="exponent-box" id="q2a_exp"> = <input type="text" class="input-box" id="q2a_val" style="width: 100px;">
+                <strong>1. a)</strong> 5 · 5 · 5 = 5<input type="text" class="exponent-box" id="q1a_exp"> = <input type="text" class="input-box" id="q1a_val">
             </div>
 
             <div class="exercise-item">
-                <strong>2.b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5<input type="text" class="exponent-box" id="q2b_exp">
+                <strong>1. b)</strong> 10 · 10 · 10 · 10 · 10 · 10 = 10<input type="text" class="exponent-box" id="q1b_exp"> = <input type="text" class="input-box" id="q1b_val" style="width: 120px;">
+            </div>
+
+            <div class="exercise-item">
+                <strong>1. c)</strong> (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = (-0,1)<input type="text" class="exponent-box" id="q1c_exp"> = <input type="text" class="input-box" id="q1c_val" style="width: 120px;">
             </div>
 
             <div class="nav-buttons">
@@ -305,68 +295,28 @@
             </div>
         </div>
 
-        <!-- 2. LAP: 3. és 4. feladat -->
+        <!-- 2. LAP: 2. Feladat (Hatványok szorzata: a, b, c, d, e) -->
         <div class="page" id="page-2">
-            <h2>2. Oldal: Hányadosok és törtek</h2>
+            <h2>2. Oldal: Add meg hatványalakban a szorzatokat!</h2>
 
             <div class="exercise-item">
-                <strong>3.</strong> 4<sup>5</sup> : 4<sup>3</sup> = 4<input type="text" class="exponent-box" id="q3_exp">
+                <strong>2. a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7<input type="text" class="exponent-box" id="q2a_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>4.a)</strong> 
-                <div class="fraction">
-                    <div class="numerator">7<sup>5</sup></div>
-                    <div class="denominator">7<sup>3</sup></div>
-                </div>
-                = 7<input type="text" class="exponent-box" id="q4a_exp">
+                <strong>2. b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5<input type="text" class="exponent-box" id="q2b_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>4.b)</strong> 
-                ( <div class="fraction">
-                    <div class="numerator">2</div>
-                    <div class="denominator">5</div>
-                </div> )<sup>3</sup> = 
-                <div class="fraction">
-                    <div class="numerator">
-                        2<input type="text" class="exponent-box" id="q4b_num_exp" style="top: -6px;">
-                    </div>
-                    <div class="denominator">
-                        5<input type="text" class="exponent-box" id="q4b_den_exp" style="top: -6px;">
-                    </div>
-                </div>
-                =
-                <div class="fraction">
-                    <div class="numerator">
-                        <input type="text" class="input-box" id="q4b_val_num" style="width: 38px; height: 32px;">
-                    </div>
-                    <div class="denominator">
-                        <input type="text" class="input-box" id="q4b_val_den" style="width: 38px; height: 32px;">
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
-                <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
-            </div>
-        </div>
-
-        <!-- 3. LAP: 5., 6. és 7. feladat -->
-        <div class="page" id="page-3">
-            <h2>3. Oldal: Hatványozás és egyenletek</h2>
-
-            <div class="exercise-item">
-                <strong>5.</strong> (5<sup>4</sup>)<sup>2</sup> = 5<input type="text" class="exponent-box" id="q5_exp">
+                <strong>2. c)</strong> 7<sup>3</sup> · 7 = 7<input type="text" class="exponent-box" id="q2c_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>6.</strong> 2<sup>6</sup> · x = 2<sup>13</sup> &nbsp;&nbsp;&rArr;&nbsp;&nbsp; x = 2<input type="text" class="exponent-box" id="q6_exp">
+                <strong>2. d)</strong> 3<sup>5</sup> · 3<sup>2</sup> · 3<sup>4</sup> = 3<input type="text" class="exponent-box" id="q2d_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>7.</strong> 2<sup>4</sup> · 5<sup>4</sup> = (2 · 5)<input type="text" class="exponent-box" id="q7_exp1"> = 10<input type="text" class="exponent-box" id="q7_exp2"> = <input type="text" class="input-box" id="q7_val" style="width: 80px;">
+                <strong>2. e)</strong> 9<sup>2</sup> · 9<sup>0</sup> · 9<sup>1</sup> = 9<input type="text" class="exponent-box" id="q2e_exp">
             </div>
 
             <div class="nav-buttons">
@@ -394,7 +344,7 @@
     })();
 
     let currentPage = 0;
-    const totalPages = 3; 
+    const totalPages = 2; // Most már 2 feladatoldal van
     let quizStarted = false;
 
     function updateProgress() {
@@ -460,19 +410,18 @@
 
     // --- BEKÜLDÉS E-MAILBEN ---
     function submitQuiz() {
-        quizStarted = false; // Kikapcsoljuk a büntetést beküldéskor
+        quizStarted = false; 
         const studentName = document.getElementById('studentName').value.trim();
         
         let detailsText = 
-            `1. feladat (5*5*5): kitevő=${document.getElementById('q1_exp').value}, érték=${document.getElementById('q1_val').value}\n` +
-            `2.a feladat (7^5*7^7): kitevő=${document.getElementById('q2a_exp').value}, érték=${document.getElementById('q2a_val').value}\n` +
-            `2.b feladat (5^3*5^7): kitevő=${document.getElementById('q2b_exp').value}\n` +
-            `3. feladat (4^5:4^3): kitevő=${document.getElementById('q3_exp').value}\n` +
-            `4.a feladat (tört hányados): kitevő=${document.getElementById('q4a_exp').value}\n` +
-            `4.b feladat ((2/5)^3): számláló ktv=${document.getElementById('q4b_num_exp').value}, nevező ktv=${document.getElementById('q4b_den_exp').value}, tört=${document.getElementById('q4b_val_num').value}/${document.getElementById('q4b_val_den').value}\n` +
-            `5. feladat ((5^4)^2): kitevő=${document.getElementById('q5_exp').value}\n` +
-            `6. feladat (egyenlet x): x kitevő=${document.getElementById('q6_exp').value}\n` +
-            `7. feladat (2^4*5^4): 1.kitevő=${document.getElementById('q7_exp1').value}, 2.kitevő=${document.getElementById('q7_exp2').value}, érték=${document.getElementById('q7_val').value}`;
+            `1.a feladat: kitevő=${document.getElementById('q1a_exp').value}, érték=${document.getElementById('q1a_val').value}\n` +
+            `1.b feladat: kitevő=${document.getElementById('q1b_exp').value}, érték=${document.getElementById('q1b_val').value}\n` +
+            `1.c feladat: kitevő=${document.getElementById('q1c_exp').value}, érték=${document.getElementById('q1c_val').value}\n` +
+            `2.a feladat: kitevő=${document.getElementById('q2a_exp').value}\n` +
+            `2.b feladat: kitevő=${document.getElementById('q2b_exp').value}\n` +
+            `2.c feladat: kitevő=${document.getElementById('q2c_exp').value}\n` +
+            `2.d feladat: kitevő=${document.getElementById('q2d_exp').value}\n` +
+            `2.e feladat: kitevő=${document.getElementById('q2e_exp').value}\n`;
 
         const templateParams = {
             from_name: studentName,

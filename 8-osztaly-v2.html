@@ -1,600 +1,314 @@
- <!--  <!DOCTYPE html>
-<html lang="hu">
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8. Osztály - Matematika</title> -->
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8. Osztály - Matematika</title>
-    <!-- Külső stíluslap csatolása -->
-    <link rel="stylesheet" href="osztalylap_style.css">
-    <!-- MathJax betöltése a matematikai képletekhez -->
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<!-- <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #e2e8f0;
-            --accent-blue: #0284c7;
-            --accent-green: #10b981;
-            --accent-orange: #f59e0b;
-            --border-color: #334155;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matematika Feladat - Hatványozás</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome ikonok -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Ne látszódjanak a nyilak a szám beviteli mezőkben */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background: #1e293b;
-            padding: 0px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .btn-back {
-            background-color: var(--accent-blue);
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-
-        .btn-back:hover {
-            background-color: #38bdf8;
-            color: #0f172a;
-        }
-
-        /* ALAP ELRENDEZÉS (SZÁMÍTÓGÉP) */
-        .layout {
-            display: flex;
-            max-width: 1400px;
-            margin: 20px auto;
-            gap: 20px;
-            padding: 0 15px;
-            box-sizing: border-box;
-        }
-
-        /* BAL OLDALI ARCHÍVUM SÁV */
-        .sidebar {
-            width: 260px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            flex-shrink: 0;
-            box-sizing: border-box;
-        }
-
-        .sidebar h3 {
-            margin-top: 0;
-            color: #38bdf8;
-            font-size: 1.1rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .archive-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .archive-item {
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .archive-item:hover {
-            background-color: #334155;
-            color: #38bdf8;
-        }
-
-        /* JOBB OLDALI FŐ TARTALOM */
-        .main-content {
-            flex-grow: 1;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .date-title {
-            color: #38bdf8;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        /* 3 EGYMÁS MELLETTI DOBOZ */
-        .task-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
-
-        .task-card {
-            background-color: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 18px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .task-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: var(--accent-blue);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .task-card h4 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .card-orai h4 { color: #38bdf8; }
-        .card-hazi h4 { color: var(--accent-orange); }
-        .card-szorgalmi h4 { color: var(--accent-green); }
-
-        .card-preview {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin: 15px 0;
-            line-height: 1.4;
-            flex-grow: 1;
-        }
-
-        .click-hint {
-            font-size: 0.8rem;
-            color: #38bdf8;
-            text-align: right;
-            font-weight: 600;
-        }
-
-        /* LEBEGŐ ABLAK HÁTTÉR (Középre igazítva, biztonságos margóval) */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        /* LEBEGŐ ABLAK TARTALOM */
-        .modal-content {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            max-width: 750px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 20px;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            box-sizing: border-box;
-            margin: 0 auto;
-        }
-
-        /* BEZÁRÓ GOMB: Sticky, pontosan a belső paddinghez igazítva, hogy ne csússzon el */
-        .modal-close {
-            position: sticky;
-            top: -20px;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            color: #94a3b8;
-            cursor: pointer;
-            line-height: 1;
-            z-index: 100;
-            background-color: var(--card-bg);
-            padding: 5px 10px;
-            border-radius: 6px;
-            margin-top: -20px;
-            margin-right: -20px;
-        }
-
-        .modal-close:hover {
-            color: #ef4444;
-        }
-
-        .modal-body img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin: 10px 0;
-            border: 1px solid var(--border-color);
-        }
-
-        /* MATEMATIKAI FELADATOK ÉS MEGOLDÁSOK STÍLUSA */
-        .feladat-container {
-            background-color: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .feladat-container h3 {
-            margin-top: 0;
-            color: #38bdf8;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-        }
-
-        details summary {
-            background-color: var(--accent-blue);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            outline: none;
-            margin-top: 10px;
-            display: inline-block;
-            list-style: none;
-        }
-
-        details summary::-webkit-details-marker {
-            display: none;
-        }
-
-        details summary:hover {
-            background-color: #38bdf8;
-            color: #0f172a;
-        }
-
-        details summary::after {
-            content: " ▼";
-            font-size: 12px;
-        }
-
-        details[open] summary::after {
-            content: " ▲";
-        }
-
-        .solution-content {
-            background-color: #1e293b;
-            border-left: 4px solid var(--accent-blue);
-            border-radius: 0 8px 8px 0;
-            padding: 12px;
-            margin-top: 10px;
-        }
-
-        /* MOBILBARÁT BEÁLLÍTÁS */
-        @media (max-width: 768px) {
-            .layout {
-                flex-direction: column;
-                padding: 0 10px;
-            }
-            
-            .sidebar {
-                width: 100%;
-            }
-
-            header {
-                padding: 12px 15px;
-            }
-
-            .modal-content {
-                width: 100% !important;
-                padding: 15px !important;
-                max-height: 90vh;
-            }
-
-            .modal-close {
-                top: -15px;
-                right: -15px;
-                margin-top: -15px;
-                margin-right: -15px;
-            }
-        }
-    /* VENN DIAGRAM KÖZÖS (ALAP) STÍLUSOK */
-.venn-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    background-color: #0f172a;
-    margin: 15px auto;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-.venn-circle {
-    position: absolute;
-    border-radius: 50%;
-    box-sizing: border-box;
-    z-index: 1;
-}
-
-.venn-circle-a {
-    border: 3px solid #2980b9;
-    background-color: rgba(41, 128, 185, 0.25);
-}
-
-.venn-circle-b {
-    border: 3px solid #27ae60;
-    background-color: rgba(39, 174, 96, 0.25);
-}
-
-.venn-label {
-    position: absolute;
-    color: white;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 11px;
-}
-
-.venn-label-a { background-color: #2980b9; top: -18px; left: 15px; }
-.venn-label-b { background-color: #27ae60; top: -18px; right: 15px; }
-
-.venn-text {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
-    z-index: 2;
-}
-
-.venn-text-a { left: 25%; font-size: 15px; color: var(--text-color); }
-.venn-text-b { left: 75%; font-size: 14px; color: var(--text-color); text-align: center; line-height: 1.2; }
-.venn-text-ab { left: 50%; font-size: 13px; color: #a855f7; text-align: center; line-height: 1.2; z-index: 5; }
-.venn-text-out { position: absolute; bottom: 8px; left: 12px; font-weight: bold; font-size: 14px; color: #ef4444; z-index: 2; }
-
-
-/* --- ASZTALI / LAPTOP NÉZET (SZÉLES KIJELZŐ) --- */
-@media (min-width: 769px) {
-    .venn-container { height: 200px; }
-    .venn-circle { top: 15px; width: 54%; height: 170px; }
-    .venn-circle-a { left: 6%; }
-    .venn-circle-b { right: 6%; }
-    .venn-text-a { left: 22%; }
-    .venn-text-b { left: 78%; }
-    .venn-text-ab { width: 35%; font-size: 18px; }
-}
-
-
-/* --- MOBIL NÉZET (KESKENY KIJELZŐ) --- */
-@media (max-width: 768px) {
-    .venn-container { height: 170px; }
-    .venn-circle { top: 10px; width: 62%; height: 150px; }
-    .venn-circle-a { left: 4%; }
-    .venn-circle-b { right: 4%; }
-    .venn-text-a { left: 22%; }
-    .venn-text-b { left: 78%; }
-    .venn-text-ab { width: 40%; font-size: 12px; }
-}
-    </style> -->
+    /* Egyedi animáció a visszajelzéshez */
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.3s ease-out forwards;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between p-4 md:p-8">
 
-    <header>
-        <h2>8. Osztály - Matematika</h2>
-        <a href="index.html" class="btn-back">⬅ Vissza a Főoldalra</a>
-    </header>
+  <!-- Fő tároló -->
+  <div class="max-w-4xl mx-auto w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden my-auto">
+    
+    <!-- Fejléc -->
+    <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-6 text-white relative">
+      <div class="flex items-center gap-3">
+        <span class="bg-white/20 p-3 rounded-xl text-2xl font-bold flex items-center justify-center w-12 h-12 shadow-inner">
+          20
+        </span>
+        <div>
+          <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">FELADATOK</h1>
+          <p class="text-amber-100 text-sm font-medium">Hatványozás gyakorlása</p>
+        </div>
+      </div>
+    </div>
 
-    <div class="layout">
+    <!-- Példa doboz -->
+    <div class="p-6 md:p-8 space-y-8">
+      <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl flex items-start sm:items-center gap-3 text-amber-900">
+        <i class="fa-solid fa-circle-info text-amber-500 text-xl mt-0.5 sm:mt-0"></i>
+        <div class="text-base md:text-lg">
+          <span class="font-bold text-amber-700 italic">Például:</span>
+          <span class="font-semibold tracking-wide ml-2">2 · 2 · 2 · 2 = 2<sup>4</sup> = 16</span>
+        </div>
+      </div>
+
+      <!-- Feladat címe -->
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 rounded-full border-2 border-amber-500 text-amber-600 font-bold text-lg flex items-center justify-center shrink-0 shadow-sm">
+          11
+        </div>
+        <h2 class="text-lg md:text-xl font-bold text-slate-800">
+          Egészítsd ki a következő egyenlőségeket!
+        </h2>
+      </div>
+
+      <!-- Feladatok listája -->
+      <form id="taskForm" onsubmit="event.preventDefault(); checkAnswers();" class="space-y-8">
         
-        <!-- BAL OLDALSÁV: ARCHÍVUM (Csak a tartalom méretére nő) -->
-        <aside class="sidebar">
-            <h3>📂 Órai Archívum</h3>
-            <ul class="archive-list">
-                <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 09. 28. - Törtek</li>
-                <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 09. 25. - Műveletek</li>
-            </ul>
-        </aside>
-
-        <!-- JOBB OLDALI FŐTERÜLET -->
-        <main class="main-content">
-            <h3 class="date-title">Aktuális óra tananyaga</h3>
-
-            <div class="task-grid">
-                
-                <!-- 1. ÓRAI FELADATOK DOBOZ -->
-                <div class="task-card card-orai" onclick="openModal('modal-orai')">
-                    <h4>📘 Órai feladatok</h4>
-                    <div class="card-preview">
-                        Egyéni feldolgozás: Hatványozás - elméleti összefoglaló és kvíz
-                    </div>
-                    <span class="click-hint">Részletek ➔</span>
-                </div>
-
-                <!-- 2. HÁZI FELADAT DOBOZ -->
-                <div class="task-card card-hazi" onclick="openModal('modal-hazi')">
-                    <h4>✏️ Házi feladat</h4>
-                    <div class="card-preview">
-                        Szerkesztés alatt.
-                    </div>
-                    <span class="click-hint">Részletek ➔</span>
-                </div>
-
-                <!-- 3. SZORGLMI FELADAT DOBOZ -->
-                <div class="task-card card-szorgalmi" onclick="openModal('modal-szorgalmi')">
-                    <h4>⭐ Szorgalmi feladat</h4>
-                    <div class="card-preview">
-                        Az órai online elméleti összefoglalalást és a kvízt újra megcsinálhatod, ha sikererrel jársz javíthatsz az órai eredményeden.
-                    </div>
-                    <span class="click-hint">Részletek ➔</span>
-                </div>
-
+        <!-- a) Feladat -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-amber-300 transition-colors">
+          <div class="flex flex-wrap items-center gap-2 text-lg md:text-xl font-semibold text-slate-700">
+            <span class="text-amber-600 font-bold w-6">a)</span>
+            <span>5 · 5 · 5 = 5</span>
+            <!-- Kitevő beviteli mező -->
+            <sup class="-ml-1">
+              <input type="text" id="exp_a" maxlength="2" autocomplete="off"
+                class="w-8 h-8 text-center font-bold text-amber-600 border-2 border-slate-300 rounded-md focus:border-amber-500 focus:outline-none transition-all text-base bg-white shadow-sm"
+                placeholder="?" aria-label="a feladat kitevője">
+            </sup>
+            <span class="mx-1">=</span>
+            
+            <!-- Eredmény cellás bevitele -->
+            <div class="inline-flex gap-1 items-center bg-white p-1.5 rounded-lg border-2 border-slate-300 focus-within:border-amber-500 transition-all shadow-sm">
+              <input type="text" id="val_a_1" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded" placeholder="1">
+              <input type="text" id="val_a_2" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded" placeholder="2">
+              <input type="text" id="val_a_3" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded" placeholder="5">
             </div>
-
-           
-
-        </main>
-
-    </div>
-
-    <!-- LEBEGŐ ABLAKOK (MODAL-OK) -->
-    <div id="modal-orai" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-orai')">&times;</span>
-            <h3 style="color: #38bdf8; margin-top:0;">📘 Órai feladatok</h3>
-            <div class="modal-body">
-                <p><strong>Cím / Téma:</strong> Hatványozás, azonosságok</p>
-                <p><strong>Online egyéni feldolgozás és tudáspróba:</strong> <a href="https://csernyesuli.github.io/hatvanyozas.html">Hatványozás - elméleti összegolaló és kvíz</a></p>
-                <hr style="border-color: var(--border-color);">
-                <p><strong>Táblakép:</strong></p>
-                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
-            </div>
+            
+            <!-- Visszajelző ikon -->
+            <span id="feedback_a" class="ml-auto text-xl"></span>
+          </div>
         </div>
-    </div>
 
-    <div id="modal-hazi" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-hazi')">&times;</span>
-            <h3 style="color: var(--accent-orange); margin-top:0;">✏️ Házi feladat</h3>
-            <div class="modal-body">
-                <p><strong>Szerkesztés alatt:</strong> ------------------------</p>
-                <p><strong>Határidő:</strong> Következő óra</p>
-                <hr style="border-color: var(--border-color);">
-                <p style="color: #94a3b8; font-style: italic;">[ Házi feladat fotója / feladatsor helye ]</p>
+        <!-- b) Feladat -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-amber-300 transition-colors">
+          <div class="flex flex-wrap items-center gap-2 text-lg md:text-xl font-semibold text-slate-700">
+            <span class="text-amber-600 font-bold w-6">b)</span>
+            <span>10 · 10 · 10 · 10 · 10 · 10 = 10</span>
+            <!-- Kitevő beviteli mező -->
+            <sup class="-ml-1">
+              <input type="text" id="exp_b" maxlength="2" autocomplete="off"
+                class="w-8 h-8 text-center font-bold text-amber-600 border-2 border-slate-300 rounded-md focus:border-amber-500 focus:outline-none transition-all text-base bg-white shadow-sm"
+                placeholder="?" aria-label="b feladat kitevője">
+            </sup>
+            <span class="mx-1">=</span>
+            
+            <!-- Eredmény cellás bevitele (7 cella a 1000000-nak) -->
+            <div class="inline-flex gap-1 items-center bg-white p-1.5 rounded-lg border-2 border-slate-300 focus-within:border-amber-500 transition-all shadow-sm overflow-x-auto">
+              <input type="text" id="val_b_1" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_b_2" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_b_3" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_b_4" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_b_5" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_b_6" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_b_7" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
             </div>
+
+            <!-- Visszajelző ikon -->
+            <span id="feedback_b" class="ml-auto text-xl"></span>
+          </div>
         </div>
-    </div>
 
-    <div id="modal-szorgalmi" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-szorgalmi')">&times;</span>
-            <h3 style="color: var(--accent-green); margin-top:0;">⭐ Szorgalmi feladat</h3>
-            <div class="modal-body">
-                <p><strong>Cím / Téma:</strong> Hatványozás - elméleti összefoglaló és értékelő kvíz</p>
-                <!-- KIEGÉSZÍTETT MATEMATIKA SZÖVEG 
-            <div class="math-notes">
-                <h3>🧮 Elméleti összefoglaló: A hatványozás</h3>
-                
-                <div class="qa-section">
-                    <p><strong>Mi a hatvány?</strong><br>➔ Ismételt szorzás</p>
-                    <p><strong>Miből áll a hatvány alak?</strong><br>➔ Hatvány alapból és kitevőből</p>
-                    <p><strong>Mit mutat meg a hatvány alap?</strong><br>➔ A hatvány alapot kell szorozni önmagával</p>
-                    <p><strong>Mit jelent a hatvány kitevő?</strong><br>➔ Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
-                    <p><strong>A hatvány alak mire írható át?</strong><br>➔ Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
-                </div>
-
-                <h4>⚠️ Speciális esetek</h4>
-                <ul class="notes-list">
-                    <li>Minden szám 1. hatványa egyenlő önmagával</li>
-                    <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
-                    <li>Az 1 bármelyik hatványa 1</li>
-                    <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
-                    <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
-                </ul>
-
-                <h4>✨ Hatványozás azonosságai</h4>
-                <ul class="notes-list">
-                    <li><strong>Azonos alapú hatványok szorzása:</strong> A közös alapot a kitevők összegére emeljük</li>
-                    <li><strong>Azonos alapú hatványok osztása/hányadosa:</strong> A közös alapot a kitevők különbségére emeljük</li>
-                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
-                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
-                    <li><strong>Szorzat hatványa:</strong> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
-                    <li><strong>Osztás/hányados hatványa:</strong> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
-                    <li><strong>Azonos kitevőjű hatványok szorzása:</strong> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
-                    <li><strong>Azonos kitevőjű hatványok osztása/hányadosa:</strong> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
-                    <li><strong>Hatvány hatványozása:</strong> A hatvány alapot a kitevők szorzatára emeljük</li>
-                </ul> -->
-            </div>Egyéni feldolgozás: <a href="https://csernyesuli.github.io/hatvanyozas.html">Hatványozás - elméleti összegolaló és kvíz</a> 
-                <hr style="border-color: var(--border-color);">
-                <p><strong>Táblakép:</strong></p>
-                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
+        <!-- c) Feladat -->
+        <div class="p-5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-amber-300 transition-colors">
+          <div class="flex flex-wrap items-center gap-2 text-lg md:text-xl font-semibold text-slate-700">
+            <span class="text-amber-600 font-bold w-6">c)</span>
+            <span class="text-sm md:text-base whitespace-nowrap">(-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = (-0,1)</span>
+            <!-- Kitevő beviteli mező -->
+            <sup class="-ml-1">
+              <input type="text" id="exp_c" maxlength="2" autocomplete="off"
+                class="w-8 h-8 text-center font-bold text-amber-600 border-2 border-slate-300 rounded-md focus:border-amber-500 focus:outline-none transition-all text-base bg-white shadow-sm"
+                placeholder="?" aria-label="c feladat kitevője">
+            </sup>
+            <span class="mx-1">=</span>
+            
+            <!-- Eredmény cellás bevitele (8 cella a 0,000001-nek) -->
+            <div class="inline-flex gap-1 items-center bg-white p-1.5 rounded-lg border-2 border-slate-300 focus-within:border-amber-500 transition-all shadow-sm overflow-x-auto">
+              <input type="text" id="val_c_1" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded" placeholder="0">
+              <input type="text" id="val_c_2" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded" placeholder=",">
+              <input type="text" id="val_c_3" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_c_4" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_c_5" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_c_6" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_c_7" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
+              <input type="text" id="val_c_8" maxlength="1" autocomplete="off" class="w-7 h-9 text-center font-bold text-slate-800 focus:outline-none bg-slate-100/50 rounded">
             </div>
-           <!-- LEBEGŐ ABLAKOK (MODAL-OK) --> </div>-->
+
+            <!-- Visszajelző ikon -->
+            <span id="feedback_c" class="ml-auto text-xl"></span>
+          </div>
         </div>
-    </div>
 
-    <div id="modal-archive" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-archive')">&times;</span>
-            <h3 style="color: #38bdf8; margin-top:0;">📂 Archív óra anyaga</h3>
-            <div class="modal-body">
-                <p>A kiválasztott korábbi óra visszatöltött adatai és feladatai jelennek meg itt.</p>
-            </div>
+        <!-- Akció gombok és Kiértékelés -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <button type="button" onclick="resetForm()" class="w-full sm:w-auto px-6 py-3 rounded-xl border-2 border-slate-300 text-slate-600 font-bold hover:bg-slate-100 active:scale-95 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-rotate-right"></i>
+            Újrapróbálkozás
+          </button>
+          
+          <button type="submit" class="w-full sm:w-auto px-8 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg shadow-lg shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check"></i>
+            Ellenőrzés
+          </button>
         </div>
+      </form>
+
+      <!-- Értékelő Kártya (Rejtett alapesetben) -->
+      <div id="resultCard" class="hidden p-6 rounded-2xl bg-slate-100 border-2 border-slate-200 animate-pop">
+        <div class="flex items-center gap-4">
+          <div id="resultIcon" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl text-white font-bold shrink-0">
+            <!-- Dinamikus ikon -->
+          </div>
+          <div>
+            <h3 id="resultTitle" class="text-xl font-extrabold text-slate-800"></h3>
+            <p id="resultText" class="text-slate-600 font-medium mt-1"></p>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <style>
-        /* ÚJ: Biztosítja, hogy az oldalsáv magassága csak a saját tartalmáig érjen */
-        .sidebar {
-            align-self: flex-start;
-            /* Ide jöhetnek a korábbi .sidebar stílusaid (pl. background, padding, border-radius) */
-        }
+  <!-- Lábléc -->
+  <footer class="text-center text-slate-400 text-xs mt-8">
+    Interaktív matematika feladatsor • Hatványozás témakör
+  </footer>
 
-        /* Szöveges rész formázása */
-        .math-notes {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border-left: 5px solid #38bdf8;
-        }
-        .math-notes h3 {
-            margin-top: 0;
-            color: #38bdf8;
-        }
-        .math-notes h4 {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: #f43f5e;
-        }
-        .qa-section p {
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        .notes-list {
-            padding-left: 20px;
-            margin-bottom: 20px;
-        }
-        .notes-list li {
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-    </style>
+  <!-- Logika és automatikus Ugrás a Mezők Között -->
+  <script>
+    // Automatikus ugrás a következő beviteli mezőre gépeléskor
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputs = Array.from(document.querySelectorAll('input[type="text"]'));
+      
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          if (e.target.value.length >= e.target.maxLength) {
+            const nextInput = inputs[index + 1];
+            if (nextInput) nextInput.focus();
+          }
+        });
 
-    <script>
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-    </script>
+        // Backspace megnyomásakor az előző mezőre ugrik, ha üres
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && e.target.value === '') {
+            const prevInput = inputs[index - 1];
+            if (prevInput) prevInput.focus();
+          }
+        });
+      });
+    });
 
+    // Értékek összefűzése cellákból
+    function getCombinedValue(prefix, count) {
+      let str = '';
+      for (let i = 1; i <= count; i++) {
+        const val = document.getElementById(`${prefix}_${i}`).value.trim();
+        str += val;
+      }
+      return str;
+    }
+
+    // Kiértékelő függvény
+    function checkAnswers() {
+      let score = 0;
+      const total = 3;
+
+      // a) Ellenőrzés (5^3 = 125)
+      const expA = document.getElementById('exp_a').value.trim();
+      const valA = getCombinedValue('val_a', 3);
+      const isCorrectA = (expA === '3') && (valA === '125');
+      updateTaskFeedback('a', isCorrectA);
+      if (isCorrectA) score++;
+
+      // b) Ellenőrzés (10^6 = 1000000)
+      const expB = document.getElementById('exp_b').value.trim();
+      const valB = getCombinedValue('val_b', 7);
+      const isCorrectB = (expB === '6') && (valB === '1000000');
+      updateTaskFeedback('b', isCorrectB);
+      if (isCorrectB) score++;
+
+      // c) Ellenőrzés ((-0,1)^6 = 0,000001 vagy 0.000001)
+      const expC = document.getElementById('exp_c').value.trim();
+      const valC = getCombinedValue('val_c', 8).replace('.', ','); // Tizedesvesszőre szabványosítás
+      const isCorrectC = (expC === '6') && (valC === '0,000001');
+      updateTaskFeedback('c', isCorrectC);
+      if (isCorrectC) score++;
+
+      // Összesített eredmény megjelenítése
+      showResults(score, total);
+    }
+
+    // Feladatonkénti visszajelző stílusok frissítése
+    function updateTaskFeedback(taskId, isCorrect) {
+      const feedbackElem = document.getElementById(`feedback_${taskId}`);
+      if (isCorrect) {
+        feedbackElem.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 animate-pop"></i>`;
+      } else {
+        feedbackElem.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500 animate-pop"></i>`;
+      }
+    }
+
+    // Eredményjelző kártya frissítése
+    function showResults(score, total) {
+      const card = document.getElementById('resultCard');
+      const icon = document.getElementById('resultIcon');
+      const title = document.getElementById('resultTitle');
+      const text = document.getElementById('resultText');
+
+      card.classList.remove('hidden');
+
+      if (score === total) {
+        icon.className = "w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold shrink-0 bg-emerald-500 text-white shadow-lg shadow-emerald-500/30";
+        icon.innerHTML = `<i class="fa-solid fa-trophy"></i>`;
+        title.innerText = "Kiváló munka! 🎉";
+        title.className = "text-xl font-extrabold text-emerald-700";
+        text.innerText = `Minden válaszod helyes! Elért pontszám: ${score} / ${total}`;
+      } else if (score > 0) {
+        icon.className = "w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold shrink-0 bg-amber-500 text-white shadow-lg shadow-amber-500/30";
+        icon.innerHTML = `<i class="fa-solid fa-thumbs-up"></i>`;
+        title.innerText = "Szép próbálkozás! 👍";
+        title.className = "text-xl font-extrabold text-amber-700";
+        text.innerText = `Jó úton jársz, de van még mit javítani. Elért pontszám: ${score} / ${total}`;
+      } else {
+        icon.className = "w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold shrink-0 bg-rose-500 text-white shadow-lg shadow-rose-500/30";
+        icon.innerHTML = `<i class="fa-solid fa-lightbulb"></i>`;
+        title.innerText = "Ne add fel! 💪";
+        title.className = "text-xl font-extrabold text-rose-700";
+        text.innerText = `Nézd át a fenti példát, és próbáld meg újra! Elért pontszám: ${score} / ${total}`;
+      }
+
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Űrlap alaphelyzetbe állítása
+    function resetForm() {
+      document.getElementById('taskForm').reset();
+      ['a', 'b', 'c'].forEach(id => {
+        document.getElementById(`feedback_${id}`).innerHTML = '';
+      });
+      document.getElementById('resultCard').classList.add('hidden');
+    }
+  </script>
 </body>
 </html>

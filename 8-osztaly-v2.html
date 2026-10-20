@@ -18,7 +18,6 @@
             --success: #22c55e;
         }
 
-        /* Védelem: kijelölés és másolás tiltása */
         body {
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -60,7 +59,6 @@
             transition: width 0.3s ease;
         }
 
-        /* Lapok kezelése */
         .page {
             display: none;
         }
@@ -79,7 +77,6 @@
             line-height: 1.5;
         }
 
-        /* Bekérő mezők */
         .form-group {
             margin-bottom: 20px;
         }
@@ -105,20 +102,19 @@
             border-color: var(--primary);
         }
 
-        /* Feladatok elrendezése */
         .exercise-item {
             background: #f1f5f9;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
             font-size: 1.15rem;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
-        /* Beviteli mezők */
+        /* Normál beviteli mező */
         input.input-box {
             width: 45px;
             height: 38px;
@@ -137,20 +133,29 @@
             border-color: var(--primary);
         }
 
-        /* Hatványozás és Tört formázás */
-        .power-box {
-            display: inline-flex;
-            align-items: flex-start;
-        }
-
-        .exponent {
-            width: 32px !important;
-            height: 30px !important;
-            font-size: 0.85rem !important;
-            margin-top: -8px;
+        /* Kitevő doboz (kicsi, felső indexben) */
+        input.exponent-box {
+            width: 28px !important;
+            height: 26px !important;
+            font-size: 0.8rem !important;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            outline: none;
+            background: #fff;
+            vertical-align: super;
             margin-left: 2px;
+            margin-right: 4px;
+            position: relative;
+            top: -8px;
         }
 
+        input.exponent-box:focus {
+            border-color: var(--primary);
+        }
+
+        /* Tört formázás */
         .fraction {
             display: inline-flex;
             flex-direction: column;
@@ -160,19 +165,22 @@
         }
 
         .fraction .numerator {
-            border-bottom: 2px solid #000;
+            border-bottom: 2px solid var(--text);
             padding-bottom: 2px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .fraction .denominator {
             padding-top: 2px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
-        /* Gombok */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -208,34 +216,44 @@
             color: white;
         }
 
-        /* Figyelmeztető felugró ablak */
+        /* Biztonsági sötétítő modal */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
         }
 
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 35px;
+            border-radius: 16px;
             text-align: center;
-            max-width: 400px;
+            max-width: 420px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
         .modal-content h3 {
             color: var(--danger);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+        }
+
+        .modal-content p {
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<div class="container">
+<div class="container" id="mainContainer">
     <!-- Haladási sáv -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
@@ -248,16 +266,16 @@
             <h1>Matematika Dolgozat: Hatványozás</h1>
             <p class="desc">
                 Kedves Tanuló!<br>
-                A dolgozat kitöltésére álló idő alatt önállóan dolgozz. A feladatok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
+                A dolgozat kitöltésére álló idő alatt önállóan, tabletről dolgozz. A feladatok az üresen hagyott helyek kitöltését igénylik. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
                 <br><br>
-                ⚠️ <strong>FONTOS BIZTONSÁGI SZABÁLYOK:</strong>
-                <br>- Tilos a lap elhagyása, váltása vagy más alkalmazás megnyitása!
-                <br>- A lap elhagyása esetén a dolgozat <strong>automatikusan nullázódik és elölről kezdődik</strong>!
+                ⚠️ <strong>SZIGORÚ BIZTONSÁGI SZABÁLYOK:</strong>
+                <br>- Tilos a lap elhagyása, alkalmazásváltás vagy értesítési sáv lehúzása!
+                <br>- Bármilyen lapelhagyási kísérlet esetén az oldal **azonnal leblokkol**, és a dolgozat elölről kezdődik.
             </p>
 
             <div class="form-group">
                 <label for="studentName">Saját neved (Vezetéknév és Keresztnév):</label>
-                <input type="text" id="studentName" placeholder="Pl. Minta János" required autocomplete="off">
+                <input type="text" id="studentName" placeholder="Pl. Minta Anna" required autocomplete="off">
             </div>
 
             <div class="nav-buttons" style="justify-content: flex-end;">
@@ -265,27 +283,20 @@
             </div>
         </div>
 
-        <!-- 1. LAP: 11. és 12. feladatok -->
+        <!-- 1. LAP: 1. és 2. feladat -->
         <div class="page" id="page-1">
             <h2>1. Oldal: Hatvány fogalma és szorzata</h2>
             
             <div class="exercise-item">
-                <strong>11.a)</strong> 5 · 5 · 5 = 5
-                <input type="text" class="input-box exponent" id="q11_a_exp">
-                = 
-                <input type="text" class="input-box" id="q11_a_val">
+                <strong>1.</strong> 5 · 5 · 5 = 5<input type="text" class="exponent-box" id="q1_exp"> = <input type="text" class="input-box" id="q1_val">
             </div>
 
             <div class="exercise-item">
-                <strong>12.a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7
-                <input type="text" class="input-box exponent" id="q12_a_exp">
-                = 
-                <input type="text" class="input-box" id="q12_a_val" style="width: 100px;">
+                <strong>2.a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7<input type="text" class="exponent-box" id="q2a_exp"> = <input type="text" class="input-box" id="q2a_val" style="width: 100px;">
             </div>
 
             <div class="exercise-item">
-                <strong>12.b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5
-                <input type="text" class="input-box exponent" id="q12_b_exp">
+                <strong>2.b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5<input type="text" class="exponent-box" id="q2b_exp">
             </div>
 
             <div class="nav-buttons">
@@ -294,48 +305,44 @@
             </div>
         </div>
 
-        <!-- 2. LAP: 13. feladat (Hányados és Törtek) -->
+        <!-- 2. LAP: 3. és 4. feladat -->
         <div class="page" id="page-2">
-            <h2>2. Oldal: Hatványok hányadosa és törtek</h2>
+            <h2>2. Oldal: Hányadosok és törtek</h2>
 
             <div class="exercise-item">
-                <strong>13.b)</strong> 4<sup>5</sup> : 4<sup>3</sup> = 4
-                <input type="text" class="input-box exponent" id="q13_b_exp">
+                <strong>3.</strong> 4<sup>5</sup> : 4<sup>3</sup> = 4<input type="text" class="exponent-box" id="q3_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>13.c)</strong> 
+                <strong>4.a)</strong> 
                 <div class="fraction">
                     <div class="numerator">7<sup>5</sup></div>
                     <div class="denominator">7<sup>3</sup></div>
                 </div>
-                = 7
-                <input type="text" class="input-box exponent" id="q13_c_exp">
+                = 7<input type="text" class="exponent-box" id="q4a_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>20.a)</strong> 
+                <strong>4.b)</strong> 
                 ( <div class="fraction">
                     <div class="numerator">2</div>
                     <div class="denominator">5</div>
                 </div> )<sup>3</sup> = 
                 <div class="fraction">
                     <div class="numerator">
-                        2
-                        <input type="text" class="input-box exponent" id="q20_num_exp">
+                        2<input type="text" class="exponent-box" id="q4b_num_exp" style="top: -6px;">
                     </div>
                     <div class="denominator">
-                        5
-                        <input type="text" class="input-box exponent" id="q20_den_exp">
+                        5<input type="text" class="exponent-box" id="q4b_den_exp" style="top: -6px;">
                     </div>
                 </div>
                 =
                 <div class="fraction">
                     <div class="numerator">
-                        <input type="text" class="input-box" id="q20_val_num">
+                        <input type="text" class="input-box" id="q4b_val_num" style="width: 38px; height: 32px;">
                     </div>
                     <div class="denominator">
-                        <input type="text" class="input-box" id="q20_val_den">
+                        <input type="text" class="input-box" id="q4b_val_den" style="width: 38px; height: 32px;">
                     </div>
                 </div>
             </div>
@@ -346,27 +353,20 @@
             </div>
         </div>
 
-        <!-- 3. LAP: 14., 15. és 17. feladatok -->
+        <!-- 3. LAP: 5., 6. és 7. feladat -->
         <div class="page" id="page-3">
-            <h2>3. Oldal: Hatvány hatványozása és egyenletek</h2>
+            <h2>3. Oldal: Hatványozás és egyenletek</h2>
 
             <div class="exercise-item">
-                <strong>14.a)</strong> (5<sup>4</sup>)<sup>2</sup> = 5
-                <input type="text" class="input-box exponent" id="q14_a_exp">
+                <strong>5.</strong> (5<sup>4</sup>)<sup>2</sup> = 5<input type="text" class="exponent-box" id="q5_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>15.a)</strong> 2<sup>6</sup> · x = 2<sup>13</sup> &nbsp;&nbsp;&Rightarrow;&nbsp;&nbsp; x = 2
-                <input type="text" class="input-box exponent" id="q15_a_exp">
+                <strong>6.</strong> 2<sup>6</sup> · x = 2<sup>13</sup> &nbsp;&nbsp;&rArr;&nbsp;&nbsp; x = 2<input type="text" class="exponent-box" id="q6_exp">
             </div>
 
             <div class="exercise-item">
-                <strong>17.a)</strong> 2<sup>4</sup> · 5<sup>4</sup> = (2 · 5)
-                <input type="text" class="input-box exponent" id="q17_a_exp">
-                = 10
-                <input type="text" class="input-box exponent" id="q17_a_exp2">
-                = 
-                <input type="text" class="input-box" id="q17_a_val" style="width: 80px;">
+                <strong>7.</strong> 2<sup>4</sup> · 5<sup>4</sup> = (2 · 5)<input type="text" class="exponent-box" id="q7_exp1"> = 10<input type="text" class="exponent-box" id="q7_exp2"> = <input type="text" class="input-box" id="q7_val" style="width: 80px;">
             </div>
 
             <div class="nav-buttons">
@@ -378,12 +378,12 @@
     </form>
 </div>
 
-<!-- Modal ablak szabályszegés esetén -->
+<!-- Azonnali sötétítő figyelmeztető ablak -->
 <div class="modal" id="penaltyModal">
     <div class="modal-content">
         <h3>⚠️ FIGYELEM! LAPELHAGYÁS!</h3>
-        <p>Elhagytad az oldalt vagy megváltoztattad az ablakot! A szabályok értelmében a dolgozatod nullázásra került és újraindul.</p>
-        <button class="btn btn-next" style="margin-top: 15px;" onclick="closeModal()">Értettem, Újraindítás</button>
+        <p>Elhagytad az oldalt, váltottál az ablakok között vagy az értesítési sávot használtad! A szabályok értelmében a dolgozatod letiltásra és nullázásra került.</p>
+        <button class="btn btn-next" onclick="closeModal()">Értettem, Újraindítás</button>
     </div>
 </div>
 
@@ -394,7 +394,7 @@
     })();
 
     let currentPage = 0;
-    const totalPages = 3; // 1, 2, 3 az igazi feladatok oldalai
+    const totalPages = 3; 
     let quizStarted = false;
 
     function updateProgress() {
@@ -423,7 +423,7 @@
         window.scrollTo(0, 0);
     }
 
-    // --- LAPELHAGYÁS ÉS BIZTONSÁG ---
+    // --- AZONNALI SÖTÉTÍTŐ LAPELHAGYÁS VÉDELEM ---
     window.addEventListener('blur', function() {
         if (quizStarted) {
             triggerPenalty();
@@ -432,6 +432,12 @@
 
     document.addEventListener('visibilitychange', function() {
         if (document.hidden && quizStarted) {
+            triggerPenalty();
+        }
+    });
+
+    window.addEventListener('pagehide', function() {
+        if (quizStarted) {
             triggerPenalty();
         }
     });
@@ -452,21 +458,21 @@
         updateProgress();
     }
 
-    // --- DOLGOZAT BEKÜLDÉSE E-MAILBEN ---
+    // --- BEKÜLDÉS E-MAILBEN ---
     function submitQuiz() {
+        quizStarted = false; // Kikapcsoljuk a büntetést beküldéskor
         const studentName = document.getElementById('studentName').value.trim();
         
-        // Részletes válaszok összegyűjtése a sablonhoz (`{{details}}`)
         let detailsText = 
-            `11.a kitevő: ${document.getElementById('q11_a_exp').value}, érték: ${document.getElementById('q11_a_val').value}\n` +
-            `12.a kitevő: ${document.getElementById('q12_a_exp').value}\n` +
-            `12.b kitevő: ${document.getElementById('q12_b_exp').value}\n` +
-            `13.b kitevő: ${document.getElementById('q13_b_exp').value}\n` +
-            `13.c kitevő: ${document.getElementById('q13_c_exp').value}\n` +
-            `20.a számláló ktv: ${document.getElementById('q20_num_exp').value}, nevező ktv: ${document.getElementById('q20_den_exp').value}, tört: ${document.getElementById('q20_val_num').value}/${document.getElementById('q20_val_den').value}\n` +
-            `14.a kitevő: ${document.getElementById('q14_a_exp').value}\n` +
-            `15.a x kitevő: ${document.getElementById('q15_a_exp').value}\n` +
-            `17.a érték: ${document.getElementById('q17_a_val').value}`;
+            `1. feladat (5*5*5): kitevő=${document.getElementById('q1_exp').value}, érték=${document.getElementById('q1_val').value}\n` +
+            `2.a feladat (7^5*7^7): kitevő=${document.getElementById('q2a_exp').value}, érték=${document.getElementById('q2a_val').value}\n` +
+            `2.b feladat (5^3*5^7): kitevő=${document.getElementById('q2b_exp').value}\n` +
+            `3. feladat (4^5:4^3): kitevő=${document.getElementById('q3_exp').value}\n` +
+            `4.a feladat (tört hányados): kitevő=${document.getElementById('q4a_exp').value}\n` +
+            `4.b feladat ((2/5)^3): számláló ktv=${document.getElementById('q4b_num_exp').value}, nevező ktv=${document.getElementById('q4b_den_exp').value}, tört=${document.getElementById('q4b_val_num').value}/${document.getElementById('q4b_val_den').value}\n` +
+            `5. feladat ((5^4)^2): kitevő=${document.getElementById('q5_exp').value}\n` +
+            `6. feladat (egyenlet x): x kitevő=${document.getElementById('q6_exp').value}\n` +
+            `7. feladat (2^4*5^4): 1.kitevő=${document.getElementById('q7_exp1').value}, 2.kitevő=${document.getElementById('q7_exp2').value}, érték=${document.getElementById('q7_val').value}`;
 
         const templateParams = {
             from_name: studentName,
@@ -474,7 +480,6 @@
             details: detailsText
         };
 
-        // Küldés az EmailJS-nek
         emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams)
             .then(function(response) {
                alert("Köszönjük! A dolgozatodat sikeresen elküldtük a tanár úrnak.");

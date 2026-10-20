@@ -147,13 +147,13 @@
             border-color: var(--primary);
         }
 
-        /* === GOLYÓÁLLÓ CSS GRID A HATVÁNYOZHATÓSÁGHOZ === */
+        /* TÖKÉLETESÍTETT HATVÁNY GRID ELRENDEZÉS */
         .power-container {
             display: inline-grid;
             grid-template-columns: auto auto;
             grid-template-rows: auto auto;
-            align-items: end;
-            vertical-align: middle;
+            align-items: start;
+            vertical-align: baseline;
             margin: 0 4px;
         }
 
@@ -163,16 +163,17 @@
             font-weight: 600;
             line-height: 1;
             padding-right: 2px;
+            font-size: 1.15rem;
         }
 
         input.exponent-grid-box {
             grid-column: 2;
             grid-row: 1;
-            width: 28px !important;
-            height: 24px !important;
-            min-width: 28px;
-            min-height: 24px;
-            font-size: 0.8rem !important;
+            width: 26px !important;
+            height: 22px !important;
+            min-width: 26px;
+            min-height: 22px;
+            font-size: 0.75rem !important;
             font-weight: bold;
             text-align: center;
             border: 2px solid var(--border);
@@ -181,6 +182,7 @@
             background: #fff;
             padding: 0 !important;
             margin: 0 !important;
+            margin-bottom: -4px !important; /* Feljebb húzza a 7-est a doboz alá */
             box-sizing: border-box !important;
             -webkit-user-select: text;
             user-select: text;

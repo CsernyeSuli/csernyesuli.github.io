@@ -12,10 +12,10 @@
             --primary-hover: #1d4ed8;
             --bg-page: #f8fafc;
             --card-bg: #ffffff;
-            --border: #cbd5e1;
+            --border: #bdc3c7;
             --text: #0f172a;
             --danger: #ef4444;
-            --success: #22c55e;
+            --success: #27ae60;
         }
 
         body {
@@ -23,9 +23,9 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            background-color: var(--bg-page);
+            background-color: #f4f7f6;
             color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -33,13 +33,14 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 750px;
             width: 100%;
             background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             padding: 30px;
             position: relative;
+            box-sizing: border-box;
         }
 
         /* Haladási sáv */
@@ -67,14 +68,21 @@
             display: block;
         }
 
-        h1, h2 {
+        h1 {
+            font-size: 26px;
             margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
         p.desc {
             color: #475569;
             margin-bottom: 20px;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 16px;
         }
 
         .form-group {
@@ -85,6 +93,7 @@
             display: block;
             font-weight: 600;
             margin-bottom: 8px;
+            font-size: 16px;
         }
 
         .form-group input {
@@ -92,111 +101,113 @@
             padding: 12px;
             border: 2px solid var(--border);
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 18px;
             outline: none;
+            box-sizing: border-box;
             -webkit-user-select: text;
             user-select: text;
         }
 
         .form-group input:focus {
-            border-color: var(--primary);
+            border-color: #3498db;
         }
 
         /* Példa és elméleti doboz */
         .example-box {
             background-color: #fef3c7;
             border-left: 4px solid #f59e0b;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 1.05rem;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 18px;
             color: #b45309;
-            font-weight: 600;
             line-height: 1.6;
         }
 
-        .exercise-item {
-            background: #f1f5f9;
-            border-radius: 10px;
-            padding: 16px 20px;
-            margin-bottom: 15px;
-            font-size: 1.15rem;
+        /* UGYANAZ A PROFI ELRENDEZÉS, MINT A PRÓBAKÓDBAN */
+        .task-row {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 20px 0;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 10px;
         }
 
-        /* Normál beviteli mező az értékeknek */
-        input.input-box {
-            width: 90px;
-            height: 38px;
-            text-align: center;
-            font-size: 1rem;
+        .task-number {
+            color: #2c3e50;
+            margin-right: 5px;
+        }
+
+        /* Speciális doboz a hatványalapnak és a kitevőnek */
+        .power-box {
+            display: inline-flex;
+            align-items: flex-start;
+            position: relative;
+            padding-top: 12px;
+            margin-right: 5px;
+        }
+
+        .base {
+            font-size: 30px;
+            line-height: 1;
+        }
+
+        /* Kitevő beviteli mező */
+        .exponent-input {
+            width: 38px;
+            height: 35px;
+            font-size: 18px;
             font-weight: bold;
-            border: 2px solid var(--border);
+            text-align: center;
+            border: 2px solid #bdc3c7;
             border-radius: 6px;
             outline: none;
-            background: #fff;
+            background-color: #ffffff;
+            transform: translateY(-16px);
+            transition: all 0.2s;
+            box-sizing: border-box;
+            padding: 0;
             -webkit-user-select: text;
             user-select: text;
-            box-sizing: border-box;
         }
 
-        input.input-box:focus {
-            border-color: var(--primary);
+        .exponent-input:focus {
+            border-color: #3498db;
+            background-color: #e8f4fd;
         }
 
-        /* TÖKÉLETESÍTETT HATVÁNY GRID ELRENDEZÉS */
-        .power-container {
-            display: inline-grid;
-            grid-template-columns: auto auto;
-            grid-template-rows: auto auto;
-            align-items: start;
-            vertical-align: baseline;
-            margin: 0 4px;
-        }
-
-        .base-text {
-            grid-column: 1;
-            grid-row: 2;
-            font-weight: 600;
-            line-height: 1;
-            padding-right: 2px;
-            font-size: 1.15rem;
-        }
-
-        input.exponent-grid-box {
-            grid-column: 2;
-            grid-row: 1;
-            width: 26px !important;
-            height: 22px !important;
-            min-width: 26px;
-            min-height: 22px;
-            font-size: 0.75rem !important;
+        /* Normál végeredmény beviteli mező */
+        .result-input {
+            width: 110px;
+            height: 42px;
+            font-size: 20px;
             font-weight: bold;
             text-align: center;
-            border: 2px solid var(--border);
-            border-radius: 4px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
             outline: none;
-            background: #fff;
-            padding: 0 !important;
-            margin: 0 !important;
-            margin-bottom: -4px !important; /* Feljebb húzza a 7-est a doboz alá */
-            box-sizing: border-box !important;
+            background-color: #ffffff;
+            margin-left: 5px;
+            box-sizing: border-box;
             -webkit-user-select: text;
             user-select: text;
         }
 
-        input.exponent-grid-box:focus {
-            border-color: var(--primary);
+        .result-input:focus {
+            border-color: #3498db;
+            background-color: #e8f4fd;
         }
 
-        /* Statikus felső indexek a feladatok szövegében */
-        sup {
-            font-size: 0.75em;
-            vertical-align: super;
-            line-height: 0;
+        /* Sima HTML felső index pontosítás */
+        sup.math-sup {
+            font-size: 20px;
+            position: relative;
+            top: -0.5em;
         }
 
         .nav-buttons {
@@ -206,10 +217,10 @@
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -254,7 +265,7 @@
             margin-bottom: 15px;
         }
 
-        /* Biztonsági sötétítő modal & Megerősítő modal */
+        /* Modálok */
         .modal {
             display: none;
             position: fixed;
@@ -329,34 +340,40 @@
             <h2>1. Oldal: Egészítsd ki a következő egyenlőségeket!</h2>
             
             <div class="example-box">
-                <strong>Például:</strong> 2 · 2 · 2 · 2 = 2<sup>4</sup> = 16
+                <strong>Például:</strong> 2 &middot; 2 &middot; 2 &middot; 2 = 2<sup class="math-sup">4</sup> = 16
             </div>
 
-            <div class="exercise-item">
-                <strong>1. a)</strong> 5 · 5 · 5 = 
-                <span class="power-container">
-                    <span class="base-text">5</span>
-                    <input type="text" class="exponent-grid-box" id="q1a_exp">
-                </span> = 
-                <input type="text" class="input-box" id="q1a_val">
+            <div class="task-row">
+                <span class="task-number">1. a)</span>
+                <span>5 &middot; 5 &middot; 5 =</span>
+                <div class="power-box">
+                    <span class="base">5</span>
+                    <input type="text" id="q1a_exp" class="exponent-input" inputmode="numeric">
+                </div>
+                <span>=</span>
+                <input type="text" id="q1a_val" class="result-input" inputmode="numeric">
             </div>
 
-            <div class="exercise-item">
-                <strong>1. b)</strong> 10 · 10 · 10 · 10 · 10 · 10 = 
-                <span class="power-container">
-                    <span class="base-text">10</span>
-                    <input type="text" class="exponent-grid-box" id="q1b_exp">
-                </span> = 
-                <input type="text" class="input-box" id="q1b_val" style="width: 120px;">
+            <div class="task-row">
+                <span class="task-number">1. b)</span>
+                <span>10 &middot; 10 &middot; 10 &middot; 10 &middot; 10 &middot; 10 =</span>
+                <div class="power-box">
+                    <span class="base">10</span>
+                    <input type="text" id="q1b_exp" class="exponent-input" inputmode="numeric">
+                </div>
+                <span>=</span>
+                <input type="text" id="q1b_val" class="result-input" style="width: 140px;" inputmode="numeric">
             </div>
 
-            <div class="exercise-item">
-                <strong>1. c)</strong> (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = 
-                <span class="power-container">
-                    <span class="base-text">(-0,1)</span>
-                    <input type="text" class="exponent-grid-box" id="q1c_exp">
-                </span> = 
-                <input type="text" class="input-box" id="q1c_val" style="width: 120px;">
+            <div class="task-row">
+                <span class="task-number">1. c)</span>
+                <span>(-0,1) &middot; (-0,1) &middot; (-0,1) &middot; (-0,1) &middot; (-0,1) &middot; (-0,1) =</span>
+                <div class="power-box">
+                    <span class="base">(-0,1)</span>
+                    <input type="text" id="q1c_exp" class="exponent-input" inputmode="numeric">
+                </div>
+                <span>=</span>
+                <input type="text" id="q1c_val" class="result-input" style="width: 140px;" inputmode="numeric">
             </div>
 
             <div class="nav-buttons">
@@ -370,50 +387,55 @@
             <h2>2. Oldal: Hatványok szorzata</h2>
 
             <div class="example-box">
-                <strong>2.</strong> Figyeld meg, majd fogalmazd meg az összefüggést!<br>
-                3<sup>5</sup> · 3<sup>7</sup> = (3 · 3 · 3 · 3 · 3) · (3 · 3 · 3 · 3 · 3 · 3 · 3) = 3<sup>5+7</sup> = 3<sup>12</sup><br>
-                <small style="color: #64748b;">(5 tényező · 7 tényező = összesen 12 tényező)</small><br><br>
+                <strong>2. Figyeld meg, majd fogalmazd meg az összefüggést!</strong><br>
+                3<sup class="math-sup">5</sup> &middot; 3<sup class="math-sup">7</sup> = (3 &middot; 3 &middot; 3 &middot; 3 &middot; 3) &middot; (3 &middot; 3 &middot; 3 &middot; 3 &middot; 3 &middot; 3 &middot; 3) = 3<sup class="math-sup">5+7</sup> = 3<sup class="math-sup">12</sup><br>
+                <small style="color: #64748b; font-size: 15px;">(5 tényező &middot; 7 tényező = összesen 12 tényező)</small><br><br>
                 Az előzőhöz hasonlóan értelmezd a következő hatványok szorzatát:
             </div>
 
-            <div class="exercise-item">
-                <strong>a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 
-                <span class="power-container">
-                    <span class="base-text">7</span>
-                    <input type="text" class="exponent-grid-box" id="q2a_exp">
-                </span>
+            <div class="task-row">
+                <span class="task-number">a)</span>
+                <span>7<sup class="math-sup">5</sup> &middot; 7<sup class="math-sup">7</sup> =</span>
+                <div class="power-box">
+                    <span class="base">7</span>
+                    <input type="text" id="q2a_exp" class="exponent-input" inputmode="numeric">
+                </div>
             </div>
 
-            <div class="exercise-item">
-                <strong>b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 
-                <span class="power-container">
-                    <span class="base-text">5</span>
-                    <input type="text" class="exponent-grid-box" id="q2b_exp">
-                </span>
+            <div class="task-row">
+                <span class="task-number">b)</span>
+                <span>5<sup class="math-sup">3</sup> &middot; 5<sup class="math-sup">7</sup> =</span>
+                <div class="power-box">
+                    <span class="base">5</span>
+                    <input type="text" id="q2b_exp" class="exponent-input" inputmode="numeric">
+                </div>
             </div>
 
-            <div class="exercise-item">
-                <strong>c)</strong> 7<sup>3</sup> · 7 = 
-                <span class="power-container">
-                    <span class="base-text">7</span>
-                    <input type="text" class="exponent-grid-box" id="q2c_exp">
-                </span>
+            <div class="task-row">
+                <span class="task-number">c)</span>
+                <span>7<sup class="math-sup">3</sup> &middot; 7 =</span>
+                <div class="power-box">
+                    <span class="base">7</span>
+                    <input type="text" id="q2c_exp" class="exponent-input" inputmode="numeric">
+                </div>
             </div>
 
-            <div class="exercise-item">
-                <strong>d)</strong> 3<sup>5</sup> · 3<sup>2</sup> · 3<sup>4</sup> = 
-                <span class="power-container">
-                    <span class="base-text">3</span>
-                    <input type="text" class="exponent-grid-box" id="q2d_exp">
-                </span>
+            <div class="task-row">
+                <span class="task-number">d)</span>
+                <span>3<sup class="math-sup">5</sup> &middot; 3<sup class="math-sup">2</sup> &middot; 3<sup class="math-sup">4</sup> =</span>
+                <div class="power-box">
+                    <span class="base">3</span>
+                    <input type="text" id="q2d_exp" class="exponent-input" inputmode="numeric">
+                </div>
             </div>
 
-            <div class="exercise-item">
-                <strong>e)</strong> 9<sup>2</sup> · 9<sup>0</sup> · 9<sup>1</sup> = 
-                <span class="power-container">
-                    <span class="base-text">9</span>
-                    <input type="text" class="exponent-grid-box" id="q2e_exp">
-                </span>
+            <div class="task-row">
+                <span class="task-number">e)</span>
+                <span>9<sup class="math-sup">2</sup> &middot; 9<sup class="math-sup">0</sup> &middot; 9<sup class="math-sup">1</sup> =</span>
+                <div class="power-box">
+                    <span class="base">9</span>
+                    <input type="text" id="q2e_exp" class="exponent-input" inputmode="numeric">
+                </div>
             </div>
 
             <div class="nav-buttons">

@@ -165,7 +165,7 @@
             outline: none;
             background: #fff;
             margin-left: 2px;
-            margin-top: -6px; /* Felső indexbe kényszeríti stabilan */
+            margin-top: -6px;
             -webkit-user-select: text;
             user-select: text;
         }
@@ -280,6 +280,9 @@
             <p class="desc">
                 Kedves Tanuló!<br>
                 A dolgozat kitöltésére álló idő alatt önállóan, tabletről dolgozz. A feladatok az üresen hagyott helyek kitöltését igénylik. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
+                <br><br>
+                📝 <strong>HASZNOS TUDNIVALÓ:</strong>
+                <br>- A kapott papírlapon végezd el a szükséges számításokat, átalakításokat; a papírlapot a végén nem kell beadni.
                 <br><br>
                 ⚠️ <strong>FONTOS SZABÁLYOK ÉS FIGYELMEZTETÉSEK:</strong>
                 <br>- Ha a dolgozatot többször nyitod meg vagy küldöd be, a rendszerben <strong>kizárólag a legkorábban beérkezett megoldásod</strong> lesz érvényes!
@@ -493,18 +496,7 @@
         quizStarted = false; 
         const studentName = document.getElementById('studentName').value.trim();
         
-        // Helyes válaszok ellenőrzése és pontszámítás
         let score = 0;
-        const totalPoints = 8; // 1. feladat: 3 kitevő + 3 érték (6) + 2. feladat: 5 kitevő (5) -> Összesen 11 pont. Legyen pontosan kiszámolva:
-        // 1.a: exp=3, val=125 (2 pont)
-        // 1.b: exp=6, val=1000000 (2 pont)
-        // 1.c: exp=6, val=0.000001 / .000001 / ,000001 (2 pont)
-        // 2.a: exp=12 (1 pont)
-        // 2.b: exp=10 (1 pont)
-        // 2.c: exp=4 (1 pont)
-        // 2.d: exp=11 (1 pont)
-        // 2.e: exp=3 (1 pont)
-        // Összesen: 6 + 5 = 11 pont.
         let maxPoints = 11;
 
         if(document.getElementById('q1a_exp').value.trim() === '3') score++;
@@ -545,7 +537,6 @@
         // Küldés az EmailJS-nek
         emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams, "hsRvek-Jff5scNP1B")
             .then(function(response) {
-               // Záró oldal megjelenítése a kiértékeléssel
                document.getElementById('successMessage').innerHTML = `<strong>${studentName}</strong> nevű tanuló dolgozatát sikeresen elküldtük a tanár úrnak.`;
                document.getElementById('scoreDisplay').innerHTML = `Elért eredményed: ${scoreString}`;
                

@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8. Osztály - Hatványozás Interaktív Feladatok</title>
+    <title>Matematika Dolgozat - Hatványozás</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
-            --primary: #f59e0b;
-            --primary-hover: #d97706;
-            --bg-card: #ffffff;
-            --bg-page: #fcfbf7;
-            --text-dark: #1f2937;
-            --border-color: #e5e7eb;
-            --success-color: #10b981;
-            --error-color: #ef4444;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-page: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #cbd5e1;
+            --text: #0f172a;
+            --danger: #ef4444;
+            --success: #22c55e;
         }
 
-        * {
-            box-sizing: border-box;
+        /* Védelem: kijelölés és másolás tiltása */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: var(--bg-page);
+            color: var(--text);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-page);
-            color: var(--text-dark);
-            padding: 20px 10px;
+            padding: 20px;
             display: flex;
             justify-content: center;
         }
@@ -34,418 +36,453 @@
         .container {
             max-width: 800px;
             width: 100%;
-            background: white;
-            padding: 30px;
+            background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            padding: 30px;
+            position: relative;
         }
 
-        .header {
+        /* Haladási sáv */
+        .progress-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            height: 10px;
             margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f3f4f6;
+            overflow: hidden;
         }
 
-        .task-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-right: 12px;
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
         }
 
-        .task-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: inline-block;
-            vertical-align: middle;
+        /* Lapok kezelése */
+        .page {
+            display: none;
         }
 
-        .example-box {
-            background-color: #fffbe0;
-            border-left: 4px solid var(--primary);
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 25px;
+        .page.active {
+            display: block;
+        }
+
+        h1, h2 {
+            margin-bottom: 15px;
+        }
+
+        p.desc {
+            color: #475569;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Bekérő mezők */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
             font-size: 1rem;
-            color: #92400e;
+            outline: none;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
-        .exercise-card {
-            background: #fafafa;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Feladatok elrendezése */
+        .exercise-item {
+            background: #f1f5f9;
+            border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
+            font-size: 1.15rem;
             display: flex;
+            align-items: center;
             flex-wrap: wrap;
-            align-items: center;
             gap: 10px;
-            font-size: 1.2rem;
-            font-weight: 600;
         }
 
-        .label-letter {
-            color: var(--primary-hover);
+        /* Beviteli mezők */
+        input.input-box {
+            width: 45px;
+            height: 38px;
+            text-align: center;
+            font-size: 1rem;
             font-weight: bold;
-            font-size: 1.2rem;
-            min-width: 25px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            outline: none;
+            background: #fff;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
-        .expression {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+        input.input-box:focus {
+            border-color: var(--primary);
         }
 
-        .power-wrapper {
-            position: relative;
+        /* Hatványozás és Tört formázás */
+        .power-box {
             display: inline-flex;
             align-items: flex-start;
+        }
+
+        .exponent {
+            width: 32px !important;
+            height: 30px !important;
+            font-size: 0.85rem !important;
+            margin-top: -8px;
+            margin-left: 2px;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
             margin: 0 4px;
         }
 
-        .base-num {
-            font-size: 1.3rem;
-        }
-
-        .exponent-input {
-            width: 36px;
-            height: 34px;
-            border: 2px solid #cbd5e1;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 0.95rem;
-            font-weight: bold;
-            margin-left: 2px;
-            margin-top: -8px;
-            outline: none;
-            transition: all 0.2s;
-            background-color: #fff;
-        }
-
-        .exponent-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-        }
-
-        .equals {
-            margin: 0 6px;
-            color: #64748b;
-        }
-
-        .grid-inputs {
-            display: inline-flex;
-            gap: 4px;
-            background: #fff;
-            padding: 4px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-        }
-
-        .cell-input {
-            width: 32px;
-            height: 38px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: bold;
-            outline: none;
-            transition: all 0.2s;
-            background-color: #fff;
-        }
-
-        .cell-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
-        }
-
-        .correct {
-            border-color: var(--success-color) !important;
-            background-color: #ecfdf5 !important;
-            color: #065f46;
-        }
-
-        .incorrect {
-            border-color: var(--error-color) !important;
-            background-color: #fef2f2 !important;
-            color: #991b1b;
-        }
-
-        .actions {
+        .fraction .numerator {
+            border-bottom: 2px solid #000;
+            padding-bottom: 2px;
             display: flex;
-            gap: 15px;
+            align-items: center;
+        }
+
+        .fraction .denominator {
+            padding-top: 2px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Gombok */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
             margin-top: 30px;
-            justify-content: flex-end;
         }
 
         .btn {
             padding: 12px 24px;
+            border: none;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            border: none;
-            transition: background 0.2s, transform 0.1s;
+            transition: all 0.2s;
         }
 
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-submit {
+        .btn-next {
             background-color: var(--primary);
             color: white;
         }
 
-        .btn-submit:hover {
+        .btn-next:hover {
             background-color: var(--primary-hover);
         }
 
-        .btn-reset {
+        .btn-prev {
             background-color: #e2e8f0;
             color: #475569;
         }
 
-        .btn-reset:hover {
-            background-color: #cbd5e1;
+        .btn-submit {
+            background-color: var(--success);
+            color: white;
         }
 
-        #feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
+        /* Figyelmeztető felugró ablak */
+        .modal {
             display: none;
-            font-weight: 600;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
+            max-width: 400px;
         }
 
-        #feedback.show {
-            display: block;
-        }
-
-        #feedback.success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        #feedback.warning {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        @media (max-width: 600px) {
-            .exercise-card {
-                font-size: 1rem;
-                padding: 15px;
-            }
-            .cell-input {
-                width: 26px;
-                height: 34px;
-                font-size: 0.95rem;
-            }
-            .exponent-input {
-                width: 30px;
-                height: 30px;
-            }
+        .modal-content h3 {
+            color: var(--danger);
+            margin-bottom: 10px;
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="container">
-    <div class="header">
-        <span class="task-number">11</span>
-        <h2 class="task-title">Egészítsd ki a következő egyenlőségeket!</h2>
+    <!-- Haladási sáv -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <div class="example-box">
-        <strong>Például:</strong> 2 · 2 · 2 · 2 = 2<sup>4</sup> = 16
-    </div>
+    <form id="quizForm" autocomplete="off">
+        
+        <!-- 0. LAP: Tájékoztató és Névbekérő -->
+        <div class="page active" id="page-0">
+            <h1>Matematika Dolgozat: Hatványozás</h1>
+            <p class="desc">
+                Kedves Tanuló!<br>
+                A dolgozat kitöltésére álló idő alatt önállóan dolgozz. A feladatok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
+                <br><br>
+                ⚠️ <strong>FONTOS BIZTONSÁGI SZABÁLYOK:</strong>
+                <br>- Tilos a lap elhagyása, váltása vagy más alkalmazás megnyitása!
+                <br>- A lap elhagyása esetén a dolgozat <strong>automatikusan nullázódik és elölről kezdődik</strong>!
+            </p>
 
-    <form id="taskForm" autocomplete="off">
-        <!-- a) feladat -->
-        <div class="exercise-card">
-            <span class="label-letter">a)</span>
-            <div class="expression">
-                5 · 5 · 5 = 
-                <div class="power-wrapper">
-                    <span class="base-num">5</span>
-                    <input type="text" class="exponent-input" id="a_exp" maxlength="2" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
+            <div class="form-group">
+                <label for="studentName">Saját neved (Vezetéknév és Keresztnév):</label>
+                <input type="text" id="studentName" placeholder="Pl. Minta János" required autocomplete="off">
+            </div>
+
+            <div class="nav-buttons" style="justify-content: flex-end;">
+                <button type="button" class="btn btn-next" onclick="startQuiz()">Dolgozat Kezdése</button>
+            </div>
+        </div>
+
+        <!-- 1. LAP: 11. és 12. feladatok -->
+        <div class="page" id="page-1">
+            <h2>1. Oldal: Hatvány fogalma és szorzata</h2>
+            
+            <div class="exercise-item">
+                <strong>11.a)</strong> 5 · 5 · 5 = 5
+                <input type="text" class="input-box exponent" id="q11_a_exp">
+                = 
+                <input type="text" class="input-box" id="q11_a_val">
+            </div>
+
+            <div class="exercise-item">
+                <strong>12.a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7
+                <input type="text" class="input-box exponent" id="q12_a_exp">
+                = 
+                <input type="text" class="input-box" id="q12_a_val" style="width: 100px;">
+            </div>
+
+            <div class="exercise-item">
+                <strong>12.b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5
+                <input type="text" class="input-box exponent" id="q12_b_exp">
+            </div>
+
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
+                <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
+            </div>
+        </div>
+
+        <!-- 2. LAP: 13. feladat (Hányados és Törtek) -->
+        <div class="page" id="page-2">
+            <h2>2. Oldal: Hatványok hányadosa és törtek</h2>
+
+            <div class="exercise-item">
+                <strong>13.b)</strong> 4<sup>5</sup> : 4<sup>3</sup> = 4
+                <input type="text" class="input-box exponent" id="q13_b_exp">
+            </div>
+
+            <div class="exercise-item">
+                <strong>13.c)</strong> 
+                <div class="fraction">
+                    <div class="numerator">7<sup>5</sup></div>
+                    <div class="denominator">7<sup>3</sup></div>
+                </div>
+                = 7
+                <input type="text" class="input-box exponent" id="q13_c_exp">
+            </div>
+
+            <div class="exercise-item">
+                <strong>20.a)</strong> 
+                ( <div class="fraction">
+                    <div class="numerator">2</div>
+                    <div class="denominator">5</div>
+                </div> )<sup>3</sup> = 
+                <div class="fraction">
+                    <div class="numerator">
+                        2
+                        <input type="text" class="input-box exponent" id="q20_num_exp">
+                    </div>
+                    <div class="denominator">
+                        5
+                        <input type="text" class="input-box exponent" id="q20_den_exp">
+                    </div>
+                </div>
+                =
+                <div class="fraction">
+                    <div class="numerator">
+                        <input type="text" class="input-box" id="q20_val_num">
+                    </div>
+                    <div class="denominator">
+                        <input type="text" class="input-box" id="q20_val_den">
+                    </div>
                 </div>
             </div>
-            <span class="equals">=</span>
-            <div class="grid-inputs">
-                <input type="text" class="cell-input a-cell" data-idx="0" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input a-cell" data-idx="1" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input a-cell" data-idx="2" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input a-cell" data-idx="3" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
+
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
+                <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
             </div>
         </div>
 
-        <!-- b) feladat -->
-        <div class="exercise-card">
-            <span class="label-letter">b)</span>
-            <div class="expression">
-                10 · 10 · 10 · 10 · 10 · 10 = 
-                <div class="power-wrapper">
-                    <span class="base-num">10</span>
-                    <input type="text" class="exponent-input" id="b_exp" maxlength="2" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                </div>
+        <!-- 3. LAP: 14., 15. és 17. feladatok -->
+        <div class="page" id="page-3">
+            <h2>3. Oldal: Hatvány hatványozása és egyenletek</h2>
+
+            <div class="exercise-item">
+                <strong>14.a)</strong> (5<sup>4</sup>)<sup>2</sup> = 5
+                <input type="text" class="input-box exponent" id="q14_a_exp">
             </div>
-            <span class="equals">=</span>
-            <div class="grid-inputs">
-                <input type="text" class="cell-input b-cell" data-idx="0" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input b-cell" data-idx="1" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input b-cell" data-idx="2" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input b-cell" data-idx="3" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input b-cell" data-idx="4" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input b-cell" data-idx="5" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                <input type="text" class="cell-input b-cell" data-idx="6" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
+
+            <div class="exercise-item">
+                <strong>15.a)</strong> 2<sup>6</sup> · x = 2<sup>13</sup> &nbsp;&nbsp;&Rightarrow;&nbsp;&nbsp; x = 2
+                <input type="text" class="input-box exponent" id="q15_a_exp">
+            </div>
+
+            <div class="exercise-item">
+                <strong>17.a)</strong> 2<sup>4</sup> · 5<sup>4</sup> = (2 · 5)
+                <input type="text" class="input-box exponent" id="q17_a_exp">
+                = 10
+                <input type="text" class="input-box exponent" id="q17_a_exp2">
+                = 
+                <input type="text" class="input-box" id="q17_a_val" style="width: 80px;">
+            </div>
+
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
+                <button type="button" class="btn btn-submit" onclick="submitQuiz()">Befejezés és Beküldés</button>
             </div>
         </div>
 
-        <!-- c) feladat -->
-        <div class="exercise-card">
-            <span class="label-letter">c)</span>
-            <div class="expression">
-                (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = 
-                <div class="power-wrapper">
-                    <span class="base-num">(-0,1)</span>
-                    <input type="text" class="exponent-input" id="c_exp" maxlength="2" autocomplete="one-time-code" autocorrect="off" spellcheck="false" inputmode="numeric">
-                </div>
-            </div>
-            <span class="equals">=</span>
-            <div class="grid-inputs">
-                <input type="text" class="cell-input c-cell" data-idx="0" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="1" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="2" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="3" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="4" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="5" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="6" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-                <input type="text" class="cell-input c-cell" data-idx="7" maxlength="1" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
-            </div>
-        </div>
-
-        <div class="actions">
-            <button type="button" class="btn btn-reset" onclick="resetForm()">Újrapróbálkozás</button>
-            <button type="button" class="btn btn-submit" onclick="checkAnswers()">Ellenőrzés</button>
-        </div>
     </form>
+</div>
 
-    <div id="feedback"></div>
+<!-- Modal ablak szabályszegés esetén -->
+<div class="modal" id="penaltyModal">
+    <div class="modal-content">
+        <h3>⚠️ FIGYELEM! LAPELHAGYÁS!</h3>
+        <p>Elhagytad az oldalt vagy megváltoztattad az ablakot! A szabályok értelmében a dolgozatod nullázásra került és újraindul.</p>
+        <button class="btn btn-next" style="margin-top: 15px;" onclick="closeModal()">Értettem, Újraindítás</button>
+    </div>
 </div>
 
 <script>
-    // Automatikus ugrás a következő mezőre gépeléskor
-    document.querySelectorAll('.cell-input').forEach((input) => {
-        input.addEventListener('input', (e) => {
-            if (e.target.value.length >= 1) {
-                let next = e.target.nextElementSibling;
-                if (next && next.classList.contains('cell-input')) {
-                    next.focus();
-                }
-            }
-        });
+    // --- EMAILJS INICIALIZÁLÁSA ---
+    (function(){
+        emailjs.init("hsRvek-Jff5scNP1B");
+    })();
 
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && e.target.value.length === 0) {
-                let prev = e.target.previousElementSibling;
-                if (prev && prev.classList.contains('cell-input')) {
-                    prev.focus();
-                }
-            }
-        });
-    });
+    let currentPage = 0;
+    const totalPages = 3; // 1, 2, 3 az igazi feladatok oldalai
+    let quizStarted = false;
 
-    // Oldal betöltésekor minden mező azonnali kiürítése az auto-fill megelőzésére
-    window.addEventListener('load', () => {
-        resetForm();
-    });
-
-    function checkAnswers() {
-        let score = 0;
-        let total = 6; // 3 kitevő + 3 érték
-
-        // a) feladat ellenőrzése
-        const aExp = document.getElementById('a_exp');
-        if (aExp.value.trim() === '3') {
-            aExp.className = 'exponent-input correct';
-            score++;
-        } else {
-            aExp.className = 'exponent-input incorrect';
-        }
-
-        const aCells = Array.from(document.querySelectorAll('.a-cell')).map(i => i.value.trim()).join('');
-        const aGrid = document.querySelectorAll('.a-cell');
-        if (aCells === '125') {
-            aGrid.forEach(i => i.className = 'cell-input a-cell correct');
-            score++;
-        } else {
-            aGrid.forEach(i => i.className = 'cell-input a-cell incorrect');
-        }
-
-        // b) feladat ellenőrzése
-        const bExp = document.getElementById('b_exp');
-        if (bExp.value.trim() === '6') {
-            bExp.className = 'exponent-input correct';
-            score++;
-        } else {
-            bExp.className = 'exponent-input incorrect';
-        }
-
-        const bCells = Array.from(document.querySelectorAll('.b-cell')).map(i => i.value.trim()).join('');
-        const bGrid = document.querySelectorAll('.b-cell');
-        if (bCells === '1000000') {
-            bGrid.forEach(i => i.className = 'cell-input b-cell correct');
-            score++;
-        } else {
-            bGrid.forEach(i => i.className = 'cell-input b-cell incorrect');
-        }
-
-        // c) feladat ellenőrzése
-        const cExp = document.getElementById('c_exp');
-        if (cExp.value.trim() === '6') {
-            cExp.className = 'exponent-input correct';
-            score++;
-        } else {
-            cExp.className = 'exponent-input incorrect';
-        }
-
-        const cCells = Array.from(document.querySelectorAll('.c-cell')).map(i => i.value.trim().replace(',', '.')).join('');
-        const cGrid = document.querySelectorAll('.c-cell');
-        // Elfogadjuk a 0.000001 vagy a ,000001 formátumot is
-        if (cCells === '0.000001' || cCells === '.000001') {
-            cGrid.forEach(i => i.className = 'cell-input c-cell correct');
-            score++;
-        } else {
-            cGrid.forEach(i => i.className = 'cell-input c-cell incorrect');
-        }
-
-        // Visszajelzés megjelenítése
-        const feedback = document.getElementById('feedback');
-        feedback.className = 'show ' + (score === total ? 'success' : 'warning');
-        feedback.innerHTML = `Eredményed: <strong>${score} / ${total}</strong> pont.<br>` +
-            (score === total ? 'Kiváló munka! Minden válasz helyes.' : 'Nézd át a pirossal jelölt részeket, és próbáld újra!');
+    function updateProgress() {
+        const progress = (currentPage / totalPages) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
     }
 
-    function resetForm() {
-        document.getElementById('taskForm').reset();
-        document.querySelectorAll('input').forEach(i => {
-            i.value = '';
-            i.className = i.classList.contains('exponent-input') ? 'exponent-input' : 'cell-input ' + Array.from(i.classList).find(c => c.endsWith('-cell') || '');
-        });
-        const feedback = document.getElementById('feedback');
-        feedback.className = '';
-        feedback.innerHTML = '';
+    function startQuiz() {
+        const name = document.getElementById('studentName').value.trim();
+        if(!name) {
+            alert("Kérjük, add meg a nevedet a folytatáshoz!");
+            return;
+        }
+        quizStarted = true;
+        changePage(1);
+    }
+
+    function changePage(delta) {
+        const pages = document.querySelectorAll('.page');
+        pages[currentPage].classList.remove('active');
+        
+        currentPage += delta;
+        pages[currentPage].classList.add('active');
+
+        updateProgress();
+        window.scrollTo(0, 0);
+    }
+
+    // --- LAPELHAGYÁS ÉS BIZTONSÁG ---
+    window.addEventListener('blur', function() {
+        if (quizStarted) {
+            triggerPenalty();
+        }
+    });
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && quizStarted) {
+            triggerPenalty();
+        }
+    });
+
+    function triggerPenalty() {
+        document.getElementById('penaltyModal').style.display = 'flex';
+        document.getElementById('quizForm').reset();
+    }
+
+    function closeModal() {
+        document.getElementById('penaltyModal').style.display = 'none';
+        quizStarted = false;
+        currentPage = 0;
+        
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+        pages[0].classList.add('active');
+        updateProgress();
+    }
+
+    // --- DOLGOZAT BEKÜLDÉSE E-MAILBEN ---
+    function submitQuiz() {
+        const studentName = document.getElementById('studentName').value.trim();
+        
+        // Részletes válaszok összegyűjtése a sablonhoz (`{{details}}`)
+        let detailsText = 
+            `11.a kitevő: ${document.getElementById('q11_a_exp').value}, érték: ${document.getElementById('q11_a_val').value}\n` +
+            `12.a kitevő: ${document.getElementById('q12_a_exp').value}\n` +
+            `12.b kitevő: ${document.getElementById('q12_b_exp').value}\n` +
+            `13.b kitevő: ${document.getElementById('q13_b_exp').value}\n` +
+            `13.c kitevő: ${document.getElementById('q13_c_exp').value}\n` +
+            `20.a számláló ktv: ${document.getElementById('q20_num_exp').value}, nevező ktv: ${document.getElementById('q20_den_exp').value}, tört: ${document.getElementById('q20_val_num').value}/${document.getElementById('q20_val_den').value}\n` +
+            `14.a kitevő: ${document.getElementById('q14_a_exp').value}\n` +
+            `15.a x kitevő: ${document.getElementById('q15_a_exp').value}\n` +
+            `17.a érték: ${document.getElementById('q17_a_val').value}`;
+
+        const templateParams = {
+            from_name: studentName,
+            score: "Kitöltve és beküldve",
+            details: detailsText
+        };
+
+        // Küldés az EmailJS-nek
+        emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams)
+            .then(function(response) {
+               alert("Köszönjük! A dolgozatodat sikeresen elküldtük a tanár úrnak.");
+               location.reload();
+            }, function(error) {
+               alert("Hiba történt a beküldés során. Kérlek, próbáld újra!");
+               console.log("FAILED...", error);
+            });
     }
 </script>
 

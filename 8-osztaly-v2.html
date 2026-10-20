@@ -102,7 +102,7 @@
             border-color: var(--primary);
         }
 
-        /* Példa doboz */
+        /* Példa és elméleti doboz */
         .example-box {
             background-color: #fef3c7;
             border-left: 4px solid #f59e0b;
@@ -112,6 +112,7 @@
             font-size: 1.05rem;
             color: #b45309;
             font-weight: 600;
+            line-height: 1.6;
         }
 
         .exercise-item {
@@ -145,7 +146,14 @@
             border-color: var(--primary);
         }
 
-        /* Kitevő doboz (kicsi, felső indexben) */
+        /* Biztos felső index (kitevő) burkoló és doboz */
+        .power-term {
+            position: relative;
+            display: inline-flex;
+            align-items: flex-start;
+            margin: 0 2px;
+        }
+
         input.exponent-box {
             width: 28px !important;
             height: 26px !important;
@@ -156,11 +164,10 @@
             border-radius: 4px;
             outline: none;
             background: #fff;
-            vertical-align: super;
             margin-left: 2px;
-            margin-right: 4px;
-            position: relative;
-            top: -8px;
+            margin-top: -6px; /* Felső indexbe kényszeríti stabilan */
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         input.exponent-box:focus {
@@ -202,6 +209,11 @@
             color: white;
         }
 
+        .btn-cancel {
+            background-color: #94a3b8;
+            color: white;
+        }
+
         /* Sikeres záró oldal dizájn */
         .success-card {
             background: #ecfdf5;
@@ -217,7 +229,7 @@
             margin-bottom: 15px;
         }
 
-        /* Biztonsági sötétítő modal */
+        /* Biztonsági sötétítő modal & Megerősítő modal */
         .modal {
             display: none;
             position: fixed;
@@ -269,9 +281,9 @@
                 Kedves Tanuló!<br>
                 A dolgozat kitöltésére álló idő alatt önállóan, tabletről dolgozz. A feladatok az üresen hagyott helyek kitöltését igénylik. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
                 <br><br>
-                ⚠️ <strong>SZIGORÚ BIZTONSÁGI SZABÁLYOK:</strong>
-                <br>- Tilos a lap elhagyása, alkalmazásváltás vagy értesítési sáv lehúzása!
-                <br>- Bármilyen lapelhagyási kísérlet esetén az oldal **azonnal leblokkol**, és a dolgozat elölről kezdődik.
+                ⚠️ <strong>FONTOS SZABÁLYOK ÉS FIGYELMEZTETÉSEK:</strong>
+                <br>- Ha a dolgozatot többször nyitod meg vagy küldöd be, a rendszerben <strong>kizárólag a legkorábban beérkezett megoldásod</strong> lesz érvényes!
+                <br>- Tilos a lap elhagyása, alkalmazásváltás vagy értesítési sáv lehúzása. Lapelhagyás esetén az oldal azonnal leblokkol és a dolgozat elölről kezdődik.
             </p>
 
             <div class="form-group">
@@ -284,7 +296,7 @@
             </div>
         </div>
 
-        <!-- 1. LAP: 1. Feladat (a, b, c részekkel) -->
+        <!-- 1. LAP: 1. Feladat -->
         <div class="page" id="page-1">
             <h2>1. Oldal: Egészítsd ki a következő egyenlőségeket!</h2>
             
@@ -293,15 +305,21 @@
             </div>
 
             <div class="exercise-item">
-                <strong>1. a)</strong> 5 · 5 · 5 = 5<input type="text" class="exponent-box" id="q1a_exp"> = <input type="text" class="input-box" id="q1a_val">
+                <strong>1. a)</strong> 5 · 5 · 5 = 
+                <span class="power-term">5<input type="text" class="exponent-box" id="q1a_exp"></span> = 
+                <input type="text" class="input-box" id="q1a_val">
             </div>
 
             <div class="exercise-item">
-                <strong>1. b)</strong> 10 · 10 · 10 · 10 · 10 · 10 = 10<input type="text" class="exponent-box" id="q1b_exp"> = <input type="text" class="input-box" id="q1b_val" style="width: 120px;">
+                <strong>1. b)</strong> 10 · 10 · 10 · 10 · 10 · 10 = 
+                <span class="power-term">10<input type="text" class="exponent-box" id="q1b_exp"></span> = 
+                <input type="text" class="input-box" id="q1b_val" style="width: 120px;">
             </div>
 
             <div class="exercise-item">
-                <strong>1. c)</strong> (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = (-0,1)<input type="text" class="exponent-box" id="q1c_exp"> = <input type="text" class="input-box" id="q1c_val" style="width: 120px;">
+                <strong>1. c)</strong> (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) · (-0,1) = 
+                <span class="power-term">(-0,1)<input type="text" class="exponent-box" id="q1c_exp"></span> = 
+                <input type="text" class="input-box" id="q1c_val" style="width: 120px;">
             </div>
 
             <div class="nav-buttons">
@@ -310,33 +328,45 @@
             </div>
         </div>
 
-        <!-- 2. LAP: 2. Feladat (Hatványok szorzata: a, b, c, d, e) -->
+        <!-- 2. LAP: 2. Feladat -->
         <div class="page" id="page-2">
-            <h2>2. Oldal: Add meg hatványalakban a szorzatokat!</h2>
+            <h2>2. Oldal: Hatványok szorzata</h2>
 
-            <div class="exercise-item">
-                <strong>2. a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 7<input type="text" class="exponent-box" id="q2a_exp">
+            <div class="example-box">
+                <strong>2.</strong> Figyeld meg, majd fogalmazd meg az összefüggést!<br>
+                3<sup>5</sup> · 3<sup>7</sup> = (3 · 3 · 3 · 3 · 3) · (3 · 3 · 3 · 3 · 3 · 3 · 3) = 3<sup>5+7</sup> = 3<sup>12</sup><br>
+                <small style="color: #64748b;">(5 tényező · 7 tényező = összesen 12 tényező)</small><br><br>
+                Az előzőhöz hasonlóan értelmezd a következő hatványok szorzatát:
             </div>
 
             <div class="exercise-item">
-                <strong>2. b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 5<input type="text" class="exponent-box" id="q2b_exp">
+                <strong>a)</strong> 7<sup>5</sup> · 7<sup>7</sup> = 
+                <span class="power-term">7<input type="text" class="exponent-box" id="q2a_exp"></span>
             </div>
 
             <div class="exercise-item">
-                <strong>2. c)</strong> 7<sup>3</sup> · 7 = 7<input type="text" class="exponent-box" id="q2c_exp">
+                <strong>b)</strong> 5<sup>3</sup> · 5<sup>7</sup> = 
+                <span class="power-term">5<input type="text" class="exponent-box" id="q2b_exp"></span>
             </div>
 
             <div class="exercise-item">
-                <strong>2. d)</strong> 3<sup>5</sup> · 3<sup>2</sup> · 3<sup>4</sup> = 3<input type="text" class="exponent-box" id="q2d_exp">
+                <strong>c)</strong> 7<sup>3</sup> · 7 = 
+                <span class="power-term">7<input type="text" class="exponent-box" id="q2c_exp"></span>
             </div>
 
             <div class="exercise-item">
-                <strong>2. e)</strong> 9<sup>2</sup> · 9<sup>0</sup> · 9<sup>1</sup> = 9<input type="text" class="exponent-box" id="q2e_exp">
+                <strong>d)</strong> 3<sup>5</sup> · 3<sup>2</sup> · 3<sup>4</sup> = 
+                <span class="power-term">3<input type="text" class="exponent-box" id="q2d_exp"></span>
+            </div>
+
+            <div class="exercise-item">
+                <strong>e)</strong> 9<sup>2</sup> · 9<sup>0</sup> · 9<sup>1</sup> = 
+                <span class="power-term">9<input type="text" class="exponent-box" id="q2e_exp"></span>
             </div>
 
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
-                <button type="button" class="btn btn-submit" onclick="submitQuiz()">Befejezés és Beküldés</button>
+                <button type="button" class="btn btn-submit" onclick="confirmSubmit()">Befejezés és Beküldés</button>
             </div>
         </div>
 
@@ -344,17 +374,29 @@
         <div class="page" id="page-success">
             <div class="success-card">
                 <h2>🎉 Köszönjük a kitöltést!</h2>
-                <p id="successMessage" style="font-size: 1.1rem; color: #065f46; margin-bottom: 20px;">
+                <p id="successMessage" style="font-size: 1.1rem; color: #065f46; margin-bottom: 10px;">
                     Dolgozatodat sikeresen rögzítettük és elküldtük a tanár úrnak.
                 </p>
-                <button type="button" class="btn btn-next" onclick="location.reload()">Újrakezdés</button>
+                <p id="scoreDisplay" style="font-size: 1.25rem; font-weight: bold; color: #047857; margin-top: 15px;"></p>
             </div>
         </div>
 
     </form>
 </div>
 
-<!-- Azonnali sötétítő figyelmeztető ablak -->
+<!-- Megerősítő Modal beküldés előtt -->
+<div class="modal" id="confirmModal" style="display: none;">
+    <div class="modal-content">
+        <h3 style="color: var(--primary);">Biztosan befejezed?</h3>
+        <p>Ha rákattintasz a küldésre, a válaszaid véglegesítésre kerülnek, és elküldjük az eredményt a tanárnak.</p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <button type="button" class="btn btn-cancel" onclick="closeConfirmModal()">Mégse</button>
+            <button type="button" class="btn btn-submit" onclick="executeSubmit()">Igen, Küldés</button>
+        </div>
+    </div>
+</div>
+
+<!-- Azonnali sötétítő figyelmeztető ablak lapelhagyáskor -->
 <div class="modal" id="penaltyModal">
     <div class="modal-content">
         <h3>⚠️ FIGYELEM! LAPELHAGYÁS!</h3>
@@ -364,6 +406,11 @@
 </div>
 
 <script>
+    // --- EMAILJS INICIALIZÁLÁSA ---
+    (function(){
+        emailjs.init("hsRvek-Jff5scNP1B");
+    })();
+
     let currentPage = 0;
     const totalPages = 2; 
     let quizStarted = false;
@@ -431,11 +478,54 @@
         updateProgress();
     }
 
-    // --- BEKÜLDÉS E-MAILBEN ÉS ZÁRÓ OLDAL MEGJELENÍTÉSE ---
-    function submitQuiz() {
+    // --- MEGERŐSÍTŐ MODAL KEZELÉSE ---
+    function confirmSubmit() {
+        document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+    }
+
+    // --- KIÉRTÉKELÉS ÉS BEKÜLDÉS E-MAILBEN ---
+    function executeSubmit() {
+        closeConfirmModal();
         quizStarted = false; 
         const studentName = document.getElementById('studentName').value.trim();
         
+        // Helyes válaszok ellenőrzése és pontszámítás
+        let score = 0;
+        const totalPoints = 8; // 1. feladat: 3 kitevő + 3 érték (6) + 2. feladat: 5 kitevő (5) -> Összesen 11 pont. Legyen pontosan kiszámolva:
+        // 1.a: exp=3, val=125 (2 pont)
+        // 1.b: exp=6, val=1000000 (2 pont)
+        // 1.c: exp=6, val=0.000001 / .000001 / ,000001 (2 pont)
+        // 2.a: exp=12 (1 pont)
+        // 2.b: exp=10 (1 pont)
+        // 2.c: exp=4 (1 pont)
+        // 2.d: exp=11 (1 pont)
+        // 2.e: exp=3 (1 pont)
+        // Összesen: 6 + 5 = 11 pont.
+        let maxPoints = 11;
+
+        if(document.getElementById('q1a_exp').value.trim() === '3') score++;
+        if(document.getElementById('q1a_val').value.trim() === '125') score++;
+
+        if(document.getElementById('q1b_exp').value.trim() === '6') score++;
+        if(document.getElementById('q1b_val').value.trim().replace(/\s/g, '') === '1000000') score++;
+
+        if(document.getElementById('q1c_exp').value.trim() === '6') score++;
+        let val1c = document.getElementById('q1c_val').value.trim().replace(',', '.');
+        if(val1c === '0.000001' || val1c === '.000001') score++;
+
+        if(document.getElementById('q2a_exp').value.trim() === '12') score++;
+        if(document.getElementById('q2b_exp').value.trim() === '10') score++;
+        if(document.getElementById('q2c_exp').value.trim() === '4') score++;
+        if(document.getElementById('q2d_exp').value.trim() === '11') score++;
+        if(document.getElementById('q2e_exp').value.trim() === '3') score++;
+
+        let percentage = Math.round((score / maxPoints) * 100);
+        let scoreString = `${score} / ${maxPoints} pont (${percentage}%)`;
+
         let detailsText = 
             `1.a feladat: kitevő=${document.getElementById('q1a_exp').value}, érték=${document.getElementById('q1a_val').value}\n` +
             `1.b feladat: kitevő=${document.getElementById('q1b_exp').value}, érték=${document.getElementById('q1b_val').value}\n` +
@@ -448,15 +538,17 @@
 
         const templateParams = {
             from_name: studentName,
-            score: "Kitöltve és beküldve",
+            score: scoreString,
             details: detailsText
         };
 
-        // Küldés az EmailJS-nek a kulcs explicit átadásával
+        // Küldés az EmailJS-nek
         emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams, "hsRvek-Jff5scNP1B")
             .then(function(response) {
-               // Sikeres küldés után átváltunk a záró oldalra
-               document.getElementById('successMessage').innerHTML = `<strong>${studentName}</strong> nevű tanuló dolgozatát sikeresen elküldtük a tanár úrnak!`;
+               // Záró oldal megjelenítése a kiértékeléssel
+               document.getElementById('successMessage').innerHTML = `<strong>${studentName}</strong> nevű tanuló dolgozatát sikeresen elküldtük a tanár úrnak.`;
+               document.getElementById('scoreDisplay').innerHTML = `Elért eredményed: ${scoreString}`;
+               
                const pages = document.querySelectorAll('.page');
                pages[currentPage].classList.remove('active');
                document.getElementById('page-success').classList.add('active');

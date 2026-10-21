@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8. Osztályos Matematika Dolgozat - Hatványozás (Nyomtatható verzió)</title>
+    <style>
+        :root {
+            --text: #0f172a;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 850px;
+            width: 100%;
+            background: #ffffff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 { font-size: 24px; margin-bottom: 10px; color: #2c3e50; text-align: center; }
+        .student-info {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 5px;
+        }
+
+        p.desc {
+            color: #475569;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* Példa doboz */
+        .example-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #f39c12;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #b58105;
+            font-weight: bold;
+        }
+
+        /* Feladat sorkonténerek */
+        .task-row {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .task-number {
+            color: #2c3e50;
+            margin-right: 5px;
+            font-style: italic;
+        }
+
+        /* NYOMTATÁSHOZ VALÓ ÜRES DOBOZOK */
+        .print-box {
+            display: inline-flex;
+            align-items: flex-end;
+            border: 2px solid #64748b;
+            padding: 4px 6px;
+            border-radius: 6px;
+            background-color: white;
+            height: 50px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .print-base {
+            width: 35px;
+            height: 38px;
+            border: 1px solid #94a3b8;
+            border-radius: 4px;
+        }
+
+        .print-exp {
+            width: 24px;
+            height: 24px;
+            border: 1px solid #94a3b8;
+            border-radius: 3px;
+            margin-left: 4px;
+            transform: translateY(-16px);
+        }
+
+        .print-result {
+            width: 80px;
+            height: 35px;
+            border: 1px solid #94a3b8;
+            border-radius: 6px;
+            margin-left: 5px;
+        }
+
+        .joined-print-digits {
+            display: inline-flex;
+            border: 2px solid #64748b;
+            border-radius: 6px;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+
+        .joined-print-digits span {
+            width: 30px;
+            height: 35px;
+            border-right: 1px solid #94a3b8;
+            display: inline-block;
+        }
+        .joined-print-digits span:last-child { border-right: none; }
+
+        sup.math-sup {
+            font-size: 16px;
+            position: relative;
+            top: -0.4em;
+        }
+
+        .task-inner-sup {
+            font-size: 16px;
+            position: relative;
+            top: -0.3em;
+            margin-right: 1px;
+        }
+
+        .task-outer-sup {
+            font-size: 16px;
+            position: relative;
+            top: -0.75em;
+            margin-left: 1px;
+        }
+
+        .bracket-outer-sup {
+            font-size: 16px;
+            position: relative;
+            top: -1.2em;
+            margin-left: 1px;
+        }
+
+        /* Nyíldiagramok (3.a) */
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .arrow-block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            padding: 15px 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .fixed-power {
+            font-size: 24px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: flex-start;
+        }
+        .fixed-sup {
+            font-size: 14px;
+            position: relative;
+            top: -0.4em;
+        }
+        .arrows-box {
+            display: block;
+            width: 100px;
+            position: relative;
+            margin: 0 10px;
+            height: 45px;
+        }
+        .arrow-text {
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            left: 0;
+        }
+        .green-text { color: #27ae60; top: -14px; }
+        .red-text { color: #c0392b; bottom: -14px; }
+        .arrow-line { position: absolute; left: 0; right: 0; height: 2px; }
+        .arrow-green { background-color: #27ae60; top: 16px; }
+        .arrow-red { background-color: #c0392b; top: 26px; }
+
+        .big-bracket {
+            font-size: 38px;
+            font-weight: 300;
+            line-height: 1;
+            color: #2c3e50;
+            display: inline-block;
+            transform: scaleY(1.3);
+            margin: 0 1px;
+        }
+
+        .math-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 4px;
+        }
+
+        .math-fraction .num, .math-fraction .numerator {
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 2px;
+            line-height: 1.1;
+        }
+
+        .math-fraction .den, .math-fraction .denominator {
+            padding-top: 4px;
+            line-height: 1.1;
+        }
+
+        .print-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            gap: 4px;
+        }
+
+        .print-fraction-line {
+            width: 100%;
+            height: 2px;
+            background-color: #2c3e50;
+            margin: 2px 0;
+        }
+
+        .print-power-box-tall {
+            display: inline-flex;
+            align-items: flex-end;
+            border: 2px solid #64748b;
+            padding: 4px 6px 4px 6px;
+            border-radius: 6px;
+            background-color: white;
+            height: 52px;
+        }
+
+        .points-info {
+            text-align: right;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 15px;
+        }
+
+        @media print {
+            body { padding: 0; }
+            .container { max-width: 100%; padding: 0; }
+            .task-row, .arrow-block { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Matematika Felmérő: Hatványozás</h1>
+    <div class="student-info">
+        <span>Név: ..............................................................</span>
+        <span>Osztály: 8. ......</span>
+        <span>Pontszám: ....... / 70 p.</span>
+    </div>
+
+    <!-- 1. Feladat -->
+    <h2>1. Írd fel hatvány alakban a következő szorzatokat!</h2>
+    <div class="task-row">
+        <span class="task-number">a)</span>
+        <span>2 &middot; 2 &middot; 2 &middot; 2 &middot; 2 =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">b)</span>
+        <span>3 &middot; 3 &middot; 3 &middot; 3 =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">c)</span>
+        <span>5 &middot; 5 &middot; 5 &middot; 5 &middot; 5 &middot; 5 =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="points-info">(6 pont)</div>
+
+    <!-- 2. Feladat -->
+    <h2>2. Számítsd ki a következő hatványok értékét!</h2>
+    <div class="task-row">
+        <span class="task-number">a)</span>
+        <span>2<sup class="math-sup">4</sup> =</span>
+        <div class="print-result"></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">b)</span>
+        <span>3<sup class="math-sup">3</sup> =</span>
+        <div class="print-result"></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">c)</span>
+        <span>10<sup class="math-sup">4</sup> =</span>
+        <div class="print-result"></div>
+    </div>
+    <div class="points-info">(3 pont)</div>
+
+    <!-- 3. Feladat -->
+    <h2>3. a) Mely számok írhatók az üresen hagyott helyre?</h2>
+    <div class="tasks-grid">
+        <div class="arrow-block">
+            <div class="fixed-power">2<span class="fixed-sup">3</span></div>
+            <div class="arrows-box">
+                <span class="arrow-text green-text">&middot; 2<sup>5</sup></span>
+                <div class="arrow-line arrow-green"></div>
+                <div class="arrow-line arrow-red"></div>
+                <span class="arrow-text red-text">: 2<sup>5</sup></span>
+            </div>
+            <div class="fixed-power">2<span class="fixed-sup">8</span></div>
+        </div>
+        <div class="arrow-block">
+            <div class="print-box" style="margin-left:0;">
+                <div class="print-base"></div>
+                <div class="print-exp"></div>
+            </div>
+            <div class="arrows-box">
+                <span class="arrow-text green-text">&middot; 3<sup>3</sup></span>
+                <div class="arrow-line arrow-green"></div>
+                <div class="arrow-line arrow-red"></div>
+                <span class="arrow-text red-text">: 3<sup>3</sup></span>
+            </div>
+            <div class="fixed-power">3<span class="fixed-sup">7</span></div>
+        </div>
+        <div class="arrow-block">
+            <div class="print-box" style="margin-left:0;">
+                <div class="print-base"></div>
+                <div class="print-exp"></div>
+            </div>
+            <div class="arrows-box">
+                <span class="arrow-text green-text">&middot; 5<sup>6</sup></span>
+                <div class="arrow-line arrow-green"></div>
+                <div class="arrow-line arrow-red"></div>
+                <span class="arrow-text red-text">: 5<sup>6</sup></span>
+            </div>
+            <div class="fixed-power">5<span class="fixed-sup">7</span></div>
+        </div>
+        <div class="arrow-block">
+            <div class="print-box" style="margin-left:0;">
+                <div class="print-base"></div>
+                <div class="print-exp"></div>
+            </div>
+            <div class="arrows-box">
+                <span class="arrow-text green-text">&middot; 4<sup>5</sup></span>
+                <div class="arrow-line arrow-green"></div>
+                <div class="arrow-line arrow-red"></div>
+                <span class="arrow-text red-text">: 4<sup>5</sup></span>
+            </div>
+            <div class="fixed-power">4<span class="fixed-sup">5</span></div>
+        </div>
+    </div>
+
+    <h2>3. b) Add meg hatványalakban a hányadosokat!</h2>
+    <div class="task-row">
+        <span>4<sup class="math-sup">5</sup> : 4<sup class="math-sup">3</sup> =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span>5<sup class="math-sup">8</sup> : 5<sup class="math-sup">3</sup> =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span>10<sup class="math-sup">5</sup> : 10<sup class="math-sup">3</sup> =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+
+    <h2>3. c) Add meg hatványalakban a hányadosokat!</h2>
+    <div class="task-row">
+        <div class="math-fraction"><span class="numerator">7<sup class="math-sup">5</sup></span><span class="denominator">7<sup class="math-sup">3</sup></span></div>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <div class="math-fraction"><span class="numerator">5<sup class="math-sup">9</sup></span><span class="denominator">5<sup class="math-sup">3</sup></span></div>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <div class="math-fraction"><span class="numerator">1<sup class="math-sup">7</sup></span><span class="denominator">1<sup class="math-sup">2</sup></span></div>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="points-info">(18 pont)</div>
+
+    <!-- 4. Feladat -->
+    <h2>4. Végezd el a hatványozást!</h2>
+    <div class="example-box">
+        Példa: (2<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span> = 2<sup>4</sup> &middot; 2<sup>4</sup> &middot; 2<sup>4</sup> = 2<sup>12</sup>
+    </div>
+    <div class="task-row">
+        <span class="task-number">a)</span>
+        <span>(5<span class="task-inner-sup">4</span>)<span class="task-outer-sup">2</span></span>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">b)</span>
+        <span>(10<span class="task-inner-sup">3</span>)<span class="task-outer-sup">4</span></span>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">c)</span>
+        <span>(0,1<span class="task-inner-sup">2</span>)<span class="task-outer-sup">3</span></span>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">d)</span>
+        <span>(c<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span></span>
+        <span>=</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="points-info">(8 pont)</div>
+
+    <!-- 5. Feladat -->
+    <h2>5. Oldd meg a következő egyenleteket!</h2>
+    <div class="task-row">
+        <span class="task-number">a)</span>
+        <span>2<sup class="math-sup">6</sup> &middot; <em>x</em> = 2<sup class="math-sup">13</sup></span>
+        <span style="color: #7f8c8d; margin: 0 8px;">&rArr; <em>x</em> =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">b)</span>
+        <span>2<sup class="math-sup">3</sup> &middot; <em>y</em> = 1024</span>
+        <span style="color: #7f8c8d; margin: 0 8px;">&rArr; <em>y</em> =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">c)</span>
+        <span>5<sup class="math-sup">4</sup> &middot; <em>u</em> = 25<sup class="math-sup">4</sup></span>
+        <span style="color: #7f8c8d; margin: 0 8px;">&rArr; <em>u</em> =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="points-info">(6 pont)</div>
+
+    <!-- 6. Feladat -->
+    <h2>6. Végezd el a számításokat!</h2>
+    <div class="task-row" style="font-size: 18px;">
+        <span class="task-number">6. a)</span>
+        <span>2<sup class="math-sup">4</sup> &middot; 5<sup class="math-sup">4</sup> = (2 &middot; 2 &middot; 2 &middot; 2) &middot; (5 &middot; 5 &middot; 5 &middot; 5) = (2 &middot; 5)</span>
+        <div class="print-exp" style="transform:none; margin: 0 2px;"></div>
+        <span>= 10</span>
+        <div class="print-exp" style="transform:none; margin: 0 2px;"></div>
+        <span>=</span>
+        <div class="joined-print-digits">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+    <div class="task-row" style="font-size: 18px;">
+        <span class="task-number">6. b)</span>
+        <span>20<sup class="math-sup">3</sup> = ... =</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+        <span>&middot;</span>
+        <div class="print-box"><div class="print-base"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">6. c)</span>
+        <span>5<sup class="math-sup">3</sup> &middot; 4<sup class="math-sup">3</sup> =</span>
+        <div class="print-box"><div class="print-base" style="width:55px;"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">6. d)</span>
+        <span>2<sup class="math-sup">5</sup> &middot; 10<sup class="math-sup">5</sup> =</span>
+        <div class="print-box"><div class="print-base" style="width:55px;"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="task-row">
+        <span class="task-number">6. e)</span>
+        <span>2<sup class="math-sup">4</sup> &middot; 3<sup class="math-sup">4</sup> &middot; 5<sup class="math-sup">4</sup> =</span>
+        <div class="print-box"><div class="print-base" style="width:55px;"></div><div class="print-exp"></div></div>
+    </div>
+    <div class="points-info">(17 pont)</div>
+
+    <!-- 7. Feladat -->
+    <h2>7. Figyeld meg, majd folytasd az = jel után!</h2>
+    <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+        <div class="task-row" style="background: none; border: none; padding: 0; margin-bottom: 20px;">
+            <span class="task-number">a)</span>
+            <span class="big-bracket">(</span>
+            <div class="math-fraction"><span class="num">2</span><span class="den">5</span></div>
+            <span class="big-bracket">)</span><sup class="bracket-outer-sup">3</sup>
+            <span>= ... =</span>
+            <div class="print-fraction">
+                <div class="print-power-box-tall"><div class="print-base" style="width:30px;"></div><div class="print-exp"></div></div>
+                <div class="print-fraction-line"></div>
+                <div class="print-power-box-tall"><div class="print-base" style="width:30px;"></div><div class="print-exp"></div></div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+            <div style="display: inline-flex; align-items: center; font-size: 20px; font-weight: bold; gap: 6px;">
+                <span class="task-number">b)</span>
+                <span class="big-bracket">(</span>
+                <div class="math-fraction"><span class="num">5</span><span class="den">2</span></div>
+                <span class="big-bracket">)</span><sup class="bracket-outer-sup">5</sup>
+                <span>=</span>
+                <div class="print-fraction">
+                    <div class="print-power-box-tall"><div class="print-base" style="width:30px;"></div><div class="print-exp"></div></div>
+                    <div class="print-fraction-line"></div>
+                    <div class="print-power-box-tall"><div class="print-base" style="width:30px;"></div><div class="print-exp"></div></div>
+                </div>
+            </div>
+            <div style="display: inline-flex; align-items: center; font-size: 20px; font-weight: bold; gap: 6px;">
+                <span class="task-number">c)</span>
+                <span class="big-bracket">(</span>
+                <span>&minus;</span>
+                <div class="math-fraction"><span class="num">3</span><span class="den">4</span></div>
+                <span class="big-bracket">)</span><sup class="bracket-outer-sup">6</sup>
+                <span>=</span>
+                <div class="print-fraction">
+                    <div class="print-power-box-tall"><div class="print-base" style="width:30px;"></div><div class="print-exp"></div></div>
+                    <div class="print-fraction-line"></div>
+                    <div class="print-power-box-tall"><div class="print-base" style="width:30px;"></div><div class="print-exp"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="points-info">(12 pont)</div>
+</div>
+
+</body>
+</html>

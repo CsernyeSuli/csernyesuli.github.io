@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematika Dolgozat - Hatványozás</title>
+    <title>8. Osztályos Matematika Dolgozat - Hatványozás</title>
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
@@ -133,7 +133,28 @@
             font-style: italic;
         }
 
-        /* SZAGGATOTT KERET - MAGASABB KONTÉNER, ALSÓ IGAZÍTÁSSAL A ALAPHOZ */
+        /* 4. FELADAT RÁCS ELRENDEZÉSE (2 OSZLOP) */
+        .task4-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .task4-card {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #eef2f3;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* SZAGGATOTT KERET - OPTIMÁLIS MAGASSÁG ÉS ELEM-IGAZÍTÁS */
         .input-power-box {
             display: inline-flex;
             align-items: flex-end;
@@ -165,7 +186,7 @@
 
         .base-input-wide { width: 70px; }
 
-        /* KITEVŐ BEVITELI MEZŐ - FELJEBB EMELVE */
+        /* KITEVŐ BEVITELI MEZŐ - FELJEBB TOLVA A DOBOZ FELSŐ SARKÁHOZ */
         .exponent-input {
             width: 30px;
             height: 30px;
@@ -179,7 +200,7 @@
             padding: 0;
             background-color: #fff;
             margin-left: 4px;
-            transform: translateY(-26px); /* Kitevő feljebb tolva */
+            transform: translateY(-26px);
             -webkit-user-select: text;
             user-select: text;
         }
@@ -244,16 +265,16 @@
         /* 4. FELADAT SPECIFIKUS TIPOGRÁFIÁJA */
         .task-inner-sup {
             font-size: 18px;
-            position: relative;
-            top: -0.3em;
-            margin-right: 1px;
+    position: relative;
+    top: -0.4em;
+    margin-right: 1px;
         }
 
         .task-outer-sup {
-            font-size: 18px;
-            position: relative;
-            top: -0.75em;
-            margin-left: 1px;
+           font-size: 18px;
+    position: relative;
+    top: -0.85em;
+    margin-left: 1px;
         }
 
         /* 7. FELADAT SPECIFIKUS KÜLSŐ KITEVŐ */
@@ -442,7 +463,7 @@
         .modal-content p { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
 
         @media (max-width: 768px) {
-            .tasks-grid { grid-template-columns: 1fr; }
+            .tasks-grid, .task4-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -458,7 +479,7 @@
         
         <!-- 0. LAP: Tájékoztató és Névbekérő -->
         <div class="page active" id="page-0">
-            <h1>Matematika Dolgozat: Hatványozás</h1>
+            <h1>8. Osztályos Matematika Dolgozat: Hatványozás</h1>
             <p class="desc">
                 Kedves Tanuló!<br>
                 A dolgozat kitöltésére álló idő alatt önállóan, tabletről dolgozz. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
@@ -653,55 +674,59 @@
             </div>
         </div>
 
-        <!-- 4. LAP: 4. Feladat -->
-        <div class="page" id="page-4">
-            <h2>4. Végezd el a hatványozást!</h2>
-            <div class="example-box">
-                Példa: (2<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span> = 2<sup>4</sup> &middot; 2<sup>4</sup> &middot; 2<sup>4</sup> = 2<sup>12</sup>
-            </div>
-            <div class="task-row">
-                <span class="task-number">a)</span>
-                <span>(5<span class="task-inner-sup">4</span>)<span class="task-outer-sup">2</span></span>
-                <span>=</span>
-                <div class="input-power-box">
-                    <input type="text" id="q4a_base" class="base-input" inputmode="numeric">
-                    <input type="text" id="q4a_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-            <div class="task-row">
-                <span class="task-number">b)</span>
-                <span>(10<span class="task-inner-sup">3</span>)<span class="task-outer-sup">4</span></span>
-                <span>=</span>
-                <div class="input-power-box">
-                    <input type="text" id="q4b_base" class="base-input" inputmode="numeric">
-                    <input type="text" id="q4b_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-            <div class="task-row">
-                <span class="task-number">c)</span>
-                <span>(0,1<span class="task-inner-sup">2</span>)<span class="task-outer-sup">3</span></span>
-                <span>=</span>
-                <div class="input-power-box">
-                    <input type="text" id="q4c_base" class="base-input" inputmode="decimal">
-                    <input type="text" id="q4c_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-            <div class="task-row">
-                <span class="task-number">d)</span>
-                <span>(c<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span></span>
-                <span>=</span>
-                <div class="input-power-box">
-                    <input type="text" id="q4d_base" class="base-input">
-                    <input type="text" id="q4d_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
+        <!-- 4. LAP: 4. Feladat (A d) feladat kódolásával egységesítve) -->
+<div class="page" id="page-4">
+    <h2>4. Figyeld meg, majd alakítsd át annak megfelelően a kifejezéseket!</h2>
+    
+    <div class="example-box">
+        Példa: (2<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span> = 2<sup>4</sup> &middot; 2<sup>4</sup> &middot; 2<sup>4</sup> = (2 &middot; 2 &middot; 2 &middot; 2) &middot; (2 &middot; 2 &middot; 2 &middot; 2) &middot; (2 &middot; 2 &middot; 2 &middot; 2) = 2<sup>12</sup>
+    </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 8 pont</div>
-            <div class="nav-buttons">
-                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
-                <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
+    <p style="font-size: 18px; font-weight: bold; color: #2c3e50; margin-top: 15px; margin-bottom: 10px;">
+        Hasonlóan értelmezd a következő hatványok hatványozását!
+    </p>
+
+    <div class="task4-grid">
+        <div class="task4-card">
+            <span class="task-number">a)</span>
+            <span>(5<span class="task-inner-sup">4</span>)<span class="task-outer-sup">2</span> =</span>
+            <div class="input-power-box">
+                <input type="text" id="q4a_base" class="base-input" inputmode="numeric">
+                <input type="text" id="q4a_exp" class="exponent-input" inputmode="numeric">
             </div>
         </div>
+        <div class="task4-card">
+            <span class="task-number">b)</span>
+            <span>(10<span class="task-inner-sup">3</span>)<span class="task-outer-sup">4</span> =</span>
+            <div class="input-power-box">
+                <input type="text" id="q4b_base" class="base-input" inputmode="numeric">
+                <input type="text" id="q4b_exp" class="exponent-input" inputmode="numeric">
+            </div>
+        </div>
+        <div class="task4-card">
+            <span class="task-number">c)</span>
+            <span>(0,1<span class="task-inner-sup">2</span>)<span class="task-outer-sup">3</span> =</span>
+            <div class="input-power-box">
+                <input type="text" id="q4c_base" class="base-input" inputmode="decimal">
+                <input type="text" id="q4c_exp" class="exponent-input" inputmode="numeric">
+            </div>
+        </div>
+        <div class="task4-card">
+            <span class="task-number">d)</span>
+            <span>(c<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span> =</span>
+            <div class="input-power-box">
+                <input type="text" id="q4d_base" class="base-input">
+                <input type="text" id="q4d_exp" class="exponent-input" inputmode="numeric">
+            </div>
+        </div>
+    </div>
+
+    <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 8 pont</div>
+    <div class="nav-buttons">
+        <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
+        <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
+    </div>
+</div>
 
         <!-- 5. LAP: 5. Feladat -->
         <div class="page" id="page-5">
@@ -1100,7 +1125,7 @@
         let percentage = Math.round((score / maxPoints) * 100);
         let scoreString = `${score} / ${maxPoints} pont (${percentage}%)`;
 
-        let detailsText = `Hatványozás Dolgozat Kitöltve.\nElért eredmény: ${scoreString}\n`;
+        let detailsText = `8. Osztályos Hatványozás Dolgozat Kitöltve.\nElért eredmény: ${scoreString}\n`;
 
         const templateParams = {
             from_name: studentName,

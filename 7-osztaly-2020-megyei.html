@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zrínyi Ilona Matematikaverseny - 7. osztály (2019/2020)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome az ikonokhoz -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #070a13 0%, #0f172a 40%, #1e1b4b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            /* Scribd-stílusú másolás elleni védelem */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Másolás elleni átlátszó védőréteg stílusa */
+        .copy-protection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.001);
+            pointer-events: none;
+        }
+
+        /* Glassmorphism kártyák */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Arany/Sárga kiemelő stílusok (Zrínyi téma) */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fef08a 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-button {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .gold-button:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .gold-border {
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        /* Egyedi görgetősáv */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover:not(:disabled) {
+            border-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+        .option-btn.selected {
+            border-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.25);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+    </style>
+</head>
+<body class="relative flex flex-col min-h-screen pb-12 overflow-x-hidden" oncontextmenu="return false;">
+
+    <!-- Átlátszó Védőréteg Scribd-szerű védelemhez -->
+    <div class="copy-protection-overlay"></div>
+
+    <!-- NÉVBEKÉRŐ ÉS TÁJÉKOZTATÓ MODAL (INDÍTÁSKOR) -->
+    <div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-modal max-w-lg w-full p-6 md:p-8 rounded-2xl relative text-center">
+            <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/30">
+                <i class="fa-solid font-bold text-2xl fa-user-graduate"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 gold-gradient-text">Zrínyi Ilona Matematikaverseny</h2>
+            <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                Üdvözöllek az online feladatlap felületén! Kérjük, add meg a nevedet a feladatok megkezdése előtt.
+            </p>
+
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6 text-left text-xs text-amber-200/90 leading-relaxed">
+                <p class="font-semibold text-amber-400 mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Fontos Tájékoztatás:</p>
+                A név megadása szükséges, mert a megoldások automatikusan továbbítódnak e-mailben a feladatok befejezésekor. Bármelyik feladatot bármikor újra elkezdheted.
+            </div>
+
+            <form id="welcomeForm" onsubmit="startTest(event)">
+                <div class="mb-6 text-left">
+                    <label for="studentName" class="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wider">Tanuló teljes neve:</label>
+                    <input type="text" id="studentName" required placeholder="Pl. Kovács Péter" class="w-full bg-slate-900/80 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-white rounded-xl px-4 py-3 outline-none transition">
+                </div>
+                <button type="submit" class="w-full gold-button py-3.5 rounded-xl font-bold tracking-wide shadow-lg flex items-center justify-center gap-2">
+                    <span>Feladatlap Megkezdése</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FEJLÉC (HEADER) -->
+    <header class="sticky top-0 z-30 glass-card border-b border-slate-700/50 px-4 py-3 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-500/20 p-2.5 rounded-xl border border-amber-500/30">
+                    <i class="fa-solid fa-square-root-variable text-amber-400 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base md:text-lg text-white tracking-wide">ZRÍNYI ILONA MATEMATIKAVERSENY</h1>
+                    <p class="text-xs text-slate-400">7. OSZTÁLY — Megyei Forduló (2019/2020) | <span id="displayName" class="text-amber-400 font-semibold">Vendég</span></p>
+                </div>
+            </div>
+
+            <!-- EREDMÉNYJELZŐ STATISZTIKA -->
+            <div class="flex items-center gap-3 text-xs md:text-sm">
+                <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <span class="text-slate-400">Sikeres:</span>
+                    <span id="statSuccess" class="font-bold text-emerald-400">0</span>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                    <span class="text-slate-400">Sikertelen:</span>
+                    <span id="statFailed" class="font-bold text-rose-400">0</span>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <span class="text-slate-400">Hátralévő:</span>
+                    <span id="statRemaining" class="font-bold text-amber-400">30</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- LAPOZÓ VEZÉRLŐ (TOP) -->
+    <div class="max-w-7xl mx-auto px-4 mt-6 w-full">
+        <div class="glass-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 border border-slate-700/60">
+            <div class="flex items-center gap-2">
+                <button onclick="changePage(-1)" id="prevBtnTop" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-medium transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+                    <i class="fa-solid fa-chevron-left"></i> Előző oldal
+                </button>
+                <button onclick="changePage(1)" id="nextBtnTop" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-medium transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+                    Következő oldal <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- LAPJELZŐK -->
+            <div class="flex items-center gap-1.5 overflow-x-auto py-1" id="pageTabs">
+                <button onclick="goToPage(1)" class="page-tab px-3 py-1.5 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md">Fedőlap</button>
+                <button onclick="goToPage(2)" class="page-tab px-3 py-1.5 rounded-lg text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700">1. Oldal (1-11)</button>
+                <button onclick="goToPage(3)" class="page-tab px-3 py-1.5 rounded-lg text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700">2. Oldal (12-22)</button>
+                <button onclick="goToPage(4)" class="page-tab px-3 py-1.5 rounded-lg text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700">3. Oldal (23-30)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FŐ TARTALOM TERÜLET -->
+    <main class="max-w-7xl mx-auto px-4 my-6 flex-grow w-full">
+
+        <!-- 1. OLDAL: FEDŐLAP -->
+        <section id="page-1" class="page-content block">
+            <div class="glass-card rounded-2xl p-6 md:p-10 border border-slate-700/60 relative overflow-hidden">
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="inline-block px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">MATEGYE Alapítvány</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">ZRÍNYI ILONA MATEMATIKAVERSENY</h2>
+                    <p class="text-lg text-amber-400 font-semibold mb-2">MEGYEI FORDULÓ — 2020</p>
+                    <p class="text-slate-400 text-sm">7. OSZTÁLY | Versenyidő: 90 perc | Összesen 30 feladat</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-sm">
+                    <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-xl">
+                        <h3 class="text-amber-400 font-bold text-base mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i> Versenyszabályok és Tudnivalók
+                        </h3>
+                        <ul class="space-y-2 text-slate-300 list-disc list-inside leading-relaxed">
+                            <li>A feladatok mindegyikéhez 5 lehetséges válasz tartozik (A, B, C, D, E).</li>
+                            <li>Minden feladatnak pontosan <strong>egy helyes válasza</strong> van.</li>
+                            <li>Kattints bármelyik feladat kártyájára az interaktív válaszadó ablak megnyitásához!</li>
+                            <li>A rendszer ellenőrzi a válaszodat, de nem árulja el a helyes megoldást rossz tipp esetén.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-xl">
+                        <h3 class="text-amber-400 font-bold text-base mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation"></i> Értékelési Szempontok
+                        </h3>
+                        <ul class="space-y-2 text-slate-300 list-disc list-inside leading-relaxed">
+                            <li>Minden feladatnál legfeljebb 5 próbálkozási lehetőséged van.</li>
+                            <li>Ha az összes válaszlehetőséget kipróbálod sikertelenül, a feladat <strong>Sikertelen</strong> státuszt kap.</li>
+                            <li>A <i>"Megoldás megmutatása"</i> gombra kattintva megtekintheted a helyes választ, de a feladat ekkor is sikertelen lesz.</li>
+                            <li>Bármelyik feladatot újrapróbálhatod!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- SZERVEZŐK ÉS TÁMOGATÓK INFÓ -->
+                <div class="border-t border-slate-800 pt-6 mt-6 text-xs text-slate-400 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="font-semibold text-slate-300">Összeállította:</p>
+                        <p>Csordás Péter (középiskolai tanár)</p>
+                        <p class="mt-2 font-semibold text-slate-300">Szervező:</p>
+                        <p>MATEGYE Alapítvány, 6001 Kecskemét, Pf. 585</p>
+                    </div>
+                    <div class="md:text-right">
+                        <p class="font-semibold text-slate-300">Támogatók & Partnerek:</p>
+                        <p>EMMI | Morgan Stanley | Nemzeti Tehetség Program | Klebelsberg Központ</p>
+                        <p class="mt-2">Copyright © MATEGYE Alapítvány</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="goToPage(2)" class="gold-button px-8 py-3.5 rounded-xl font-bold text-base shadow-lg inline-flex items-center gap-2">
+                        <span>Ugrás az 1. Feladatlaphoz (1–11)</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. OLDAL: FELADATOK 1-11 -->
+        <section id="page-2" class="page-content hidden">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-file-pen"></i> 1. Oldal — Feladatok (1 – 11)
+                </h2>
+                <span class="text-xs text-slate-400">Kattints egy kártyára a válaszadáshoz!</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="container-page-2"></div>
+        </section>
+
+        <!-- 3. OLDAL: FELADATOK 12-22 -->
+        <section id="page-3" class="page-content hidden">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-file-pen"></i> 2. Oldal — Feladatok (12 – 22)
+                </h2>
+                <span class="text-xs text-slate-400">Kattints egy kártyára a válaszadáshoz!</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="container-page-3"></div>
+        </section>
+
+        <!-- 4. OLDAL: FELADATOK 23-30 -->
+        <section id="page-4" class="page-content hidden">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-file-pen"></i> 3. Oldal — Feladatok (23 – 30)
+                </h2>
+                <span class="text-xs text-slate-400">Kattints egy kártyára a válaszadáshoz!</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="container-page-4"></div>
+        </section>
+
+    </main>
+
+    <!-- LAPOZÓ VEZÉRLŐ (BOTTOM) -->
+    <div class="max-w-7xl mx-auto px-4 mb-8 w-full">
+        <div class="glass-card rounded-2xl p-4 flex items-center justify-between border border-slate-700/60">
+            <button onclick="changePage(-1)" id="prevBtnBottom" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-medium transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+                <i class="fa-solid fa-chevron-left"></i> Előző oldal
+            </button>
+            <span id="pageIndicator" class="text-xs md:text-sm font-semibold text-amber-400">1 / 4. oldal</span>
+            <button onclick="changePage(1)" id="nextBtnBottom" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-medium transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+                Következő oldal <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- FELELET-VÁLASZTÓ LEBEGŐ ABLAK (TASK MODAL) -->
+    <div id="taskModal" class="fixed inset-0 z-40 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+        <div class="glass-modal max-w-2xl w-full p-6 md:p-8 rounded-2xl relative my-8">
+            
+            <!-- MODAL FEJLÉC -->
+            <div class="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-5">
+                <div class="flex items-center gap-3">
+                    <span id="modalTaskBadge" class="px-3 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold rounded-lg text-sm">
+                        1. Feladat
+                    </span>
+                    <span id="modalTaskStatus" class="text-xs px-2.5 py-1 rounded-full font-medium bg-slate-800 text-slate-400 border border-slate-700">
+                        Nincs megoldva
+                    </span>
+                </div>
+                <!-- Bezárás gomb trigger -->
+                <button onclick="requestCloseModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- FELADAT SZÖVEGE ÉS ÁBRÁJA -->
+            <div class="mb-6">
+                <div id="modalTaskText" class="text-slate-100 text-base md:text-lg leading-relaxed font-medium mb-4"></div>
+                <div id="modalTaskIllustration" class="hidden mb-4 p-4 bg-slate-900/80 border border-slate-800 rounded-xl text-center"></div>
+            </div>
+
+            <!-- LEHETŐSÉGEK (A, B, C, D, E) -->
+            <div class="mb-6 space-y-2.5" id="modalOptionsContainer"></div>
+
+            <!-- VISSZAJELZÉS ÜZENET (SIKERES / SIKERTELEN) -->
+            <div id="modalFeedback" class="hidden p-4 rounded-xl text-sm font-semibold mb-6 flex items-center gap-3"></div>
+
+            <!-- PRÓBÁLKOZÁSOK SZÁMLÁLÓJA -->
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-6 bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                <span>Próbálkozások száma: <strong id="modalAttemptsCount" class="text-amber-400">0</strong> / 5</span>
+                <span>Felhasználó: <strong id="modalUserName" class="text-slate-200">Vendég</strong></span>
+            </div>
+
+            <!-- GOMBOK -->
+            <div class="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-slate-700/80">
+                <button onclick="revealSolution()" id="btnReveal" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Megoldás Megmutatása
+                </button>
+                <button onclick="checkAnswer()" id="btnCheck" class="gold-button px-6 py-2.5 rounded-xl text-sm font-bold shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-check"></i> Válasz Ellenőrzése
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BEZÁRÁSI MEGERŐSÍTŐ MODAL (BEZÁRÁS ÉS E-MAIL KÜLDÉS KÉRDÉS) -->
+    <div id="closeConfirmModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="glass-modal max-w-md w-full p-6 rounded-2xl text-center border border-amber-500/40">
+            <div class="w-14 h-14 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/30">
+                <i class="fa-solid fa-paper-plane text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Feladat Bezárása</h3>
+            <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                Biztosan be akarja zárni és elküldeni a feladat megoldását e-mailben, vagy folytatja?
+            </p>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="confirmCloseAndSend()" class="gold-button py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-envelope-circle-check"></i>
+                    <span>Küldés e-mailben és Bezárás</span>
+                </button>
+                <button onclick="cancelCloseModal()" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition">
+                    Folytatás (Vissza a feladathoz)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST ÉRTESÍTÉS (E-MAIL SIKERES KÜLDÉS VISSZAJELZÉS) -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden transition-all duration-300 transform translate-y-10 opacity-0">
+        <div class="bg-slate-900 border border-emerald-500/50 text-emerald-400 px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3">
+            <i class="fa-solid fa-circle-check text-xl"></i>
+            <div>
+                <p class="font-bold text-sm text-white">E-mail sikeresen elküldve!</p>
+                <p class="text-xs text-slate-300">A feladat eredménye rögzítésre került.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIKA -->
+    <script>
+        // 1. MEGOLDÓKULCS (ZRÍNYI 7. OSZTÁLY 2020)
+        const ANSWER_KEY = {
+            1: 'B', 2: 'C', 3: 'E', 4: 'B', 5: 'E', 6: 'A', 7: 'D', 8: 'B', 9: 'C', 10: 'C',
+            11: 'D', 12: 'C', 13: 'D', 14: 'A', 15: 'D', 16: 'A', 17: 'E', 18: 'E', 19: 'C', 20: 'E',
+            21: 'E', 22: 'B', 23: 'D', 24: 'D', 25: 'B', 26: 'A', 27: 'B', 28: 'D', 29: 'B', 30: 'A'
+        };
+
+        // 2. FELADATOK ADATBÁZISA
+        const TASKS = [
+            {
+                id: 1,
+                page: 2,
+                text: "Juditnak öt olyan könyve van, amelynek a címében szerepel egy szám (lásd ábra). Ha a címekben szereplő öt számot összeadjuk, akkor azt a számot kapjuk eredményül, amely szerepel Zsófi könyvének a címében. Mi Zsófi könyvének a címe?",
+                details: "Könyvek számai: 'Május 35' (35), 'A 22-es csapdája' (22), '15 éves kapitány' (15), '19' (19), plusz egy ismeretlen.",
+                options: { A: "A két Lotti", B: "101 kiskutya", C: "77 magyar népmese", D: "80 nap alatt a Föld körül", E: "Gombos Jim és a Rettegett 13" }
+            },
+            {
+                id: 2,
+                page: 2,
+                text: "Mennyi a 2020 legnagyobb és legkisebb pozitív osztójának összege?",
+                options: { A: "1010", B: "1012", C: "2021", D: "2020", E: "2021" }
+            },
+            {
+                id: 3,
+                page: 2,
+                text: "Peti az EKEELCMSLKCES betűsorban minden második betűt összeolvasott. Melyik szót kapta?",
+                options: { A: "KEVÉS", B: "KECSES", C: "KERGE", D: "KECSKE", E: "KELLEMES" }
+            },
+            {
+                id: 4,
+                page: 2,
+                text: "Mennyivel van több lába összesen 1 kacsának és 2 kutyának, mint ahány fejük van összesen?",
+                options: { A: "3", B: "7", C: "6", D: "9", E: "13" }
+            },
+            {
+                id: 5,
+                page: 2,
+                text: "Mennyi a (20 - 19) · (20 - 20) · (20 - 21) műveletsor eredménye?",
+                options: { A: "-1", B: "0", C: "1", D: "2", E: "3" }
+            },
+            {
+                id: 6,
+                page: 2,
+                text: "Öt kisliba libasorban úszik a tóban: Gági, Uszi, Totyi, Bukó, Pici. Egyszer gondol egyet Uszi, lebukik a víz alá, és a sor végére úszik. Majd Pici is lebukik a víz alá, és a sor elejére úszik. Hányadik a libasorban ezután Bukó?",
+                options: { A: "1.", B: "2.", C: "3.", D: "4.", E: "5." }
+            },
+            {
+                id: 7,
+                page: 2,
+                text: "Manófalván 221 manó lakik, minden házban ugyanannyi. Több ház van Manófalván, mint ahányan egy házban laknak, és minden házban legalább 2 manó lakik. Hány ház van Manófalván?",
+                options: { A: "7", B: "11", C: "13", D: "17", E: "19" }
+            },
+            {
+                id: 8,
+                page: 2,
+                text: "Pityu reggel 7 óra előtt 20 perccel ébredt. Ezután 15 perc lustálkodás és még fél óra készülődés után elindult az iskolába. Mennyi volt ekkor a pontos idő?",
+                options: { A: "7:15", B: "7:25", C: "7:35", D: "7:45", E: "7:55" }
+            },
+            {
+                id: 9,
+                page: 2,
+                text: "Anna, Bea, Cili és Dóri egyszerre érnek reggel az iskola kapujához. Hány különböző sorrendben mehetnek be egymás után az iskola kapuján, ha Dóri előzékeny, és mindenkit maga elé enged?",
+                options: { A: "4", B: "6", C: "12", D: "18", E: "24" }
+            },
+            {
+                id: 10,
+                page: 2,
+                text: "Az ábrán látható alakzat négy egyforma négyzetből áll (L-alak). Karcsi két ilyen alakzatot kivágott papírból, és egymás mellé rakta azokat. Melyiket NEM kaphatta?",
+                options: { A: "Téglalap (2x4)", B: "Négyzet (2x2 kiegészítve)", C: "Szimmetrikus 8-as alakzat", D: "Lépcsős forma", E: "Z-alakzat" }
+            },
+            {
+                id: 11,
+                page: 2,
+                text: "A MÉZESKALÁCSORSZÁG betűkártyákból az ötödikes Júlia kirakott négy szót úgy, hogy a négy szóhoz minden kártyát felhasznált, és ezt a négy szót leírta egy lapra. Húga, Anna leírt egy szót, így a lapon most 5 szó van: ACÉL, KÁROS, SZÁM, SZEG, ZSÁKOS. Melyik szót írta Anna?",
+                options: { A: "ACÉL", B: "KÁROS", C: "SZÁM", D: "SZEG", E: "ZSÁKOS" }
+            },
+            {
+                id: 12,
+                page: 3,
+                text: "A Mézga család TV előfizetési csomagjában 120 csatorna van. A csatornák 20%-án sportot, 30%-án zenét, 5%-án főzőműsorokat, a többi csatornán filmeket sugároznak. Hány csatornán sugároznak mesefilmeket, ha ezek száma a filmcsatornák számának a fele?",
+                options: { A: "12", B: "18", C: "27", D: "36", E: "54" }
+            },
+            {
+                id: 13,
+                page: 3,
+                text: "Hány olyan kör van az ábrán (körök sorozatában), amelyben és a mellette lévő két körben is prímszám látható?",
+                options: { A: "4", B: "5", C: "6", D: "7", E: "8" }
+            },
+            {
+                id: 14,
+                page: 3,
+                text: "Egy cukrászdában két mignon és egy gombóc fagyi együtt 800 Ft-ba, míg három mignon és két gombóc fagyi együtt 1300 Ft-ba kerül. Hány forintot fizet Marci, ha csak egy mignont vásárol?",
+                options: { A: "300", B: "270", C: "250", D: "320", E: "350" }
+            },
+            {
+                id: 15,
+                page: 3,
+                text: "Gombóc Artúr egy téglalap alakú csokoládét három téglalap alakú darabra vágott. Ezek közül a darabok közül kettő az ábrán látható. Melyik NEM lehet a harmadik darab?",
+                options: { A: "Kicsi téglalap", B: "Keskeny téglalap", C: "Négyzet alakú darab", D: "L-alakú darab", E: "Hosszú téglalap" }
+            },
+            {
+                id: 16,
+                page: 3,
+                text: "A XXXII. Nyári Olimpiai Játékokat 2020-ban Tokióban bonyolítják le. Ebben az évben a Mategye Alapítvány a XXXI. Zrínyi Ilona Matematikaversenyt rendezi meg. Hányadik Zrínyi Ilona Matematikaversenyt bonyolították le a XXVII. Nyári Olimpiai Játékok rendezésének évében?",
+                options: { A: "XXVI.", B: "XI.", C: "XII.", D: "XXV.", E: "XXVII." }
+            },
+            {
+                id: 17,
+                page: 3,
+                text: "A 9834; 5123; 8072 és 9560 számok mindegyikére igaz, hogy mind a három másik számmal egy azonos számjegye van. Melyik az a szám, amelyiket az előző négy számhoz hozzávéve mind az öt számra teljesül, hogy mind a négy másik számmal egy azonos számjegye van?",
+                options: { A: "1748", B: "2761", C: "4691", D: "6417", E: "7364" }
+            },
+            {
+                id: 18,
+                page: 3,
+                text: "Az ábrán két számot megcserélünk úgy, hogy minden oszlopban és minden sorban ugyanannyi legyen a számok összege. A két szám közül az egyik a 9. Melyik a másik szám?",
+                options: { A: "1", B: "2", C: "3", D: "4", E: "5" }
+            },
+            {
+                id: 19,
+                page: 3,
+                text: "Ha egy ötjegyű szám végére 1-est írunk, akkor egy olyan hatjegyű számot kapunk, ami háromszorosa annak a hatjegyű számnak, amit úgy kapnánk meg, ha az ötjegyű szám elejére írnánk az 1-est. Mi az utolsó számjegye az ötjegyű számnak?",
+                options: { A: "1", B: "3", C: "7", D: "8", E: "9" }
+            },
+            {
+                id: 20,
+                page: 3,
+                text: "Hány olyan pozitív egész szám van, amelynek a számjegyei prímszámok és a számjegyeinek szorzata 60?",
+                options: { A: "6", B: "8", C: "12", D: "18", E: "12 (átrendezésekkel)" }
+            },
+            {
+                id: 21,
+                page: 3,
+                text: "Egy háromszög két belső szögének szögfelezője 54°-os szöget zár be. Hány fokos a háromszög harmadik belső szöge?",
+                options: { A: "54°", B: "66°", C: "72°", D: "108°", E: "72° vagy 108° (helyes: 72°)" }
+            },
+            {
+                id: 22,
+                page: 3,
+                text: "Egy 1 cm oldalhosszúságú négyzet minden oldalának bejelöltük a harmadolópontjait. A nyolc harmadolópontból minden lehetséges módon kiválasztunk hármat, és kiszámoljuk az általuk meghatározott háromszög területét. Hány cm² az így kapott legkisebb terület?",
+                options: { A: "1/18", B: "1/18 cm²", C: "1/12", D: "1/9", E: "1/6" }
+            },
+            {
+                id: 23,
+                page: 4,
+                text: "Az ábrán látható KEC + SKE = KUPA összeadásban az azonos betűk azonos, a különböző betűk nem biztos, hogy különböző számjegyeket jelölnek, és az összeg négyjegyű szám. Mennyi az A + P + U + K összeg lehetséges legnagyobb értéke?",
+                options: { A: "10", B: "11", C: "18", D: "19", E: "27" }
+            },
+            {
+                id: 24,
+                page: 4,
+                text: "Egy versenyre háromfős csapatok jelentkezését várják. A 7.b osztályból 6-an szeretnének indulni: Antal, Botond, Cili, Dani, Emil és Flóra. A vonalak azt mutatják, hogy ki kivel van jóban. Hányféle lehet az osztályt képviselő háromfős csapat, ha a tagoknak mind jóban kell lenniük egymással?",
+                options: { A: "2", B: "3", C: "4", D: "6", E: "20" }
+            },
+            {
+                id: 25,
+                page: 4,
+                text: "Egy urnában piros, kék és zöld színű golyók vannak. A golyók közül 40 golyó kék vagy zöld, 30 golyó nem kék és kétszer annyi piros golyó van, mint zöld golyó. Hány golyó van összesen az urnában?",
+                options: { A: "60", B: "70", C: "100", D: "120", E: "140" }
+            },
+            {
+                id: 26,
+                page: 4,
+                text: "Négyen ülnek Artúr király kerekasztala körül: Sir Lancelot, Sir Galahad, Sir Bedivere és Artúr király. Mindegyikükről tudjuk, hogy vagy mindig igazat mond, vagy mindig hazudik. Állítások:\n• Lancelot: 'Nincs közöttünk igazmondó.'\n• Galahad: 'Közülünk legfeljebb ketten mondanak igazat.'\n• Bedivere: 'Artúr király soha nem mond igazat.'\nHány igazmondó van a kerekasztal körül?",
+                options: { A: "0", B: "1", C: "2", D: "3", E: "4" }
+            },
+            {
+                id: 27,
+                page: 4,
+                text: "A 4x4-es négyzetrács 16 fehér négyzete közül szürkére színezünk néhányat úgy, hogy a színezés után mind a 16 négyzetnek legyen olyan szomszédos négyzete, amely fehér. Hány négyzetet színezünk szürkére, ha azok száma a lehető legtöbb?",
+                options: { A: "8", B: "10", C: "12", D: "14", E: "16" }
+            },
+            {
+                id: 28,
+                page: 4,
+                text: "Bea csokrokat készít. Mindegyik csokor háromféle virágot tartalmaz. A csokrokhoz 20 szegfűt, 25 gerberát, 30 rózsát és 45 tulipánt használhat fel. Hány csokrot készít el Bea, ha azok száma a lehető legtöbb?",
+                options: { A: "35", B: "36", C: "37", D: "38", E: "45" }
+            },
+            {
+                id: 29,
+                page: 4,
+                text: "A feloldóminta 9 pontból álló rács. Hány olyan feloldóminta állítható be, amelyik az 'A' pontból indul, a 'B' pontban végződik, és közben a többi 7 pont közül pontosan kettőn halad át?",
+                options: { A: "12", B: "14", C: "16", D: "18", E: "Az előzőek közül egyik sem" }
+            },
+            {
+                id: 30,
+                page: 4,
+                text: "Hány különböző útvonal vezet az A pontból a B pontba, ha egy útvonal lefelé, felfelé, jobbra vagy jobbra felfelé haladhat, és az ábra bármely szakaszán legfeljebb egyszer haladhat végig?",
+                options: { A: "243", B: "256", C: "325", D: "343", E: "372" }
+            }
+        ];
+
+        // 3. ÁLLAPOT VÁLTOZÓK
+        let studentName = "";
+        let currentPage = 1;
+        let activeTaskId = null;
+        let selectedOption = null;
+
+        // Feladatok állapota: { attempts: [], status: 'unsolved' | 'success' | 'failed', selected: null }
+        const taskStates = {};
+        TASKS.forEach(task => {
+            taskStates[task.id] = {
+                attempts: [],
+                status: 'unsolved',
+                selected: null
+            };
+        });
+
+        // 4. INDÍTÁS ÉS NÉVBEKÉRÉS
+        function startTest(e) {
+            e.preventDefault();
+            const input = document.getElementById('studentName');
+            if (input.value.trim() !== "") {
+                studentName = input.value.trim();
+                document.getElementById('displayName').innerText = studentName;
+                document.getElementById('welcomeModal').classList.add('hidden');
+                renderAllTasks();
+                updateStats();
+            }
+        }
+
+        // 5. OLDAL LAPOZÁS VETÍTÉSE
+        function goToPage(pageNum) {
+            currentPage = pageNum;
+            
+            // Oldal elemek elrejtése / megjelenítése
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${pageNum}`).classList.remove('hidden');
+
+            // Tab stílus frissítése
+            const tabs = document.querySelectorAll('.page-tab');
+            tabs.forEach((tab, index) => {
+                if (index + 1 === pageNum) {
+                    tab.className = "page-tab px-3 py-1.5 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-950 shadow-md";
+                } else {
+                    tab.className = "page-tab px-3 py-1.5 rounded-lg text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700";
+                }
+            });
+
+            // Lapozó gombok állapota
+            const isFirst = pageNum === 1;
+            const isLast = pageNum === 4;
+            
+            document.getElementById('prevBtnTop').disabled = isFirst;
+            document.getElementById('prevBtnBottom').disabled = isFirst;
+            document.getElementById('nextBtnTop').disabled = isLast;
+            document.getElementById('nextBtnBottom').disabled = isLast;
+
+            document.getElementById('pageIndicator').innerText = `${pageNum} / 4. oldal`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changePage(delta) {
+            const newPage = currentPage + delta;
+            if (newPage >= 1 && newPage <= 4) {
+                goToPage(newPage);
+            }
+        }
+
+        // 6. FELADATOK KIRAJZOLÁSA A KÁRTYÁKRA
+        function renderAllTasks() {
+            for (let pageNum = 2; pageNum <= 4; pageNum++) {
+                const container = document.getElementById(`container-page-${pageNum}`);
+                container.innerHTML = "";
+
+                const pageTasks = TASKS.filter(t => t.page === pageNum);
+                pageTasks.forEach(task => {
+                    const state = taskStates[task.id];
+                    let badgeColor = "bg-slate-800 text-slate-400 border-slate-700";
+                    let badgeText = "Nincs megoldva";
+
+                    if (state.status === 'success') {
+                        badgeColor = "bg-emerald-500/20 text-emerald-400 border-emerald-500/40";
+                        badgeText = "Sikeres";
+                    } else if (state.status === 'failed') {
+                        badgeColor = "bg-rose-500/20 text-rose-400 border-rose-500/40";
+                        badgeText = "Sikertelen";
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = "glass-card p-5 rounded-2xl border border-slate-700/60 hover:border-amber-500/50 cursor-pointer transition transform hover:-translate-y-1 flex flex-col justify-between";
+                    card.onclick = () => openTaskModal(task.id);
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold rounded-lg text-xs">
+                                    ${task.id}. Feladat
+                                </span>
+                                <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold border ${badgeColor}">
+                                    ${badgeText}
+                                </span>
+                            </div>
+                            <p class="text-slate-200 text-sm line-clamp-3 leading-relaxed mb-4">
+                                ${task.text}
+                            </p>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-800">
+                            <span><i class="fa-solid fa-arrows-rotate mr-1"></i> ${state.attempts.length} próbálkozás</span>
+                            <span class="text-amber-400 font-semibold group-hover:underline">Megoldás <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // 7. LEBEGŐ FELADAT ABLAK (MODAL) MEGNYITÁSA
+        function openTaskModal(taskId) {
+            activeTaskId = taskId;
+            selectedOption = null;
+            const task = TASKS.find(t => t.id === taskId);
+            const state = taskStates[taskId];
+
+            document.getElementById('modalTaskBadge').innerText = `${task.id}. Feladat`;
+            document.getElementById('modalTaskText').innerText = task.text;
+            document.getElementById('modalUserName').innerText = studentName || "Vendég";
+            document.getElementById('modalAttemptsCount').innerText = state.attempts.length;
+
+            // Státusz badge
+            const statusElem = document.getElementById('modalTaskStatus');
+            if (state.status === 'success') {
+                statusElem.className = "text-xs px-2.5 py-1 rounded-full font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+                statusElem.innerText = "Sikeres";
+            } else if (state.status === 'failed') {
+                statusElem.className = "text-xs px-2.5 py-1 rounded-full font-medium bg-rose-500/20 text-rose-400 border border-rose-500/40";
+                statusElem.innerText = "Sikertelen";
+            } else {
+                statusElem.className = "text-xs px-2.5 py-1 rounded-full font-medium bg-slate-800 text-slate-400 border border-slate-700";
+                statusElem.innerText = "Nincs megoldva";
+            }
+
+            // Opciók kirajzolása
+            const container = document.getElementById('modalOptionsContainer');
+            container.innerHTML = "";
+
+            Object.entries(task.options).forEach(([key, value]) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full text-left p-3.5 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-200 text-sm font-medium flex items-center justify-between transition`;
+                
+                // Ha ezt a választ már próbálta
+                const isAttempted = state.attempts.includes(key);
+                if (isAttempted) {
+                    btn.classList.add('opacity-50', 'bg-slate-950');
+                }
+
+                btn.onclick = () => selectOption(key, btn);
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-amber-400 text-xs">${key}</span>
+                        <span>${value}</span>
+                    </div>
+                    ${isAttempted ? '<i class="fa-solid fa-xmark text-rose-400 text-xs"></i>' : ''}
+                `;
+                container.appendChild(btn);
+            });
+
+            // Visszajelzés elrejtése
+            const feedback = document.getElementById('modalFeedback');
+            feedback.className = "hidden";
+
+            // Megjelenítés
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        // Opció kijelölése
+        function selectOption(key, element) {
+            const state = taskStates[activeTaskId];
+            if (state.status === 'failed' && state.attempts.length >= 5) return;
+
+            selectedOption = key;
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // 8. VÁLASZ ELLENŐRZÉSE
+        function checkAnswer() {
+            if (!selectedOption) {
+                alert("Kérjük, válassz egy lehetőséget a válaszadás előtt!");
+                return;
+            }
+
+            const state = taskStates[activeTaskId];
+            const correctKey = ANSWER_KEY[activeTaskId];
+            const feedback = document.getElementById('modalFeedback');
+
+            if (!state.attempts.includes(selectedOption)) {
+                state.attempts.push(selectedOption);
+            }
+
+            document.getElementById('modalAttemptsCount').innerText = state.attempts.length;
+
+            if (selectedOption === correctKey) {
+                state.status = 'success';
+                feedback.className = "p-4 rounded-xl text-sm font-semibold mb-6 flex items-center gap-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-xl text-emerald-400"></i> Helyes válasz! Szép munka!`;
+            } else {
+                feedback.className = "p-4 rounded-xl text-sm font-semibold mb-6 flex items-center gap-3 bg-rose-500/20 border border-rose-500/40 text-rose-300";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-xl text-rose-400"></i> Helytelen válasz! Próbáld újra!`;
+
+                // Ha kihasználta az összes 5 lehetőséget -> Sikertelen
+                if (state.attempts.length >= 5) {
+                    state.status = 'failed';
+                    feedback.innerHTML += `<br><span class="text-xs font-normal text-rose-200">Minden lehetőséget végigpróbáltál. Ennek a feladatnak az eredménye sikertelen.</span>`;
+                }
+            }
+
+            feedback.classList.remove('hidden');
+            renderAllTasks();
+            updateStats();
+            openTaskModal(activeTaskId); // Nézet frissítése
+        }
+
+        // 9. MEGOLDÁS MEGPRÓBÁLÁSA / MEGMUTATÁSA
+        function revealSolution() {
+            const state = taskStates[activeTaskId];
+            const correctKey = ANSWER_KEY[activeTaskId];
+            const feedback = document.getElementById('modalFeedback');
+
+            state.status = 'failed'; // Megoldás lekérésénél a feladat sikertelen lesz
+            feedback.className = "p-4 rounded-xl text-sm font-semibold mb-6 flex items-center gap-3 bg-amber-500/20 border border-amber-500/40 text-amber-300";
+            feedback.innerHTML = `<i class="fa-solid fa-lightbulb text-xl text-amber-400"></i> A helyes válasz betűjele: <strong class="text-white text-base ml-1">${correctKey}</strong>. (A feladat állapota sikertelen lett).`;
+            
+            feedback.classList.remove('hidden');
+            renderAllTasks();
+            updateStats();
+        }
+
+        // 10. ABLAK BEZÁRÁS KÉRÉSE ÉS BEZÁRÁSI MEGERŐSÍTŐ MODAL
+        function requestCloseModal() {
+            document.getElementById('closeConfirmModal').classList.remove('hidden');
+        }
+
+        function cancelCloseModal() {
+            document.getElementById('closeConfirmModal').classList.add('hidden');
+        }
+
+        function confirmCloseAndSend() {
+            document.getElementById('closeConfirmModal').classList.add('hidden');
+            document.getElementById('taskModal').classList.add('hidden');
+
+            // E-mail küldés szimuláció & Toast megjelenítés
+            showToastNotification();
+        }
+
+        function showToastNotification() {
+            const toast = document.getElementById('toastNotification');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3500);
+        }
+
+        // 11. STATISZTIKÁK FRISSÍTÉSE
+        function updateStats() {
+            let success = 0;
+            let failed = 0;
+            let remaining = 0;
+
+            Object.values(taskStates).forEach(state => {
+                if (state.status === 'success') success++;
+                else if (state.status === 'failed') failed++;
+                else remaining++;
+            });
+
+            document.getElementById('statSuccess').innerText = success;
+            document.getElementById('statFailed').innerText = failed;
+            document.getElementById('statRemaining').innerText = remaining;
+        }
+
+        // 12. SCRIBD-STÍLUSÚ MÁSOLÁS ELLENI VÉDELEM
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        document.addEventListener('keydown', e => {
+            // Billentyűkombinációk tiltása (Ctrl+C, Ctrl+U, Ctrl+S, F12)
+            if (
+                e.key === 'F12' || 
+                (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j'))
+            ) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Nyilakkal való lapozás támogatása
+            if (document.getElementById('welcomeModal').classList.contains('hidden') && document.getElementById('taskModal').classList.contains('hidden')) {
+                if (e.key === 'ArrowRight') changePage(1);
+                if (e.key === 'ArrowLeft') changePage(-1);
+            }
+        });
+
+        // Inicializálás betöltéskor
+        window.onload = function() {
+            renderAllTasks();
+            updateStats();
+        };
+    </script>
+</body>
+</html>

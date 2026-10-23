@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematika Dolgozat - Hatványozás</title>
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <title>Matematika Gyakorló - Hatványozás</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -80,25 +78,6 @@
             font-size: 16px;
         }
 
-        .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 18px;
-            outline: none;
-            box-sizing: border-box;
-            -webkit-user-select: text;
-            user-select: text;
-        }
-
         /* Példa doboz */
         .example-box {
             background-color: #fdf6e2;
@@ -154,7 +133,7 @@
             font-weight: bold;
         }
 
-        /* SZAGGATOTT KERET - OPTIMÁLIS MAGASSÁG ÉS ELEM-IGAZÍTÁS */
+        /* SZAGGATOTT KERET */
         .input-power-box {
             display: inline-flex;
             align-items: flex-end;
@@ -186,7 +165,6 @@
 
         .base-input-wide { width: 70px; }
 
-        /* KITEVŐ BEVITELI MEZŐ - FELJEBB TOLVA A DOBOZ FELSŐ SARKÁHOZ */
         .exponent-input {
             width: 30px;
             height: 30px;
@@ -208,6 +186,19 @@
         .base-input:focus, .base-input-wide:focus, .exponent-input:focus, .digit-input:focus, .result-input:focus {
             border-color: #3498db;
             background-color: #e8f4fd;
+        }
+
+        /* Visszajelző színek ellenőrzés után */
+        .input-correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46 !important;
+        }
+
+        .input-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
         }
 
         .result-input {
@@ -250,6 +241,8 @@
             background-color: transparent;
             margin: 0;
             border-radius: 0;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         .joined-digits-container .digit-input:last-child {
@@ -262,7 +255,6 @@
             top: -0.4em;
         }
 
-        /* 4. FELADAT SPECIFIKUS TIPOGRÁFIÁJA */
         .task-inner-sup {
             font-size: 18px;
             position: relative;
@@ -277,7 +269,6 @@
             margin-left: 1px;
         }
 
-        /* 7. FELADAT SPECIFIKUS KÜLSŐ KITEVŐ */
         .bracket-outer-sup {
             font-size: 18px;
             position: relative;
@@ -344,7 +335,6 @@
             border-color: transparent #c0392b transparent transparent;
         }
 
-        /* 7. FELADAT STÍLUSAI */
         .big-bracket {
             font-size: 48px;
             font-weight: 300;
@@ -429,45 +419,26 @@
         .btn-next:hover { background-color: var(--primary-hover); }
         .btn-prev { background-color: #e2e8f0; color: #475569; }
         .btn-submit { background-color: var(--success); color: white; }
-        .btn-cancel { background-color: #94a3b8; color: white; }
+        .btn-submit:hover { background-color: #219150; }
 
-        .success-card {
+        .score-banner {
             background: #ecfdf5;
             border: 2px solid #10b981;
-            border-radius: 12px;
-            padding: 30px;
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
             color: #065f46;
-        }
-        .success-card h2 { color: #047857; border: none; }
-
-        .modal {
+            margin-bottom: 20px;
             display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
         }
-        .modal-content {
-            background: white;
-            padding: 35px;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 420px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-        .modal-content h3 { color: var(--danger); margin-bottom: 12px; font-size: 1.4rem; }
-        .modal-content p { color: #475569; font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
+        .score-banner h3 { margin: 0 0 5px 0; color: #047857; }
 
         @media (max-width: 768px) {
             .tasks-grid, .task4-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 <div class="container" id="mainContainer">
     <!-- Haladási sáv -->
@@ -475,30 +446,30 @@
         <div class="progress-bar" id="progressBar"></div>
     </div>
 
+    <!-- Eredmény sáv (ellenőrzés után megjelenik) -->
+    <div class="score-banner" id="scoreBanner">
+        <h3>🎉 Ellenőrzés kész!</h3>
+        <p id="scoreDisplay" style="font-size: 1.2rem; font-weight: bold; margin: 0;"></p>
+        <p style="font-size: 0.95em; margin: 8px 0 0 0; color: #047857;">
+            💡 <b>Hogyan nézheted át a hibáidat?</b> A helyes válaszok <b>zölddel</b>, a hibásak <b>pirossal</b> lettek jelölve. A lap alján lévő <b>„Vissza”</b> gomb segítségével bármikor lapozhatsz hátrafelé, és részletesen megnézheted, mit rontottál el!
+        </p>
+    </div>
+
     <form id="quizForm" autocomplete="off">
         
-        <!-- 0. LAP: Tájékoztató és Névbekérő -->
+        <!-- 0. LAP: Tájékoztató -->
         <div class="page active" id="page-0">
-            <h1>Matematika Dolgozat: Hatványozás</h1>
+            <h1>Matematika Gyakorló: Hatványozás</h1>
             <p class="desc">
                 Kedves Tanuló!<br>
-                A dolgozat kitöltésére álló idő alatt önállóan, tabletről dolgozz. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
+                Ezzel a felülettel teljesen önállóan gyakorolhatod a hatványozás szabályait. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
                 <br><br>
                 📝 <strong>HASZNOS TUDNIVALÓ:</strong>
-                <br>- Egy papírlapon végezd el a szükséges számításokat, átalakításokat; a papírlapot a végén nem kell beadni.
-                <br><br>
-                ⚠️ <strong>FONTOS SZABÁLYOK ÉS FIGYELMEZTETÉSEK:</strong>
-                <br>- Ha a dolgozatot többször nyitod meg vagy küldöd be, a rendszerben <strong>kizárólag a legkorábban beérkezett megoldásod</strong> lesz érvényes!
-                <br>- Tilos a lap elhagyása, alkalmazásváltás vagy értesítési sáv lehúzása. Lapelhagyás esetén az oldal azonnal leblokkol és a dolgozat elölről kezdődik.
+                <br>- Egy papírlapon végezd el a szükséges számításokat, átalakításokat a válaszadás előtt. A végén azonnal ellenőrizheted a teljesítményedet!
             </p>
 
-            <div class="form-group">
-                <label for="studentName">Saját neved (Vezetéknév és Keresztnév):</label>
-                <input type="text" id="studentName" placeholder="Pl. Minta Anna" required autocomplete="off">
-            </div>
-
             <div class="nav-buttons" style="justify-content: flex-end;">
-                <button type="button" class="btn btn-next" onclick="startQuiz()">Dolgozat Kezdése</button>
+                <button type="button" class="btn btn-next" onclick="changePage(1)">Gyakorlás Kezdése</button>
             </div>
         </div>
 
@@ -530,7 +501,7 @@
                 </div>
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 6 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 6 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
                 <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
@@ -556,7 +527,7 @@
                 <input type="text" id="q2c_val" class="result-input" style="width: 130px;" inputmode="numeric">
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 3 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 3 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
                 <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
@@ -667,7 +638,7 @@
                 </div>
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 18 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 18 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
                 <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
@@ -677,15 +648,9 @@
         <!-- 4. LAP: 4. Feladat -->
         <div class="page" id="page-4">
             <h2>4. Figyeld meg, majd alakítsd át annak megfelelően a kifejezéseket!</h2>
-            
             <div class="example-box">
                 Példa: (2<span class="task-inner-sup">4</span>)<span class="task-outer-sup">3</span> = 2<sup>4</sup> &middot; 2<sup>4</sup> &middot; 2<sup>4</sup> = (2 &middot; 2 &middot; 2 &middot; 2) &middot; (2 &middot; 2 &middot; 2 &middot; 2) &middot; (2 &middot; 2 &middot; 2 &middot; 2) = 2<sup>12</sup>
             </div>
-
-            <p style="font-size: 18px; font-weight: bold; color: #2c3e50; margin-top: 15px; margin-bottom: 10px;">
-                Hasonlóan értelmezd a következő hatványok hatványozását!
-            </p>
-
             <div class="task4-grid">
                 <div class="task4-card">
                     <span class="task-number">a)</span>
@@ -721,7 +686,7 @@
                 </div>
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 8 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 8 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
                 <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
@@ -759,7 +724,7 @@
                 </div>
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 6 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 6 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
                 <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
@@ -769,7 +734,6 @@
         <!-- 6. LAP: 6. Feladat -->
         <div class="page" id="page-6">
             <h2>6. Végezd el a számításokat!</h2>
-            
             <div class="task-row" style="font-size: 20px; align-items: center;">
                 <span class="task-number">6. a)</span>
                 <span>2<sup class="math-sup">4</sup> &middot; 5<sup class="math-sup">4</sup> = (2 &middot; 2 &middot; 2 &middot; 2) &middot; (5 &middot; 5 &middot; 5 &middot; 5) = (2 &middot; 5)</span>
@@ -788,7 +752,7 @@
 
             <div class="task-row" style="font-size: 20px; align-items: center;">
                 <span class="task-number">6. b)</span>
-                <span>20<sup class="math-sup">3</sup> = (2 &middot; 10)<sup>3</sup> = (2 &middot; 10) &middot; (2 &middot; 10) &middot; (2 &middot; 10) = (2 &middot; 2 &middot; 2) &middot; (10 &middot; 10 &middot; 10) =</span>
+                <span>20<sup class="math-sup">3</sup> = (2 &middot; 10)<sup>3</sup> = ... =</span>
                 <div class="input-power-box" style="height: 70px;">
                     <input type="text" id="q6b1_base" class="base-input" inputmode="numeric" style="width:38px; height:42px; font-size:22px;">
                     <input type="text" id="q6b1_exp" class="exponent-input" inputmode="numeric">
@@ -827,7 +791,7 @@
                 </div>
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 17 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 17 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
                 <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
@@ -837,27 +801,15 @@
         <!-- 7. LAP: 7. Feladat -->
         <div class="page" id="page-7">
             <h2>7. Figyeld meg, majd folytasd az = jel után!</h2>
-
             <div style="background-color: #fafafa; padding: 25px 20px; border-radius: 10px; border: 1px solid #eef2f3; margin-bottom: 20px;">
+                
                 <!-- 7. a) -->
                 <div class="task-row" style="background: none; border: none; padding: 0; margin-bottom: 25px;">
                     <span class="task-number">a)</span>
                     <span class="big-bracket">(</span>
                     <div class="math-fraction"><span class="num">2</span><span class="den">5</span></div>
                     <span class="big-bracket">)</span><sup class="bracket-outer-sup">3</sup>
-                    <span>=</span>
-                    <div class="math-fraction"><span class="num">2</span><span class="den">5</span></div>
-                    <span>&middot;</span>
-                    <div class="math-fraction"><span class="num">2</span><span class="den">5</span></div>
-                    <span>&middot;</span>
-                    <div class="math-fraction"><span class="num">2</span><span class="den">5</span></div>
-                    <span>=</span>
-                    <div class="math-fraction">
-                        <span class="num">2 &middot; 2 &middot; 2</span>
-                        <span class="den">5 &middot; 5 &middot; 5</span>
-                    </div>
-                    <span>=</span>
-                    
+                    <span>= ... =</span>
                     <div class="input-fraction">
                         <div class="input-power-box-tall">
                             <input type="text" id="q7a_num_base" class="base-input" inputmode="numeric">
@@ -916,56 +868,19 @@
                 </div>
             </div>
 
-            <div class="points-info">🏆 Ebben a feladatban elérhető pontszám: 12 pont</div>
+            <div class="points-info">🏆 Elérhető pontszám: 70 pont</div>
             <div class="nav-buttons">
                 <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
-                <button type="button" class="btn btn-submit" onclick="confirmSubmit()">Befejezés és Beküldés</button>
-            </div>
-        </div>
-
-        <!-- SIKERES ZÁRÓ OLDAL -->
-        <div class="page" id="page-success">
-            <div class="success-card">
-                <h2>🎉 Köszönjük a kitöltést!</h2>
-                <p id="successMessage" style="font-size: 1.1rem; color: #065f46; margin-bottom: 10px;">
-                    Dolgozatodat sikeresen rögzítettük és elküldtük a tanár úrnak.
-                </p>
-                <p id="scoreDisplay" style="font-size: 1.25rem; font-weight: bold; color: #047857; margin-top: 15px;"></p>
+                <button type="button" class="btn btn-submit" onclick="checkAnswers()">Eredmény Ellenőrzése</button>
             </div>
         </div>
 
     </form>
 </div>
 
-<!-- Megerősítő Modal beküldés előtt -->
-<div class="modal" id="confirmModal">
-    <div class="modal-content">
-        <h3 style="color: var(--primary);">Biztosan befejezed?</h3>
-        <p>Ha rákattintasz a küldésre, a válaszaid véglegesítésre kerülnek, és elküldjük az eredményt a tanárnak.</p>
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-            <button type="button" class="btn btn-cancel" onclick="closeConfirmModal()">Mégse</button>
-            <button type="button" class="btn btn-submit" onclick="executeSubmit()">Igen, Küldés</button>
-        </div>
-    </div>
-</div>
-
-<!-- Azonnali sötétítő figyelmeztető ablak lapelhagyáskor -->
-<div class="modal" id="penaltyModal">
-    <div class="modal-content">
-        <h3>⚠️ FIGYELEM! LAPELHAGYÁS!</h3>
-        <p>Elhagytad az oldalt, váltottál az ablakok között vagy az értesítési sávot használtad! A szabályok értelmében a dolgozatod letiltásra és nullázásra került.</p>
-        <button class="btn btn-next" onclick="closeModal()">Értettem, Újraindítás</button>
-    </div>
-</div>
-
 <script>
-    (function(){
-        emailjs.init("hsRvek-Jff5scNP1B");
-    })();
-
     let currentPage = 0;
-    const totalPages = 7; 
-    let quizStarted = false;
+    const totalPages = 7;
 
     function updateProgress() {
         if (currentPage <= totalPages) {
@@ -974,293 +889,133 @@
         }
     }
 
-    function startQuiz() {
-        const name = document.getElementById('studentName').value.trim();
-        if(!name) {
-            alert("Kérjük, add meg a nevedet a folytatáshoz!");
-            return;
-        }
-        quizStarted = true;
-        changePage(1);
-    }
-
     function changePage(delta) {
         const pages = document.querySelectorAll('.page');
         pages[currentPage].classList.remove('active');
-        
         currentPage += delta;
+        if (currentPage < 0) currentPage = 0;
+        if (currentPage > totalPages) currentPage = totalPages;
         pages[currentPage].classList.add('active');
-
         updateProgress();
         window.scrollTo(0, 0);
     }
 
-    window.addEventListener('blur', function() { if (quizStarted) triggerPenalty(); });
-    document.addEventListener('visibilitychange', function() { if (document.hidden && quizStarted) triggerPenalty(); });
-    window.addEventListener('pagehide', function() { if (quizStarted) triggerPenalty(); });
-
-    function triggerPenalty() {
-        document.getElementById('penaltyModal').style.display = 'flex';
-        document.getElementById('quizForm').reset();
+    function markField(id, isCorrect) {
+        let el = document.getElementById(id);
+        if(!el) return;
+        el.classList.remove('input-correct', 'input-incorrect');
+        el.classList.add(isCorrect ? 'input-correct' : 'input-incorrect');
     }
 
-    function closeModal() {
-        document.getElementById('penaltyModal').style.display = 'none';
-        quizStarted = false;
-        currentPage = 0;
-        const pages = document.querySelectorAll('.page');
-        pages.forEach(p => p.classList.remove('active'));
-        pages[0].classList.add('active');
-        updateProgress();
-    }
-
-    function confirmSubmit() { document.getElementById('confirmModal').style.display = 'flex'; }
-    function closeConfirmModal() { document.getElementById('confirmModal').style.display = 'none'; }
-
-    function executeSubmit() {
-        closeConfirmModal();
-        quizStarted = false; 
-        const studentName = document.getElementById('studentName').value.trim();
-        
+    function checkAnswers() {
         let score = 0;
         let maxPoints = 70;
 
-        // Értékelés és részletes válaszok gyűjtése az e-mailhez
-        let details = "Részletes megoldások:\n\n";
-
         // 1. Feladat (6p)
-        let v1a_b = document.getElementById('q1a_base').value.trim();
-        let v1a_e = document.getElementById('q1a_exp').value.trim();
-        let v1b_b = document.getElementById('q1b_base').value.trim();
-        let v1b_e = document.getElementById('q1b_exp').value.trim();
-        let v1c_b = document.getElementById('q1c_base').value.trim();
-        let v1c_e = document.getElementById('q1c_exp').value.trim();
-
-        details += `1.a feladat: alap=${v1a_b}, kitevő=${v1a_e}\n`;
-        details += `1.b feladat: alap=${v1b_b}, kitevő=${v1b_e}\n`;
-        details += `1.c feladat: alap=${v1c_b}, kitevő=${v1c_e}\n`;
-
-        if(v1a_b === '2') score++;
-        if(v1a_e === '5') score++;
-        if(v1b_b === '3') score++;
-        if(v1b_e === '4') score++;
-        if(v1c_b === '5') score++;
-        if(v1c_e === '6') score++;
+        let c1 = document.getElementById('q1a_base').value.trim() === '2'; markField('q1a_base', c1); if(c1) score++;
+        let c2 = document.getElementById('q1a_exp').value.trim() === '5'; markField('q1a_exp', c2); if(c2) score++;
+        let c3 = document.getElementById('q1b_base').value.trim() === '3'; markField('q1b_base', c3); if(c3) score++;
+        let c4 = document.getElementById('q1b_exp').value.trim() === '4'; markField('q1b_exp', c4); if(c4) score++;
+        let c5 = document.getElementById('q1c_base').value.trim() === '5'; markField('q1c_base', c5); if(c5) score++;
+        let c6 = document.getElementById('q1c_exp').value.trim() === '6'; markField('q1c_exp', c6); if(c6) score++;
 
         // 2. Feladat (3p)
-        let v2a = document.getElementById('q2a_val').value.trim();
-        let v2b = document.getElementById('q2b_val').value.trim();
-        let v2c = document.getElementById('q2c_val').value.trim();
-
-        details += `2.a feladat: érték=${v2a}\n`;
-        details += `2.b feladat: érték=${v2b}\n`;
-        details += `2.c feladat: érték=${v2c}\n`;
-
-        if(v2a === '16') score++;
-        if(v2b === '27') score++;
-        if(v2c === '10000') score++;
+        let c7 = document.getElementById('q2a_val').value.trim() === '16'; markField('q2a_val', c7); if(c7) score++;
+        let c8 = document.getElementById('q2b_val').value.trim() === '27'; markField('q2b_val', c8); if(c8) score++;
+        let c9 = document.getElementById('q2c_val').value.trim() === '10000'; markField('q2c_val', c9); if(c9) score++;
 
         // 3. Feladat (18p)
-        let v3a2_b = document.getElementById('q3a2_base').value.trim();
-        let v3a2_e = document.getElementById('q3a2_exp').value.trim();
-        let v3a3_b = document.getElementById('q3a3_base').value.trim();
-        let v3a3_e = document.getElementById('q3a3_exp').value.trim();
-        let v3a4_b = document.getElementById('q3a4_base').value.trim();
-        let v3a4_e = document.getElementById('q3a4_exp').value.trim();
+        let c10 = document.getElementById('q3a2_base').value.trim() === '3'; markField('q3a2_base', c10); if(c10) score++;
+        let c11 = document.getElementById('q3a2_exp').value.trim() === '4'; markField('q3a2_exp', c11); if(c11) score++;
+        let c12 = document.getElementById('q3a3_base').value.trim() === '5'; markField('q3a3_base', c12); if(c12) score++;
+        let c13 = document.getElementById('q3a3_exp').value.trim() === '1'; markField('q3a3_exp', c13); if(c13) score++;
+        let c14 = document.getElementById('q3a4_base').value.trim() === '4'; markField('q3a4_base', c14); if(c14) score++;
+        let c15 = document.getElementById('q3a4_exp').value.trim() === '0'; markField('q3a4_exp', c15); if(c15) score++;
 
-        details += `3.a (2.) feladat: alap=${v3a2_b}, kitevő=${v3a2_e}\n`;
-        details += `3.a (3.) feladat: alap=${v3a3_b}, kitevő=${v3a3_e}\n`;
-        details += `3.a (4.) feladat: alap=${v3a4_b}, kitevő=${v3a4_e}\n`;
+        let c16 = document.getElementById('q3b1_base').value.trim() === '4'; markField('q3b1_base', c16); if(c16) score++;
+        let c17 = document.getElementById('q3b1_exp').value.trim() === '2'; markField('q3b1_exp', c17); if(c17) score++;
+        let c18 = document.getElementById('q3b2_base').value.trim() === '5'; markField('q3b2_base', c18); if(c18) score++;
+        let c19 = document.getElementById('q3b2_exp').value.trim() === '5'; markField('q3b2_exp', c19); if(c19) score++;
+        let c20 = document.getElementById('q3b3_base').value.trim() === '10'; markField('q3b3_base', c20); if(c20) score++;
+        let c21 = document.getElementById('q3b3_exp').value.trim() === '2'; markField('q3b3_exp', c21); if(c21) score++;
 
-        if(v3a2_b === '3') score++;
-        if(v3a2_e === '4') score++;
-        if(v3a3_b === '5') score++;
-        if(v3a3_e === '1') score++;
-        if(v3a4_b === '4') score++;
-        if(v3a4_e === '0') score++;
-
-        let v3b1_b = document.getElementById('q3b1_base').value.trim();
-        let v3b1_e = document.getElementById('q3b1_exp').value.trim();
-        let v3b2_b = document.getElementById('q3b2_base').value.trim();
-        let v3b2_e = document.getElementById('q3b2_exp').value.trim();
-        let v3b3_b = document.getElementById('q3b3_base').value.trim();
-        let v3b3_e = document.getElementById('q3b3_exp').value.trim();
-
-        details += `3.b (1.) feladat: alap=${v3b1_b}, kitevő=${v3b1_e}\n`;
-        details += `3.b (2.) feladat: alap=${v3b2_b}, kitevő=${v3b2_e}\n`;
-        details += `3.b (3.) feladat: alap=${v3b3_b}, kitevő=${v3b3_e}\n`;
-
-        if(v3b1_b === '4') score++;
-        if(v3b1_e === '2') score++;
-        if(v3b2_b === '5') score++;
-        if(v3b2_e === '5') score++;
-        if(v3b3_b === '10') score++;
-        if(v3b3_e === '2') score++;
-
-        let v3c1_b = document.getElementById('q3c1_base').value.trim();
-        let v3c1_e = document.getElementById('q3c1_exp').value.trim();
-        let v3c2_b = document.getElementById('q3c2_base').value.trim();
-        let v3c2_e = document.getElementById('q3c2_exp').value.trim();
-        let v3c3_b = document.getElementById('q3c3_base').value.trim();
-        let v3c3_e = document.getElementById('q3c3_exp').value.trim();
-
-        details += `3.c (1.) feladat: alap=${v3c1_b}, kitevő=${v3c1_e}\n`;
-        details += `3.c (2.) feladat: alap=${v3c2_b}, kitevő=${v3c2_e}\n`;
-        details += `3.c (3.) feladat: alap=${v3c3_b}, kitevő=${v3c3_e}\n`;
-
-        if(v3c1_b === '7') score++;
-        if(v3c1_e === '2') score++;
-        if(v3c2_b === '5') score++;
-        if(v3c2_e === '6') score++;
-        if(v3c3_b === '1') score++;
-        if(v3c3_e === '5') score++;
+        let c22 = document.getElementById('q3c1_base').value.trim() === '7'; markField('q3c1_base', c22); if(c22) score++;
+        let c23 = document.getElementById('q3c1_exp').value.trim() === '2'; markField('q3c1_exp', c23); if(c23) score++;
+        let c24 = document.getElementById('q3c2_base').value.trim() === '5'; markField('q3c2_base', c24); if(c24) score++;
+        let c25 = document.getElementById('q3c2_exp').value.trim() === '6'; markField('q3c2_exp', c25); if(c25) score++;
+        let c26 = document.getElementById('q3c3_base').value.trim() === '1'; markField('q3c3_base', c26); if(c26) score++;
+        let c27 = document.getElementById('q3c3_exp').value.trim() === '5'; markField('q3c3_exp', c27); if(c27) score++;
 
         // 4. Feladat (8p)
-        let v4a_b = document.getElementById('q4a_base').value.trim();
-        let v4a_e = document.getElementById('q4a_exp').value.trim();
-        let v4b_b = document.getElementById('q4b_base').value.trim();
-        let v4b_e = document.getElementById('q4b_exp').value.trim();
-        let v4c_b = document.getElementById('q4c_base').value.trim();
-        let v4c_e = document.getElementById('q4c_exp').value.trim();
-        let v4d_b = document.getElementById('q4d_base').value.trim();
-        let v4d_e = document.getElementById('q4d_exp').value.trim();
-
-        details += `4.a feladat: alap=${v4a_b}, kitevő=${v4a_e}\n`;
-        details += `4.b feladat: alap=${v4b_b}, kitevő=${v4b_e}\n`;
-        details += `4.c feladat: alap=${v4c_b}, kitevő=${v4c_e}\n`;
-        details += `4.d feladat: alap=${v4d_b}, kitevő=${v4d_e}\n`;
-
-        if(v4a_b === '5') score++;
-        if(v4a_e === '8') score++;
-        if(v4b_b === '10') score++;
-        if(v4b_e === '12') score++;
-        let c_val = v4c_b.replace(',', '.');
-        if(c_val === '0.1' || c_val === '.1') score++;
-        if(v4c_e === '6') score++;
-        if(v4d_b.toLowerCase() === 'c') score++;
-        if(v4d_e === '12') score++;
+        let c28 = document.getElementById('q4a_base').value.trim() === '5'; markField('q4a_base', c28); if(c28) score++;
+        let c29 = document.getElementById('q4a_exp').value.trim() === '8'; markField('q4a_exp', c29); if(c29) score++;
+        let c30 = document.getElementById('q4b_base').value.trim() === '10'; markField('q4b_base', c30); if(c30) score++;
+        let c31 = document.getElementById('q4b_exp').value.trim() === '12'; markField('q4b_exp', c31); if(c31) score++;
+        let c_val = document.getElementById('q4c_base').value.trim().replace(',', '.');
+        let c32 = (c_val === '0.1' || c_val === '.1'); markField('q4c_base', c32); if(c32) score++;
+        let c33 = document.getElementById('q4c_exp').value.trim() === '6'; markField('q4c_exp', c33); if(c33) score++;
+        let c34 = document.getElementById('q4d_base').value.trim().toLowerCase() === 'c'; markField('q4d_base', c34); if(c34) score++;
+        let c35 = document.getElementById('q4d_exp').value.trim() === '12'; markField('q4d_exp', c35); if(c35) score++;
 
         // 5. Feladat (6p)
-        let v5a_b = document.getElementById('q5a_base').value.trim();
-        let v5a_e = document.getElementById('q5a_exp').value.trim();
-        let v5b_b = document.getElementById('q5b_base').value.trim();
-        let v5b_e = document.getElementById('q5b_exp').value.trim();
-        let v5c_b = document.getElementById('q5c_base').value.trim();
-        let v5c_e = document.getElementById('q5c_exp').value.trim();
-
-        details += `5.a feladat: alap=${v5a_b}, kitevő=${v5a_e}\n`;
-        details += `5.b feladat: alap=${v5b_b}, kitevő=${v5b_e}\n`;
-        details += `5.c feladat: alap=${v5c_b}, kitevő=${v5c_e}\n`;
-
-        if(v5a_b === '2') score++;
-        if(v5a_e === '7') score++;
-        if(v5b_b === '2') score++;
-        if(v5b_e === '7') score++;
-        if(v5c_b === '5') score++;
-        if(v5c_e === '4') score++;
+        let c36 = document.getElementById('q5a_base').value.trim() === '2'; markField('q5a_base', c36); if(c36) score++;
+        let c37 = document.getElementById('q5a_exp').value.trim() === '7'; markField('q5a_exp', c37); if(c37) score++;
+        let c38 = document.getElementById('q5b_base').value.trim() === '2'; markField('q5b_base', c38); if(c38) score++;
+        let c39 = document.getElementById('q5b_exp').value.trim() === '7'; markField('q5b_exp', c39); if(c39) score++;
+        let c40 = document.getElementById('q5c_base').value.trim() === '5'; markField('q5c_base', c40); if(c40) score++;
+        let c41 = document.getElementById('q5c_exp').value.trim() === '4'; markField('q5c_exp', c41); if(c41) score++;
 
         // 6. Feladat (17p)
-        let v6a_e1 = document.getElementById('q6a_exp').value.trim();
-        let v6a_e2 = document.getElementById('q6a_exp2').value.trim();
-        let v6a_digs = document.getElementById('q6a_d1').value + document.getElementById('q6a_d2').value + document.getElementById('q6a_d3').value + document.getElementById('q6a_d4').value + document.getElementById('q6a_d5').value;
+        let c42 = document.getElementById('q6a_exp').value.trim() === '4'; markField('q6a_exp', c42); if(c42) score++;
+        let c43 = document.getElementById('q6a_exp2').value.trim() === '4'; markField('q6a_exp2', c43); if(c43) score++;
+        let d1_ok = document.getElementById('q6a_d1').value.trim() === '1'; markField('q6a_d1', d1_ok); if(d1_ok) score++;
+        let d2_ok = document.getElementById('q6a_d2').value.trim() === '0'; markField('q6a_d2', d2_ok); if(d2_ok) score++;
+        let d3_ok = document.getElementById('q6a_d3').value.trim() === '0'; markField('q6a_d3', d3_ok); if(d3_ok) score++;
+        let d4_ok = document.getElementById('q6a_d4').value.trim() === '0'; markField('q6a_d4', d4_ok); if(d4_ok) score++;
+        let d5_ok = document.getElementById('q6a_d5').value.trim() === '0'; markField('q6a_d5', d5_ok); if(d5_ok) score++;
 
-        details += `6.a feladat: kitevők=${v6a_e1}, ${v6a_e2}, szám=${v6a_digs}\n`;
-
-        if(v6a_e1 === '4') score++;
-        if(v6a_e2 === '4') score++;
-        if(document.getElementById('q6a_d1').value.trim() === '1') score++;
-        if(document.getElementById('q6a_d2').value.trim() === '0') score++;
-        if(document.getElementById('q6a_d3').value.trim() === '0') score++;
-        if(document.getElementById('q6a_d4').value.trim() === '0') score++;
-        if(document.getElementById('q6a_d5').value.trim() === '0') score++;
-
-        let v6b1_b = document.getElementById('q6b1_base').value.trim();
-        let v6b1_e = document.getElementById('q6b1_exp').value.trim();
-        let v6b2_b = document.getElementById('q6b2_base').value.trim();
-        let v6b2_e = document.getElementById('q6b2_exp').value.trim();
-        details += `6.b feladat: 1.tényező=${v6b1_b}^${v6b1_e}, 2.tényező=${v6b2_b}^${v6b2_e}\n`;
-
-        if(v6b1_b === '2') score++;
-        if(v6b1_e === '3') score++;
-        if(v6b2_b === '10') score++;
-        if(v6b2_e === '3') score++;
+        let c44 = document.getElementById('q6b1_base').value.trim() === '2'; markField('q6b1_base', c44); if(c44) score++;
+        let c45 = document.getElementById('q6b1_exp').value.trim() === '3'; markField('q6b1_exp', c45); if(c45) score++;
+        let c46 = document.getElementById('q6b2_base').value.trim() === '10'; markField('q6b2_base', c46); if(c46) score++;
+        let c47 = document.getElementById('q6b2_exp').value.trim() === '3'; markField('q6b2_exp', c47); if(c47) score++;
 
         let c6_base = document.getElementById('q6c_base').value.trim();
-        let c6_exp = document.getElementById('q6c_exp').value.trim();
-        details += `6.c feladat: alap=${c6_base}, kitevő=${c6_exp}\n`;
-        if(c6_base === '20' || c6_base === '(20)' || c6_base === '(5*4)' || c6_base === '(5·4)') score++;
-        if(c6_exp === '3') score++;
+        let c48 = (c6_base === '20' || c6_base === '(20)' || c6_base === '(5*4)' || c6_base === '(5·4)'); markField('q6c_base', c48); if(c48) score++;
+        let c49 = document.getElementById('q6c_exp').value.trim() === '3'; markField('q6c_exp', c49); if(c49) score++;
 
         let d6_base = document.getElementById('q6d_base').value.trim();
-        let d6_exp = document.getElementById('q6d_exp').value.trim();
-        details += `6.d feladat: alap=${d6_base}, kitevő=${d6_exp}\n`;
-        if(d6_base === '20' || d6_base === '(20)' || d6_base === '(2*10)' || d6_base === '(2·10)') score++;
-        if(d6_exp === '5') score++;
+        let c50 = (d6_base === '20' || d6_base === '(20)' || d6_base === '(2*10)' || d6_base === '(2·10)'); markField('q6d_base', c50); if(c50) score++;
+        let c51 = document.getElementById('q6d_exp').value.trim() === '5'; markField('q6d_exp', c51); if(c51) score++;
 
         let e6_base = document.getElementById('q6e_base').value.trim();
-        let e6_exp = document.getElementById('q6e_exp').value.trim();
-        details += `6.e feladat: alap=${e6_base}, kitevő=${e6_exp}\n`;
-        if(e6_base === '30' || e6_base === '(30)' || e6_base === '(2*3*5)' || e6_base === '(2·3·5)') score++;
-        if(e6_exp === '4') score++;
+        let c52 = (e6_base === '30' || e6_base === '(30)' || e6_base === '(2*3*5)' || e6_base === '(2·3·5)'); markField('q6e_base', c52); if(c52) score++;
+        let c53 = document.getElementById('q6e_exp').value.trim() === '4'; markField('q6e_exp', c53); if(c53) score++;
 
         // 7. Feladat (12p)
-        let v7a_nb = document.getElementById('q7a_num_base').value.trim();
-        let v7a_ne = document.getElementById('q7a_num_exp').value.trim();
-        let v7a_db = document.getElementById('q7a_den_base').value.trim();
-        let v7a_de = document.getElementById('q7a_den_exp').value.trim();
-        details += `7.a feladat: számláló=${v7a_nb}^${v7a_ne}, nevező=${v7a_db}^${v7a_de}\n`;
+        let c54 = document.getElementById('q7a_num_base').value.trim() === '2'; markField('q7a_num_base', c54); if(c54) score++;
+        let c55 = document.getElementById('q7a_num_exp').value.trim() === '3'; markField('q7a_num_exp', c55); if(c55) score++;
+        let c56 = document.getElementById('q7a_den_base').value.trim() === '5'; markField('q7a_den_base', c56); if(c56) score++;
+        let c57 = document.getElementById('q7a_den_exp').value.trim() === '3'; markField('q7a_den_exp', c57); if(c57) score++;
 
-        if(v7a_nb === '2') score++;
-        if(v7a_ne === '3') score++;
-        if(v7a_db === '5') score++;
-        if(v7a_de === '3') score++;
+        let c58 = document.getElementById('q7b_num_base').value.trim() === '5'; markField('q7b_num_base', c58); if(c58) score++;
+        let c59 = document.getElementById('q7b_num_exp').value.trim() === '5'; markField('q7b_num_exp', c59); if(c59) score++;
+        let c60 = document.getElementById('q7b_den_base').value.trim() === '2'; markField('q7b_den_base', c60); if(c60) score++;
+        let c61 = document.getElementById('q7b_den_exp').value.trim() === '5'; markField('q7b_den_exp', c61); if(c61) score++;
 
-        let v7b_nb = document.getElementById('q7b_num_base').value.trim();
-        let v7b_ne = document.getElementById('q7b_num_exp').value.trim();
-        let v7b_db = document.getElementById('q7b_den_base').value.trim();
-        let v7b_de = document.getElementById('q7b_den_exp').value.trim();
-        details += `7.b feladat: számláló=${v7b_nb}^${v7b_ne}, nevező=${v7b_db}^${v7b_de}\n`;
-
-        if(v7b_nb === '5') score++;
-        if(v7b_ne === '5') score++;
-        if(v7b_db === '2') score++;
-        if(v7b_de === '5') score++;
-
-        let v7c_nb = document.getElementById('q7c_num_base').value.trim();
-        let v7c_ne = document.getElementById('q7c_num_exp').value.trim();
-        let v7c_db = document.getElementById('q7c_den_base').value.trim();
-        let v7c_de = document.getElementById('q7c_den_exp').value.trim();
-        details += `7.c feladat: számláló=${v7c_nb}^${v7c_ne}, nevező=${v7c_db}^${v7c_de}\n`;
-
-        if(v7c_nb === '3' || v7c_nb === '(-3)' || v7c_nb === '-3') score++;
-        if(v7c_ne === '6') score++;
-        if(v7c_db === '4') score++;
-        if(v7c_de === '6') score++;
+        let q7c_nb = document.getElementById('q7c_num_base').value.trim();
+        let c62 = (q7c_nb === '3' || q7c_nb === '(-3)' || q7c_nb === '-3'); markField('q7c_num_base', c62); if(c62) score++;
+        let c63 = document.getElementById('q7c_num_exp').value.trim() === '6'; markField('q7c_num_exp', c63); if(c63) score++;
+        let c64 = document.getElementById('q7c_den_base').value.trim() === '4'; markField('q7c_den_base', c64); if(c64) score++;
+        let c65 = document.getElementById('q7c_den_exp').value.trim() === '6'; markField('q7c_den_exp', c65); if(c65) score++;
 
         let percentage = Math.round((score / maxPoints) * 100);
-        let scoreString = `${score} / ${maxPoints} pont (${percentage}%)`;
+        document.getElementById('scoreDisplay').innerHTML = `Elért eredmény: ${score} / ${maxPoints} pont (${percentage}%)`;
+        document.getElementById('scoreBanner').style.display = 'block';
 
-        const templateParams = {
-            from_name: studentName,
-            score: scoreString,
-            details: details
-        };
-
-        emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams, "hsRvek-Jff5scNP1B")
-            .then(function(response) {
-               document.getElementById('successMessage').innerHTML = `<strong>${studentName}</strong> nevű tanuló dolgozatát sikeresen elküldtük a tanár úrnak.`;
-               document.getElementById('scoreDisplay').innerHTML = `Elért eredményed: ${scoreString}`;
-               
-               const pages = document.querySelectorAll('.page');
-               pages[currentPage].classList.remove('active');
-               document.getElementById('page-success').classList.add('active');
-               document.getElementById('progressBar').style.width = '100%';
-            }, function(error) {
-               alert("Hiba történt az e-mail küldése során. Kérlek, szólj a tanárnak!");
-               console.log("FAILED...", error);
-            });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-</script>
 
+    updateProgress();
+</script>
 </body>
 </html>

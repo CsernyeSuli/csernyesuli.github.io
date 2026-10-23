@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8. Osztály - Matematika</title>
+    <title>8. osztály - Matematika</title>
     <!-- Külső stíluslap csatolása -->
     <link rel="stylesheet" href="osztalylap_style.css">
     <!-- MathJax betöltése a matematikai képletekhez -->
@@ -22,9 +22,8 @@
         <aside class="sidebar">
             <h3>📂 Órai Archívum</h3>
             <ul class="archive-list">
-               <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 10. 19. - Szerkesztés alatt</li>
-                 <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 10. 21. - <a href="https://csernyesuli.github.io/8-osztaly-szoveges.html">Felvételire</a></li>
-                
+                <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 10. 20. - <a href="https://csernyesuli.github.io/8-osztaly-szoveges.html">Felvételire</a></li>
+                <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 10. 21. - Hatványozás - elmélet</li>
             </ul>
         </aside>
 
@@ -38,7 +37,7 @@
                 <div class="task-card card-orai" onclick="openModal('modal-orai')">
                     <h4>📘 Órai feladatok</h4>
                     <div class="card-preview">
-                        Hatványozás - felmérő
+                        Számok normálalakja<br>Szöveges feladatok megoldása
                     </div>
                     <span class="click-hint">Részletek ➔</span>
                 </div>
@@ -56,7 +55,7 @@
                 <div class="task-card card-szorgalmi" onclick="openModal('modal-szorgalmi')">
                     <h4>⭐ Szorgalmi feladat</h4>
                     <div class="card-preview">
-                        Az órai online elméleti összefoglalalást és a kvízt újra megcsinálhatod, ha sikererrel jársz javíthatsz az órai eredményeden.
+                        Szöveges feladatok megoldása<br> - videósorozat -
                     </div>
                     <span class="click-hint">Részletek ➔</span>
                 </div>
@@ -70,21 +69,90 @@
     </div>
 
     <!-- LEBEGŐ ABLAKOK (MODAL-OK) -->
-    <div id="modal-orai" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-orai')">&times;</span>
-            <h3 style="color: #38bdf8; margin-top:0;">📘 Órai feladatok</h3>
-            <div class="modal-body">
-                <p><strong>Cím / Téma:</strong> Hatványozás, azonosságok</p><br>
-                <p>A felmérőt az órán kapott tableten kell megoldanod!<br> A végén megtudod az értékelést, ami automatikusan elküldésre kerül az email címemre.</p>
-                <p><strong>Online felmérő:</strong> <a href="https://csernyesuli.github.io/hatvanyozas-felmero.html">Kezd el itt!</a></p>
-                <hr style="border-color: var(--border-color);">
-                <p><strong>Táblakép:</strong></p>
-                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
+   <div id="modal-orai" class="modal-overlay">
+    <div class="modal-content" style="background-color: #1e293b; color: #f8fafc; border: 1px solid #334155;">
+        <span class="modal-close" onclick="closeModal('modal-orai')" style="color: #94a3b8; cursor: pointer;">&times;</span>
+        <h3 style="color: #38bdf8; margin-top:0; border-bottom: 2px solid #38bdf8; padding-bottom: 8px;">📘 Órai feladatok & Tananyag</h3>
+        <div class="modal-body" style="text-align: left; font-size: 0.95em; line-height: 1.6;">
+            
+            <h4 style="color: #f43f5e; margin-bottom: 5px;">A normálalak általános képlete:</h4>
+            <p style="font-size: 1.2em; text-align: center; background-color: rgba(56, 189, 248, 0.1); padding: 10px; border-radius: 6px; letter-spacing: 1px;">
+                <b><span style="color: #fbbf24;">a</span> · 10<sup><span style="color: #34d399;">n</span></sup></b>
+            </p>
+            
+            <p><b>A betűk jelentése:</b></p>
+            <ul style="padding-left: 20px;">
+                <li style="margin-bottom: 8px;">
+                    <b><span style="color: #fbbf24;">a</span></b> <i>(az első tényező)</i>: Egy olyan valós szám, amely legalább 1, de kisebb, mint 10 (<b>1 ≤ <span style="color: #fbbf24;">a</span> &lt; 10</b>). A gyakorlatban ez azt jelenti, hogy a tizedesvessző előtt pontosan egy darab nem nulla számjegy állhat (pl. <b>4,5</b> vagy <b>3</b> vagy <b>9,99</b>).
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <b><span style="color: #34d399;">n</span></b> <i>(a kitevő)</i>: Egy egész szám (lehet pozitív, negatív vagy nulla). Ez mutatja meg, hogy hányszorosára kell nagyítani vagy kicsinyíteni a számot, azaz hány tizedesjeggyel léptettük el a vesszőt.
+                </li>
+            </ul>
+
+            <h4 style="color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 5px; margin-top: 20px;">Hogyan működik a gyakorlatban?</h4>
+            
+            <!-- 1. Példa -->
+            <div style="background-color: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; padding: 12px; margin: 12px 0; border-radius: 6px;">
+                <div style="color: #38bdf8; font-weight: bold; font-size: 1.05em; margin-bottom: 5px;">
+                    1. Nagy számoknál (<span style="color: #34d399;">n</span> pozitív):
+                </div>
+                <p style="margin: 0 0 8px 0; color: #cbd5e1;">A kitevő azt mutatja, hány helyet léptünk balra a tizedesvesszővel.</p>
+                <p style="margin: 0; font-family: monospace; font-size: 1.05em;">
+                    ➔ 5 600 000 = <b>5,6 · 10<sup>6</sup></b> <span style="color: #94a3b8; font-size: 0.9em;">(itt <span style="color: #fbbf24;">a</span> = 5,6 és <span style="color: #34d399;">n</span> = 6)</span>
+                </p>
             </div>
+
+            <!-- 2. Példa -->
+            <div style="background-color: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; padding: 12px; margin: 12px 0; border-radius: 6px;">
+                <div style="color: #38bdf8; font-weight: bold; font-size: 1.05em; margin-bottom: 5px;">
+                    2. Kicsi számoknál (<span style="color: #34d399;">n</span> negatív):
+                </div>
+                <p style="margin: 0 0 8px 0; color: #cbd5e1;">A kitevő azt mutatja, hány helyet léptünk jobbra a tizedesvesszővel.</p>
+                <p style="margin: 0; font-family: monospace; font-size: 1.05em;">
+                    ➔ 0,00042 = <b>4,2 · 10<sup>-4</sup></b> <span style="color: #94a3b8; font-size: 0.9em;">(itt <span style="color: #fbbf24;">a</span> = 4,2 és <span style="color: #34d399;">n</span> = -4)</span>
+                </p>
+            </div>
+
+            <!-- 3. Példa -->
+            <div style="background-color: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; padding: 12px; margin: 12px 0; border-radius: 6px;">
+                <div style="color: #38bdf8; font-weight: bold; font-size: 1.05em; margin-bottom: 5px;">
+                    3. Különleges eset (<span style="color: #34d399;">n</span> = 0):
+                </div>
+                <p style="margin: 0 0 8px 0; color: #cbd5e1;">Mivel bármely szám nulladik hatványa 1 (10<sup>0</sup> = 1), ha a szám eleve 1 és 10 között van, a kitevő nulla lesz.</p>
+                <p style="margin: 0; font-family: monospace; font-size: 1.05em;">
+                    ➔ 7,3 = <b>7,3 · 10<sup>0</sup></b> <span style="color: #94a3b8; font-size: 0.9em;">(mert 7,3 · 1 = 7,3)</span>
+                </p>
+            </div>
+
+            <hr style="border-color: #334155; margin: 20px 0;">
+
+            <h4 style="color: #38bdf8; margin-top: 10px;">📖 Tankönyvi feladatok & Videó</h4>
+            <p><b>Tk. 44–47. oldal:</b> Szöveges feladatok megoldása egyenlettel vagy anélkül.</p>
+            <p style="font-size: 0.9em; color: #94a3b8;">Fejezet bevezető részének áttanulmányozása, a benne lévő példák önálló megoldása és összehasonlítása a példa megoldásával.</p>
+            
+            <p><b>Oktató videó:</b><br>
+                🎬 <a href="https://www.youtube.com/watch?v=2J1McBHkOQk" target="_blank" style="color: #38bdf8; font-weight: bold; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 1. RÉSZ (Árpás Attila)</a>
+            </p>
+
+            <!-- Brave tipp doboz -->
+            <div style="background-color: rgba(34, 197, 94, 0.1); border-left: 5px solid #22c55e; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                <h4 style="color: #4ade80; margin-top: 0;">💡 Otthoni tipp a zavartalan videónézéshez</h4>
+                <p style="margin-bottom: 10px; color: #cbd5e1;">
+                    Ha otthoni számítógépen, okostelefonon vagy saját táblagépen szeretnétek reklámok nélkül megnézni a magyarázó videókat, ajánljuk a <b>Brave böngésző</b> használatát, amely automatikusan blokkolja a zavaró hirdetéseket.
+                </p>
+                <p style="margin-bottom: 0; color: #cbd5e1;">
+                    Az alkalmazás áruházakon kívül PC-re, Androidra és iOS eszközökre is közvetlenül innen érhető el: 
+                    <a href="https://brave.com/hu/download/" target="_blank" style="color: #4ade80; font-weight: bold; text-decoration: underline;">Brave letöltése a hivatalos oldalról</a>.
+                </p>
+            </div>
+
+            <hr style="border-color: #334155; margin: 20px 0;">
+            <p><strong>Táblakép:</strong></p>
+            <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
         </div>
     </div>
-
+</div>
     <div id="modal-hazi" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-hazi')">&times;</span>
@@ -99,26 +167,76 @@
     </div>
 
     <div id="modal-szorgalmi" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('modal-szorgalmi')">&times;</span>
-            <h3 style="color: var(--accent-green); margin-top:0;">⭐ Szorgalmi feladat</h3>
-            <div class="modal-body">
-                <p><strong>Cím / Téma:</strong> Hatványozás - elméleti összefoglaló és értékelő kvíz</p>
-                Egyéni feldolgozás: <a href="https://csernyesuli.github.io/hatvanyozas.html">Hatványozás - elméleti összegolaló és kvíz</a> 
-                <hr style="border-color: var(--border-color);">
-                <p><strong>Táblakép:</strong></p>
-                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
+    <div class="modal-content" style="background-color: #1e293b; color: #f8fafc; border: 1px solid #334155; max-width: 600px;">
+        <span class="modal-close" onclick="closeModal('modal-szorgalmi')" style="color: #94a3b8; cursor: pointer;">&times;</span>
+        <h3 style="color: #4ade80; margin-top:0; border-bottom: 2px solid #4ade80; padding-bottom: 8px;">⭐ Szorgalmi feladat & Teljes Videósorozat</h3>
+        <div class="modal-body" style="text-align: left; font-size: 0.95em; line-height: 1.6;">
+            <p><strong>Cím / Téma:</strong> Szöveges feladatok megoldása egyenletek segítségével – Teljes gyűjtemény</p>
+            <p style="color: #cbd5e1;">Az alábbi videósorozat a szorgalmasabbak számára nyújt lépésről lépésre részletes magyarázatot a szöveges feladatok egyenlettel történő megoldásához.</p>
+            
+            <hr style="border-color: #334155; margin: 15px 0;">
+
+            <h4 style="color: #38bdf8; margin-top: 10px;">🎬 Oktató videók listája (1–23. Rész):</h4>
+            
+            <!-- Görgethető doboz a hosszú videólistához -->
+            <div style="max-height: 280px; overflow-y: auto; padding-right: 10px; background-color: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid #334155;">
+                <ul style="padding-left: 20px; margin: 0; list-style-type: disc;">
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=2J1McBHkOQk" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 1. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=_JN1A9sV864" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 2. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=9r33a-5ftDs" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 3. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=uU6kaLnu0Po" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 4. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=6XgCd3vEh_M" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 5. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=4QxZGiL8iso" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 6. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=hXmjdJLCpyc" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 7. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=_sVvtVhEoZY" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 8. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=01VtA6_lIsM" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 9. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=9IUJl-tpclo" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 10. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=MjRGmJEL_-8" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 11. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=9eI7d4K-g2k" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 12. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=v1QwW3RHNYg" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 13. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=hn4YBCCg0qY" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 14. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=IO3ChWXds60" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 15. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=1W85Gf8Oz2g" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 16/1. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=rXPF34tzrH0" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 16/2. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=PiVnbsWepOE" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 17. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=AeykPVBSiec" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 18. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=umIUmNM8Ju4" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 19. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=01EYsg0vSS4" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 20. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=PIRu3FkjLxA" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 21. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=zeLPhoPSFLc" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 22. RÉSZ</a></li>
+                    <li style="margin-bottom: 8px;"><a href="https://www.youtube.com/watch?v=bMACEq0CF8c" target="_blank" style="color: #38bdf8; text-decoration: underline;">SZÖVEGES FELADATOK MEGOLDÁSA EGYENLETEK SEGÍTSÉGÉVEL – 23. RÉSZ</a></li>
+                </ul>
             </div>
-           <!-- LEBEGŐ ABLAKOK (MODAL-OK) --> </div>
+
+            <!-- Brave tipp doboz -->
+            <div style="background-color: rgba(34, 197, 94, 0.1); border-left: 5px solid #22c55e; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                <h4 style="color: #4ade80; margin-top: 0;">💡 Otthoni tipp a zavartalan videónézéshez</h4>
+                <p style="margin-bottom: 10px; color: #cbd5e1;">
+                    Ha otthoni számítógépen, okostelefonon vagy saját táblagépen szeretnétek reklámok nélkül megnézni a magyarázó videókat, ajánljuk a <b>Brave böngésző</b> használatát, amely automatikusan blokkolja a zavaró hirdetéseket.
+                </p>
+                <p style="margin-bottom: 0; color: #cbd5e1;">
+                    Az alkalmazás áruházakon kívül PC-re, Androidra és iOS eszközökre is közvetlenül innen érhető el: 
+                    <a href="https://brave.com/hu/download/" target="_blank" style="color: #4ade80; font-weight: bold; text-decoration: underline;">Brave letöltése a hivatalos oldalról</a>.
+                </p>
+            </div>
+
+            <hr style="border-color: #334155; margin: 15px 0;">
+            <p><strong>Táblakép:</strong></p>
+            <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
         </div>
     </div>
+</div>
 
     <div id="modal-archive" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('modal-archive')">&times;</span>
             <h3 style="color: #38bdf8; margin-top:0;">📂 Archív óra anyaga</h3>
             <div class="modal-body">
-                <p>A kiválasztott korábbi óra visszatöltött adatai és feladatai jelennek meg itt.</p>
+                <p><strong>Cím / Téma:</strong> Hatványozás - elméleti összefoglaló és értékelő kvíz</p>
+                Egyéni feldolgozás: <a href="https://csernyesuli.github.io/hatvanyozas.html">Hatványozás - elméleti összegolaló és kvíz</a> 
+                <hr style="border-color: var(--border-color);">
+                <p><strong>Táblakép:</strong></p>
+                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
             </div>
         </div>
     </div>

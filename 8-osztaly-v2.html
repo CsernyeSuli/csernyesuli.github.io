@@ -3,624 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematika Dolgozat - Hatványozás</title>
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <title>8. Osztály - Matematika</title>
+    <!-- Külső stíluslap csatolása -->
+    <link rel="stylesheet" href="osztalylap_style.css">
+    <!-- MathJax betöltése a matematikai képletekhez -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <header>
+        <h2>8. Osztály - Matematika</h2>
+        <a href="index.html" class="btn-back">⬅ Vissza a Főoldalra</a>
+    </header>
+
+    <div class="layout">
+        
+        <!-- BAL OLDALSÁV: ARCHÍVUM (Csak a tartalom méretére nő) -->
+        <aside class="sidebar">
+            <h3>📂 Órai Archívum</h3>
+            <ul class="archive-list">
+               <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 10. 19. - Szerkesztés alatt</li>
+                 <li class="archive-item" onclick="openModal('modal-archive')">📅 2026. 10. 21. - <a href="https://csernyesuli.github.io/8-osztaly-szoveges.html">Felvételire</a></li>
+                
+            </ul>
+        </aside>
+
+        <!-- JOBB OLDALI FŐTERÜLET -->
+        <main class="main-content">
+            <h3 class="date-title">Aktuális óra tananyaga</h3>
+
+            <div class="task-grid">
+                
+                <!-- 1. ÓRAI FELADATOK DOBOZ -->
+                <div class="task-card card-orai" onclick="openModal('modal-orai')">
+                    <h4>📘 Órai feladatok</h4>
+                    <div class="card-preview">
+                        Hatványozás - felmérő
+                    </div>
+                    <span class="click-hint">Részletek ➔</span>
+                </div>
+
+                <!-- 2. HÁZI FELADAT DOBOZ -->
+                <div class="task-card card-hazi" onclick="openModal('modal-hazi')">
+                    <h4>✏️ Házi feladat</h4>
+                    <div class="card-preview">
+                        Szerkesztés alatt.
+                    </div>
+                    <span class="click-hint">Részletek ➔</span>
+                </div>
+
+                <!-- 3. SZORGLMI FELADAT DOBOZ -->
+                <div class="task-card card-szorgalmi" onclick="openModal('modal-szorgalmi')">
+                    <h4>⭐ Szorgalmi feladat</h4>
+                    <div class="card-preview">
+                        Az órai online elméleti összefoglalalást és a kvízt újra megcsinálhatod, ha sikererrel jársz javíthatsz az órai eredményeden.
+                    </div>
+                    <span class="click-hint">Részletek ➔</span>
+                </div>
+
+            </div>
+
+           
+
+        </main>
+
+    </div>
+
+    <!-- LEBEGŐ ABLAKOK (MODAL-OK) -->
+    <div id="modal-orai" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-orai')">&times;</span>
+            <h3 style="color: #38bdf8; margin-top:0;">📘 Órai feladatok</h3>
+            <div class="modal-body">
+                <p><strong>Cím / Téma:</strong> Hatványozás, azonosságok</p><br>
+                <p>A felmérőt az órán kapott tableten kell megoldanod!<br> A végén megtudod az értékelést, ami automatikusan elküldésre kerül az email címemre.</p>
+                <p><strong>Online felmérő:</strong> <a href="https://csernyesuli.github.io/hatvanyozas-felmero.html">Kezd el itt!</a></p>
+                <hr style="border-color: var(--border-color);">
+                <p><strong>Táblakép:</strong></p>
+                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-hazi" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-hazi')">&times;</span>
+            <h3 style="color: var(--accent-orange); margin-top:0;">✏️ Házi feladat</h3>
+            <div class="modal-body">
+                <p><strong>Szerkesztés alatt:</strong> ------------------------</p>
+                <p><strong>Határidő:</strong> Következő óra</p>
+                <hr style="border-color: var(--border-color);">
+                <p style="color: #94a3b8; font-style: italic;">[ Házi feladat fotója / feladatsor helye ]</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-szorgalmi" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-szorgalmi')">&times;</span>
+            <h3 style="color: var(--accent-green); margin-top:0;">⭐ Szorgalmi feladat</h3>
+            <div class="modal-body">
+                <p><strong>Cím / Téma:</strong> Hatványozás - elméleti összefoglaló és értékelő kvíz</p>
+                Egyéni feldolgozás: <a href="https://csernyesuli.github.io/hatvanyozas.html">Hatványozás - elméleti összegolaló és kvíz</a> 
+                <hr style="border-color: var(--border-color);">
+                <p><strong>Táblakép:</strong></p>
+                <p style="color: #94a3b8; font-style: italic;">[ Kép / Táblakép helye ]</p>
+            </div>
+           <!-- LEBEGŐ ABLAKOK (MODAL-OK) --> </div>
+        </div>
+    </div>
+
+    <div id="modal-archive" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-archive')">&times;</span>
+            <h3 style="color: #38bdf8; margin-top:0;">📂 Archív óra anyaga</h3>
+            <div class="modal-body">
+                <p>A kiválasztott korábbi óra visszatöltött adatai és feladatai jelennek meg itt.</p>
+            </div>
+        </div>
+    </div>
+
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-page: #f8fafc;
-            --card-bg: #ffffff;
-            --border: #bdc3c7;
-            --text: #0f172a;
-            --danger: #ef4444;
-            --success: #27ae60;
+        /* ÚJ: Biztosítja, hogy az oldalsáv magassága csak a saját tartalmáig érjen */
+        .sidebar {
+            align-self: flex-start;
+            /* Ide jöhetnek a korábbi .sidebar stílusaid (pl. background, padding, border-radius) */
         }
 
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            background-color: #f4f7f6;
-            color: var(--text);
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
+        /* Szöveges rész formázása */
+        .math-notes {
+            margin-top: 40px;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .container {
-            max-width: 750px;
-            width: 100%;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 30px;
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        /* Haladási sáv */
-        .progress-container {
-            width: 100%;
-            background-color: #e2e8f0;
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            height: 10px;
-            margin-bottom: 25px;
-            overflow: hidden;
+            border-left: 5px solid #38bdf8;
         }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
+        .math-notes h3 {
+            margin-top: 0;
+            color: #38bdf8;
         }
-
-        .page {
-            display: none;
+        .math-notes h4 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #f43f5e;
         }
-
-        .page.active {
-            display: block;
-        }
-
-        h1 {
-            font-size: 26px;
+        .qa-section p {
             margin-bottom: 15px;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        p.desc {
-            color: #475569;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 16px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 18px;
-            outline: none;
-            box-sizing: border-box;
-            -webkit-user-select: text;
-            user-select: text;
-        }
-
-        .form-group input:focus {
-            border-color: #3498db;
-        }
-
-        /* Példa és elméleti doboz */
-        .example-box {
-            background-color: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-size: 18px;
-            color: #b45309;
-            line-height: 1.6;
-        }
-
-        /* UGYANAZ A PROFI ELRENDEZÉS, MINT A PRÓBAKÓDBAN */
-        .task-row {
-            font-size: 26px;
-            font-weight: bold;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 10px;
-        }
-
-        .task-number {
-            color: #2c3e50;
-            margin-right: 5px;
-        }
-
-        /* Speciális doboz a hatványalapnak és a kitevőnek */
-        .power-box {
-            display: inline-flex;
-            align-items: flex-start;
-            position: relative;
-            padding-top: 12px;
-            margin-right: 5px;
-        }
-
-        .base {
-            font-size: 30px;
-            line-height: 1;
-        }
-
-        /* Kitevő beviteli mező */
-        .exponent-input {
-            width: 38px;
-            height: 35px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            border: 2px solid #bdc3c7;
-            border-radius: 6px;
-            outline: none;
-            background-color: #ffffff;
-            transform: translateY(-16px);
-            transition: all 0.2s;
-            box-sizing: border-box;
-            padding: 0;
-            -webkit-user-select: text;
-            user-select: text;
-        }
-
-        .exponent-input:focus {
-            border-color: #3498db;
-            background-color: #e8f4fd;
-        }
-
-        /* Normál végeredmény beviteli mező */
-        .result-input {
-            width: 110px;
-            height: 42px;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            outline: none;
-            background-color: #ffffff;
-            margin-left: 5px;
-            box-sizing: border-box;
-            -webkit-user-select: text;
-            user-select: text;
-        }
-
-        .result-input:focus {
-            border-color: #3498db;
-            background-color: #e8f4fd;
-        }
-
-        /* Sima HTML felső index pontosítás */
-        sup.math-sup {
-            font-size: 20px;
-            position: relative;
-            top: -0.5em;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-next {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-next:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-prev {
-            background-color: #e2e8f0;
-            color: #475569;
-        }
-
-        .btn-submit {
-            background-color: var(--success);
-            color: white;
-        }
-
-        .btn-cancel {
-            background-color: #94a3b8;
-            color: white;
-        }
-
-        /* Sikeres záró oldal dizájn */
-        .success-card {
-            background: #ecfdf5;
-            border: 2px solid #10b981;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            color: #065f46;
-        }
-
-        .success-card h2 {
-            color: #047857;
-            margin-bottom: 15px;
-        }
-
-        /* Modálok */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 35px;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 420px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-content h3 {
-            color: var(--danger);
-            margin-bottom: 12px;
-            font-size: 1.4rem;
-        }
-
-        .modal-content p {
-            color: #475569;
-            font-size: 1rem;
             line-height: 1.5;
+        }
+        .notes-list {
+            padding-left: 20px;
             margin-bottom: 20px;
+        }
+        .notes-list li {
+            margin-bottom: 8px;
+            line-height: 1.4;
         }
     </style>
-</head>
-<body oncontextmenu="return false;">
 
-<div class="container" id="mainContainer">
-    <!-- Haladási sáv -->
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
-
-    <form id="quizForm" autocomplete="off">
-        
-        <!-- 0. LAP: Tájékoztató és Névbekérő -->
-        <div class="page active" id="page-0">
-            <h1>Matematika Dolgozat: Hatványozás</h1>
-            <p class="desc">
-                Kedves Tanuló!<br>
-                A dolgozat kitöltésére álló idő alatt önállóan, tabletről dolgozz. A feladatok az üresen hagyott helyek kitöltését igénylik. A lapok között a „Tovább” és „Vissza” gombokkal navigálhatsz.
-                <br><br>
-                📝 <strong>HASZNOS TUDNIVALÓ:</strong>
-                <br>- A kapott papírlapon végezd el a szükséges számításokat, átalakításokat; a papírlapot a végén nem kell beadni.
-                <br><br>
-                ⚠️ <strong>FONTOS SZABÁLYOK ÉS FIGYELMEZTETÉSEK:</strong>
-                <br>- Ha a dolgozatot többször nyitod meg vagy küldöd be, a rendszerben <strong>kizárólag a legkorábban beérkezett megoldásod</strong> lesz érvényes!
-                <br>- Tilos a lap elhagyása, alkalmazásváltás vagy értesítési sáv lehúzása. Lapelhagyás esetén az oldal azonnal leblokkol és a dolgozat elölről kezdődik.
-            </p>
-
-            <div class="form-group">
-                <label for="studentName">Saját neved (Vezetéknév és Keresztnév):</label>
-                <input type="text" id="studentName" placeholder="Pl. Minta Anna" required autocomplete="off">
-            </div>
-
-            <div class="nav-buttons" style="justify-content: flex-end;">
-                <button type="button" class="btn btn-next" onclick="startQuiz()">Dolgozat Kezdése</button>
-            </div>
-        </div>
-
-        <!-- 1. LAP: 1. Feladat -->
-        <div class="page" id="page-1">
-            <h2>1. Oldal: Egészítsd ki a következő egyenlőségeket!</h2>
-            
-            <div class="example-box">
-                <strong>Például:</strong> 2 &middot; 2 &middot; 2 &middot; 2 = 2<sup class="math-sup">4</sup> = 16
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">1. a)</span>
-                <span>5 &middot; 5 &middot; 5 =</span>
-                <div class="power-box">
-                    <span class="base">5</span>
-                    <input type="text" id="q1a_exp" class="exponent-input" inputmode="numeric">
-                </div>
-                <span>=</span>
-                <input type="text" id="q1a_val" class="result-input" inputmode="numeric">
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">1. b)</span>
-                <span>10 &middot; 10 &middot; 10 &middot; 10 &middot; 10 &middot; 10 =</span>
-                <div class="power-box">
-                    <span class="base">10</span>
-                    <input type="text" id="q1b_exp" class="exponent-input" inputmode="numeric">
-                </div>
-                <span>=</span>
-                <input type="text" id="q1b_val" class="result-input" style="width: 140px;" inputmode="numeric">
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">1. c)</span>
-                <span>(-0,1) &middot; (-0,1) &middot; (-0,1) &middot; (-0,1) &middot; (-0,1) &middot; (-0,1) =</span>
-                <div class="power-box">
-                    <span class="base">(-0,1)</span>
-                    <input type="text" id="q1c_exp" class="exponent-input" inputmode="numeric">
-                </div>
-                <span>=</span>
-                <input type="text" id="q1c_val" class="result-input" style="width: 140px;" inputmode="numeric">
-            </div>
-
-            <div class="nav-buttons">
-                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
-                <button type="button" class="btn btn-next" onclick="changePage(1)">Tovább</button>
-            </div>
-        </div>
-
-        <!-- 2. LAP: 2. Feladat -->
-        <div class="page" id="page-2">
-            <h2>2. Oldal: Hatványok szorzata</h2>
-
-            <div class="example-box">
-                <strong>2. Figyeld meg, majd fogalmazd meg az összefüggést!</strong><br>
-                3<sup class="math-sup">5</sup> &middot; 3<sup class="math-sup">7</sup> = (3 &middot; 3 &middot; 3 &middot; 3 &middot; 3) &middot; (3 &middot; 3 &middot; 3 &middot; 3 &middot; 3 &middot; 3 &middot; 3) = 3<sup class="math-sup">5+7</sup> = 3<sup class="math-sup">12</sup><br>
-                <small style="color: #64748b; font-size: 15px;">(5 tényező &middot; 7 tényező = összesen 12 tényező)</small><br><br>
-                Az előzőhöz hasonlóan értelmezd a következő hatványok szorzatát:
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">a)</span>
-                <span>7<sup class="math-sup">5</sup> &middot; 7<sup class="math-sup">7</sup> =</span>
-                <div class="power-box">
-                    <span class="base">7</span>
-                    <input type="text" id="q2a_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">b)</span>
-                <span>5<sup class="math-sup">3</sup> &middot; 5<sup class="math-sup">7</sup> =</span>
-                <div class="power-box">
-                    <span class="base">5</span>
-                    <input type="text" id="q2b_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">c)</span>
-                <span>7<sup class="math-sup">3</sup> &middot; 7 =</span>
-                <div class="power-box">
-                    <span class="base">7</span>
-                    <input type="text" id="q2c_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">d)</span>
-                <span>3<sup class="math-sup">5</sup> &middot; 3<sup class="math-sup">2</sup> &middot; 3<sup class="math-sup">4</sup> =</span>
-                <div class="power-box">
-                    <span class="base">3</span>
-                    <input type="text" id="q2d_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-
-            <div class="task-row">
-                <span class="task-number">e)</span>
-                <span>9<sup class="math-sup">2</sup> &middot; 9<sup class="math-sup">0</sup> &middot; 9<sup class="math-sup">1</sup> =</span>
-                <div class="power-box">
-                    <span class="base">9</span>
-                    <input type="text" id="q2e_exp" class="exponent-input" inputmode="numeric">
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
-                <button type="button" class="btn btn-submit" onclick="confirmSubmit()">Befejezés és Beküldés</button>
-            </div>
-        </div>
-
-        <!-- 3. LAP: Záró / Eredményjelző oldal -->
-        <div class="page" id="page-success">
-            <div class="success-card">
-                <h2>🎉 Köszönjük a kitöltést!</h2>
-                <p id="successMessage" style="font-size: 1.1rem; color: #065f46; margin-bottom: 10px;">
-                    Dolgozatodat sikeresen rögzítettük és elküldtük a tanár úrnak.
-                </p>
-                <p id="scoreDisplay" style="font-size: 1.25rem; font-weight: bold; color: #047857; margin-top: 15px;"></p>
-            </div>
-        </div>
-
-    </form>
-</div>
-
-<!-- Megerősítő Modal beküldés előtt -->
-<div class="modal" id="confirmModal" style="display: none;">
-    <div class="modal-content">
-        <h3 style="color: var(--primary);">Biztosan befejezed?</h3>
-        <p>Ha rákattintasz a küldésre, a válaszaid véglegesítésre kerülnek, és elküldjük az eredményt a tanárnak.</p>
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-            <button type="button" class="btn btn-cancel" onclick="closeConfirmModal()">Mégse</button>
-            <button type="button" class="btn btn-submit" onclick="executeSubmit()">Igen, Küldés</button>
-        </div>
-    </div>
-</div>
-
-<!-- Azonnali sötétítő figyelmeztető ablak lapelhagyáskor -->
-<div class="modal" id="penaltyModal">
-    <div class="modal-content">
-        <h3>⚠️ FIGYELEM! LAPELHAGYÁS!</h3>
-        <p>Elhagytad az oldalt, váltottál az ablakok között vagy az értesítési sávot használtad! A szabályok értelmében a dolgozatod letiltásra és nullázásra került.</p>
-        <button class="btn btn-next" onclick="closeModal()">Értettem, Újraindítás</button>
-    </div>
-</div>
-
-<script>
-    // --- EMAILJS INICIALIZÁLÁSA ---
-    (function(){
-        emailjs.init("hsRvek-Jff5scNP1B");
-    })();
-
-    let currentPage = 0;
-    const totalPages = 2; 
-    let quizStarted = false;
-
-    function updateProgress() {
-        if (currentPage <= totalPages) {
-            const progress = (currentPage / totalPages) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
+    <script>
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
         }
-    }
-
-    function startQuiz() {
-        const name = document.getElementById('studentName').value.trim();
-        if(!name) {
-            alert("Kérjük, add meg a nevedet a folytatáshoz!");
-            return;
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
-        quizStarted = true;
-        changePage(1);
-    }
-
-    function changePage(delta) {
-        const pages = document.querySelectorAll('.page');
-        pages[currentPage].classList.remove('active');
-        
-        currentPage += delta;
-        pages[currentPage].classList.add('active');
-
-        updateProgress();
-        window.scrollTo(0, 0);
-    }
-
-    // --- AZONNALI SÖTÉTÍTŐ LAPELHAGYÁS VÉDELEM ---
-    window.addEventListener('blur', function() {
-        if (quizStarted) {
-            triggerPenalty();
-        }
-    });
-
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden && quizStarted) {
-            triggerPenalty();
-        }
-    });
-
-    window.addEventListener('pagehide', function() {
-        if (quizStarted) {
-            triggerPenalty();
-        }
-    });
-
-    function triggerPenalty() {
-        document.getElementById('penaltyModal').style.display = 'flex';
-        document.getElementById('quizForm').reset();
-    }
-
-    function closeModal() {
-        document.getElementById('penaltyModal').style.display = 'none';
-        quizStarted = false;
-        currentPage = 0;
-        
-        const pages = document.querySelectorAll('.page');
-        pages.forEach(p => p.classList.remove('active'));
-        pages[0].classList.add('active');
-        updateProgress();
-    }
-
-    // --- MEGERŐSÍTŐ MODAL KEZELÉSE ---
-    function confirmSubmit() {
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('confirmModal').style.display = 'none';
-    }
-
-    // --- KIÉRTÉKELÉS ÉS BEKÜLDÉS E-MAILBEN ---
-    function executeSubmit() {
-        closeConfirmModal();
-        quizStarted = false; 
-        const studentName = document.getElementById('studentName').value.trim();
-        
-        let score = 0;
-        let maxPoints = 11;
-
-        if(document.getElementById('q1a_exp').value.trim() === '3') score++;
-        if(document.getElementById('q1a_val').value.trim() === '125') score++;
-
-        if(document.getElementById('q1b_exp').value.trim() === '6') score++;
-        if(document.getElementById('q1b_val').value.trim().replace(/\s/g, '') === '1000000') score++;
-
-        if(document.getElementById('q1c_exp').value.trim() === '6') score++;
-        let val1c = document.getElementById('q1c_val').value.trim().replace(',', '.');
-        if(val1c === '0.000001' || val1c === '.000001') score++;
-
-        if(document.getElementById('q2a_exp').value.trim() === '12') score++;
-        if(document.getElementById('q2b_exp').value.trim() === '10') score++;
-        if(document.getElementById('q2c_exp').value.trim() === '4') score++;
-        if(document.getElementById('q2d_exp').value.trim() === '11') score++;
-        if(document.getElementById('q2e_exp').value.trim() === '3') score++;
-
-        let percentage = Math.round((score / maxPoints) * 100);
-        let scoreString = `${score} / ${maxPoints} pont (${percentage}%)`;
-
-        let detailsText = 
-            `1.a feladat: kitevő=${document.getElementById('q1a_exp').value}, érték=${document.getElementById('q1a_val').value}\n` +
-            `1.b feladat: kitevő=${document.getElementById('q1b_exp').value}, érték=${document.getElementById('q1b_val').value}\n` +
-            `1.c feladat: kitevő=${document.getElementById('q1c_exp').value}, érték=${document.getElementById('q1c_val').value}\n` +
-            `2.a feladat: kitevő=${document.getElementById('q2a_exp').value}\n` +
-            `2.b feladat: kitevő=${document.getElementById('q2b_exp').value}\n` +
-            `2.c feladat: kitevő=${document.getElementById('q2c_exp').value}\n` +
-            `2.d feladat: kitevő=${document.getElementById('q2d_exp').value}\n` +
-            `2.e feladat: kitevő=${document.getElementById('q2e_exp').value}\n`;
-
-        const templateParams = {
-            from_name: studentName,
-            score: scoreString,
-            details: detailsText
-        };
-
-        // Küldés az EmailJS-nek
-        emailjs.send("service_kbrr2is", "template_4f0cvfq", templateParams, "hsRvek-Jff5scNP1B")
-            .then(function(response) {
-               document.getElementById('successMessage').innerHTML = `<strong>${studentName}</strong> nevű tanuló dolgozatát sikeresen elküldtük a tanár úrnak.`;
-               document.getElementById('scoreDisplay').innerHTML = `Elért eredményed: ${scoreString}`;
-               
-               const pages = document.querySelectorAll('.page');
-               pages[currentPage].classList.remove('active');
-               document.getElementById('page-success').classList.add('active');
-               document.getElementById('progressBar').style.width = '100%';
-            }, function(error) {
-               alert("Hiba történt az e-mail küldése során. Kérlek, szólj a tanárnak!");
-               console.log("FAILED...", error);
-            });
-    }
-</script>
+    </script>
 
 </body>
 </html>

@@ -1,5 +1,4 @@
-# csernyesuli.github.io
-# 7. osztály kódja / MINTA
+# csernyesuli.github.io  7. osztály kódja / MINTA
 
 Itt látható a forráskódja:
 

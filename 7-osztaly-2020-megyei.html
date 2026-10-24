@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- MathJax a törtekhez -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript">
         (function() {
             emailjs.init("hsRvek-Jff5scNP1B");
@@ -72,6 +75,9 @@
             padding: 8px 20px;
             border-radius: 20px;
             font-size: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .stat-correct { color: #4ade80; font-weight: bold; }
@@ -86,6 +92,8 @@
             padding: 10px 15px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .btn {
@@ -207,6 +215,29 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
+        }
+
+        .modal-nav-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-modal-nav {
+            background: rgba(30, 27, 75, 0.9);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-modal-nav:hover {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: #fbbf24;
         }
 
         .modal-content {
@@ -223,6 +254,7 @@
             justify-content: space-between;
             gap: 8px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .task-image-box {
@@ -270,15 +302,16 @@
             color: #4ade80 !important;
         }
 
-        .option-item.status-wrong {
-            background: rgba(239, 68, 68, 0.25) !important;
-            border-color: #ef4444 !important;
-            color: #f87171 !important;
-        }
-
         .option-icon {
             margin-left: auto;
             font-size: 16px;
+        }
+
+        .option-img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 4px;
+            margin-left: 10px;
         }
 
         .feedback-box {
@@ -302,8 +335,9 @@
             <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 20px;">7. osztályos megyei forduló (2019/2020)</p>
 
             <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 8px; text-align: left; font-size: 13px; color: #cbd5e1; margin-bottom: 20px;">
-                <p style="margin-bottom: 8px;"><i class="fa-solid fa-circle-info" style="color: #fbbf24;"></i> <strong>Tájékoztatás:</strong> A név megadása kötelező. A megoldásaid az EmailJS rendszeren keresztül automatikusan elküldésre kerülnek.</p>
-                <p><i class="fa-solid fa-rotate-right" style="color: #fbbf24;"></i> Bármelyik feladatot újrapróbálhatod vagy újraindíthatsz.</p>
+                <p style="margin-bottom: 8px;"><i class="fa-solid fa-clock-rotate-left" style="color: #fbbf24;"></i> <strong>Tájékoztatás:</strong> Nem kell egyszerre minden feladatot megcsinálnod, később is visszajöhetsz és folytathatod!</p>
+                <p style="margin-bottom: 8px;"><i class="fa-solid fa-paper-plane" style="color: #fbbf24;"></i> A feladatok ablakának bezárásakor az eddigi eredmények automatikusan elküldésre kerülnek a csernyei.iskola@gmail.com címre.</p>
+                <p><i class="fa-solid fa-rotate-right" style="color: #fbbf24;"></i> Helytelen válasz esetén legfeljebb 5 alkalommal próbálkozhatsz.</p>
             </div>
 
             <input type="text" id="student-name" placeholder="Add meg a neved..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; margin-bottom: 15px;">
@@ -339,7 +373,9 @@
             <h2 style="color: #fbbf24; margin-bottom: 15px;">Címlap & Versenyszabályzat</h2>
             <p style="margin-bottom: 20px; color: #cbd5e1; font-size: 15px; line-height: 1.6;">
                 Üdvözöljük a Zrínyi Ilona Matematikaverseny 7. osztályos interaktív feladatlapján!<br>
-                Válaszd ki a kívánt válaszlehetőséget, majd nyomd meg az <strong>Ellenőrzés</strong> gombot!
+                <strong>Nem kell egyszerre minden feladatot megcsinálnod, bármikor visszajöhetsz és folytathatod!</strong><br><br>
+                Válaszd ki a kívánt válaszlehetőséget, majd nyomd meg az <strong>Ellenőrzés</strong> gombot!<br>
+                A feladatok ablakának bezárásakor az eredmények automatikusan elküldésre kerülnek a tanárnak.
             </p>
             <button onclick="changePage(1)" class="btn">Kezdés (2. oldal) <i class="fa-solid fa-arrow-right"></i></button>
         </div>
@@ -363,7 +399,7 @@
         </div>
     </div>
 
-    <!-- LEBEGŐ ABLAK (MODAL) -->
+    <!-- LEBEGŐ ABLAK (MODAL) A FELADATOKHOZ -->
     <div id="task-modal" class="modal-overlay hidden">
         <div class="modal-body">
             <div class="modal-header">
@@ -371,20 +407,51 @@
                     <h3 id="modal-title" style="color: #fbbf24;">Feladat</h3>
                     <div id="modal-attempts" style="font-size: 12px; color: #cbd5e1; margin-top: 2px;">Próbálkozások: 0 / 5</div>
                 </div>
+                <!-- Fejlécbe áthelyezett navigációs gombok -->
+                <div class="modal-nav-group">
+                    <button onclick="navigateTask(-1)" class="btn-modal-nav"><i class="fa-solid fa-chevron-left mr-1"></i> Előző</button>
+                    <button onclick="navigateTask(1)" class="btn-modal-nav">Következő <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                </div>
                 <i class="fa-solid fa-xmark" onclick="askClose()" style="cursor: pointer; font-size: 20px; color: #cbd5e1;"></i>
             </div>
-            <div class="modal-content">
+            <div class="modal-content" id="modal-content-box">
                 <div id="modal-image-container"></div>
                 <div id="modal-text" style="margin-bottom: 20px; font-size: 15px; line-height: 1.5; color: #e2e8f0;"></div>
                 <div id="modal-options"></div>
                 <div id="modal-feedback" class="feedback-box hidden"></div>
             </div>
             <div class="modal-footer">
-                <button onclick="resetTask()" class="btn btn-secondary" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #60a5fa;"><i class="fa-solid fa-rotate-right mr-1"></i> Újraindítás</button>
-                <button onclick="revealSolution()" class="btn btn-secondary">Megoldás</button>
+                <button onclick="revealSolution()" class="btn btn-secondary">Megoldás megmutatása</button>
                 <button onclick="checkAnswer()" id="check-btn" class="btn-check"><i class="fa-solid fa-check mr-1"></i> Ellenőrzés</button>
                 <button onclick="askClose()" class="btn">Bezárás</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MÁSODIK LEBEGŐ ABLAK: HELYTELEN VÁLASZ FIGYELMEZTETŐ -->
+    <div id="wrong-modal" class="modal-overlay hidden" style="z-index: 1100;">
+        <div class="modal-body" style="padding: 25px; text-align: center; max-width: 450px; border-color: #ef4444;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 45px; color: #f87171; margin-bottom: 15px;"></i>
+            <h2 style="color: #f87171; margin-bottom: 10px;">Helytelen válasz!</h2>
+            <p id="wrong-modal-text" style="font-size: 14px; color: #cbd5e1; margin-bottom: 25px; line-height: 1.5;">
+                A kiválasztott válasz nem helyes. Próbáld újra, vagy fejezd be a feladatot!
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="continueRetry()" class="btn-check" style="background: #3b82f6;"><i class="fa-solid fa-rotate-right mr-1"></i> Próbáld újra</button>
+                <button onclick="finishTaskFailed()" class="btn" style="background: #ef4444; color: #fff;"><i class="fa-solid fa-flag-checkered mr-1"></i> Befejezés</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÉRTESÍTŐ MODAL A SIKERES BEKÜLDÉSRŐL -->
+    <div id="email-sent-modal" class="modal-overlay hidden" style="z-index: 1200;">
+        <div class="modal-body" style="padding: 25px; text-align: center; max-width: 450px; border-color: #22c55e;">
+            <i class="fa-solid fa-circle-check" style="font-size: 45px; color: #4ade80; margin-bottom: 15px;"></i>
+            <h2 style="color: #4ade80; margin-bottom: 10px;">Eredmények elküldve!</h2>
+            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 25px; line-height: 1.5;">
+                Az eredmények automatikusan elküldve a <strong>csernyei.iskola@gmail.com</strong> címre.
+            </p>
+            <button onclick="document.getElementById('email-sent-modal').classList.add('hidden')" class="btn-check" style="width: 100%;">Rendben</button>
         </div>
     </div>
 
@@ -400,42 +467,69 @@
         };
 
         const tasks = {
-            1: { text: "Juditnak öt olyan könyve van, amelynek a címében szerepel egy szám (lásd ábra). Ha a címekben szereplő öt számot összeadjuk, akkor azt a számot kapjuk eredményül, amely szerepel Zsófi könyvének a címében. Mi Zsófi könyvének a címe?", options: { A: "A két Lotti", B: "101 kiskutya", C: "77 magyar népmese", D: "80 nap alatt a Föld körül", E: "Gombos Jim és a Rettegett 13" }, img: "img/task-1.png" },
+            1: { text: "Juditnak öt olyan könyve van, amelynek a címében szerepel egy szám (lásd ábra). Ha a címekben szereplő öt számot összeadjuk, akkor azt a számot kapjuk eredményül, amely szerepel Zsófi könyvének a címében. Mi Zsófi könyvének a címe?", options: { A: "A két Lotti", B: "101 kiskutya", C: "77 magyar népmese", D: "80 nap alatt a Föld körül", E: "Gombos Jim és a Rettegett 13" }, img: "img-zrinyi2020/zrinyi2020task-1.png" },
             2: { text: "Mennyi a 2020 legnagyobb és legkisebb pozitív osztójának összege?", options: { A: "1010", B: "1012", C: "2019", D: "2020", E: "2021" } },
             3: { text: "Peti az EKEELCMSLKCES betűsorban minden második betűt összeolvasott. Melyik szót kapta?", options: { A: "KEVÉS", B: "KECSES", C: "KERGE", D: "KECSKE", E: "KELLEMES" } },
             4: { text: "Mennyivel van több lába összesen 1 kacsának és 2 kutyának, mint ahány fejük van összesen?", options: { A: "3", B: "6", C: "7", D: "9", E: "5" } },
             5: { text: "Mennyi a (20-19) - (20-20) · (20-21) műveletsor eredménye?", options: { A: "-1", B: "0", C: "1", D: "2", E: "3" } },
-            6: { text: "Öt kisliba libasorban úszik a tóban (lásd ábra: Gági, Uszi, Totyi, Bukó, Pici). Uszi lebukik a víz alá és a sor végére úszik, majd Pici is lebukik és a sor elejére úszik. Hányadik a libasorban ezután Bukó?", options: { A: "1.", B: "2.", C: "3.", D: "4.", E: "5." }, img: "img/task-6.png" },
+            6: { text: "Öt kisliba libasorban úszik a tóban (lásd ábra). Egyszer gondol egyet Uszi, lebukik a víz alá, és a sor végére úszik, majd Pici is lebukik a víz alá, és a sor elejére úszik. Hányadik a libasorban ezután Bukó?", options: { A: "1.", B: "2.", C: "3.", D: "4.", E: "5." }, img: "img-zrinyi2020/zrinyi2020task-6.png" },
             7: { text: "Manófalván 221 manó lakik, minden házban ugyanannyi. Több ház van Manófalván, mint ahányan egy házban laknak, és minden házban legalább 2 manó lakik. Hány ház van Manófalván?", options: { A: "7", B: "11", C: "13", D: "17", E: "19" } },
-            8: { text: "Pityu reggel 7 óra előtt 20 perccel ébredt. Ezután 15 perc lustálkodás és fél óra készülődés után elindult az iskolába. Mennyi volt ekkor a pontos idő?", options: { A: "7:15", B: "7:25", C: "7:35", D: "7:45", E: "7:55" } },
+            8: { text: "Pityu reggel 7 óra előtt 20 perccel ébredt. Ezután 15 perc lustálkodás és még fél óra készülődés után elindult az iskolába. Mennyi volt ekkor a pontos idő?", options: { A: "7:15", B: "7:25", C: "7:35", D: "7:45", E: "7:55" } },
             9: { text: "Anna, Bea, Cili és Dóri egyszerre érnek reggel az iskola kapujához. Hány különböző sorrendben mehetnek be egymás után az iskola kapuján, ha Dóri előzékeny, és mindenkit maga elé enged?", options: { A: "4", B: "6", C: "12", D: "18", E: "24" } },
-            10: { text: "Az ábrán látható alakzat négy egyforma négyzetből áll. Karcsi két ilyen alakzatot kivágott papírból, és egymás mellé rakta azokat. Melyiket nem kaphatta?", options: { A: "A alakzat", B: "B alakzat", C: "C alakzat", D: "D alakzat", E: "E alakzat" }, img: "img/task-10.png" },
-            11: { text: "A MÉZESKALÁCSORSZÁG betűkártyákból Júlia kirakott négy szót (ACÉL, KÁROS, SZÁM, SZEG, ZSÁKOS). Melyik szót írta Anna a lapra ötödikként?", options: { A: "ACÉL", B: "KÁROS", C: "SZÁM", D: "SZEG", E: "ZSÁKOS" }, img: "img/task-11.png" },
-            12: { text: "A Mézga család TV csomagjában 120 csatorna van (20% sport, 30% zene, 5% főzés, a többi film). Hány csatornán sugároznak mesefilmeket, ha ezek száma a filmcsatornák számának a fele?", options: { A: "6", B: "24", C: "27", D: "34", E: "36" } },
-            13: { text: "Hány olyan kör van az ábrán, amelyben és a mellette lévő két körben is prímszám látható?", options: { A: "4", B: "5", C: "6", D: "7", E: "8" }, img: "img/task-13.png" },
-            14: { text: "Egy cukrászdában két mignon és egy gombóc fagyi 800 Ft, míg három mignon és két gombóc fagyi 1300 Ft. Hány forintot fizet Marci egy mignonért?", options: { A: "250", B: "270", C: "300", D: "320", E: "350" } },
-            15: { text: "Gombóc Artúr egy téglalap alakú csokit három részre vágott (kettő látható az ábrán). Melyik nem lehet a harmadik darab?", options: { A: "A darab", B: "B darab", C: "C darab", D: "D darab", E: "E darab" }, img: "img/task-15.png" },
-            16: { text: "A XXXII. Nyári Olimpiai Játékok 2020-ban lettek rendezve. Hányadik Zrínyi Ilona Matematikaversenyt bonyolították le a XXVII. Nyári Olimpiai Játékok rendezésének évében?", options: { A: "XI.", B: "XII.", C: "XXV.", D: "XXVI.", E: "XXVII." } },
-            17: { text: "A 9834; 5123; 8072 és 9560 számok mindegyikére igaz, hogy mind a három másik számmal egy azonos számjegye van. Melyik az az ötödik szám, amivel ugyanez teljesül?", options: { A: "1748", B: "2761", C: "4691", D: "6417", E: "7364" } },
-            18: { text: "Az ábrán két számot megcserélünk úgy, hogy minden sorban és oszlopban ugyanannyi legyen az összeg. Az egyik megcserélt szám a 9. Melyik a másik?", options: { A: "1", B: "2", C: "3", D: "4", E: "5" }, img: "img/task-18.png" },
-            19: { text: "Ha egy ötjegyű szám végére 1-est írunk, háromszorosa lesz annak, mint amikor az elejére írjuk az 1-est. Mi az ötjegyű szám utolsó számjegye?", options: { A: "1", B: "3", C: "5", D: "7", E: "9" } },
-            20: { text: "Hány olyan pozitív egész szám van, amelynek számjegyei prímszámok és számjegyeinek szorzata 60?", options: { A: "6", B: "8", C: "12", D: "18", E: "végtelen sok" } },
+            10: { 
+                text: "Az ábrán látható alakzat négy egyforma négyzetből áll. Karcsi két ilyen alakzatot kivágott papírból, és egymás mellé rakta azokat. Melyiket nem kaphatta?", 
+                img: "img-zrinyi2020/zrinyi2020task-10.png",
+                options: { A: "A alakzat", B: "B alakzat", C: "C alakzat", D: "D alakzat", E: "E alakzat" },
+                optImgs: {
+                    A: "img-zrinyi2020/zrinyi2020task-10-a.png",
+                    B: "img-zrinyi2020/zrinyi2020task-10-b.png",
+                    C: "img-zrinyi2020/zrinyi2020task-10-c.png",
+                    D: "img-zrinyi2020/zrinyi2020task-10-d.png",
+                    E: "img-zrinyi2020/zrinyi2020task-10-e.png"
+                }
+            },
+            11: { 
+                text: "A MÉZESKALÁCSORSZÁG betűkártyákból az ötödikes Júlia kirakott négy szót úgy, hogy a négy szóhoz minden kártyát felhasznált, és ezt a négy szót leírta egy lapra. Húga, a harmadikos Anna ugyanerre a lapra leírt egy szót, így a lapon most már öt szó van (lásd ábra). Melyik szót írta Anna a lapra?", 
+                options: { A: "ACÉL", B: "KÁROS", C: "SZÁM", D: "SZEG", E: "ZSÁKOS" }, 
+                img: "img-zrinyi2020/zrinyi2020task-11.png" 
+            },
+            12: { text: "A Mézga család TV előfizetési csomagjában 120 csatorna van. A csatornák 20%-án sportot, 30%-án zenét, 5%-án főzőműsorokat, a többi csatornán filmeket sugároznak. Hány csatornán sugároznak mesefilmeket, ha ezek száma a filmcsatornák számának a fele?", options: { A: "6", B: "24", C: "27", D: "34", E: "36" } },
+            13: { text: "Hány olyan kör van az ábrán, amelyben és a mellette lévő két körben is prímszám látható?", options: { A: "4", B: "5", C: "6", D: "7", E: "8" }, img: "img-zrinyi2020/zrinyi2020task-13.png" },
+            14: { text: "Egy cukrászdában két mignon és egy gombóc fagyi együtt 800 Ft-ba, míg három mignon és két gombóc fagyi együtt 1300 Ft-ba kerül. Hány forintot fizet Marci, ha csak egy mignont vásárol?", options: { A: "250", B: "270", C: "300", D: "320", E: "350" } },
+            15: { 
+                text: "Gombóc Artúr egy téglalap alakú csokoládét három téglalap alakú darabra vágott. Ezek közül a darabok közül kettő az ábrán látható. Melyik nem lehet a harmadik darab?", 
+                options: { A: "A darab", B: "B darab", C: "C darab", D: "D darab", E: "E darab" }, 
+                img: "img-zrinyi2020/zrinyi2020task-15.png",
+                optImgs: {
+                    A: "img-zrinyi2020/zrinyi2020task-15-a.png",
+                    B: "img-zrinyi2020/zrinyi2020task-15-b.png",
+                    C: "img-zrinyi2020/zrinyi2020task-15-c.png",
+                    D: "img-zrinyi2020/zrinyi2020task-15-d.png",
+                    E: "img-zrinyi2020/zrinyi2020task-15-e.png"
+                }
+            },
+            16: { text: "A XXXII. Nyári Olimpiai Játékokat 2020-ban Tokióban bonyolítják le. Ebben az évben a Mategye Alapítvány a XXXI. Zrínyi Ilona Matematikaversenyt rendezi meg. A nyári olimpiai játékok négyévente, a Zrínyi Ilona Matematikaverseny évente kerül megrendezésre. Hányadik Zrínyi Ilona Matematikaversenyt bonyolították le a XXVII. Nyári Olimpiai Játékok rendezésének évében?", options: { A: "XI.", B: "XII.", C: "XXV.", D: "XXVI.", E: "XXVII." } },
+            17: { text: "A 9834; 5123; 8072 és 9560 számok mindegyikére igaz, hogy mind a három másik számmal egy azonos számjegye van. Melyik az a szám, amelyiket az előző négy számhoz hozzávéve mind az öt számra teljesül, hogy mind a négy másik számmal egy azonos számjegye van?", options: { A: "1748", B: "2761", C: "4691", D: "6417", E: "7364" } },
+            18: { text: "Az ábrán két számot megcserélünk úgy, hogy minden oszlopban és minden sorban ugyanannyi legyen a számok összege. A két szám közül az egyik a 9. Melyik a másik szám?", options: { A: "1", B: "2", C: "3", D: "4", E: "5" }, img: "img-zrinyi2020/zrinyi2020task-18.png" },
+            19: { text: "Ha egy ötjegyű szám végére 1-est írunk, akkor egy olyan hatjegyű számot kapunk, ami háromszorosa annak a hatjegyű számnak, amit úgy kapnánk meg, ha az ötjegyű szám elejére írnánk az 1-est. Mi az utolsó számjegye az ötjegyű számnak?", options: { A: "1", B: "3", C: "5", D: "7", E: "9" } },
+            20: { text: "Hány olyan pozitív egész szám van, amelynek a számjegyei prímszámok és a számjegyeinek szorzata 60?", options: { A: "6", B: "8", C: "12", D: "18", E: "végtelen sok" } },
             21: { text: "Egy háromszög két belső szögének szögfelezője 54°-os szöget zár be. Hány fokos a háromszög harmadik belső szöge?", options: { A: "54", B: "66", C: "72", D: "108", E: "126" } },
-            22: { text: "Egy 1 cm oldalhosszúságú négyzet harmadolópontjaiból kiválasztunk hármat, és kiszámoljuk a háromszög területét. Hány cm² a legkisebb terület?", options: { A: "1/18", B: "1/12", C: "1/9", D: "1/6", E: "1/4" } },
-            23: { text: "Az ábrán látható összeadásban (KEC + SKE = KUPA) azonos betűk azonos számjegyek. Mennyi az A+P+U+K összeg lehetséges legnagyobb értéke?", options: { A: "10", B: "11", C: "18", D: "19", E: "27" }, img: "img/task-23.png" },
-            24: { text: "A 7.b osztályból 6-an szeretnének versenyezni (Antal, Botond, Cili, Dani, Emil, Flóra). Az ábrán látható barátságok alapján hányféle háromfős csapat indítható?", options: { A: "2", B: "3", C: "4", D: "6", E: "20" }, img: "img/task-24.png" },
-            25: { text: "Egy urnában piros, kék és zöld golyók vannak (40 kék vagy zöld, 30 nem kék, kétszer annyi piros, mint zöld). Hány golyó van összesen az urnában?", options: { A: "60", B: "70", C: "100", D: "120", E: "140" } },
-            26: { text: "Artúr király kerekasztala körül négyen ülnek (Lancelot, Galahad, Bedivere, Artúr). Vallomásaik alapján hány igazmondó van jelen?", options: { A: "0", B: "1", C: "2", D: "3", E: "4" } },
-            27: { text: "4x4-es négyzetrács fehér négyzeteiből szürkítünk úgy, hogy mind a 16 négyzetnek legyen fehér szomszédja. Hány négyzetet színezünk szürkére a lehető legtöbb esetén?", options: { A: "8", B: "10", C: "12", D: "14", E: "16" }, img: "img/task-27.png" },
-            28: { text: "Bea csokrokat készít (3-féle virág/csokor, 20 szegfű, 25 gerbera, 30 rózsa, 45 tulipán áll rendelkezésre). Hány csokrot készíthet a lehető legtöbb esetben?", options: { A: "35", B: "36", C: "37", D: "38", E: "45" } },
-            29: { text: "9 pontos érintőképernyős feloldóminta (A-ból indul, B-ben végződik, közben 2 ponton halad át). Hányféle ilyen minta állítható be?", options: { A: "12", B: "14", C: "16", D: "18", E: "Az előzőek közül egyik sem." }, img: "img/task-29.png" },
-            30: { text: "Hány különböző útvonal vezet az ábra A pontjából a B pontjába a megadott irányok szerint?", options: { A: "243", B: "256", C: "325", D: "343", E: "372" }, img: "img/task-30.png" }
+            22: { text: "Egy 1 cm oldalhosszúságú négyzet minden oldalának bejelöltük a harmadolópontjait. A nyolc harmadolópontból minden lehetséges módon kiválasztunk hármat, és kiszámoljuk az általuk meghatározott háromszög területét. Hány négyzetcentiméter az így kapott legkisebb terület?", options: { A: "$$\\frac{1}{18}$$", B: "$$\\frac{1}{12}$$", C: "$$\\frac{1}{9}$$", D: "$$\\frac{1}{6}$$", E: "$$\\frac{1}{4}$$" }, img: "img-zrinyi2020/zrinyi2020task-22.png" },
+            23: { text: "Az ábrán látható összeadásban az azonos betűk azonos, a különböző betűk nem biztos, hogy különböző számjegyeket jelölnek, és az összeg négyjegyű szám. Mennyi az A+P+U+K összeg lehetséges legnagyobb értéke?", options: { A: "10", B: "11", C: "18", D: "19", E: "27" }, img: "img-zrinyi2020/zrinyi2020task-23.png" },
+            24: { text: "Egy versenyre háromfős csapatok jelentkezését várják. Fontos, hogy a csapattagok mind jóban legyenek egymással, mert a versenyen együtt kell majd működniük. A 7.b osztályból induló csapatban hatan szeretnének részt venni, Antal, Botond, Cili, Dani, Emil és Flóra. Az ábrán a gyerekeket pontokkal és nevük kezdőbetűivel ábrázoltuk. A vonalak azt mutatják, hogy közülük ki kivel van jóban. Hányféle lehet az osztályt képviselő háromfős csapat?", options: { A: "2", B: "3", C: "4", D: "6", E: "20" }, img: "img-zrinyi2020/zrinyi2020task-24.png" },
+            25: { text: "Egy urnában piros, kék és zöld színű golyók vannak. A golyók közül 40 golyó kék vagy zöld, 30 golyó nem kék és kétszer annyi piros golyó van, mint zöld golyó. Hány golyó van összesen az urnában?", options: { A: "60", B: "70", C: "100", D: "120", E: "140" } },
+            26: { text: "Négyen ülnek most Artúr király kerekasztala körül: Sir Lancelot, Sir Galahad, Sir Bedivere és Artúr király. Mindegyikükről tudjuk, hogy vagy mindig igazat mond, vagy mindig hazudik. Egy alkalommal a lovagok a következőket állították:\nSir Lancelot: „Nincs közöttünk igazmondó.”\nSir Galahad: „Közülünk legfeljebb ketten mondanak igazat.”\nSir Bedivere: „Artúr király soha nem mond igazat.”\nHány igazmondó van most Artúr király kerekasztala körül?", options: { A: "0", B: "1", C: "2", D: "3", E: "4" } },
+            27: { text: "Az ábrán látható 4x4-es négyzetrács 16 fehér négyzete közül szürkére színezünk néhányat úgy, hogy a színezés után mind a 16 négyzetnek legyen olyan szomszédos négyzete, amely fehér. Hány négyzetet színezünk szürkére, ha azok száma a lehető legtöbb? (Két négyzet szomszédos, ha van közös oldaluk.)", options: { A: "8", B: "10", C: "12", D: "14", E: "16" }, img: "img-zrinyi2020/zrinyi2020task-27.png" },
+            28: { text: "Bea csokrokat készít. Mindegyik csokor háromféle virágot tartalmaz. A csokrokhoz 20 szegfűt, 25 gerberát, 30 rózsát és 45 tulipánt használhat fel. Hány csokrot készít el Bea, ha azok száma a lehető legtöbb?", options: { A: "35", B: "36", C: "37", D: "38", E: "45" } },
+            29: { text: "A feloldóminta érintőképernyők biztonsági kódjaként használatos. A feloldóminta az érintőképernyőn látható 9 pontból néhányat összekötő, egymáshoz csatlakozó szakaszokból álló vonal, amelyben számít az összekötés sorrendje. A feloldóminta vonala a megadott 9 pont mindegyikén csak egyszer haladhat áthaladni. Hány olyan feloldóminta állítható be, amelyik az ábra A pontjából indul, a B pontjában végződik, és közben a többi 7 pont közül kettőn halad át? (A 9 pont egy négyzetrács rácspontjai.)", options: { A: "12", B: "14", C: "16", D: "18", E: "Az előzőek közül egyik sem." }, img: "img-zrinyi2020/zrinyi2020task-29.png" },
+            30: { text: "Hány különböző útvonal vezet az ábra A pontjából a B pontjába, ha egy útvonal a vonalakon lefelé, felfelé, jobbra vagy jobbra felfelé haladhat, és az ábra bármely szakaszán legfeljebb egyszer haladhat végig? (Két útvonal különböző, ha van olyan szakasz, amelyen az egyik áthalad, a másik nem.)", options: { A: "243", B: "256", C: "325", D: "343", E: "372" }, img: "img-zrinyi2020/zrinyi2020task-30.png" }
         };
 
         let activeUser = "";
         let page = 1;
         let currentTask = null;
         let taskData = {};
+        let emailSent = false;
 
         for(let i=1; i<=30; i++) {
             taskData[i] = { status: 'unsolved', selected: null, wrongOpts: [], attempts: 0 };
@@ -527,7 +621,7 @@
                 document.getElementById('check-btn').disabled = true;
             } else if(taskData[id].status === 'failed') {
                 feedback.className = 'feedback-box feedback-failed';
-                feedback.innerHTML = '<i class="fa-solid fa-xmark"></i> Ez a feladat sikertelenként rögzítve. Az Újraindítás gombbal újrapróbálhatod.';
+                feedback.innerHTML = '<i class="fa-solid fa-xmark"></i> Ez a feladat sikertelenként rögzítve.';
                 document.getElementById('check-btn').disabled = true;
             } else {
                 feedback.className = 'feedback-box hidden';
@@ -535,6 +629,22 @@
             }
 
             document.getElementById('task-modal').classList.remove('hidden');
+            document.getElementById('modal-content-box').scrollTop = 0;
+            
+            if(window.MathJax) {
+                MathJax.typeset();
+            }
+        }
+
+        function navigateTask(direction) {
+            let nextId = currentTask + direction;
+            if(nextId >= 1 && nextId <= 30) {
+                openTask(nextId);
+            } else if(nextId < 1) {
+                alert('Ez az első feladat!');
+            } else {
+                alert('Ez volt az utolsó feladat!');
+            }
         }
 
         function renderOptions(id) {
@@ -546,10 +656,7 @@
                 item.className = 'option-item';
                 
                 let iconHtml = '';
-                if(taskData[id].wrongOpts.includes(opt)) {
-                    item.classList.add('status-wrong');
-                    iconHtml = '<i class="fa-solid fa-xmark option-icon"></i>';
-                } else if(taskData[id].status === 'correct' && opt === keys[id]) {
+                if(taskData[id].status === 'correct' && opt === keys[id]) {
                     item.classList.add('status-correct');
                     iconHtml = '<i class="fa-solid fa-check option-icon"></i>';
                 } else if(taskData[id].selected === opt) {
@@ -558,18 +665,24 @@
 
                 if(taskData[id].status === 'unsolved') {
                     item.onclick = () => {
-                        if(taskData[id].wrongOpts.includes(opt)) return;
                         taskData[id].selected = opt;
                         renderOptions(id);
                     };
                 }
 
-                item.innerHTML = `
-                    <span><strong>${opt})</strong> ${tasks[id].options[opt]}</span>
-                    ${iconHtml}
-                `;
+                let contentHtml = `<span><strong>${opt})</strong> ${tasks[id].options[opt]}</span>`;
+                
+                if(tasks[id].optImgs && tasks[id].optImgs[opt]) {
+                    contentHtml += `<img src="${tasks[id].optImgs[opt]}" alt="${opt} opció képe" class="option-img" onerror="this.style.display='none'">`;
+                }
+
+                item.innerHTML = contentHtml + iconHtml;
                 optsContainer.appendChild(item);
             });
+
+            if(window.MathJax) {
+                MathJax.typeset();
+            }
         }
 
         function checkAnswer() {
@@ -596,78 +709,103 @@
                 updateStats();
                 renderGrids();
                 renderOptions(id);
-
-                sendEmailResult(id, "Helyes");
             } else {
-                if(!taskData[id].wrongOpts.includes(selected)) {
-                    taskData[id].wrongOpts.push(selected);
-                }
-                taskData[id].selected = null;
-
                 if(taskData[id].attempts >= 5) {
-                    taskData[id].status = 'failed';
-                    feedback.className = 'feedback-box feedback-failed';
-                    feedback.innerHTML = '<i class="fa-solid fa-xmark"></i> Helytelen válasz. A próbálkozások száma kimerült, a feladat sikertelen!';
-                    document.getElementById('check-btn').disabled = true;
-                    sendEmailResult(id, "Sikertelen (kimerült próbálkozások)");
+                    finishTaskFailed();
                 } else {
-                    feedback.className = 'feedback-box feedback-failed';
-                    feedback.innerHTML = `<i class="fa-solid fa-xmark"></i> Helytelen válasz! Próbáld újra! (${taskData[id].attempts}/5)`;
+                    document.getElementById('wrong-modal-text').innerHTML = `
+                        A megadott válasz nem helyes.<br>
+                        <strong>Eddigi próbálkozások száma: ${taskData[id].attempts} / 5</strong>
+                    `;
+                    document.getElementById('wrong-modal').classList.remove('hidden');
                 }
-                updateStats();
-                renderGrids();
-                renderOptions(id);
             }
         }
 
-        function revealSolution() {
+        function continueRetry() {
             if(!currentTask) return;
             const id = currentTask;
+            taskData[id].selected = null;
+            taskData[id].wrongOpts = []; 
+            document.getElementById('wrong-modal').classList.add('hidden');
+            renderOptions(id);
+        }
+
+        function finishTaskFailed() {
+            if(!currentTask) return;
+            const id = currentTask;
+            
             taskData[id].status = 'failed';
+            document.getElementById('wrong-modal').classList.add('hidden');
             
             const feedback = document.getElementById('modal-feedback');
             feedback.classList.remove('hidden');
             feedback.className = 'feedback-box feedback-failed';
-            feedback.innerHTML = `A helyes válasz: <strong>${keys[id]}) ${tasks[id].options[keys[id]]}</strong>. A feladat eredménye: Sikertelen.`;
-            document.getElementById('check-btn').disabled = true;
+            feedback.innerHTML = `<i class="fa-solid fa-xmark"></i> Ez a feladat sikertelenként lezárva. A helyes válasz lett volna: <strong>${keys[id]}) ${tasks[id].options[keys[id]]}</strong>`;
             
+            document.getElementById('check-btn').disabled = true;
             updateStats();
             renderGrids();
             renderOptions(id);
-            sendEmailResult(id, "Megoldás megtekintve (Sikertelen)");
         }
 
-        function resetTask() {
+        function revealSolution() {
             if(!currentTask) return;
-            const id = currentTask;
-            taskData[id] = { status: 'unsolved', selected: null, wrongOpts: [], attempts: 0 };
-            updateStats();
-            renderGrids();
-            openTask(id);
+            finishTaskFailed();
         }
 
-        // EmailJS beépített küldés a te kulcsaiddal
-        function sendEmailResult(taskId, resultStatus) {
+        // BEZÁRÁSKOR AUTOMATIKUS E-MAIL KÜLDÉS
+        function askClose() {
+            if (confirm("Biztosan be akarja zárni az ablakot?")) {
+                document.getElementById('task-modal').classList.add('hidden');
+
+                if (!emailSent && activeUser) {
+                    sendSummaryEmailSilent();
+                }
+            }
+        }
+
+        function sendSummaryEmailSilent() {
+            let correctCount = 0;
+            let failedCount = 0;
+            let unsolvedCount = 0;
+            let detailsText = "";
+
+            for(let i=1; i<=30; i++) {
+                let st = taskData[i].status;
+                let statLabel = "Megoldatlan";
+                if(st === 'correct') {
+                    statLabel = "Helyes";
+                    correctCount++;
+                } else if(st === 'failed') {
+                    statLabel = "Sikertelen";
+                    failedCount++;
+                } else {
+                    unsolvedCount++;
+                }
+                detailsText += `${i}. feladat: ${statLabel} (${taskData[i].attempts} próbálkozás)\n`;
+            }
+
             const templateParams = {
                 to_name: "Tanár úr",
+                subject: `Zrínyi 2020 Összesítő - ${activeUser}`,
+                title: `Zrínyi 2020 Összesítő - ${activeUser}`,
                 student_name: activeUser,
-                task_number: taskId,
-                task_status: resultStatus,
-                correct_answer: keys[taskId]
+                name: activeUser,
+                task_number: "Összesített eredmények (1-30)",
+                task_status: `Helyes: ${correctCount}, Sikertelen: ${failedCount}, Megoldatlan: ${unsolvedCount}`,
+                attempts: "Összesen",
+                correct_answer: "-",
+                details: detailsText
             };
 
-            emailjs.send('service_kbrr2is', 'template_4f0cvfq', templateParams, 'hsRvek-Jff5scNP1B')
+            emailjs.send('service_kbrr2is', 'template_vtvagng', templateParams, 'hsRvek-Jff5scNP1B')
                 .then(function(response) {
-                    console.log('E-mail sikeresen elküldve!', response.status, response.text);
+                    emailSent = true;
+                    document.getElementById('email-sent-modal').classList.remove('hidden');
                 }, function(error) {
                     console.log('E-mail küldési hiba:', error);
                 });
-        }
-
-        function askClose() {
-            if(confirm("Biztosan be akarja zárni az ablakot?")) {
-                document.getElementById('task-modal').classList.add('hidden');
-            }
         }
 
         function updateStats() {

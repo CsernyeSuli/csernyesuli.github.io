@@ -14,6 +14,11 @@
             --border-color: #334155;
         }
 
+        /* Finom, sima görgetés a horgony linkekhez */
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -26,10 +31,21 @@
             background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
             color: white;
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 0.5rem 1rem; /* Margó megfelezve felül és alul */
         }
 
-        /* 3 FŐGOMB FENT */
+        header h1 {
+            margin: 0 0 4px 0;
+            font-size: 1.8rem;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* FŐGOMBOK FENT */
         nav {
             background-color: #1e293b;
             display: flex;
@@ -37,6 +53,7 @@
             gap: 20px;
             padding: 15px;
             border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
         }
 
         nav a {
@@ -47,7 +64,19 @@
             font-weight: 600;
             border-radius: 8px;
             text-decoration: none;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
+        }
+
+        /* Zrínyi gomb a menüben - Háttér egyezik a lenti dobozéval */
+        nav a.btn-zrinyi-nav {
+            background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
+            border: 2px solid var(--accent-gold);
+            color: #f59e0b;
+        }
+
+        nav a.btn-zrinyi-nav:hover {
+            background: #f59e0b;
+            color: #0f172a;
         }
 
         nav a:hover {
@@ -61,7 +90,7 @@
             padding: 0 20px;
         }
 
-        /* 3 OSZTÁLY DOBOZ / MONTÁZS */
+        /* OSZTÁLY DOBOZOK */
         .class-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -110,7 +139,7 @@
             background-color: var(--accent-blue);
         }
 
-        /* ZRÍNYI MATEMATIKA VERSENY DOBOZ / FÜL */
+        /* ZRÍNYI MATEMATIKA VERSENY DOBOZ A LAP ALJÁN */
         .competition-card {
             background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
             border: 2px solid var(--accent-gold);
@@ -123,6 +152,22 @@
             color: #f59e0b;
             margin-top: 0;
         }
+
+        .btn-competition {
+            display: inline-block;
+            background-color: #d97706;
+            color: #0f172a;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-competition:hover {
+            background-color: #f59e0b;
+        }
     </style>
 </head>
 <body>
@@ -132,16 +177,17 @@
         <p>Üdvözöljük a felkészítő és tananyag portálon!</p>
     </header>
 
-    <!-- FELSŐ 3 OSZTÁLYGOMB -->
+    <!-- FELSŐ GOMBOK -->
     <nav>
         <a href="6-osztaly.html">6. Osztály</a>
         <a href="7-osztaly.html">7. Osztály</a>
         <a href="8-osztaly.html">8. Osztály</a>
+        <a href="#zri-card" class="btn-zrinyi-nav">Zrínyi</a>
     </nav>
 
     <div class="container">
         
-        <!-- 3 AKTUÁLIS MONTÁZS DOBOZ -->
+        <!-- AKTUÁLIS MONTÁZS DOBOZOK -->
         <h2 style="text-align: center; margin-bottom: 20px;">Aktuális osztály-összefoglalók</h2>
         
         <div class="class-grid">
@@ -175,10 +221,11 @@
 
         </div>
 
-        <!-- ZRÍNYI MATEMATIKA VERSENY DOBOZ (Előkészítve) -->
-        <div class="competition-card">
+        <!-- ZRÍNYI MATEMATIKA VERSENY DOBOZ A LAP ALJÁN -->
+        <div id="zri-card" class="competition-card">
             <h3>🏆 Zrínyi Ilona Matematika Verseny</h3>
-            <p style="color: #cbd5e1;">[ Külön részleg a versenyfelkészüléshez, feladatsorokhoz és tájékoztatókhoz ]</p>
+            <p style="color: #cbd5e1;">7. osztályos megyei forduló (2019/2020) interaktív feladatsor és gyakorló.</p>
+            <a href="7-osztaly-2020-megyei.html" class="btn-competition">Zrínyi 2020 (7. Osztály) Megnyitása ➔</a>
         </div>
 
     </div>

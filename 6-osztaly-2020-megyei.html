@@ -4,181 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zrínyi Ilona Matematikaverseny 2020 - 6. osztály Megyei Forduló</title>
+    <!-- Külső stíluslap csatolása -->
+    <link rel="stylesheet" href="style.css">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <style>
-        :root {
-            --primary: #1e3a8a;
-            --primary-light: #3b82f6;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #0f172a;
-            --border: #e2e8f0;
-            --success: #16a34a;
-            --danger: #dc2626;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            margin-bottom: 25px;
-        }
-
-        header h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
-        header p { margin: 0; opacity: 0.9; }
-
-        .student-info-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            margin-bottom: 25px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .input-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .input-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--primary);
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-
-        .task-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .task-header {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            border-bottom: 2px solid #eff6ff;
-            padding-bottom: 8px;
-        }
-
-        .task-img {
-            max-width: 100%;
-            height: auto;
-            margin: 10px 0;
-            display: block;
-            border-radius: 6px;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .option-btn {
-            background: #f1f5f9;
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s;
-            font-size: 0.95rem;
-        }
-
-        .option-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .option-btn.selected {
-            background: var(--primary-light);
-            color: white;
-            border-color: var(--primary);
-            font-weight: 600;
-        }
-
-        .option-btn img {
-            max-width: 100%;
-            height: auto;
-            vertical-align: middle;
-        }
-
-        .action-area {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .submit-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-            transition: transform 0.1s, background 0.2s;
-        }
-
-        .submit-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-        }
-
-        #result-box {
-            display: none;
-            background: var(--card-bg);
-            border: 2px solid var(--primary);
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 25px;
-        }
-
-        .status-msg {
-            font-weight: bold;
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 6px;
-        }
-        .status-msg.success { background: #dcfce7; color: var(--success); }
-        .status-msg.error { background: #fee2e2; color: var(--danger); }
-    </style>
 </head>
 <body>
 
@@ -239,7 +68,7 @@
             </div>
         </div>
 
-        <!-- 4. Feladat (Képpel) -->
+        <!-- 4. Feladat -->
         <div class="task-card" data-task="4">
             <div class="task-header">4. feladat</div>
             <p>Öt kisliba libasorban úszik a tóban (lásd ábra). Egyszer gondol egyet Uszi, lebukik a víz alá, és a sor végére úszik. Majd Bukó is lebukik a víz alá, és a sor végére úszik. Hányadik a libasorban ezután Totyi?</p>
@@ -253,7 +82,7 @@
             </div>
         </div>
 
-        <!-- 5. Feladat (Képpel) -->
+        <!-- 5. Feladat -->
         <div class="task-card" data-task="5">
             <div class="task-header">5. feladat</div>
             <p>Az ábrán látható alakzat négy egyforma négyzetből áll. Karcsi két ilyen alakzatot kivágott papírból, és egymás mellé rakta azokat. Melyiket nem kaphatta?</p>
@@ -267,7 +96,7 @@
             </div>
         </div>
 
-        <!-- 6. Feladat (Képpel) -->
+        <!-- 6. Feladat -->
         <div class="task-card" data-task="6">
             <div class="task-header">6. feladat</div>
             <p>Hány különböző betűsort olvashatunk ki az ábrából, ha a bal felső négyzetben lévő H betűtől indulunk, a jobb alsó négyzetben lévő A betűhöz érkezünk, és a kiolvasás során egy alkalommal lépünk lefelé, minden más esetben jobbra lépünk egyet?</p>
@@ -281,7 +110,7 @@
             </div>
         </div>
 
-        <!-- 7. Feladat (Képpel) -->
+        <!-- 7. Feladat -->
         <div class="task-card" data-task="7">
             <div class="task-header">7. feladat</div>
             <p>Juditnak öt olyan könyve van, amelynek a címében szerepel egy szám (lásd ábra). Ha a címekben szereplő öt számot összeadjuk, akkor azt a számot kapjuk eredményül, amely szerepel Zsófi könyvének a címében. Mi Zsófi könyvének a címe?</p>
@@ -377,7 +206,7 @@
             </div>
         </div>
 
-        <!-- 14. Feladat (Képpel) -->
+        <!-- 14. Feladat -->
         <div class="task-card" data-task="14">
             <div class="task-header">14. feladat</div>
             <p>Az ábrán két számot megcserélünk úgy, hogy minden sorban és minden oszlopban ugyanannyi legyen a számok összege. A két szám közül az egyik a 9. Melyik a másik szám?</p>
@@ -391,7 +220,7 @@
             </div>
         </div>
 
-        <!-- 15. Feladat (Képpel) -->
+        <!-- 15. Feladat -->
         <div class="task-card" data-task="15">
             <div class="task-header">15. feladat</div>
             <p>A MÉZESKALÁCSORSZÁG betűkártyákból az ötödikes Júlia kirakott négy szót úgy, hogy a négy szóhoz minden kártyát felhasznált, és ezt a négy szót leírta egy lapra. Húga, a harmadikos Anna ugyanerre a lapra leírt egy szót, így a lapon most már öt szó van (lásd ábra). Melyik szót írta Anna a lapra?</p>
@@ -418,7 +247,7 @@
             </div>
         </div>
 
-        <!-- 17. Feladat (Képpel) -->
+        <!-- 17. Feladat -->
         <div class="task-card" data-task="17">
             <div class="task-header">17. feladat</div>
             <p>Az ábrán látható 3x3-as négyzetrács 9 fehér négyzete közül szürkére színezünk néhányat úgy, hogy a színezés után mind a 9 négyzetnek legyen olyan szomszédos négyzete, amely szürke. Hány négyzetet színezünk szürkére, ha azok száma a lehető legkevesebb? (Két négyzet szomszédos, ha van közös oldaluk.)</p>
@@ -432,7 +261,7 @@
             </div>
         </div>
 
-        <!-- 18. Feladat (Képpel) -->
+        <!-- 18. Feladat -->
         <div class="task-card" data-task="18">
             <div class="task-header">18. feladat</div>
             <p>Az ábrán látható összeadásban az azonos betűk azonos, a különböző betűk nem biztos, hogy különböző számjegyeket jelölnek, és az összeg négyjegyű szám. Mennyi a K+E+C+S+K+E összeg lehetséges legnagyobb értéke?</p>
@@ -485,7 +314,7 @@
             </div>
         </div>
 
-        <!-- 22. Feladat (Képpel) -->
+        <!-- 22. Feladat -->
         <div class="task-card" data-task="22">
             <div class="task-header">22. feladat</div>
             <p>Hány különböző útvonal vezet az ábra A pontjából a B pontjába, ha egy útvonal a vonalakon lefelé, felfelé, jobbra vagy jobbra felfelé haladhat, és az ábra bármely szakaszán legfeljebb egyszer haladhat végig? (Két útvonal különböző, ha van olyan szakasz, amelyen az egyik áthalad, a másik nem.)</p>
@@ -525,7 +354,7 @@
             </div>
         </div>
 
-        <!-- 25. Feladat (Képpel) -->
+        <!-- 25. Feladat -->
         <div class="task-card" data-task="25">
             <div class="task-header">25. feladat</div>
             <p>A feloldóminta érintőképernyők biztonsági kódjaként használatos. A feloldóminta az érintőképernyőn látható 9 pontból néhányat összekötő, egymáshoz csatlakozó szakaszokból álló vonal, amelyben számít az összekötés sorrendje. A feloldóminta vonala a megadott 9 pont mindegyikén csak egyszer haladhat át. Hány olyan feloldóminta állítható be, amelyik az ábra A pontjából indul, a B pontjában végződik, és közben a többi 7 pont közül kettőn halad át? (A 9 pont egy négyzetrács rácspontjai.)</p>
@@ -555,16 +384,16 @@
 <script>
     // EmailJS Inicializálása
     (function() {
-        emailjs.init("YOUR_PUBLIC_KEY"); // Helyettesítsd be a saját Public Key-eddel
+        emailjs.init("YOUR_PUBLIC_KEY");
     })();
 
-    // Helyes válaszok kulcsa a 6. osztályos 2020-as feladatsorhoz
+    // Hivatalos felülvizsgált megoldókulcs (6. évfolyam)
     const correctAnswers = {
-        1: "D", 2: "C", 3: "A", 4: "C", 5: "E",
-        6: "E", 7: "D", 8: "B", 9: "B", 10: "D",
-        11: "D", 12: "D", 13: "D", 14: "C", 15: "B",
-        16: "C", 17: "B", 18: "C", 19: "D", 20: "C",
-        21: "B", 22: "D", 23: "C", 24: "C", 25: "B"
+        1: "D", 2: "B", 3: "A", 4: "B", 5: "D",
+        6: "A", 7: "C", 8: "B", 9: "B", 10: "D",
+        11: "E", 12: "D", 13: "D", 14: "C", 15: "E",
+        16: "A", 17: "C", 18: "C", 19: "D", 20: "C",
+        21: "B", 22: "D", 23: "C", 24: "B", 25: "C"
     };
 
     const userAnswers = {};
@@ -612,7 +441,7 @@
             }
         }
 
-        // Zrínyi pontszám számítás (6. osztály)
+        // Zrínyi pontszám számítás
         const pontszam = (helyesDb * 4) - (hibasDb * 1);
 
         // Eredmény kijelzése
@@ -625,7 +454,7 @@
         detailsText.innerHTML = detailsList.join('<br>');
         resultBox.style.display = 'block';
 
-        // EmailJS paraméterek (A megegyezett formátummal a tárgyban)
+        // EmailJS adatok átadása
         const templateParams = {
             student_name: studentName,
             student_class: studentClass,
@@ -637,7 +466,7 @@
         emailStatus.className = 'status-msg';
         emailStatus.innerText = 'Eredmények küldése folyamatban...';
 
-        // EmailJS elküldése
+        // EmailJS küldés
         emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams)
             .then(function(response) {
                 emailStatus.className = 'status-msg success';

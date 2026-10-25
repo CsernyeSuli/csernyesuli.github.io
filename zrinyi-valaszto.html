@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zrínyi Ilona Matematikaverseny - Feladatlap Választó</title>
+    <link rel="stylesheet" href="zrinyilap-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0b1120;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Fejléc Zrínyi kártya stílusban */
+        .zrinyi-header-card {
+            background: linear-gradient(135deg, #1e293b 0%, #2e1065 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .zrinyi-header-card h1 {
+            color: #fbbf24;
+            font-size: 2rem;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .zrinyi-header-card p {
+            color: #cbd5e1;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .student-bar {
+            margin-top: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid #475569;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        /* Szűrő Panel */
+        .filter-panel {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-group label {
+            color: #fbbf24;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .filter-select {
+            background: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-select:focus {
+            border-color: #f59e0b;
+        }
+
+        /* Státusz jelvény a szűrők mellett */
+        .filter-status-badge {
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        /* Osztályválasztó Rács */
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .class-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            border-color: #f59e0b;
+            box-shadow: 0 12px 20px -5px rgba(245, 158, 11, 0.25);
+        }
+
+        .class-card h2 {
+            color: #38bdf8;
+            font-size: 1.5rem;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .class-card p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Gombok & Státuszok */
+        .btn-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .btn-select {
+            background: #d97706;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-select:hover:not(.disabled) {
+            background: #f59e0b;
+            color: #0f172a;
+        }
+
+        .btn-select.disabled {
+            background: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+            border: 1px solid #475569;
+        }
+
+        /* Előugró Szövegbuborékok (Tooltips) */
+        .tooltip-text, .filter-tooltip {
+            visibility: hidden;
+            width: 220px;
+            background-color: #f59e0b;
+            color: #0f172a;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 10px;
+            position: absolute;
+            z-index: 20;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 0.82rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .tooltip-text::after, .filter-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f59e0b transparent transparent transparent;
+        }
+
+        .btn-container:hover .tooltip-text.show,
+        .filter-group:hover .filter-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .status-icon {
+            font-size: 1.1rem;
+        }
+        .status-icon.available {
+            color: #22c55e; /* Élénk zöld */
+        }
+        .status-icon.unavailable {
+            color: #ef4444; /* Élénk piros */
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .back-home:hover {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LEBEGŐ ABLAK: NÉV ÉS OSZTÁLY BEKÉRÉSE -->
+    <div id="step1-modal" class="modal-overlay">
+        <div class="modal-body" style="padding: 30px; text-align: center; max-width: 450px; width: 90%; border: 2px solid #fbbf24; border-radius: 16px; background: #1e293b; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
+            <i class="fa-solid fa-user-pen" style="font-size: 45px; color: #fbbf24; margin-bottom: 12px;"></i>
+            <h2 style="color: #fbbf24; margin: 0 0 8px 0; font-size: 1.8rem;">Azonosítás</h2>
+            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 22px; line-height: 1.4;">Kérjük, add meg a nevedet és az osztályodat a feladatlapok eléréséhez!</p>
+
+            <input type="text" id="student-name" placeholder="Add meg a neved..." style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; outline: none;">
+            <input type="text" id="student-class" placeholder="Add meg az osztályod (pl. 6.A)..." style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; margin-bottom: 22px; box-sizing: border-box; font-size: 1rem; outline: none;">
+            
+            <button onclick="goToStep2()" class="btn-select" style="width: 100%; background: #d97706; color: #ffffff; font-size: 1.1rem; padding: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold;">
+                Tovább <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. LEBEGŐ ABLAK: TÁJÉKOZTATÓ ÉS MEGÉRTETTEM GOMB -->
+    <div id="step2-modal" class="modal-overlay hidden">
+        <div class="modal-body" style="padding: 30px; text-align: center; max-width: 520px; width: 90%; border: 2px solid #3b82f6; border-radius: 16px; background: #1e293b; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
+            <i class="fa-solid fa-graduation-cap" style="font-size: 48px; color: #fbbf24; margin-bottom: 12px;"></i>
+            <h2 style="color: #fbbf24; margin: 0 0 6px 0; font-size: 1.85rem;">Zrínyi Ilona Matematikaverseny</h2>
+            <p style="font-size: 15px; color: #93c5fd; margin-bottom: 20px; font-weight: 500;">Fontos tudnivalók a feladatok megoldásához</p>
+
+            <div style="background: rgba(15, 23, 42, 0.75); padding: 18px; border-radius: 10px; text-align: left; font-size: 14px; color: #e2e8f0; margin-bottom: 24px; border: 1px solid #334155;">
+                <p style="margin: 0 0 14px 0; line-height: 1.5;">
+                    <i class="fa-solid fa-clock-rotate-left" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> <strong>Tájékoztatás:</strong> Nem kell egyszerre minden feladatot megcsinálnod, később is visszajöhetsz és folytathatod!
+                </p>
+                <p style="margin: 0 0 14px 0; line-height: 1.5;">
+                    <i class="fa-solid fa-paper-plane" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> A feladatok ablakának bezárásakor az eddigi eredmények automatikusan elküldésre kerülnek a <strong>csernyei.iskola@gmail.com</strong> címre.
+                </p>
+                <p style="margin: 0; line-height: 1.5;">
+                    <i class="fa-solid fa-rotate-right" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> Helytelen válasz esetén legfeljebb 5 alkalommal próbálkozhatsz.
+                </p>
+            </div>
+
+            <button onclick="finishQuizStart()" class="btn-select" style="width: 100%; background: #f59e0b; color: #0f172a; font-size: 1.15rem; padding: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold;">
+                <i class="fa-solid fa-circle-check" style="margin-right: 8px;"></i> Megértettem, indítás
+            </button>
+        </div>
+    </div>
+
+    <!-- FŐ TARTALOM (DASHBOARD) -->
+    <div class="main-container">
+        <a href="index.html" class="back-home"><i class="fa-solid fa-house"></i> Vissza a Csernyesuli Főoldalra</a>
+
+        <div class="zrinyi-header-card">
+            <h1><i class="fa-solid fa-trophy"></i> Zrínyi Ilona Matematikaverseny</h1>
+            <p>Válaszd ki a tanévet, a fordulót és az évfolyamot!</p>
+            <div class="student-bar">
+                <i class="fa-solid fa-user" style="color: #fbbf24;"></i> Tanuló: <strong id="display-name" style="color: #fff;">-</strong> | 
+                Osztály: <strong id="display-class" style="color: #fff;">-</strong> 
+                <button onclick="resetStudentData()" style="background: none; border: none; color: #f87171; cursor: pointer; margin-left: 10px; font-size: 0.85rem;" title="Adatok módosítása"><i class="fa-solid fa-pen-to-square"></i> Módosítás</button>
+            </div>
+        </div>
+
+        <!-- SZŰRŐ PANEL (BUBORÉKOKKAL ÉS SZÍNES STÁTUSZOKKAL) -->
+        <div class="filter-panel">
+            <div class="filter-group">
+                <span id="tooltip-year" class="filter-tooltip">Válassz tanévet!</span>
+                <label for="select-year"><i class="fa-solid fa-calendar-days"></i> Tanév:</label>
+                <select id="select-year" class="filter-select" onchange="updateCardLabels()">
+                    <option value="" disabled selected>- válassz -</option>
+                    <option value="2020">2019/2020</option>
+                    <option value="2021">2020/2021</option>
+                    <option value="2022">2021/2022</option>
+                </select>
+                <span id="badge-year" class="filter-status-badge"></span>
+            </div>
+
+            <div class="filter-group">
+                <span id="tooltip-round" class="filter-tooltip">Először válassz tanévet!</span>
+                <label for="select-round"><i class="fa-solid fa-layer-group"></i> Forduló:</label>
+                <select id="select-round" class="filter-select" onchange="updateCardLabels()">
+                    <option value="" disabled selected>- válassz -</option>
+                    <option value="megyei">Megyei forduló</option>
+                    <option value="orszagos">Országos döntő</option>
+                </select>
+                <span id="badge-round" class="filter-status-badge"></span>
+            </div>
+        </div>
+
+        <!-- ÉVFOLYAM KÁRTYÁK -->
+        <div class="class-grid">
+            <!-- 5. Osztály -->
+            <div class="class-card">
+                <div>
+                    <h2>5. Osztály <span id="status-5"></span></h2>
+                    <p id="desc-5">Zrínyi Ilona Matematikaverseny feladatsor (25 feladat).</p>
+                </div>
+                <div class="btn-container">
+                    <span id="tooltip-5" class="tooltip-text">Válassz tanévet és fordulót!</span>
+                    <button id="btn-5" onclick="goToClass('5')" class="btn-select disabled">Megnyitás <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- 6. Osztály -->
+            <div class="class-card">
+                <div>
+                    <h2>6. Osztály <span id="status-6"></span></h2>
+                    <p id="desc-6">Zrínyi Ilona Matematikaverseny feladatsor (25 feladat).</p>
+                </div>
+                <div class="btn-container">
+                    <span id="tooltip-6" class="tooltip-text">Válassz tanévet és fordulót!</span>
+                    <button id="btn-6" onclick="goToClass('6')" class="btn-select disabled">Megnyitás <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- 7. Osztály -->
+            <div class="class-card">
+                <div>
+                    <h2>7. Osztály <span id="status-7"></span></h2>
+                    <p id="desc-7">Zrínyi Ilona Matematikaverseny feladatsor (30 feladat).</p>
+                </div>
+                <div class="btn-container">
+                    <span id="tooltip-7" class="tooltip-text">Válassz tanévet és fordulót!</span>
+                    <button id="btn-7" onclick="goToClass('7')" class="btn-select disabled">Megnyitás <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- 8. Osztály -->
+            <div class="class-card">
+                <div>
+                    <h2>8. Osztály <span id="status-8"></span></h2>
+                    <p id="desc-8">Zrínyi Ilona Matematikaverseny feladatsor (30 feladat).</p>
+                </div>
+                <div class="btn-container">
+                    <span id="tooltip-8" class="tooltip-text">Válassz tanévet és fordulót!</span>
+                    <button id="btn-8" onclick="goToClass('8')" class="btn-select disabled">Megnyitás <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Jelenleg elérhető feladatsorok adatbázisa
+        const availableTests = [
+            '6-2020-megyei',
+            '7-2020-megyei'
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const name = sessionStorage.getItem('zrinyi_student_name');
+            const cls = sessionStorage.getItem('zrinyi_student_class');
+
+            if (name && cls) {
+                document.getElementById('display-name').textContent = name;
+                document.getElementById('display-class').textContent = cls;
+                document.getElementById('step1-modal').classList.add('hidden');
+                document.getElementById('step2-modal').classList.add('hidden');
+            }
+            updateCardLabels();
+        });
+
+        function goToStep2() {
+            const name = document.getElementById('student-name').value.trim();
+            const cls = document.getElementById('student-class').value.trim();
+
+            if (!name || !cls) {
+                alert('Kérlek, add meg a nevedet és az osztályodat is!');
+                return;
+            }
+
+            sessionStorage.setItem('zrinyi_student_name', name);
+            sessionStorage.setItem('zrinyi_student_class', cls);
+
+            document.getElementById('display-name').textContent = name;
+            document.getElementById('display-class').textContent = cls;
+
+            document.getElementById('step1-modal').classList.add('hidden');
+            document.getElementById('step2-modal').classList.remove('hidden');
+        }
+
+        function finishQuizStart() {
+            document.getElementById('step2-modal').classList.add('hidden');
+        }
+
+        function resetStudentData() {
+            document.getElementById('step1-modal').classList.remove('hidden');
+            document.getElementById('step2-modal').classList.add('hidden');
+        }
+
+        // Szűrők, jelvények és buborékok frissítése
+        function updateCardLabels() {
+            const yearSelect = document.getElementById('select-year');
+            const roundSelect = document.getElementById('select-round');
+            
+            const selectedYear = yearSelect.value;
+            const selectedRound = roundSelect.value;
+
+            const badgeYear = document.getElementById('badge-year');
+            const badgeRound = document.getElementById('badge-round');
+            const tooltipYear = document.getElementById('tooltip-year');
+            const tooltipRound = document.getElementById('tooltip-round');
+
+            // Tanév státusz jelvény és buborék
+            if (!selectedYear) {
+                badgeYear.innerHTML = '';
+                tooltipYear.textContent = 'Kérlek, válassz egy tanévet!';
+            } else {
+                const yearHasTest = availableTests.some(test => test.includes(`-${selectedYear}-`));
+                if (yearHasTest) {
+                    badgeYear.innerHTML = '<i class="fa-solid fa-circle-check status-icon available" title="Elérhető"></i>';
+                    tooltipYear.textContent = 'Ebben a tanévben van elérhető feladatsor!';
+                } else {
+                    badgeYear.innerHTML = '<i class="fa-solid fa-circle-xmark status-icon unavailable" title="Nem érhető el"></i>';
+                    tooltipYear.textContent = 'Ebben a tanévben még nincs feltöltött feladatsor!';
+                }
+            }
+
+            // Forduló státusz jelvény és buborék
+            if (!selectedYear) {
+                badgeRound.innerHTML = '';
+                tooltipRound.textContent = 'Először válassz tanévet!';
+            } else if (!selectedRound) {
+                badgeRound.innerHTML = '';
+                tooltipRound.textContent = 'Kérlek, válassz egy fordulót!';
+            } else {
+                const roundHasTest = availableTests.some(test => test.includes(`-${selectedYear}-${selectedRound}`));
+                if (roundHasTest) {
+                    badgeRound.innerHTML = '<i class="fa-solid fa-circle-check status-icon available" title="Elérhető"></i>';
+                    tooltipRound.textContent = 'Ebben a fordulóban van elérhető feladatsor!';
+                } else {
+                    badgeRound.innerHTML = '<i class="fa-solid fa-circle-xmark status-icon unavailable" title="Nem érhető el"></i>';
+                    tooltipRound.textContent = 'Ebben a fordulóban még nincs feltöltött feladatsor!';
+                }
+            }
+
+            // Évfolyam kártyák frissítése
+            ['5', '6', '7', '8'].forEach(grade => {
+                const taskCount = (grade === '5' || grade === '6') ? 25 : 30;
+                const statusEl = document.getElementById(`status-${grade}`);
+                const btnEl = document.getElementById(`btn-${grade}`);
+                const tooltipEl = document.getElementById(`tooltip-${grade}`);
+
+                if (!selectedYear || !selectedRound) {
+                    document.getElementById(`desc-${grade}`).textContent = `Zrínyi Ilona Matematikaverseny feladatsor (${taskCount} feladat).`;
+                    statusEl.innerHTML = '';
+                    btnEl.classList.add('disabled');
+                    tooltipEl.textContent = 'Először válassz tanévet és fordulót!';
+                    tooltipEl.classList.add('show');
+                } else {
+                    const roundText = selectedRound === 'megyei' ? 'Megyei forduló' : 'Országos döntő';
+                    document.getElementById(`desc-${grade}`).textContent = `${selectedYear}. évi ${roundText} feladatsora (${taskCount} feladat).`;
+
+                    const testKey = `${grade}-${selectedYear}-${selectedRound}`;
+                    const isAvailable = availableTests.includes(testKey);
+
+                    if (isAvailable) {
+                        statusEl.innerHTML = '<i class="fa-solid fa-circle-check status-icon available" title="Elérhető"></i>';
+                        btnEl.classList.remove('disabled');
+                        tooltipEl.classList.remove('show');
+                    } else {
+                        statusEl.innerHTML = '<i class="fa-solid fa-circle-xmark status-icon unavailable" title="Nem érhető el"></i>';
+                        btnEl.classList.add('disabled');
+                        tooltipEl.textContent = 'Ez a feladatsor még nem érhető el!';
+                        tooltipEl.classList.add('show');
+                    }
+                }
+            });
+        }
+
+        function goToClass(grade) {
+            const name = sessionStorage.getItem('zrinyi_student_name');
+            const cls = sessionStorage.getItem('zrinyi_student_class');
+
+            if (!name || !cls) {
+                document.getElementById('step1-modal').classList.remove('hidden');
+                return;
+            }
+
+            const year = document.getElementById('select-year').value;
+            const round = document.getElementById('select-round').value;
+
+            if (!year || !round) {
+                alert('Kérlek, előbb válaszd ki a tanévet és a fordulót!');
+                return;
+            }
+
+            const testKey = `${grade}-${year}-${round}`;
+
+            if (availableTests.includes(testKey)) {
+                window.location.href = `${grade}-osztaly-${year}-${round}.html`;
+            } else {
+                alert(`A(z) ${grade}. osztályos feladatsor (${year} ${round}) még nem érhető el!`);
+            }
+        }
+    </script>
+</body>
+</html>

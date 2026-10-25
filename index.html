@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematika Portál - Főoldal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-color: #0f172a;
@@ -14,7 +15,6 @@
             --border-color: #334155;
         }
 
-        /* Finom, sima görgetés a horgony linkekhez */
         html {
             scroll-behavior: smooth;
         }
@@ -31,7 +31,7 @@
             background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
             color: white;
             text-align: center;
-            padding: 0.5rem 1rem; /* Margó megfelezve felül és alul */
+            padding: 0.5rem 1rem;
         }
 
         header h1 {
@@ -50,7 +50,7 @@
             background-color: #1e293b;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             padding: 15px;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
@@ -59,15 +59,30 @@
         nav a {
             background-color: var(--accent-blue);
             color: white;
-            padding: 12px 28px;
-            font-size: 1.1rem;
+            padding: 12px 24px;
+            font-size: 1.05rem;
             font-weight: 600;
             border-radius: 8px;
             text-decoration: none;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Zrínyi gomb a menüben - Háttér egyezik a lenti dobozéval */
+        /* Kiemelt Felvételihez gomb */
+        nav a.btn-felveteli {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
+            color: white;
+            border: 2px solid #f472b6;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        nav a.btn-felveteli:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.6);
+        }
+
         nav a.btn-zrinyi-nav {
             background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
             border: 2px solid var(--accent-gold);
@@ -90,7 +105,6 @@
             padding: 0 20px;
         }
 
-        /* OSZTÁLY DOBOZOK */
         .class-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -139,7 +153,6 @@
             background-color: var(--accent-blue);
         }
 
-        /* ZRÍNYI MATEMATIKA VERSENY DOBOZ A LAP ALJÁN */
         .competition-card {
             background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
             border: 2px solid var(--accent-gold);
@@ -177,8 +190,11 @@
         <p>Üdvözöljük a felkészítő és tananyag portálon!</p>
     </header>
 
-    <!-- FELSŐ GOMBOK -->
+    <!-- FELSŐ GOMBOK (Ékezetmentes, helyes hivatkozásokkal) -->
     <nav>
+        <a href="felveteli-felkeszito.html" class="btn-felveteli">
+            <i class="fa-solid fa-graduation-cap"></i> Felvételihez
+        </a>
         <a href="6-osztaly.html">6. Osztály</a>
         <a href="7-osztaly.html">7. Osztály</a>
         <a href="8-osztaly.html">8. Osztály</a>
@@ -187,12 +203,10 @@
 
     <div class="container">
         
-        <!-- AKTUÁLIS MONTÁZS DOBOZOK -->
         <h2 style="text-align: center; margin-bottom: 20px;">Aktuális osztály-összefoglalók</h2>
         
         <div class="class-grid">
             
-            <!-- 6. OSZTÁLY DOBOZ -->
             <div class="class-card">
                 <h3>6. Osztály</h3>
                 <div class="montage-placeholder">
@@ -201,31 +215,28 @@
                 <a href="6-osztaly.html" class="btn-link">Megnyitás ➔</a>
             </div>
 
-            <!-- 7. OSZTÁLY DOBOZ -->
             <div class="class-card">
                 <h3>7. Osztály</h3>
                 <div class="montage-placeholder">
                     [ Menj a 7. osztály oldalára, hogy a szorgalmi feladatot elérhesd, ha javítani akarsz az órai osztályzaton. ]
                 </div>
-                <a href="7-osztaly.html" class="btn-link">Megnyitás ➔</a>
+                <a href="7-osztaly-2020-megyei.html" class="btn-link">Megnyitás ➔</a>
             </div>
 
-            <!-- 8. OSZTÁLY DOBOZ -->
             <div class="class-card">
                 <h3>8. Osztály</h3>
                 <div class="montage-placeholder">
                     Hatványozás online felmérő
                 </div>
-                <a href="8-osztaly.html" class="btn-link">Megnyitás ➔</a>
+                <a href="felveteli-felkeszito.html" class="btn-link">Megnyitás ➔</a>
             </div>
 
         </div>
 
-        <!-- ZRÍNYI MATEMATIKA VERSENY DOBOZ A LAP ALJÁN -->
         <div id="zri-card" class="competition-card">
             <h3>🏆 Zrínyi Ilona Matematika Verseny</h3>
             <p style="color: #cbd5e1;">7. osztályos megyei forduló (2019/2020) interaktív feladatsor és gyakorló.</p>
-            <a href="7-osztaly-2020-megyei.html" class="btn-competition">Zrínyi 2020 (7. Osztály) Megnyitása ➔</a>
+            <a href="zrinyi-valaszto.html" class="btn-competition">Zrínyi Választó Megnyitása ➔</a>
         </div>
 
     </div>

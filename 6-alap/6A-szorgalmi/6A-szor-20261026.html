@@ -4,123 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>6. Osztályos Szorgalmi Feladat - Műveleti Sorrend</title>
-    <!-- Külső stíluslap csatolása a meglévő struktúra alapján -->
+    <!-- Külső stíluslap csatolása a gyökérből -->
     <link rel="stylesheet" href="../../osztalylap-style.css">
-    <style>
-        .szorgalmi-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .progress-bar-container {
-            background-color: var(--border-color);
-            border-radius: 8px;
-            height: 12px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            background-color: var(--accent-green);
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        .step-box {
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .step-box.completed {
-            border-color: var(--accent-green);
-            opacity: 0.9;
-        }
-        .input-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-            align-items: center;
-        }
-        .input-row select, .input-row input {
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-        .btn-action {
-            background-color: var(--accent-blue);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-action:hover {
-            background-color: #38bdf8;
-            color: var(--bg-color);
-        }
-        .feedback {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        .feedback.success { color: var(--accent-green); }
-        .feedback.error { color: #ef4444; }
-        .mult-hint {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 5px;
-        }
-    </style>
 </head>
 <body>
 
     <header>
         <div style="display: flex; align-items: center; gap: 15px;">
             <a href="../6-osztaly-alap.html" class="btn-back">← Vissza az Alap Oldalra</a>
-            <h2 class="date-title" style="margin: 0;">🌟 Szorgalmi Feladat: Műveleti Sorrend Algoritmusok</h2>
+            <h2 style="margin: 0; color: #38bdf8; font-size: 1.2rem;">🌟 Szorgalmi Feladat: Műveleti Sorrend</h2>
         </div>
-        <div id="score-display" style="font-weight: bold; color: var(--accent-green);">Elért pontszám: 0 / 5</div>
+        <div id="score-display" style="font-weight: bold; color: var(--accent-green, #10b981);">Elért pontszám: 0 / 5</div>
     </header>
 
     <div class="layout">
-        <div class="main-content szorgalmi-wrapper">
+        <div class="main-content" style="width: 100%;">
             
             <div class="feladat-container">
-                <h3>Szabályzat & Útmutató</h3>
-                <p>Oldd meg az alábbi 5 összetett műveletsoros feladatot! Minden feladatnál <strong>szigorúan lépésről lépésre</strong> haladj az algoritmus szerint: válaszd ki a legördülőből a soron következő műveletet, add meg a részszámítást és a részeredményt. Csak az összes lépés sikeres teljesítése után adhatod meg a végeredményt!</p>
-                <p class="mult-hint">💡 <em>Tipp a szorzáshoz:</em> Használhatod a csillag karaktert (<code>*</code>) vagy a pontot (<code>·</code>), illetve az AltGr + - billentyűkombinációt.</p>
+                <h3 style="color: #38bdf8; margin-top: 0;">Szabályzat & Útmutató</h3>
+                <p>Oldd meg az alábbi <strong>5 összetett műveletsoros feladatot</strong>! Minden feladatnál szigorúan lépésről lépésre haladj: válaszd ki a legördülőből a soron következő műveletet, add meg a részszámítást és a részeredményt. Csak az összes lépés sikeres teljesítése után adhatod meg a végeredményt!</p>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">💡 <em>Tipp a szorzáshoz:</em> Használhatod a csillag karaktert (<code>*</code>) vagy a pontot (<code>·</code>), illetve az AltGr + - billentyűkombinációt.</p>
             </div>
 
             <!-- Előrehaladási sáv -->
-            <div class="progress-bar-container">
-                <div id="progress-fill" class="progress-bar-fill"></div>
+            <div class="progress-bar-container" style="background-color: var(--border-color, #334155); border-radius: 8px; height: 12px; margin-bottom: 20px; overflow: hidden;">
+                <div id="progress-fill" style="background-color: var(--accent-green, #10b981); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
             </div>
 
-            <!-- Itt jelennek meg dinamikusan a feladatok -->
+            <!-- Feladatok konténer -->
             <div id="task-container"></div>
 
             <!-- Végső értékelés és beküldés doboz -->
-            <div id="completion-box" style="display: none; text-align: center; margin-top: 30px; padding: 25px; background: var(--bg-color); border: 2px solid var(--accent-green); border-radius: 10px;">
-                <h2 style="color: var(--accent-green);">🎉 Gratulálok! Sikeresen teljesítetted a szorgalmi feladatsort!</h2>
-                <p>Ezzel megkaptad az <strong>5-ös érdemjegyet</strong> ehhez a feladathoz. Rossz jegyet nem kaphatsz érte, ez tiszta extra pont!</p>
-                <div class="input-row" style="justify-content: center; margin-top: 15px;">
-                    <input type="text" id="student-name" placeholder="Tanuló neve (pl. Kiss Péter)" style="width: 250px;">
-                    <button class="btn-action" onclick="sendResultEmail()" style="background-color: var(--accent-green);">Eredmény Beküldése / Mentése</button>
+            <div id="completion-box" style="display: none; text-align: center; margin-top: 30px; padding: 25px; background: var(--bg-color, #0f172a); border: 2px solid var(--accent-green, #10b981); border-radius: 10px;">
+                <h2 style="color: var(--accent-green, #10b981);">🎉 Gratulálok! Sikeresen teljesítetted a szorgalmi feladatsort!</h2>
+                <p>Ezzel megkaptad az <strong>5-ös érdemjegyet</strong> ehhez a feladathoz. Rossz jegyet nem kaphatsz érte!</p>
+                <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; justify-content: center; align-items: center;">
+                    <input type="text" id="student-name" placeholder="Tanuló neve (pl. Kiss Péter)" style="background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem; width: 250px;">
+                    <button class="btn-action" onclick="sendResultEmail()" style="background-color: var(--accent-green, #10b981); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Eredmény Beküldése / Mentése</button>
                 </div>
-                <p id="email-feedback" class="feedback"></p>
+                <p id="email-feedback" style="margin-top: 8px; font-size: 0.9rem; font-weight: 600;"></p>
             </div>
 
         </div>
     </div>
 
     <script>
-        // 5 db gondosan összeállított feladat részletes algoritmikus lépésekkel
         const tasks = [
             {
                 id: 1,
@@ -147,19 +75,6 @@
             },
             {
                 id: 3,
-                expression: "(100 - 20) : [ 4 + 2 · (3 + 1) ]",
-                steps: [
-                    { desc: "Bal oldali kerek zárójel", targetExpr: "100 - 20", result: 80 },
-                    { desc: "Jobb oldali belső kerek zárójel", targetExpr: "3 + 1", result: 4 },
-                    { desc: "Szorzás a szögletes zárójelben", targetExpr: "2 * 4", result: 8 },
-                    { desc: "Összeadás a szögletes zárójelben", targetExpr: "4 + 8", result: 12 },
-                    { desc: "Végső osztás", targetExpr: "80 / 12", result: null } // Kerekítve vagy speciális ellenőrzés
-                ],
-                finalAnswer: 5 // Módosítva, hogy kerek legyen: pl. (90 - 10) : [ 4 + 2 * (3 + 1) ] -> 80 : 12 nem kerek. Legyen: (80 - 20) : [ 2 + 2 * (3 + 1) ] -> 60 : 10 = 6
-            },
-            // Javított 3. feladat tiszta egész számokkal:
-            {
-                id: 3,
                 expression: "(80 - 20) : [ 2 + 2 · (3 + 1) ]",
                 steps: [
                     { desc: "Első kerek zárójel (kivonás)", targetExpr: "80 - 20", result: 60 },
@@ -183,24 +98,15 @@
             },
             {
                 id: 5,
-                expression: "[ 18 + 2 · (15 - 5) ] : 7",
+                expression: "[ 15 + 3 · (12 - 2) ] : 9",
                 steps: [
-                    { desc: "Kerek zárójel kivonás", targetExpr: "15 - 5", result: 10 },
-                    { desc: "Szorzás a szögletes zárójelben", targetExpr: "2 * 10", result: 20 },
-                    { desc: "Összeadás a szögletes zárójelben", targetExpr: "18 + 20", result: 38 },
-                    // Egészre kihozva: [ 17 + 4 * ... ] -> legyen [ 15 + 3 * (12 - 2) ] : 9
+                    { desc: "Kerek zárójel kivonás", targetExpr: "12 - 2", result: 10 },
+                    { desc: "Szorzás a szögletes zárójelben", targetExpr: "3 * 10", result: 30 },
+                    { desc: "Összeadás a szögletes zárójelben", targetExpr: "15 + 30", result: 45 },
+                    { desc: "Végső osztás", targetExpr: "45 / 9", result: 5 }
                 ],
                 finalAnswer: 5
             }
-        ];
-
-        // Javított 5. feladat tiszta egész eredményre: [ 15 + 3 · (12 - 2) ] : 9 = [15 + 3 * 10] : 9 = [15 + 30] : 9 = 45 : 9 = 5
-        tasks[4].expression = "[ 15 + 3 · (12 - 2) ] : 9";
-        tasks[4].steps = [
-            { desc: "Kerek zárójel kivonás", targetExpr: "12 - 2", result: 10 },
-            { desc: "Szorzás a szögletes zárójelben", targetExpr: "3 * 10", result: 30 },
-            { desc: "Összeadás a szögletes zárójelben", targetExpr: "15 + 30", result: 45 },
-            { desc: "Végső osztás", targetExpr: "45 / 9", result: 5 }
         ];
 
         let currentTaskIndex = 0;
@@ -222,31 +128,31 @@
             document.getElementById('progress-fill').style.width = progressPercent + '%';
 
             let html = `
-                <div class="step-box">
-                    <h3>🔍 6. Osztályos Feladat ${currentTaskIndex + 1} / ${tasks.length}</h3>
-                    <p style="font-size: 1.2rem; font-weight: bold; color: var(--accent-blue);">Megoldandó kifejezés: ${task.expression}</p>
-                    <hr style="border-color: var(--border-color); margin: 15px 0;">
+                <div class="feladat-container">
+                    <h3 style="color: #38bdf8; margin-top: 0;">🔍 6. Osztályos Feladat ${currentTaskIndex + 1} / ${tasks.length}</h3>
+                    <p style="font-size: 1.2rem; font-weight: bold; color: var(--accent-blue, #0284c7);">Megoldandó kifejezés: ${task.expression}</p>
+                    <hr style="border-color: var(--border-color, #334155); margin: 15px 0;">
             `;
 
-            // Eddig teljesített lépések megjelenítése
             for (let i = 0; i < currentStepIndex; i++) {
                 html += `
-                    <div style="margin-bottom: 10px; color: var(--accent-green); font-size: 0.95rem;">
+                    <div style="margin-bottom: 10px; color: var(--accent-green, #10b981); font-size: 0.95rem;">
                         ✔ <b>${i + 1}. Lépés teljesítve:</b> ${task.steps[i].desc} (Eredmény: <b>${task.steps[i].result}</b>)
                     </div>
                 `;
             }
 
-            // Aktuális lépés beviteli mezői (ha van még hátralévő lépés)
             if (currentStepIndex < task.steps.length) {
                 html += `
-                    <div style="background: var(--card-bg); padding: 12px; border-radius: 6px; border: 1px dashed var(--accent-blue);">
+                    <div style="background: var(--card-bg, #1e293b); padding: 15px; border-radius: 6px; border: 1px dashed var(--accent-blue, #0284c7);">
                         <p style="margin-top: 0; font-weight: 600; color: #38bdf8;">Következő (${currentStepIndex + 1}.) Részlépés:</p>
-                        <div class="input-row">
+                        <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
                             <label>Mit számítasz ki?</label>
-                            <select id="step-desc-input">
+                            <select id="step-desc-input" style="background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;">
                                 <option value="">-- Válassz műveletet / lépést --</option>
                                 <option value="Belső kerek zárójel elvégzése">Belső kerek zárójel elvégzése</option>
+                                <option value="Első kerek zárójel (kivonás)">Első kerek zárójel (kivonás)</option>
+                                <option value="Belső kerek zárójel (összeadás)">Belső kerek zárójel (összeadás)</option>
                                 <option value="Kerek zárójel kivonás">Kerek zárójel kivonás</option>
                                 <option value="Kerek zárójel összeadás">Kerek zárójel összeadás</option>
                                 <option value="Szorzás elvégzése">Szorzás elvégzése</option>
@@ -258,27 +164,26 @@
                                 <option value="Végső osztás">Végső osztás</option>
                             </select>
                         </div>
-                        <div class="input-row">
+                        <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
                             <label>Részszámítás:</label>
-                            <input type="text" id="step-expr-input" placeholder="pl. 12 - 4">
+                            <input type="text" id="step-expr-input" placeholder="pl. 12 - 4" style="background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;">
                             <label>Részeredmény:</label>
-                            <input type="number" id="step-res-input" style="width: 100px;" placeholder="pl. 8">
-                            <button class="btn-action" onclick="checkStep()">Lépés Ellenőrzése</button>
+                            <input type="number" id="step-res-input" style="width: 100px; background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;" placeholder="pl. 8">
+                            <button class="btn-action" onclick="checkStep()" style="background-color: var(--accent-blue, #0284c7); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Lépés Ellenőrzése</button>
                         </div>
-                        <div id="step-feedback" class="feedback"></div>
+                        <div id="step-feedback" style="margin-top: 8px; font-size: 0.9rem; font-weight: 600;"></div>
                     </div>
                 `;
             } else {
-                // Ha az összes lépés megvan, kérjük a végső eredményt
                 html += `
-                    <div style="background: var(--card-bg); padding: 15px; border-radius: 6px; border: 2px solid var(--accent-green);">
-                        <p style="margin-top: 0; font-weight: bold; color: var(--accent-green);">✨ Minden részlépést sikeresen elvégeztél! Add meg a feladat végeredményét:</p>
-                        <div class="input-row">
+                    <div style="background: var(--card-bg, #1e293b); padding: 15px; border-radius: 6px; border: 2px solid var(--accent-green, #10b981);">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--accent-green, #10b981);">✨ Minden részlépést sikeresen elvégeztél! Add meg a feladat végeredményét:</p>
+                        <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
                             <label><b>Végeredmény =</b></label>
-                            <input type="number" id="final-res-input" style="width: 120px;" placeholder="pl. 27">
-                            <button class="btn-action" onclick="checkFinalAnswer()" style="background-color: var(--accent-green);">Feladat Véglegesítése</button>
+                            <input type="number" id="final-res-input" style="width: 120px; background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;" placeholder="pl. 27">
+                            <button class="btn-action" onclick="checkFinalAnswer()" style="background-color: var(--accent-green, #10b981); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Feladat Véglegesítése</button>
                         </div>
-                        <div id="final-feedback" class="feedback"></div>
+                        <div id="final-feedback" style="margin-top: 8px; font-size: 0.9rem; font-weight: 600;"></div>
                     </div>
                 `;
             }
@@ -299,19 +204,18 @@
             const expectedExprClean = expected.targetExpr.replace(/\s+/g, '');
 
             if (!descInput) {
-                feedbackEl.className = "feedback error";
+                feedbackEl.style.color = "#ef4444";
                 feedbackEl.innerText = "Kérlek, válaszd ki a legördülőből, hogy mit számítasz ki!";
                 return;
             }
 
             if (exprInput !== expectedExprClean || resInput !== expected.result) {
-                feedbackEl.className = "feedback error";
+                feedbackEl.style.color = "#ef4444";
                 feedbackEl.innerText = "Helytelen részszámítás vagy részeredmény. Ellenőrizd a műveleti sorrendet!";
                 return;
             }
 
-            // Sikeres lépés
-            feedbackEl.className = "feedback success";
+            feedbackEl.style.color = "#10b981";
             feedbackEl.innerText = "Helyes lépés! Lépünk tovább.";
             
             setTimeout(() => {
@@ -322,13 +226,11 @@
 
         function checkFinalAnswer() {
             const task = tasks[currentTaskIndex];
-            const finalInput = parseFloat(document.getElementById('task-' + task.id) || document.getElementById('final-res-input').value);
+            const enteredVal = parseFloat(document.getElementById('final-res-input').value);
             const feedbackEl = document.getElementById('final-feedback');
 
-            const enteredVal = parseFloat(document.getElementById('final-res-input').value);
-
             if (enteredVal === task.finalAnswer) {
-                feedbackEl.className = "feedback success";
+                feedbackEl.style.color = "#10b981";
                 feedbackEl.innerText = "Helyes végeredmény! 🎉 Gratulálok!";
                 score++;
                 document.getElementById('score-display').innerText = `Elért pontszám: ${score} / 5`;
@@ -339,7 +241,7 @@
                     renderTask();
                 }, 1200);
             } else {
-                feedbackEl.className = "feedback error";
+                feedbackEl.style.color = "#ef4444";
                 feedbackEl.innerText = "A végeredmény nem stimmel. Nézd át a részszámításokat!";
             }
         }
@@ -349,25 +251,23 @@
             const feedbackEl = document.getElementById('email-feedback');
 
             if (!studentName) {
-                feedbackEl.className = "feedback error";
+                feedbackEl.style.color = "#ef4444";
                 feedbackEl.innerText = "Kérlek, add meg a neved a beküldéshez!";
                 return;
             }
 
-            // E-mail küldés szimuláció / mailto link generálás a tanár felé
-            const teacherEmail = "tanar@iskola.hu"; // Ide írhatod be a saját e-mail címedet
+            const teacherEmail = "csernyesuli@gmail.com";
             const subject = encodeURIComponent(`Szorgalmi Feladat Eredmény - ${studentName}`);
             const body = encodeURIComponent(`Tisztelt Tanár Úr / Tanárnő!\n\n${studentName} nevű tanuló sikeresen teljesítette a 6. osztályos szorgalmi feladatsort.\nElért pontszám: ${score} / 5 (100%)\nDátum: ${new Date().toLocaleDateString()}`);
 
-            feedbackEl.className = "feedback success";
-            feedbackEl.innerText = "Az eredmény sikeresen rögzítve! Megnyitom az e-mail klienst a beküldéshez...";
+            feedbackEl.style.color = "#10b981";
+            feedbackEl.innerText = "Az eredmény rögzítve! E-mail kliens megnyitása...";
 
             setTimeout(() => {
                 window.location.href = `mailto:${teacherEmail}?subject=${subject}&body=${body}`;
             }, 1000);
         }
 
-        // Indításkor az első feladat betöltése
         window.onload = function() {
             renderTask();
         };

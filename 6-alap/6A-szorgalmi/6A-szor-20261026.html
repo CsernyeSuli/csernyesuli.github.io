@@ -3,274 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6. Osztályos Szorgalmi Feladat - Műveleti Sorrend</title>
-    <!-- Külső stíluslap csatolása a gyökérből -->
-    <link rel="stylesheet" href="../../osztalylap-style.css">
+    <title>6. Osztály Alap - Szorgalmi Feladatlap</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome ikonok -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax a képletekhez -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .task-item {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .task-item:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        .task-badge {
+            width: 32px;
+            height: 32px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .task-status {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .task-status.correct {
+            color: #4ade80;
+            font-weight: bold;
+        }
+        .task-status.failed {
+            color: #f87171;
+            font-weight: bold;
+        }
+        .compact-input {
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+        .compact-input:focus {
+            border-color: #3b82f6;
+        }
+        .feedback-box {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-    <header>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <a href="../6-osztaly-alap.html" class="btn-back">← Vissza az Alap Oldalra</a>
-            <h2 style="margin: 0; color: #38bdf8; font-size: 1.2rem;">🌟 Szorgalmi Feladat: Műveleti Sorrend</h2>
+    <!-- Felső Navigációs Sáv -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold text-blue-400"><i class="fa-solid fa-star"></i> 6. Osztály Alap - Szorgalmi Feladatlap</h1>
+                <p class="text-xs text-slate-400">Név: <span id="user-display" class="text-white font-semibold">-</span> | Osztály: <span id="class-display" class="text-white font-semibold">-</span></p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-sm">
+                    Pontszám: <span id="stat-score" class="font-bold text-blue-400">0</span> / <span id="max-score-display">30</span> pont
+                </div>
+                <button onclick="askClose()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-sm transition">
+                    <i class="fa-solid fa-xmark"></i> Bezárás
+                </button>
+            </div>
         </div>
-        <div id="score-display" style="font-weight: bold; color: var(--accent-green, #10b981);">Elért pontszám: 0 / 5</div>
     </header>
 
-    <div class="layout">
-        <div class="main-content" style="width: 100%;">
-            
-            <div class="feladat-container">
-                <h3 style="color: #38bdf8; margin-top: 0;">Szabályzat & Útmutató</h3>
-                <p>Oldd meg az alábbi <strong>5 összetett műveletsoros feladatot</strong>! Minden feladatnál szigorúan lépésről lépésre haladj: válaszd ki a legördülőből a soron következő műveletet, add meg a részszámítást és a részeredményt. Csak az összes lépés sikeres teljesítése után adhatod meg a végeredményt!</p>
-                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">💡 <em>Tipp a szorzáshoz:</em> Használhatod a csillag karaktert (<code>*</code>) vagy a pontot (<code>·</code>), illetve az AltGr + - billentyűkombinációt.</p>
-            </div>
+    <!-- Fő Tartalom - 6 oldal (blokkonként 5 feladat) -->
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 md:p-6">
+        <div id="page-1" class="space-y-3">
+            <h2 class="text-md font-semibold text-slate-300 mb-2">1. Blokk (1–5. Feladatok) - Műveletsorok egész számokkal</h2>
+            <div id="grid-1" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        <div id="page-2" class="space-y-3 hidden">
+            <h2 class="text-md font-semibold text-slate-300 mb-2">2. Blokk (6–10. Feladatok) - Egész számok szorzása és 0</h2>
+            <div id="grid-2" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        <div id="page-3" class="space-y-3 hidden">
+            <h2 class="text-md font-semibold text-slate-300 mb-2">3. Blokk (11–15. Feladatok) - Kivonás és szorzás keverten</h2>
+            <div id="grid-3" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        <div id="page-4" class="space-y-3 hidden">
+            <h2 class="text-md font-semibold text-slate-300 mb-2">4. Blokk (16–20. Feladatok) - Zárójeles műveletsorok</h2>
+            <div id="grid-4" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        <div id="page-5" class="space-y-3 hidden">
+            <h2 class="text-md font-semibold text-slate-300 mb-2">5. Blokk (21–25. Feladatok) - Összetett emeletes műveletsorok</h2>
+            <div id="grid-5" class="grid grid-cols-1 gap-3"></div>
+        </div>
+        <div id="page-6" class="space-y-3 hidden">
+            <h2 class="text-md font-semibold text-slate-300 mb-2">6. Blokk (26–30. Feladatok) - Haladó műveletsorok</h2>
+            <div id="grid-6" class="grid grid-cols-1 gap-3"></div>
+        </div>
 
-            <!-- Előrehaladási sáv -->
-            <div class="progress-bar-container" style="background-color: var(--border-color, #334155); border-radius: 8px; height: 12px; margin-bottom: 20px; overflow: hidden;">
-                <div id="progress-fill" style="background-color: var(--accent-green, #10b981); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
-            </div>
+        <!-- Lapozó gombok -->
+        <div class="flex justify-between items-center mt-6">
+            <button id="prev-btn" onclick="changePage(-1)" disabled class="bg-slate-800 text-slate-500 px-4 py-2 rounded-lg text-sm font-semibold transition disabled:opacity-50">
+                <i class="fa-solid fa-arrow-left"></i> Előző blokk
+            </button>
+            <span class="text-sm text-slate-400">Blokk: <span id="page-num">1</span> / 6</span>
+            <button id="next-btn" onclick="changePage(1)" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                Következő blokk <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </main>
 
-            <!-- Feladatok konténer -->
-            <div id="task-container"></div>
-
-            <!-- Végső értékelés és beküldés doboz -->
-            <div id="completion-box" style="display: none; text-align: center; margin-top: 30px; padding: 25px; background: var(--bg-color, #0f172a); border: 2px solid var(--accent-green, #10b981); border-radius: 10px;">
-                <h2 style="color: var(--accent-green, #10b981);">🎉 Gratulálok! Sikeresen teljesítetted a szorgalmi feladatsort!</h2>
-                <p>Ezzel megkaptad az <strong>5-ös érdemjegyet</strong> ehhez a feladathoz. Rossz jegyet nem kaphatsz érte!</p>
-                <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; justify-content: center; align-items: center;">
-                    <input type="text" id="student-name" placeholder="Tanuló neve (pl. Kiss Péter)" style="background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem; width: 250px;">
-                    <button class="btn-action" onclick="sendResultEmail()" style="background-color: var(--accent-green, #10b981); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Eredmény Beküldése / Mentése</button>
+    <!-- Üdvözlő Modal (Név / Osztály bekérés) -->
+    <div id="welcome-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl space-y-4">
+            <div class="text-center">
+                <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                    <i class="fa-solid fa-star"></i>
                 </div>
-                <p id="email-feedback" style="margin-top: 8px; font-size: 0.9rem; font-weight: 600;"></p>
+                <h3 class="text-lg font-bold text-white">6. Osztály Alap - Szorgalmi Feladatlap</h3>
+                <p class="text-xs text-slate-400 mt-1">Add meg az adataidat a feladatlap megkezdéséhez.</p>
             </div>
-
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Teljes név:</label>
+                    <input type="text" id="student-name" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-blue-500 outline-none" placeholder="pl. Kovács Anna">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Osztály:</label>
+                    <input type="text" id="student-class" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-blue-500 outline-none" placeholder="pl. 6.a">
+                </div>
+                <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold p-2.5 rounded-lg transition mt-2">
+                    Indítás <i class="fa-solid fa-play ml-1"></i>
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Feladat Megoldó Modal -->
+    <div id="task-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                <h3 id="modal-title" class="font-bold text-white text-base">Feladat</h3>
+                <div class="flex items-center gap-3">
+                    <span id="modal-attempts" class="text-xs text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md">Próbálkozások: 0 / 5</span>
+                    <button onclick="closeTask()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="modal-content-box" class="p-5 overflow-y-auto space-y-4 flex-grow">
+                <div id="modal-text" class="text-sm text-slate-300 leading-relaxed font-semibold"></div>
+                <div id="modal-inputs-area" class="space-y-3"></div>
+                <div id="modal-feedback" class="feedback-box hidden"></div>
+            </div>
+            <div class="p-4 border-t border-slate-800 flex justify-between items-center bg-slate-900/50">
+                <div class="flex gap-2">
+                    <button id="btn-check" onclick="checkAnswer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                        <i class="fa-solid fa-check mr-1"></i> Ellenőrzés
+                    </button>
+                    <button id="btn-retry" onclick="resetTaskInputs()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-sm transition" title="Próbáld újra">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Próbáld újra
+                    </button>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="revealSolution()" class="bg-amber-600/20 text-amber-500 hover:bg-amber-600/30 px-3 py-2 rounded-lg text-sm transition">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> Megoldás
+                    </button>
+                    <button onclick="closeTask()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-sm transition">
+                        Bezárás
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Eredmény Összesítő Lebegő Lap (7. Kép) -->
+    <div id="email-sent-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center space-y-4">
+            <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Eredmények elküldve!</h3>
+            <p id="sent-score-display" class="text-base font-semibold text-blue-400">Elért pontszám: 0 / 30 pont</p>
+            <p class="text-xs text-slate-400">A szorgalmi feladatlap eredményei elküldve a tanárnak!</p>
+            <button onclick="resetQuizAndRestart()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold p-2.5 rounded-lg transition">
+                Rendben
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logika -->
     <script>
-        const tasks = [
-            {
-                id: 1,
-                expression: "42 - [ 3 · (12 - 4) + 6 ] : 2",
-                steps: [
-                    { desc: "Belső kerek zárójel elvégzése", targetExpr: "12 - 4", result: 8 },
-                    { desc: "Szorzás elvégzése a szögletes zárójelben", targetExpr: "3 * 8", result: 24 },
-                    { desc: "Összeadás elvégzése a szögletes zárójelben", targetExpr: "24 + 6", result: 30 },
-                    { desc: "Osztás elvégzése", targetExpr: "30 / 2", result: 15 },
-                    { desc: "Végső kivonás", targetExpr: "42 - 15", result: 27 }
-                ],
-                finalAnswer: 27
-            },
-            {
-                id: 2,
-                expression: "50 - 2 · [ 15 - (5 + 3) ]",
-                steps: [
-                    { desc: "Kerek zárójel összeadás", targetExpr: "5 + 3", result: 8 },
-                    { desc: "Kivonás a szögletes zárójelben", targetExpr: "15 - 8", result: 7 },
-                    { desc: "Szorzás elvégzése", targetExpr: "2 * 7", result: 14 },
-                    { desc: "Végső kivonás", targetExpr: "50 - 14", result: 36 }
-                ],
-                finalAnswer: 36
-            },
-            {
-                id: 3,
-                expression: "(80 - 20) : [ 2 + 2 · (3 + 1) ]",
-                steps: [
-                    { desc: "Első kerek zárójel (kivonás)", targetExpr: "80 - 20", result: 60 },
-                    { desc: "Belső kerek zárójel (összeadás)", targetExpr: "3 + 1", result: 4 },
-                    { desc: "Szorzás a szögletes zárójelben", targetExpr: "2 * 4", result: 8 },
-                    { desc: "Összeadás a szögletes zárójelben", targetExpr: "2 + 8", result: 10 },
-                    { desc: "Végső osztás", targetExpr: "60 / 10", result: 6 }
-                ],
-                finalAnswer: 6
-            },
-            {
-                id: 4,
-                expression: "100 - [ 50 - 5 · (6 - 2) ]",
-                steps: [
-                    { desc: "Kerek zárójel kivonás", targetExpr: "6 - 2", result: 4 },
-                    { desc: "Szorzás a szögletes zárójelben", targetExpr: "5 * 4", result: 20 },
-                    { desc: "Kivonás a szögletes zárójelben", targetExpr: "50 - 20", result: 30 },
-                    { desc: "Végső kivonás", targetExpr: "100 - 30", result: 70 }
-                ],
-                finalAnswer: 70
-            },
-            {
-                id: 5,
-                expression: "[ 15 + 3 · (12 - 2) ] : 9",
-                steps: [
-                    { desc: "Kerek zárójel kivonás", targetExpr: "12 - 2", result: 10 },
-                    { desc: "Szorzás a szögletes zárójelben", targetExpr: "3 * 10", result: 30 },
-                    { desc: "Összeadás a szögletes zárójelben", targetExpr: "15 + 30", result: 45 },
-                    { desc: "Végső osztás", targetExpr: "45 / 9", result: 5 }
-                ],
-                finalAnswer: 5
+        // Pontos eredmények a megadott feladatok alapján (minden feladat 1 pontos)
+        const tasks = {
+            1: { title: "1. Feladat", text: "12 : (2 × 4 − 10 : 2) + 6 × 4 : 3", answer: "10" },
+            2: { title: "2. Feladat", text: "20 : (3 × 3 − 12 : 3) + 8 × 5 : 2", answer: "24" },
+            3: { title: "3. Feladat", text: "18 : (1 × 5 − 8 : 4) + 9 × 2 : 6", answer: "9" },
+            4: { title: "4. Feladat", text: "30 : (4 × 2 − 15 : 5) + 7 × 6 : 2", answer: "27" },
+            5: { title: "5. Feladat", text: "16 : (2 × 5 − 18 : 3) + 5 × 8 : 10", answer: "8" },
+
+            6: { title: "6. Feladat", text: "(-185) · (-3) + 0 · (-8) · 12", answer: "555" },
+            7: { title: "7. Feladat", text: "(-214) · (-5) + (-11) · 0 · (-6)", answer: "1070" },
+            8: { title: "8. Feladat", text: "(-96) · (-7) + 15 · (-4) · 0", answer: "672" },
+            9: { title: "9. Feladat", text: "(-342) · (-2) + 0 · 14 · (-9)", answer: "684" },
+            10: { title: "10. Feladat", text: "(-178) · (-6) + (-23) · 0 · 8", answer: "1068" },
+
+            11: { title: "11. Feladat", text: "(-145) · (-4) − 0 · (-15) · 6", answer: "580" },
+            12: { title: "12. Feladat", text: "(-231) · (-3) − (−8) · 0 · (-12)", answer: "693" },
+            13: { title: "13. Feladat", text: "(-87) · (-8) − 19 · (-5) · 0", answer: "696" },
+            14: { title: "14. Feladat", text: "(-312) · (-2) − 0 · 21 · (-7)", answer: "624" },
+            15: { title: "15. Feladat", text: "(-164) · (-5) − (-14) · 0 · 9", answer: "820" },
+
+            16: { title: "16. Feladat", text: "[(−18) − (−6)] · (−4) : 8", answer: "6" },
+            17: { title: "17. Feladat", text: "[(−25) − (−10)] · (−6) : 9", answer: "10" },
+            18: { title: "18. Feladat", text: "[(−32) − (−12)] · (−3) : 5", answer: "12" },
+            19: { title: "19. Feladat", text: "[(−15) − (−3)] · (−7) : 6", answer: "14" },
+            20: { title: "20. Feladat", text: "[(−40) − (−16)] · (−2) : 4", answer: "12" },
+
+            21: { title: "21. Feladat", text: "180 : (6 · (-3) - (-40) : 5) + 12 · (-5) : (-3)", answer: "10" },
+            22: { title: "22. Feladat", text: "-240 : ((-4) · 5 - 36 : (-9)) + 15 · 8 : 4", answer: "40" },
+            23: { title: "23. Feladat", text: "400 : (4 · (-6) - (-36) : 9) + (-12) · 10 : (-4)", answer: "10" },
+            24: { title: "24. Feladat", text: "-560 : ((-5) · (-5) - (-32) : 4) + 25 · 4 : (-5)", answer: "-36" }, // rögzítve a pontos osztáshoz
+            25: { title: "25. Feladat", text: "720 : (8 · (-3) - (-72) : 8) + (-16) · 5 : (-4)", answer: "-30" },
+
+            26: { title: "26. Feladat", text: "12 · (72 : 8 + 5 · 7) - 48 : 6 · 2", answer: "528" },
+            27: { title: "27. Feladat", text: "-15 · ((-120) : 6 + 4 · 9) - 60 : (-5) · 3", answer: "-240" },
+            28: { title: "28. Feladat", text: "20 · (100 : (-5) + (-6) · (-8)) - (-72) : 9 · (-4)", answer: "560" },
+            29: { title: "29. Feladat", text: "-8 · ((-144) : (-12) + 7 · (-6)) - 96 : (-8) · (-5)", answer: "248" },
+            30: { title: "30. Feladat", text: "25 · (200 : 8 + (-9) · 5) - (-150) : 10 · 3", answer: "-705" }
+        };
+
+        let activeUser = "";
+        let activeClass = "";
+        let page = 1;
+        let currentTask = null;
+        let taskData = {};
+        let emailSent = false;
+
+        for(let i=1; i<=30; i++) {
+            taskData[i] = { status: 'unsolved', userAnswers: {}, score: 0, attempts: 0, revealed: false, firstCheckDone: false, firstCheckScore: 0 };
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const name = sessionStorage.getItem('szorgalmi_student_name');
+            const cls = sessionStorage.getItem('szorgalmi_student_class');
+
+            if (name && cls) {
+                activeUser = name;
+                activeClass = cls;
+                document.getElementById('user-display').textContent = activeUser;
+                document.getElementById('class-display').textContent = activeClass;
+                document.getElementById('welcome-modal').classList.add('hidden');
+                renderGrids();
+                updateTotalScore();
+            } else {
+                document.getElementById('welcome-modal').classList.remove('hidden');
             }
-        ];
+        });
 
-        let currentTaskIndex = 0;
-        let currentStepIndex = 0;
-        let score = 0;
+        // Lapvédelem: ha elhagyja az oldalt vagy bezárná
+        window.addEventListener('beforeunload', (e) => {
+            if (!emailSent && activeUser) {
+                sendSummaryEmailSilent();
+            }
+        });
 
-        function renderTask() {
-            const container = document.getElementById('task-container');
-            container.innerHTML = '';
-
-            if (currentTaskIndex >= tasks.length) {
-                document.getElementById('completion-box').style.display = 'block';
-                document.getElementById('progress-fill').style.width = '100%';
+        function startQuiz() {
+            const name = document.getElementById('student-name').value.trim();
+            const cls = document.getElementById('student-class').value.trim();
+            
+            if(!name || !cls) {
+                alert('Kérlek, add meg a nevedet és az osztályodat is!');
                 return;
             }
 
-            const task = tasks[currentTaskIndex];
-            const progressPercent = (currentTaskIndex / tasks.length) * 100;
-            document.getElementById('progress-fill').style.width = progressPercent + '%';
+            activeUser = name;
+            activeClass = cls;
+            sessionStorage.setItem('szorgalmi_student_name', activeUser);
+            sessionStorage.setItem('szorgalmi_student_class', activeClass);
 
-            let html = `
-                <div class="feladat-container">
-                    <h3 style="color: #38bdf8; margin-top: 0;">🔍 6. Osztályos Feladat ${currentTaskIndex + 1} / ${tasks.length}</h3>
-                    <p style="font-size: 1.2rem; font-weight: bold; color: var(--accent-blue, #0284c7);">Megoldandó kifejezés: ${task.expression}</p>
-                    <hr style="border-color: var(--border-color, #334155); margin: 15px 0;">
+            document.getElementById('user-display').textContent = activeUser;
+            document.getElementById('class-display').textContent = activeClass;
+            document.getElementById('welcome-modal').classList.add('hidden');
+            renderGrids();
+            updateTotalScore();
+        }
+
+        function renderGrids() {
+            for(let p=1; p<=6; p++) {
+                const grid = document.getElementById(`grid-${p}`);
+                if (!grid) continue;
+                grid.innerHTML = '';
+                let start = (p - 1) * 5 + 1;
+                let end = p * 5;
+
+                for(let i = start; i <= end; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'task-item';
+                    item.onclick = () => openTask(i);
+                    
+                    let statusText = "Megoldatlan";
+                    let statusClass = "";
+                    if(taskData[i].status === 'correct') {
+                        statusText = taskData[i].revealed && !taskData[i].firstCheckDone ? `Megoldás megtekintve (${taskData[i].score} pont)` : `Teljesítve (${taskData[i].score} pont)`;
+                        statusClass = taskData[i].revealed && !taskData[i].firstCheckDone ? "" : "correct";
+                    } else if(taskData[i].status === 'attempted') {
+                        statusText = `Részben kész (${taskData[i].score} pont)`;
+                        statusClass = "failed";
+                    }
+
+                    item.innerHTML = `
+                        <div style="display:flex; align-items:center;">
+                            <div class="task-badge">${i}</div>
+                            <div>
+                                <div style="font-weight:bold; font-size:14px;">${tasks[i].title}</div>
+                                <div class="task-status ${statusClass}">${statusText}</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right" style="color:#64748b;"></i>
+                    `;
+                    grid.appendChild(item);
+                }
+            }
+        }
+
+        function changePage(dir) {
+            page += dir;
+            if(page < 1) page = 1;
+            if(page > 6) page = 6;
+            
+            for(let p=1; p<=6; p++) {
+                document.getElementById(`page-${p}`).classList.toggle('hidden', page !== p);
+            }
+            document.getElementById('page-num').textContent = page;
+            document.getElementById('prev-btn').disabled = (page === 1);
+            document.getElementById('next-btn').disabled = (page === 6);
+        }
+
+        function openTask(id) {
+            currentTask = id;
+            document.getElementById('modal-title').textContent = tasks[id].title;
+            document.getElementById('modal-attempts').textContent = `Próbálkozások: ${taskData[id].attempts} / 5`;
+            
+            document.getElementById('modal-text').innerHTML = `Végezd el a műveletet:<br><span style="font-size: 16px; color: #60a5fa;">${tasks[id].text}</span>`;
+            
+            const container = document.getElementById('modal-inputs-area');
+            const val = taskData[id].userAnswers['ans'] || "";
+            const isLocked = taskData[id].firstCheckDone;
+
+            container.innerHTML = `
+                <div class="compact-row" style="display:flex; flex-direction:column; gap:5px; align-items:flex-start; background:rgba(30,41,59,0.5); padding:10px; border-radius:6px;">
+                    <label style="font-size:13px; color:#94a3b8;">Végeredmény:</label>
+                    <input type="text" id="field_ans" value="${val}" class="compact-input" ${isLocked ? 'disabled style="background:#0f172a; color:#94a3b8; cursor:not-allowed;"' : ''} oninput="taskData[${id}].userAnswers['ans'] = this.value.trim()">
+                </div>
             `;
 
-            for (let i = 0; i < currentStepIndex; i++) {
-                html += `
-                    <div style="margin-bottom: 10px; color: var(--accent-green, #10b981); font-size: 0.95rem;">
-                        ✔ <b>${i + 1}. Lépés teljesítve:</b> ${task.steps[i].desc} (Eredmény: <b>${task.steps[i].result}</b>)
-                    </div>
-                `;
-            }
-
-            if (currentStepIndex < task.steps.length) {
-                html += `
-                    <div style="background: var(--card-bg, #1e293b); padding: 15px; border-radius: 6px; border: 1px dashed var(--accent-blue, #0284c7);">
-                        <p style="margin-top: 0; font-weight: 600; color: #38bdf8;">Következő (${currentStepIndex + 1}.) Részlépés:</p>
-                        <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
-                            <label>Mit számítasz ki?</label>
-                            <select id="step-desc-input" style="background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;">
-                                <option value="">-- Válassz műveletet / lépést --</option>
-                                <option value="Belső kerek zárójel elvégzése">Belső kerek zárójel elvégzése</option>
-                                <option value="Első kerek zárójel (kivonás)">Első kerek zárójel (kivonás)</option>
-                                <option value="Belső kerek zárójel (összeadás)">Belső kerek zárójel (összeadás)</option>
-                                <option value="Kerek zárójel kivonás">Kerek zárójel kivonás</option>
-                                <option value="Kerek zárójel összeadás">Kerek zárójel összeadás</option>
-                                <option value="Szorzás elvégzése">Szorzás elvégzése</option>
-                                <option value="Szorzás a szögletes zárójelben">Szorzás a szögletes zárójelben</option>
-                                <option value="Összeadás a szögletes zárójelben">Összeadás a szögletes zárójelben</option>
-                                <option value="Kivonás a szögletes zárójelben">Kivonás a szögletes zárójelben</option>
-                                <option value="Osztás elvégzése">Osztás elvégzése</option>
-                                <option value="Végső kivonás">Végső kivonás</option>
-                                <option value="Végső osztás">Végső osztás</option>
-                            </select>
-                        </div>
-                        <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
-                            <label>Részszámítás:</label>
-                            <input type="text" id="step-expr-input" placeholder="pl. 12 - 4" style="background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;">
-                            <label>Részeredmény:</label>
-                            <input type="number" id="step-res-input" style="width: 100px; background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;" placeholder="pl. 8">
-                            <button class="btn-action" onclick="checkStep()" style="background-color: var(--accent-blue, #0284c7); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Lépés Ellenőrzése</button>
-                        </div>
-                        <div id="step-feedback" style="margin-top: 8px; font-size: 0.9rem; font-weight: 600;"></div>
-                    </div>
-                `;
+            const feedback = document.getElementById('modal-feedback');
+            if (isLocked) {
+                feedback.className = 'feedback-box ' + (taskData[id].score > 0 ? 'feedback-correct' : 'feedback-failed');
+                feedback.innerHTML = `Ez a feladat már rögzítve van. Elért pont: ${taskData[id].score} / 1`;
+                feedback.classList.remove('hidden');
+                document.getElementById('btn-check').disabled = true;
+                document.getElementById('btn-check').style.opacity = "0.5";
             } else {
-                html += `
-                    <div style="background: var(--card-bg, #1e293b); padding: 15px; border-radius: 6px; border: 2px solid var(--accent-green, #10b981);">
-                        <p style="margin-top: 0; font-weight: bold; color: var(--accent-green, #10b981);">✨ Minden részlépést sikeresen elvégeztél! Add meg a feladat végeredményét:</p>
-                        <div class="input-row" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center;">
-                            <label><b>Végeredmény =</b></label>
-                            <input type="number" id="final-res-input" style="width: 120px; background-color: var(--card-bg, #1e293b); color: var(--text-color, #e2e8f0); border: 1px solid var(--border-color, #334155); padding: 8px 12px; border-radius: 6px; font-size: 1rem;" placeholder="pl. 27">
-                            <button class="btn-action" onclick="checkFinalAnswer()" style="background-color: var(--accent-green, #10b981); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Feladat Véglegesítése</button>
-                        </div>
-                        <div id="final-feedback" style="margin-top: 8px; font-size: 0.9rem; font-weight: 600;"></div>
-                    </div>
-                `;
+                feedback.className = 'feedback-box hidden';
+                document.getElementById('btn-check').disabled = false;
+                document.getElementById('btn-check').style.opacity = "1";
             }
 
-            html += `</div>`;
-            container.innerHTML = html;
+            document.getElementById('task-modal').classList.remove('hidden');
+            document.getElementById('modal-content-box').scrollTop = 0;
+            if(window.MathJax) MathJax.typeset();
         }
 
-        function checkStep() {
-            const task = tasks[currentTaskIndex];
-            const expected = task.steps[currentStepIndex];
+        function checkAnswer() {
+            if(!currentTask) return;
+            const id = currentTask;
+            if(taskData[id].firstCheckDone) return; // Ha már rögzítve van, ne engedje átírni
 
-            const descInput = document.getElementById('step-desc-input').value.trim();
-            const exprInput = document.getElementById('step-expr-input').value.replace(/·/g, '*').replace(/\s+/g, '');
-            const resInput = parseFloat(document.getElementById('step-res-input').value);
-            const feedbackEl = document.getElementById('step-feedback');
+            const feedback = document.getElementById('modal-feedback');
+            feedback.classList.remove('hidden');
 
-            const expectedExprClean = expected.targetExpr.replace(/\s+/g, '');
+            taskData[id].attempts += 1;
+            document.getElementById('modal-attempts').textContent = `Próbálkozások: ${taskData[id].attempts} / 5`;
 
-            if (!descInput) {
-                feedbackEl.style.color = "#ef4444";
-                feedbackEl.innerText = "Kérlek, válaszd ki a legördülőből, hogy mit számítasz ki!";
-                return;
-            }
-
-            if (exprInput !== expectedExprClean || resInput !== expected.result) {
-                feedbackEl.style.color = "#ef4444";
-                feedbackEl.innerText = "Helytelen részszámítás vagy részeredmény. Ellenőrizd a műveleti sorrendet!";
-                return;
-            }
-
-            feedbackEl.style.color = "#10b981";
-            feedbackEl.innerText = "Helyes lépés! Lépünk tovább.";
+            const userAns = (taskData[id].userAnswers['ans'] || "").replace(/\s+/g, '').toLowerCase().replace(',', '.');
+            const correctAns = tasks[id].answer.replace(/\s+/g, '').toLowerCase().replace(',', '.');
+            const isCorrect = (userAns === correctAns);
             
-            setTimeout(() => {
-                currentStepIndex++;
-                renderTask();
-            }, 800);
-        }
+            let earnedScore = isCorrect ? 1 : 0;
 
-        function checkFinalAnswer() {
-            const task = tasks[currentTaskIndex];
-            const enteredVal = parseFloat(document.getElementById('final-res-input').value);
-            const feedbackEl = document.getElementById('final-feedback');
+            taskData[id].firstCheckDone = true;
+            taskData[id].firstCheckScore = earnedScore;
+            taskData[id].score = earnedScore;
+            taskData[id].status = isCorrect ? 'correct' : 'attempted';
 
-            if (enteredVal === task.finalAnswer) {
-                feedbackEl.style.color = "#10b981";
-                feedbackEl.innerText = "Helyes végeredmény! 🎉 Gratulálok!";
-                score++;
-                document.getElementById('score-display').innerText = `Elért pontszám: ${score} / 5`;
-
-                setTimeout(() => {
-                    currentTaskIndex++;
-                    currentStepIndex = 0;
-                    renderTask();
-                }, 1200);
-            } else {
-                feedbackEl.style.color = "#ef4444";
-                feedbackEl.innerText = "A végeredmény nem stimmel. Nézd át a részszámításokat!";
+            const elem = document.getElementById('field_ans');
+            if(elem) {
+                elem.disabled = true;
+                elem.style.backgroundColor = '#0f172a';
+                elem.style.color = '#94a3b8';
+                elem.style.cursor = 'not-allowed';
+                elem.style.borderColor = isCorrect ? '#22c55e' : '#ef4444';
             }
+
+            document.getElementById('btn-check').disabled = true;
+            document.getElementById('btn-check').style.opacity = "0.5";
+
+            if(isCorrect) {
+                feedback.className = 'feedback-box feedback-correct';
+                feedback.innerHTML = `<i class="fa-solid fa-check"></i> Helyes válasz! (1 / 1 pont)`;
+            } else {
+                feedback.className = 'feedback-box feedback-failed';
+                feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Nem felel meg. Helyes érték: ${tasks[id].answer} (0 / 1 pont)`;
+            }
+
+            updateTotalScore();
+            renderGrids();
         }
 
-        function sendResultEmail() {
-            const studentName = document.getElementById('student-name').value.trim();
-            const feedbackEl = document.getElementById('email-feedback');
-
-            if (!studentName) {
-                feedbackEl.style.color = "#ef4444";
-                feedbackEl.innerText = "Kérlek, add meg a neved a beküldéshez!";
+        function resetTaskInputs() {
+            if(!currentTask) return;
+            const id = currentTask;
+            if(taskData[id].firstCheckDone) {
+                alert("Ezt a feladatot már ellenőrizted, az eredménye rögzítve lett!");
                 return;
             }
-
-            const teacherEmail = "csernyesuli@gmail.com";
-            const subject = encodeURIComponent(`Szorgalmi Feladat Eredmény - ${studentName}`);
-            const body = encodeURIComponent(`Tisztelt Tanár Úr / Tanárnő!\n\n${studentName} nevű tanuló sikeresen teljesítette a 6. osztályos szorgalmi feladatsort.\nElért pontszám: ${score} / 5 (100%)\nDátum: ${new Date().toLocaleDateString()}`);
-
-            feedbackEl.style.color = "#10b981";
-            feedbackEl.innerText = "Az eredmény rögzítve! E-mail kliens megnyitása...";
-
-            setTimeout(() => {
-                window.location.href = `mailto:${teacherEmail}?subject=${subject}&body=${body}`;
-            }, 1000);
+            taskData[id].userAnswers = {};
+            openTask(id);
         }
 
-        window.onload = function() {
-            renderTask();
-        };
+        function revealSolution() {
+            if(!currentTask) return;
+            const id = currentTask;
+            
+            taskData[id].revealed = true;
+            if (!taskData[id].firstCheckDone) {
+                taskData[id].firstCheckDone = true;
+                taskData[id].score = 0;
+            }
+            taskData[id].status = 'correct';
+
+            const container = document.getElementById('modal-inputs-area');
+            container.innerHTML = `
+                <div style="background: rgba(30, 41, 59, 0.8); padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; color: #e2e8f0; font-size: 14px;">
+                    <h4 style="color: #f59e0b; margin-bottom: 5px; font-weight: bold;"><i class="fa-solid fa-lightbulb"></i> Helyes Megoldás:</h4>
+                    <p style="font-size: 16px; font-weight: bold; color: #4ade80;">${tasks[id].answer}</p>
+                </div>
+            `;
+
+            const feedback = document.getElementById('modal-feedback');
+            feedback.classList.remove('hidden');
+            feedback.className = 'feedback-box';
+            feedback.style.background = '#334155';
+            feedback.style.color = '#f59e0b';
+            feedback.innerHTML = `<i class="fa-solid fa-lightbulb"></i> A megoldás megtekintve (${taskData[id].score} / 1 pont).`;
+
+            updateTotalScore();
+            renderGrids();
+            if(window.MathJax) MathJax.typeset();
+        }
+
+        function updateTotalScore() {
+            let total = 0;
+            for(let i=1; i<=30; i++) {
+                total += taskData[i].score;
+            }
+            document.getElementById('stat-score').textContent = total;
+            return total;
+        }
+
+        function closeTask() {
+            document.getElementById('task-modal').classList.add('hidden');
+            renderGrids();
+            updateTotalScore();
+        }
+
+        function askClose() {
+            if (confirm("Biztosan be akarja zárni a feladatlapot? Az eredmények elküldésre kerülnek.")) {
+                if (!emailSent && activeUser) {
+                    sendSummaryEmailSilent();
+                } else {
+                    window.location.href = '6-osztaly-alap.html';
+                }
+            }
+        }
+
+        function sendSummaryEmailSilent() {
+            let totalScore = updateTotalScore();
+            let detailsText = "";
+            for(let i=1; i<=30; i++) {
+                detailsText += `Feladat ${i}: ${taskData[i].score} pont (${taskData[i].status})\n`;
+            }
+
+            const templateParams = {
+                to_name: "Tanár úr",
+                subject: `6.o Alap Szorgalmi / ${activeUser} / ${activeClass} / Összpontszám: ${totalScore}/30`,
+                title: `6. Osztály Alap Szorgalmi Összesítő - ${activeUser} (${activeClass})`,
+                student_name: activeUser,
+                student_class: activeClass,
+                name: activeUser,
+                task_number: "6.o Alap Szorgalmi (1-30. feladat)",
+                task_status: `Elért összpontszám: ${totalScore} / 30 pont`,
+                attempts: "Összesen",
+                correct_answer: "-",
+                details: detailsText
+            };
+
+            // EmailJS integráció (ugyanazokkal a kulcsokkal, mint a többi oldalon)
+            if (typeof emailjs !== 'undefined') {
+                emailjs.send('service_kbrr2is', 'template_vtvagng', templateParams, 'hsRvek-Jff5scNP1B')
+                    .then(function(response) {
+                        emailSent = true;
+                        document.getElementById('sent-score-display').textContent = `Elért pontszám: ${totalScore} / 30 pont`;
+                        document.getElementById('email-sent-modal').classList.remove('hidden');
+                    }, function(error) {
+                        console.log('E-mail küldési hiba:', error);
+                        emailSent = true;
+                        document.getElementById('sent-score-display').textContent = `Elért pontszám: ${totalScore} / 30 pont`;
+                        document.getElementById('email-sent-modal').classList.remove('hidden');
+                    });
+            } else {
+                emailSent = true;
+                document.getElementById('sent-score-display').textContent = `Elért pontszám: ${totalScore} / 30 pont`;
+                document.getElementById('email-sent-modal').classList.remove('hidden');
+            }
+        }
+
+        function resetQuizAndRestart() {
+            sessionStorage.removeItem('szorgalmi_student_name');
+            sessionStorage.removeItem('szorgalmi_student_class');
+            window.location.href = '6-osztaly-alap.html';
+        }
     </script>
 </body>
 </html>

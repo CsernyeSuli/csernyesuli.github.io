@@ -1,0 +1,137 @@
+bash
+
+cd /mnt/user-data/outputs/csernyesuli.github.io && python3 - <<'EOF'
+import re
+# ============ 1) közös JS: csoportfelirat + szorzójel-átalakítás ============
+p='muveleti_sorrend_logika.js'
+j=open(p,encoding='utf-8').read()
+j=j.replace("const ASSIGNMENT_TYPE = PAGE_CONFIG.assignmentType;","""const GROUP_LABELS = { '6_alap': 'ALAP CSOPORT', '6_halado': 'HALADÓ CSOPORT' };   // a kezdőlapon jól látható felirat
+const GROUP_LABEL = PAGE_CONFIG.groupLabel || GROUP_LABELS[CLASS_ID] || '';
+/** Gépelés közben: a billentyűzet csillagját (*) szorzóponttá (·) alakítja. A parser mindkettőt ismeri. */
+const typeFix = s => String(s).replace(/\\*/g, '·');
+const ASSIGNMENT_TYPE = PAGE_CONFIG.assignmentType;""",1)
+assert 'GROUP_LABEL' in j
+open(p,'w',encoding='utf-8').write(j)
+
+# ============ 2) HTML-ek ============
+REPL=[
+ ('<html lang="hu" class="bg-slate-950">','<html lang="hu" class="bg-slate-950 text-[15px]">'),
+ ('mx-auto max-w-4xl px-4 pb-24 pt-10','mx-auto max-w-3xl px-4 pb-16 pt-6'),
+ ('<header class="mb-8 text-center">','<header class="mb-4 text-center">'),
+ ('text-4xl font-extrabold tracking-tight text-emerald-400 md:text-5xl','text-2xl font-extrabold tracking-tight text-emerald-400 md:text-3xl'),
+ ('mt-3 text-lg text-slate-300','mt-1 text-base text-slate-300'),
+ ('rounded-3xl','rounded-2xl'),('rounded-[2rem]','rounded-2xl'),
+ ('mb-6 rounded-2xl','mb-4 rounded-2xl'),
+ ('p-6 shadow-lg shadow-black/30','p-4 shadow-lg shadow-black/30 md:p-5'),
+ ('px-6 py-3','px-4 py-2'),('px-5 py-3','px-4 py-2'),('px-4 py-3','px-3 py-2'),('px-6 py-5','px-4 py-3'),
+ ('text-xl font-bold text-slate-100','text-base font-bold text-slate-100'),
+ ('mt-2 block break-words font-mono text-sm text-cyan-300','mt-1 block break-words font-mono text-xs text-cyan-300'),
+ ('ml-4 text-3xl text-emerald-400','ml-3 text-xl text-emerald-400'),
+ ('mb-5 border-b border-slate-700 pb-3 text-2xl font-bold text-emerald-400','mb-3 border-b border-slate-700 pb-2 text-lg font-bold text-emerald-400'),
+ ('grid gap-4 md:grid-cols-2">\n    </div>','grid gap-3 md:grid-cols-2">\n    </div>'),
+ ('id="groups" class="grid gap-4 md:grid-cols-2"','id="groups" class="grid gap-3 md:grid-cols-2"'),
+ ('py-5 text-center font-mono text-2xl font-bold text-cyan-300 md:text-4xl','py-2 text-center font-mono text-xl font-bold text-cyan-300 md:text-2xl'),
+ ('break-words font-mono text-2xl font-bold text-cyan-300 md:text-4xl','break-words font-mono text-xl font-bold text-cyan-300 md:text-2xl'),
+ ('px-3 py-2 text-lg text-slate-100','px-3 py-2 text-base text-slate-100'),
+ ('max-w-md','max-w-sm'),('bg-slate-900 p-7','bg-slate-900 p-5'),('bg-slate-900 p-8','bg-slate-900 p-6'),
+ ('text-2xl font-bold">Beküldöd?','text-xl font-bold">Beküldöd?'),
+ ('text-2xl font-bold">Gyakorlás kész!','text-xl font-bold">Gyakorlás kész!'),
+ ('my-3 text-6xl font-extrabold','my-2 text-5xl font-extrabold'),
+ ('max-w-4xl','max-w-3xl'),
+ ('p-6 shadow-2xl md:p-10','p-4 shadow-2xl md:p-6'),
+ ('text-2xl font-extrabold text-emerald-400 md:text-3xl','text-lg font-extrabold text-emerald-400 md:text-2xl'),
+ ('text-3xl leading-none','text-2xl leading-none'),
+ ('mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-6 text-center','mt-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center'),
+ ('mt-5 grid gap-4 md:grid-cols-2','mt-3 grid gap-3 md:grid-cols-2'),
+ ('bg-slate-950/70 p-5','bg-slate-950/70 p-4'),
+ ('mt-8 flex items-center justify-between gap-3 border-t border-slate-800 pt-6','mt-4 flex items-center justify-between gap-3 border-t border-slate-800 pt-4'),
+ ('rounded-2xl border border-slate-800 bg-slate-950/80 p-5','rounded-xl border border-slate-800 bg-slate-950/80 p-4'),
+ ('px-5 py-4','px-4 py-3'),('text-xl font-bold">${ok ?','text-lg font-bold">${ok ?'),
+ ('mb-5 h-2 overflow-hidden','mb-3 h-2 overflow-hidden'),('mb-5 text-slate-400','mb-3 text-slate-400'),
+]
+BADGE='''  <div id="groupBadge" class="mx-auto mb-4 w-fit rounded-full border-2 border-emerald-400/70 bg-emerald-500/10 px-6 py-1 text-base font-black tracking-[0.25em] text-emerald-300 shadow-[0_0_16px_rgba(52,211,153,0.35)]"></div>
+'''
+RULE='''<div class="mb-3 flex gap-3 rounded-xl border border-sky-500/50 bg-sky-950/40 p-3 text-sm leading-relaxed text-sky-100">
+      <span class="text-lg">💡</span>
+      <div><b class="text-sky-300">Fontos szabály:</b> Egyszerre csak egyetlen műveletet végezz el! Ha több részszámítást akarsz leírni egy lépésben, válaszd el őket pontosvesszővel (pl. 5*2=10; 3*4=12)!</div>
+    </div>
+    <div id="steps"></div>'''
+ACTIONS='''<div class="mt-2 flex flex-wrap items-center gap-3">
+      <button id="addStep" type="button" class="rounded-xl bg-sky-500 px-4 py-2 font-semibold text-white shadow-[0_0_18px_rgba(14,165,233,0.45)] transition hover:bg-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none">[+] Új lépés</button>
+      <p id="stepErr" class="hidden text-sm font-medium text-red-400">A számítást zárd le egyenlőségjellel és az eredménnyel is (pl. 15:3=5)!</p>
+    </div>
+    <div id="insBar" class="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-slate-700 bg-slate-950/60 p-3 text-xs text-slate-400">
+      <span class="mr-1 font-semibold text-slate-300">Beszúrás:</span>
+      <button type="button" data-ins="·" title="szorzás" class="ins h-8 min-w-[2.25rem] rounded-lg border border-emerald-500/60 bg-slate-800 px-2 font-mono text-base font-bold text-emerald-300 transition hover:bg-slate-700 disabled:opacity-40">·</button>
+      <button type="button" data-ins=":" title="osztás" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100 transition hover:border-emerald-400 disabled:opacity-40">:</button>
+      <button type="button" data-ins="(" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100 transition hover:border-emerald-400 disabled:opacity-40">(</button>
+      <button type="button" data-ins=")" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100 transition hover:border-emerald-400 disabled:opacity-40">)</button>
+      <button type="button" data-ins="=" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100 transition hover:border-emerald-400 disabled:opacity-40">=</button>
+      <button type="button" data-ins=";" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100 transition hover:border-emerald-400 disabled:opacity-40">;</button>
+      <span class="basis-full">A szorzáshoz használhatod a billentyűzeten a csillag (*) jelet is, a program automatikusan átalakítja szorzóponttá!</span>
+    </div>'''
+for f in ['6_osztaly/6-alap/6A-szorgalmi/index.html','6_osztaly/6-halado/6H-szorgalmi/index_halado.html']:
+    h=open(f,encoding='utf-8').read(); miss=[]
+    for a,b in REPL:
+        if a not in h: miss.append(a[:50])
+        h=h.replace(a,b)
+    # 2) csoportfelirat a név/osztály mezők fölött
+    h=h.replace('</header>\n','</header>\n'+BADGE,1)
+    # 3) szabályt kiemelő panel; a régi apró tipp törlése
+    h=re.sub(r'\s*<p class="text-center text-sm text-slate-400">Számold ki lépésről lépésre\..*?</p>','',h,flags=re.S)
+    h=h.replace('<div id="steps"></div>',RULE,1)
+    # 4) beszúró sáv + csillag-tájékoztató
+    h,n=re.subn(r'<div class="mt-2 flex flex-wrap items-center gap-\d">.*?</p>\n    </div>',ACTIONS,h,count=1,flags=re.S)
+    assert n==1,'actions'
+    # JS
+    h=h.replace("$('#grpTitle').textContent = session.group.title;","$('#grpTitle').textContent = `${GROUP_LABEL} · ${session.group.title}`;")
+    h=h.replace("$('#subtitle').textContent = PAGE_CONFIG.subtitle || '';","$('#subtitle').textContent = PAGE_CONFIG.subtitle || '';\n$('#groupBadge').textContent = GROUP_LABEL;")
+    h=h.replace("  const t = e.target; if (!t.dataset.f) return;\n  session.setRow(","  const t = e.target; if (!t.dataset.f) return;\n  if (t.value.includes('*')) { const pos = t.selectionStart; t.value = typeFix(t.value); t.setSelectionRange(pos, pos); }   // * → ·\n  session.setRow(")
+    h=h.replace("  $('#addStep').disabled = locked || session.rows.length >= MAX_STEP_ROWS;\n","  $('#addStep').disabled = locked || session.rows.length >= MAX_STEP_ROWS;\n  document.querySelectorAll('.ins').forEach(b => { b.disabled = locked; });\n")
+    h=h.replace("$('#addStep').addEventListener('click', () => {","""/* beszúró gombok: oda írnak, ahol a kurzor van */
+let lastInput = null;
+$('#steps').addEventListener('focusin', e => { if (e.target.dataset.f) lastInput = e.target; });
+$('#insBar').addEventListener('mousedown', e => e.preventDefault());                 // a gomb ne vegye el a fókuszt a mezőtől
+$('#insBar').addEventListener('click', e => {
+  const b = e.target.closest('button[data-ins]'); if (!b || b.disabled) return;
+  const t = (lastInput && document.contains(lastInput)) ? lastInput
+    : document.querySelector(`#steps input[data-i="${session.rows.length - 1}"][data-f="calc"]`);
+  if (!t || t.disabled) return;
+  t.focus();
+  const s = t.selectionStart ?? t.value.length, en = t.selectionEnd ?? s, ch = b.dataset.ins;
+  t.value = t.value.slice(0, s) + ch + t.value.slice(en);
+  t.setSelectionRange(s + ch.length, s + ch.length);
+  t.dispatchEvent(new Event('input', { bubbles: true }));                           // a munkamenet is frissül
+});
+
+$('#addStep').addEventListener('click', () => {""",1)
+    for need in ['GROUP_LABEL','groupBadge','insBar','typeFix','Fontos szabály']:
+        assert need in h,(f,need)
+    assert '../../../muveleti_sorrend_logika.js' in h
+    open(f,'w',encoding='utf-8').write(h)
+    print(f.split('/')[-1],'| nem talált minta:',miss)
+EOF
+python3 - <<'EOF'
+import re
+R='/mnt/user-data/outputs/csernyesuli.github.io/'
+for f in ['6_osztaly/6-alap/6A-szorgalmi/index.html','6_osztaly/6-halado/6H-szorgalmi/index_halado.html']:
+    h=open(R+f,encoding='utf-8').read()
+    js=re.findall(r'<script>(.*?)</script>',h,re.S)[-1]; open('/tmp/x.js','w',encoding='utf-8').write(js)
+    ids=set(re.findall(r"\$\('#([A-Za-z]+)'\)",js)); have=set(re.findall(r'id="([A-Za-z]+)"',h))
+    import subprocess
+    r=subprocess.run(['node','--check','/tmp/x.js'],capture_output=True,text=True)
+    big=re.findall(r'text-(?:4xl|5xl|6xl|3xl)',h)
+    print(f.split('/')[-1],'| hiányzó id:',ids-have,'| szintaxis:', 'OK' if r.returncode==0 else r.stderr[:200],'| nagy betűosztály:',big,'| classId:',re.search(r"classId: '([^']+)'",h).group(1))
+EOF
+cd /mnt/user-data/outputs/csernyesuli.github.io && node --check muveleti_sorrend_logika.js && node -e "
+const fs=require('fs'),vm=require('vm');
+for(const cid of ['6_alap','6_halado']){const c={console,crypto,window:{PAGE_CONFIG:{classId:cid,assignmentType:'x'}}};vm.createContext(c);
+vm.runInContext(fs.readFileSync('muveleti_sorrend_logika.js','utf8')+'\nthis.o=[GROUP_LABEL,typeFix(\"-185*(-3)=555;0*(-8)=0\"),GROUPS.length,validateGroups().length,analyzeSolution(GROUPS[0].tasks[0],[{calc:typeFix(\"-185*(-3)=555\"),expr:\"555+0*(-8)*12\"}])[0].ok];',c);console.log(cid,c.o);}"
+Output
+
+index.html | nem talált minta: ['grid gap-4 md:grid-cols-2">\n    </div>', 'mb-5 text-slate-400']
+index_halado.html | nem talált minta: ['grid gap-4 md:grid-cols-2">\n    </div>', 'mb-5 text-slate-400']
+index.html | hiányzó id: set() | szintaxis: OK | nagy betűosztály: ['text-3xl', 'text-5xl', 'text-5xl'] | classId: 6_alap
+index_halado.html | hiányzó id: set() | szintaxis: OK | nagy betűosztály: ['text-3xl', 'text-5xl', 'text-5xl'] | classId: 6_halado
+6_alap [ 'ALAP CSOPORT', '-185·(-3)=555;0·(-8)=0', 8, 0, false ]
+6_halado [ 'HALADÓ CSOPORT', '-185·(-3)=555;0·(-8)=0', 8, 0, true ]

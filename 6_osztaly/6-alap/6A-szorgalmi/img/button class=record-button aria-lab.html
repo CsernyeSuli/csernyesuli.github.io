@@ -1,0 +1,203 @@
+<button class="record-button" aria-label="Felvétel indítása"></button>
+<button class="soft-record-button" aria-label="Felvétel"></button>
+<div class="outer-circle">
+  <button class="inner-record-button" aria-label="Felvétel"></button>
+</div>
+<button class="glossy-record-button" aria-label="Felvétel indítása"></button>
+
+
+
+<style>
+.glossy-record-button {
+  /* Pontos 100x100 px méret */
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  
+  /* Sima átmenet az animációkhoz */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ALAP ÁLLAPOT TEXTÚRÁJA ÉS ÁRNYÉKA:
+     1. background: Létrehozza a piros gombot a felső fehér csillogással (linear-gradient)
+     2. box-shadow (kívülről befelé):
+        - Egy nagyon lágy, elmosódott külső sötét árnyék a gomb alatt
+        - A vastag, ezüst/króm színű külső 3D fémkeret
+        - A képen látható jellegzetes mély fekete gyűrű a fém és a piros rész között
+        - Egy belső sötétedés alul, ami megadja a gomb gömbölyűségét */
+  background: linear-gradient(to bottom, #ff6b6b 0%, #cc0000 40%, #8b0000 100%);
+  
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    0 0 0 10px #cccccc,
+    inset 0 0 0 3px #000000,
+    inset 0 -10px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Felső extra üveges csillogás réteg */
+.glossy-record-button::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 15%;
+  width: 70%;
+  height: 35%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 50% / 100% 100% 0% 0%;
+  transition: all 0.2s ease;
+}
+
+
+/* 1. ANIMÁCIÓ: Egér ráhúzás (Hover) */
+.glossy-record-button:hover {
+  /* A gomb enyhén megemelkedik, a külső árnyéka lágyabb és nagyobb lesz */
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.35),
+    0 0 0 10px #dddddd,
+    inset 0 0 0 3px #000000,
+    inset 0 -10px 20px rgba(0, 0, 0, 0.6);
+}
+
+
+/* 2. ANIMÁCIÓ: Kattintás / Benyomás (Active) */
+.glossy-record-button:active {
+  /* A gomb fizikailag "lefelé" mozdul */
+  transform: translateY(4px);
+  
+  /* A külső árnyék szinte teljesen eltűnik (mivel közelebb ér a felülethez),
+     a belső sötét árnyékok felerősödnek, a gomb tetején lévő csillogás pedig elhalványul */
+  background: linear-gradient(to bottom, #cc0000 0%, #8b0000 70%, #4a0000 100%);
+  
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 0 0 10px #bbbbbb,
+    inset 0 0 15px rgba(0, 0, 0, 0.9),
+    inset 0 -5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.glossy-record-button:active::before {
+  /* Kattintáskor az üveghatású csillogás is összemegy és halványul */
+  opacity: 0.3;
+  top: 8px;
+}
+
+/* A nagy külső fehér kör (arányosan megnövelve a 100px-es gombhoz) */
+.outer-circle {
+  width: 280px;
+  height: 280px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* A belső piros gomb - Pontosan 100x100 px méretben */
+.inner-record-button {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ff0000;
+  cursor: pointer;
+  
+  /* Sima átmenet az összes animációhoz (méret és árnyékok) */
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Alap állapotú árnyékok */
+  box-shadow: 
+    inset 0 0 6px rgba(0, 0, 0, 0.4),
+    0 0 0 3px #1a1a1a,
+    0 0 0 7px #e57373;
+}
+
+/* 1. ANIMÁCIÓ: Egér ráhúzás (Hover) */
+.inner-record-button:hover {
+  /* Minimális növekedés, mintha közeledne a gomb */
+  transform: scale(1.03);
+  
+  /* A külső halvány gyűrű pulzálóan kitágul és élénkebb lesz */
+  box-shadow: 
+    inset 0 0 6px rgba(0, 0, 0, 0.4),
+    0 0 0 3px #1a1a1a,
+    0 0 0 14px rgba(229, 115, 115, 0.6);
+}
+
+/* 2. ANIMÁCIÓ: Kattintás (Active) */
+.inner-record-button:active {
+  /* Összenyomódás hatás */
+  transform: scale(0.95);
+  
+  /* A belső sötét árnyék felerősödik (mélyebbre süllyed a gomb), 
+     a külső gyűrűk pedig szorosan rásimulnak */
+  box-shadow: 
+    inset 0 0 14px rgba(0, 0, 0, 0.7),
+    0 0 0 2px #1a1a1a,
+    0 0 0 4px #e57373;
+}
+
+
+.record-button {
+  /* Alak és méret */
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ff3b30; /* Klasszikus felvétel vörös */
+  cursor: pointer;
+  
+  /* Átmenet a sima animációért */
+  transition: all 0.2s ease-in-out;
+  
+  /* 1. Alap állapot árnyéka (Lágy külső árnyék a mélységért) */
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4), 
+              0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover (Egér ráhúzás) állapot */
+.record-button:hover {
+  transform: scale(1.05);
+  /* Erősebb ragyogás és árnyék */
+  box-shadow: 0 6px 20px rgba(255, 59, 48, 0.6), 
+              0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Active (Kattintás/Benyomás) állapot */
+.record-button:active {
+  transform: scale(0.95);
+  /* 2. Benyomott árnyék (Belső árnyék "inset" használatával) */
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5), 
+              0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.soft-record-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ff0000; /* Élénk piros, mint a képen */
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  /* Finom, lágy, elmosott árnyék halvány feketével/szürkével */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 
+              0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effekt (opcionális, de ajánlott az interaktivitáshoz) */
+.soft-record-button:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 
+              0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Kattintás effekt */
+.soft-record-button:active {
+  transform: scale(0.96);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+</style>

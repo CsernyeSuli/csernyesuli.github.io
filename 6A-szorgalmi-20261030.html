@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. Osztály Alap – Műveletsorok Szorgalmi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .custom-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); }
+/* ==========================================
+   1. PIROS RECORD GOMB (530. sorhoz)
+   ========================================== */
+.glossy-record-button-50 {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  /* Kicsit lassabb, finomabb átmenet a hover-hez */
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(to bottom, #ff6b6b 0%, #cc0000 40%, #8b0000 100%);
+  
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.4),
+    0 0 0 3.5px #cccccc,
+    inset 0 0 0 1px #000000,
+    inset 0 -4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.glossy-record-button-50::before {
+  content: '';
+  position: absolute;
+  top: 1.5px;
+  left: 15%;
+  width: 70%;
+  height: 35%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 50% / 100% 100% 0% 0%;
+  transition: all 0.25s ease;
+}
+
+/* LÁTVÁNYOSABB HOVER ÁLLAPOT */
+.glossy-record-button-50:hover {
+  /* Érezhetőbb felemelkedés */
+  transform: translateY(-0.5px);
+  
+  /* Erősebb, pirosas színű izzó árnyék és fényesebb fémkeret */
+  box-shadow: 
+    0 8px 16px rgba(255, 0, 0, 0.35),       /* Vöröses izzás a gomb alatt */
+    0 0 0 3.5px #ffffff,                    /* A fémkeret szinte világít (fehérre vált) */
+    inset 0 0 4px rgba(255, 255, 255, 0.8), /* Belső extra csillogás a fém szélén */
+    inset 0 0 0 1px #000000,
+    inset 0 -4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Hover közben a felső üvegcsillogás is kicsit intenzívebb lesz */
+.glossy-record-button-50:hover::before {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+/* Kattintás (Benyomódás továbbra is drámai marad az elmozdulás miatt) */
+.glossy-record-button-50:active {
+  transform: translateY(2px);
+  background: linear-gradient(to bottom, #cc0000 0%, #8b0000 70%, #4a0000 100%);
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 0 3.5px #bbbbbb,
+    inset 0 0 6px rgba(0, 0, 0, 0.9),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.glossy-record-button-50:active::before {
+  opacity: 0.3;
+  top: 3px;
+}
+
+
+/* ==========================================================================
+   2. KÉK PLAY GOMB (Megoldások visszanézéséhez, nextSolutionStep)
+   ========================================================================== */
+.glossy-play-button-50 {
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(to bottom, #1e90ff 0%, #0052cc 50%, #002e80 100%);
+  
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 0 0 2px #0a1931,                        /* Sötétkék/feketés kontúros fémkeret */
+    inset 0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Felső üvegcsillogás (Kék gomb) */
+.glossy-play-button-50::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 15%;
+  width: 70%;
+  height: 40%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 50% / 100% 100% 0% 0%;
+  transition: all 0.25s ease;
+  z-index: 1;
+}
+
+/* FEHÉR LEJÁTSZÁS HÁROMSZÖG (Csak a kék gombhoz, clip-path technológiával) */
+.glossy-play-button-50::after {
+  content: '';
+  position: absolute;
+  top: 8px;                                 /* Függőlegesen középre igazítva */
+  left: 10px;                               /* Vízszintes optikai középpont */
+  width: 8px;
+  height: 10px;
+  background-color: #ffffff;
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%); /* Háromszöggé vágja a négyzetet */
+  z-index: 2;
+}
+
+/* Hover állapot (Kék gomb) */
+.glossy-play-button-50:hover {
+  transform: translateY(-0.5px);
+  box-shadow: 
+    0 4px 8px rgba(30, 144, 255, 0.4),       /* Királykék izzás a gomb alatt */
+    0 0 0 2px #1e90ff,                      /* Világító kék külső gyűrű */
+    inset 0 0 2px rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px #000000,
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Aktív / Kattintás állapot (Kék gomb) */
+.glossy-play-button-50:active {
+  transform: translateY(1px);
+  background: linear-gradient(to bottom, #0052cc 0%, #002e80 70%, #001a4d 100%);
+  box-shadow: 
+    0 1px 1px rgba(0, 0, 0, 0.3),
+    0 0 0 2px #0a1931,
+    inset 0 0 5px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.4);
+}
+.glossy-play-button-50:active::before {
+  opacity: 0.2;
+  top: 2px;
+}
+    </style>
+</head>
+<body class="custom-gradient text-slate-100 font-sans min-h-screen p-4 flex flex-col justify-between select-none overflow-y-auto" oncontextmenu="return false;">
+
+    <!-- NÉV ÉS OSZTÁLY BEKÉRŐ LEBEGŐ LAP -->
+    <div id="loginModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-md w-full shadow-2xl">
+            <h2 class="text-2xl font-bold text-emerald-400 mb-2">Szorgalmi Feladatlap</h2>
+            <p class="text-slate-400 mb-6 text-sm">Add meg a neved és az osztályod a feladatok megkezdéséhez.</p>
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Tanuló neve:</label>
+                    <input type="text" id="inputName" placeholder="Pl. Kovács Anna" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Osztály:</label>
+                    <input type="text" id="inputClass" placeholder="Pl. 6.a" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500">
+                </div>
+            </div>
+            <button onclick="saveStudentData()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                Belépés a feladatokhoz ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- FŐ OLDAL: FELADATSOROK VÁLASZTÁSA ÉS TÁJÉKOZTATÓ -->
+    <main id="mainContainer" class="max-w-4xl w-full mx-auto my-6 hidden">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-extrabold text-emerald-400 mb-2">Műveletsorok egész számokkal</h1>
+            <p class="text-slate-400">6. osztályos szorgalmi feladatok</p>
+            <div id="studentBadge" class="inline-block mt-3 bg-slate-800 px-4 py-1.5 rounded-full border border-slate-700 text-sm">
+                👤 <span id="displayName" class="font-bold text-amber-400"></span> | Osztály: <span id="displayClass" class="font-bold text-amber-400"></span>
+            </div>
+        </div>
+
+        <!-- TÁJÉKOZTATÓ BLOKK -->
+        <div class="bg-slate-900/80 border border-amber-500/40 p-6 rounded-2xl mb-8 shadow-lg text-slate-300 text-sm leading-relaxed">
+            <h3 class="text-amber-400 font-bold text-base mb-2 flex items-center gap-2">ℹ️ Tájékoztató és Szabályzat</h3>
+            <p class="mb-3">A számozott gombokra kattintva 5 műveletsort tartalmazó feladatlap nyílik meg. Old meg mindegyiket! A végén, ha az összes megoldás jó, jeles osztályzatot érsz el!</p>
+            
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+                <p class="font-semibold text-amber-300">FONTOS SZABÁLYOK ÉS FIGYELMEZTETÉSEK:</p>
+                <ul class="list-disc list-inside space-y-1 text-slate-400">
+                    <li>Egy kiválasztott feladatsor lezárásakor az eredményed automatikusan elküldésre kerül a <span class="text-slate-200">csernyei.iskola@gmail.com</span> címre neveddel és az eredményeddel.</li>
+                    <li>Ha a feladatsort többször nyitod meg vagy küldöd be, a rendszerben kizárólag a legkorábban beérkezett megoldásod lesz érvényes!</li>
+                    <li>Ha elhagyod az oldalt (másik lapra kattintasz), a feladatod lezáródik és az addigi eredményeid lesznek elküldve.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FELADATSOR GOMBOK -->
+        <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl backdrop-blur-md shadow-xl mb-10">
+            <h2 class="text-xl font-bold text-emerald-400 mb-6 border-b border-slate-800 pb-3">Feladatsorok</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="taskSetsGrid"></div>
+        </div>
+    </main>
+
+    <!-- MEGOLDÓ NÉZET (RÖGZÍTETT FEJLÉCCEL) -->
+    <div id="solverContainer" class="max-w-3xl w-full mx-auto my-6 hidden">
+        
+        <!-- RÖGZÍTETT STICKY FEJLÉC -->
+        <div class="sticky top-2 z-40 bg-slate-900/95 border border-slate-700/80 p-4 rounded-2xl shadow-xl backdrop-blur-md mb-6">
+            <div class="flex justify-between items-center mb-2">
+                <button onclick="backToSets()" class="text-slate-400 hover:text-white text-xs font-semibold">⬅ Vissza</button>
+                <span id="solverHeaderTitle" class="text-emerald-400 font-bold uppercase tracking-wider text-xs"></span>
+            </div>
+            <div class="text-center">
+                <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block mb-1">Aktuális kifejezés:</span>
+                <div id="expressionDisplay" class="text-xl sm:text-2xl font-extrabold text-cyan-400"></div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl shadow-2xl mb-10">
+            <!-- MÚLTBELI LÉPÉSEK -->
+            <div id="historyContainer" class="space-y-3 mb-4"></div>
+            <!-- AKTUÁLIS LÉPÉS -->
+            <div id="activeStepBox"></div>
+        </div>
+    </div>
+
+    <!-- ÉRTÉKELŐ LEBEGŐ LAP (MODAL) -->
+    <div id="evaluationModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-lg w-full shadow-2xl relative">
+            <div class="text-center mb-6">
+                <a href="../../index.html" class="text-amber-400 hover:underline text-xs font-semibold mb-4 inline-block">🏠 Vissza a főoldalra</a>
+                <h2 id="evalTitle" class="text-2xl font-bold text-emerald-400 mb-2">Feladatsor Értékelése</h2>
+                <div id="gradeBadge" class="text-3xl font-black my-4"></div>
+                <p id="evalMessage" class="text-slate-300 text-sm leading-relaxed"></p>
+            </div>
+            
+            <div class="flex gap-4">
+                <button onclick="closeEvaluationModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl transition border border-slate-700">
+                    Bezárás
+                </button>
+                <button onclick="openSolutionsViewer()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                    Megoldások ➔
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RÉSZLETES MEGOLDÁSOK LEBEGŐ LAPJA (PLAY MÓD) -->
+    <div id="solutionsModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-700 p-6 sm:p-8 rounded-3xl max-w-2xl w-full shadow-2xl relative my-auto">
+            
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
+                <h3 id="solModalTitle" class="text-lg font-bold text-emerald-400">Megoldások részletei</h3>
+                <button onclick="closeSolutionsViewer()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
+            </div>
+
+            <!-- RÖGZÍTETT FEJLÉC A MEGOLDÁSOKHOZ -->
+            <div class="sticky top-0 z-20 bg-slate-950/95 border border-slate-800 p-3 rounded-2xl text-center mb-4 backdrop-blur-md">
+                <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block mb-1">Kifejezés:</span>
+                <div id="solExpressionDisplay" class="text-lg font-extrabold text-cyan-400"></div>
+            </div>
+
+            <!-- KORÁBBI LÉPÉSEK (SZÜRKE) -->
+            <div id="solHistoryContainer" class="space-y-3 mb-4"></div>
+            <!-- AKTUÁLIS LÉPÉS PLAY GOMBBAL -->
+            <div id="solActiveStepBox"></div>
+
+            <div class="flex justify-between items-center border-t border-slate-800 pt-4 mt-6">
+                <button onclick="prevSolutionTask()" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold text-slate-300">⬅ Előző feladat</button>
+                <span id="solPaginationIndicator" class="text-xs text-slate-400 font-bold">1 / 5</span>
+                <button onclick="nextSolutionTask()" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold text-slate-300">Következő feladat ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-xs text-slate-500 py-3 border-t border-slate-800 mt-6">
+        Matematika Portál &bull; Interaktív Tanulási Rendszer
+    </footer>
+
+    <script>
+        const WEB_APP_URL = "IDE_MASold_BE_A_SAJAT_WEB_APP_URL_DOD_IDE";
+
+        const taskDatabase = [
+            { id: 1, title: "1. Feladatsor", tasks: [
+                { expr: "2 × (15 : 3 − 2 × 2) + 12 : 4 × 5", steps: [
+                    { q: "Mi az, amit először megvizsgálsz?", options: ["Van zárójelben művelet?", "Van szorzás?", "Van összeadás?", "Bármivel kezdhetem."], correct: "Van zárójelben művelet?" },
+                    { q: "Melyik művelettel kezdesz a zárójelben?", options: ["15 : 3 és 2 × 2", "3 - 2", "Csak a szorzással", "Bármelyikkel"], correct: "15 : 3 és 2 × 2" },
+                    { q: "Mennyi a zárójel értéke végül?", ansType: "number", correct: "3" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "21" }
+                ]},
+                { expr: "4 × (24 : 6 − 1 × 5) + 18 : 3 × 2", steps: [
+                    { q: "Mi az első lépés ebben a kifejezésben?", options: ["Zárójelben lévő művelet", "Szorzás elvégzése", "Osztás elvégzése"], correct: "Zárójelben lévő művelet" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "-1" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "16" }
+                ]},
+                { expr: "3 × (30 : 5 − 2 × 4) + 20 : 2 × 3", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Szorzás", "Összeadás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "-2" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "36" }
+                ]},
+                { expr: "5 × (18 : 2 − 3 × 3) + 16 : 8 × 7", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Szorzás", "Osztás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "14" }
+                ]},
+                { expr: "2 × (40 : 8 − 1 × 2) + 35 : 5 × 4", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Szorzás", "Osztás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "3" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "34" }
+                ]}
+            ]},
+            { id: 2, title: "2. Feladatsor", tasks: [
+                { expr: "12 : (2 × 4 − 10 : 2) + 6 × 4 : 3", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Osztás", "Szorzás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "3" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "12" }
+                ]},
+                { expr: "20 : (3 × 3 − 12 : 3) + 8 × 5 : 2", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Osztás", "Szorzás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "5" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "24" }
+                ]},
+                { expr: "18 : (1 × 5 − 8 : 4) + 9 × 2 : 6", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Osztás", "Szorzás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "3" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "9" }
+                ]},
+                { expr: "30 : (4 × 2 − 15 : 5) + 7 × 6 : 2", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Osztás", "Szorzás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "5" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "27" }
+                ]},
+                { expr: "16 : (2 × 5 − 18 : 3) + 5 × 8 : 10", steps: [
+                    { q: "Melyik részzel kezdesz?", options: ["Zárójel", "Osztás", "Szorzás"], correct: "Zárójel" },
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "4" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "8" }
+                ]}
+            ]},
+            { id: 3, title: "3. Feladatsor (Negatív számok)", tasks: [
+                { expr: "(− 185) · (− 3) + 0 · (− 8) · 12", steps: [
+                    { q: "Melyik művelettel kezdesz?", options: ["Szorzások", "Összeadás"], correct: "Szorzások" },
+                    { q: "Mennyi az első szorzat értéke?", ansType: "number", correct: "555" },
+                    { q: "Mennyi a második szorzat értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "555" }
+                ]},
+                { expr: "(− 214) · (− 5) + (− 11) · 0 · (− 6)", steps: [
+                    { q: "Melyik művelettel kezdesz?", options: ["Szorzások", "Összeadás"], correct: "Szorzások" },
+                    { q: "Mennyi az első szorzat értéke?", ansType: "number", correct: "1070" },
+                    { q: "Mennyi a második szorzat értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "1070" }
+                ]},
+                { expr: "(− 96) · (− 7) + 15 · (− 4) · 0", steps: [
+                    { q: "Mennyi az első szorzat értéke?", ansType: "number", correct: "672" },
+                    { q: "Mennyi a második szorzat értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "672" }
+                ]},
+                { expr: "(− 342) · (− 2) + 0 · 14 · (− 9)", steps: [
+                    { q: "Mennyi az első szorzat értéke?", ansType: "number", correct: "684" },
+                    { q: "Mennyi a második szorzat értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "684" }
+                ]},
+                { expr: "(− 178) · (− 6) + (− 23) · 0 · 8", steps: [
+                    { q: "Mennyi az első szorzat értéke?", ansType: "number", correct: "1068" },
+                    { q: "Mennyi a második szorzat értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "1068" }
+                ]}
+            ]},
+            { id: 4, title: "4. Feladatsor", tasks: [
+                { expr: "(− 145) · (− 4) − 0 · (− 15) · 6", steps: [
+                    { q: "Mennyi az első tag értéke?", ansType: "number", correct: "580" },
+                    { q: "Mennyi a második tag értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "580" }
+                ]},
+                { expr: "(− 231) · (− 3) − (− 8) · 0 · (− 12)", steps: [
+                    { q: "Mennyi az első tag értéke?", ansType: "number", correct: "693" },
+                    { q: "Mennyi a második tag értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "693" }
+                ]},
+                { expr: "(− 87) · (− 8) − 19 · (− 5) · 0", steps: [
+                    { q: "Mennyi az első tag értéke?", ansType: "number", correct: "696" },
+                    { q: "Mennyi a második tag értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "696" }
+                ]},
+                { expr: "(− 312) · (− 2) − 0 · 21 · (− 7)", steps: [
+                    { q: "Mennyi az első tag értéke?", ansType: "number", correct: "624" },
+                    { q: "Mennyi a második tag értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "624" }
+                ]},
+                { expr: "(− 164) · (− 5) − (− 14) · 0 · 9", steps: [
+                    { q: "Mennyi az első tag értéke?", ansType: "number", correct: "820" },
+                    { q: "Mennyi a második tag értéke?", ansType: "number", correct: "0" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "820" }
+                ]}
+            ]},
+            { id: 5, title: "5. Feladatsor (Zárójelek)", tasks: [
+                { expr: "[(− 18) − (− 6)] · (− 4) : 8", steps: [
+                    { q: "Mennyi a belső zárójel értéke?", ansType: "number", correct: "-12" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "6" }
+                ]},
+                { expr: "[(− 25) − (− 10)] · (− 6) : 9", steps: [
+                    { q: "Mennyi a belső zárójel értéke?", ansType: "number", correct: "-15" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "10" }
+                ]},
+                { expr: "[(− 32) − (− 12)] · (− 3) : 5", steps: [
+                    { q: "Mennyi a belső zárójel értéke?", ansType: "number", correct: "-20" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "12" }
+                ]},
+                { expr: "[(− 15) − (− 3)] · (− 7) : 6", steps: [
+                    { q: "Mennyi a belső zárójel értéke?", ansType: "number", correct: "-12" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "14" }
+                ]},
+                { expr: "[(− 40) − (− 16)] · (− 2) : 4", steps: [
+                    { q: "Mennyi a belső zárójel értéke?", ansType: "number", correct: "-24" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "12" }
+                ]}
+            ]},
+            { id: 6, title: "6. Feladatsor", tasks: [
+                { expr: "12 * (72 : 8 + 5 * 7) - 48 : 6 * 2", steps: [
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "44" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "516" }
+                ]},
+                { expr: "-15 * [(-120) : 6 + 4 * 9] - 60 : (-5) * 3", steps: [
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "16" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "-204" }
+                ]},
+                { expr: "20 * [100 : (-5) + (-6) * (-8)] - (-72) : 9 * (-4)", steps: [
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "28" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "536" }
+                ]},
+                { expr: "-8 * [(-144) : (-12) + 7 * (-6)] - 96 : (-8) * (-5)", steps: [
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "-30" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "224" }
+                ]},
+                { expr: "25 * [200 : 8 + (-9) * 5] - (-150) : 10 * 3", steps: [
+                    { q: "Mennyi a zárójel értéke?", ansType: "number", correct: "-20" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "-455" }
+                ]}
+            ]},
+            { id: 7, title: "7. Feladatsor (Haladó összetett)", tasks: [
+                { expr: "180 : [6 * (-3) - (-40) : 5] + 12 * (-5) : (-3)", steps: [
+                    { q: "Mennyi a szögletes zárójel értéke?", ansType: "number", correct: "-10" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "-70" }
+                ]},
+                { expr: "-240 : [(-4) * 5 - 36 : (-9)] + 15 * 8 : 4", steps: [
+                    { q: "Mennyi a szögletes zárójel értéke?", ansType: "number", correct: "-16" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "42" }
+                ]},
+                { expr: "400 : [4 * (-6) - (-36) : 9] + (-12) * 10 : (-4)", steps: [
+                    { q: "Mennyi a szögletes zárójel értéke?", ansType: "number", correct: "-20" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "-20" }
+                ]},
+                { expr: "-560 : [(-5) * (-4) - (-32) : 4] + 25 * 4 : (-5)", steps: [
+                    { q: "Mennyi a szögletes zárójel értéke?", ansType: "number", correct: "12" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "-48" }
+                ]},
+                { expr: "720 : [8 * (-3) - (-72) : 8] + (-16) * 5 : (-4)", steps: [
+                    { q: "Mennyi a szögletes zárójel értéke?", ansType: "number", correct: "-15" },
+                    { q: "Mennyi a feladat végeredménye?", ansType: "number", correct: "-20" }
+                ]}
+            ]}
+        ];
+
+        let currentUser = { name: "", studentClass: "" };
+        let activeSet = null;
+        let currentTaskIdx = 0;
+        let currentStepIdx = 0;
+        let sessionLog = [];
+        let viewingSolutionTaskIdx = 0;
+        let viewingSolutionStepIdx = 0;
+        let isSolvingActive = false;
+
+        document.addEventListener("mouseleave", function() {
+            if (isSolvingActive) {
+                alert("FIGYELEM! Ne hagyd el az egereddel a feladatlap keretét, mert az elhagyás a feladat lezárását vonhatja maga után!");
+            }
+        });
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden && isSolvingActive) {
+                alert("FIGYELEM! Elkattintottál az oldalról! A feladatod lezárult, mivel nem fejezted be, nem kaphatsz jelest.");
+                finalizeAndEvaluate();
+            }
+        });
+
+        window.onload = function() {
+            const sName = sessionStorage.getItem('stName');
+            const sClass = sessionStorage.getItem('stClass');
+            if (sName && sClass) {
+                currentUser.name = sName;
+                currentUser.studentClass = sClass;
+                initPortal();
+            }
+        }
+
+        function saveStudentData() {
+            const name = document.getElementById('inputName').value.trim();
+            const sClass = document.getElementById('inputClass').value.trim();
+            if (!name || !sClass) {
+                alert("Kérlek, töltsd ki a neved és az osztályod!");
+                return;
+            }
+            currentUser.name = name;
+            currentUser.studentClass = sClass;
+            sessionStorage.setItem('stName', name);
+            sessionStorage.setItem('stClass', sClass);
+            document.getElementById('loginModal').classList.add('hidden');
+            initPortal();
+        }
+
+        function initPortal() {
+            document.getElementById('displayName').innerText = currentUser.name;
+            document.getElementById('displayClass').innerText = currentUser.studentClass;
+            document.getElementById('mainContainer').classList.remove('hidden');
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('taskSetsGrid');
+            grid.innerHTML = "";
+            taskDatabase.forEach((set, idx) => {
+                const firstExpression = set.tasks[0].expr;
+                grid.innerHTML += `
+                    <div onclick="openSet(${idx})" class="p-5 bg-slate-800/80 border border-slate-700 rounded-2xl hover:border-emerald-500 cursor-pointer transition flex justify-between items-center group">
+                        <div>
+                            <h3 class="font-bold text-lg text-white group-hover:text-emerald-400 transition">${set.title}</h3>
+                            <p class="text-xs text-cyan-400 mt-1 font-mono">${firstExpression}</p>
+                        </div>
+                        <span class="text-emerald-400 font-bold text-xl group-hover:translate-x-1 transition">➔</span>
+                    </div>
+                `;
+            });
+        }
+
+        function openSet(idx) {
+            activeSet = taskDatabase[idx];
+            currentTaskIdx = 0;
+            currentStepIdx = 0;
+            sessionLog = [];
+            isSolvingActive = true;
+            document.getElementById('mainContainer').classList.add('hidden');
+            document.getElementById('solverContainer').classList.remove('hidden');
+            loadTaskStep();
+        }
+
+        function backToSets() {
+            isSolvingActive = false;
+            document.getElementById('solverContainer').classList.add('hidden');
+            document.getElementById('mainContainer').classList.remove('hidden');
+        }
+
+        function loadTaskStep() {
+            const task = activeSet.tasks[currentTaskIdx];
+            document.getElementById('solverHeaderTitle').innerText = `${activeSet.title} – ${currentTaskIdx + 1}. feladat / 5`;
+            document.getElementById('expressionDisplay').innerText = task.expr;
+            renderHistoryAndActiveStep();
+        }
+
+        function renderHistoryAndActiveStep() {
+            const historyContainer = document.getElementById('historyContainer');
+            historyContainer.innerHTML = "";
+            
+            sessionLog.filter(log => log.taskIdx === currentTaskIdx).forEach(item => {
+                historyContainer.innerHTML += `
+                    <div class="p-3 bg-slate-950/40 border border-slate-800 rounded-xl text-slate-400 text-sm flex justify-between items-center">
+                        <span>${item.stepText}</span>
+                        <span class="text-slate-400 font-medium">Válasz rögzítve</span>
+                    </div>
+                `;
+            });
+
+            const activeBox = document.getElementById('activeStepBox');
+            const task = activeSet.tasks[currentTaskIdx];
+
+            if (currentStepIdx >= task.steps.length) {
+                activeBox.innerHTML = "";
+                if (currentTaskIdx < activeSet.tasks.length - 1) {
+                    currentTaskIdx++;
+                    currentStepIdx = 0;
+                    loadTaskStep();
+                } else {
+                    finalizeAndEvaluate();
+                }
+                return;
+            }
+
+            const step = task.steps[currentStepIdx];
+            let inputControl = "";
+            if (step.options) {
+                let opts = `<option value="">Válassz opciót...</option>`;
+                step.options.forEach(o => opts += `<option value="${o}">${o}</option>`);
+                inputControl = `<select id="stepVal" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500">${opts}</select>`;
+            } else {
+                inputControl = `<input type="text" id="stepVal" placeholder="Írd be a választ..." class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500">`;
+            }
+
+            activeBox.innerHTML = `
+                <div class="p-5 bg-slate-950/60 border border-slate-800 rounded-2xl" id="activeStepCard">
+                    <label class="block font-medium text-slate-200 mb-3">${currentStepIdx + 1}. Lépés: ${step.q}</label>
+                    <div class="flex gap-3 items-center">
+                        ${inputControl}
+                    <!-- <button onclick="commitStep()" title="Válasz rögzítése" class="bg-transparent border-none cursor-pointer">
+                    <img src="img/rec50x50.png" alt="Válasz rögzítése" class="w-10 h-10 object-contain">
+                    </button> -->
+                    <button onclick="commitStep()" title="Válasz rögzítése" class="glossy-record-button-50"></button>
+
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const card = document.getElementById('activeStepCard');
+                if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        function commitStep() {
+            const valInput = document.getElementById('stepVal');
+            const val = valInput.value.trim();
+            if (!val) {
+                alert("Kérlek, adj meg egy választ!");
+                return;
+            }
+
+            const task = activeSet.tasks[currentTaskIdx];
+            const step = task.steps[currentStepIdx];
+
+            sessionLog.push({
+                taskIdx: currentTaskIdx,
+                stepText: step.q,
+                userAnswer: val,
+                correctAnswer: step.correct,
+                correct: (val === step.correct)
+            });
+
+            currentStepIdx++;
+            renderHistoryAndActiveStep();
+        }
+
+        function finalizeAndEvaluate() {
+            isSolvingActive = false;
+            document.getElementById('solverContainer').classList.add('hidden');
+            
+            let totalRequiredSteps = 0;
+            activeSet.tasks.forEach(t => totalRequiredSteps += t.steps.length);
+
+            let completedAll = (sessionLog.length === totalRequiredSteps);
+            let allCorrect = completedAll && sessionLog.every(item => item.correct);
+
+            const gradeBadge = document.getElementById('gradeBadge');
+            const evalMessage = document.getElementById('evalMessage');
+
+            if (allCorrect) {
+                gradeBadge.innerHTML = "Jeles (5) ⭐";
+                gradeBadge.className = "text-3xl font-black my-4 text-emerald-400";
+                evalMessage.innerText = "Gratulálok! Mind az 5 feladatot sikeresen és hibátlanul megoldottad!";
+            } else {
+                gradeBadge.innerHTML = "Nem sikerült ❌";
+                gradeBadge.className = "text-3xl font-black my-4 text-red-400";
+                evalMessage.innerText = "A feladatsor megszakadt, nem fejezted be az összes feladatot, vagy hiba történt a válaszokban.";
+            }
+
+            const submissionKey = `submitted_${currentUser.name}_${activeSet.title}`.replace(/\s+/g, '_');
+            const alreadySubmitted = localStorage.getItem(submissionKey);
+
+            if (!alreadySubmitted) {
+                const payload = {
+                    student_name: currentUser.name,
+                    student_class: currentUser.studentClass,
+                    title: activeSet.title,
+                    category: "Szorgalmi",
+                    total_score: allCorrect ? "Jeles (5)" : "Nem sikerült",
+                    details: JSON.stringify(sessionLog)
+                };
+
+                fetch(WEB_APP_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    localStorage.setItem(submissionKey, "true");
+                }).catch(err => console.error(err));
+            }
+
+            document.getElementById('evaluationModal').classList.remove('hidden');
+        }
+
+        function closeEvaluationModal() {
+            document.getElementById('evaluationModal').classList.add('hidden');
+            document.getElementById('mainContainer').classList.remove('hidden');
+        }
+
+        function openSolutionsViewer() {
+            document.getElementById('evaluationModal').classList.add('hidden');
+            viewingSolutionTaskIdx = 0;
+            viewingSolutionStepIdx = 0;
+            renderSolutionTaskView();
+            document.getElementById('solutionsModal').classList.remove('hidden');
+        }
+
+        function closeSolutionsViewer() {
+            document.getElementById('solutionsModal').classList.add('hidden');
+            document.getElementById('mainContainer').classList.remove('hidden');
+        }
+
+        function renderSolutionTaskView() {
+            const task = activeSet.tasks[viewingSolutionTaskIdx];
+            document.getElementById('solModalTitle').innerText = `${activeSet.title} – ${viewingSolutionTaskIdx + 1}. Feladat megoldásai`;
+            document.getElementById('solPaginationIndicator').innerText = `${viewingSolutionTaskIdx + 1} / 5`;
+            document.getElementById('solExpressionDisplay').innerText = task.expr;
+
+            const historyBox = document.getElementById('solHistoryContainer');
+            historyBox.innerHTML = "";
+
+            const userTaskLogs = sessionLog.filter(l => l.taskIdx === viewingSolutionTaskIdx);
+
+            for (let i = 0; i < viewingSolutionStepIdx; i++) {
+                const step = task.steps[i];
+                const userLog = userTaskLogs[i];
+                const userAns = userLog ? userLog.userAnswer : "Nem válaszolt";
+                const isCorr = userLog ? userLog.correct : false;
+
+                historyBox.innerHTML += `
+                    <div class="p-3 bg-slate-950/40 border border-slate-800 rounded-xl text-slate-400 text-sm space-y-1">
+                        <div>${i + 1}. Lépés: ${step.q}</div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="${isCorr ? 'text-emerald-400' : 'text-red-400'}">Diák válasza: ${userAns}</span>
+                            <span class="text-cyan-300 font-bold">Helyes válasz: ${step.correct}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const activeBox = document.getElementById('solActiveStepBox');
+            if (viewingSolutionStepIdx >= task.steps.length) {
+                activeBox.innerHTML = `<div class="p-4 bg-emerald-950/40 border border-emerald-800 text-emerald-400 text-center rounded-xl font-bold text-sm">Feladat vége! Kattints a Következő feladatra alul.</div>`;
+                return;
+            }
+
+            const currentStep = task.steps[viewingSolutionStepIdx];
+            const userLog = userTaskLogs[viewingSolutionStepIdx];
+            const userAns = userLog ? userLog.userAnswer : "Nem válaszolt";
+            const isCorr = userLog ? userLog.correct : false;
+
+            activeBox.innerHTML = `
+                <div class="p-5 bg-slate-950/60 border border-slate-800 rounded-2xl space-y-3" id="solActiveCard">
+                    <label class="block font-medium text-slate-200">${viewingSolutionStepIdx + 1}. Lépés: ${currentStep.q}</label>
+                    <div class="flex justify-between items-center text-xs bg-slate-900 p-3 rounded-xl border border-slate-800">
+                        <span class="${isCorr ? 'text-emerald-400' : 'text-red-400'}">Beírt válasz: <strong>${userAns}</strong></span>
+                        <span class="text-cyan-300 font-bold">Helyes válasz: ${currentStep.correct}</span>
+                    </div>
+                    <div class="flex justify-end pt-2">
+                                <!-- <button onclick="nextSolutionStep()" title="Következő lépés" class="bg-transparent border-none cursor-pointer">
+            <img src="img/play50x50.png" alt="Lejátszás" class="w-10 h-10 object-contain">
+        </button> -->
+        <button onclick="nextSolutionStep()" title="Következő lépés" class="glossy-play-button-50"></button>
+
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const card = document.getElementById('solActiveCard');
+                if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        function nextSolutionStep() {
+            const task = activeSet.tasks[viewingSolutionTaskIdx];
+            if (viewingSolutionStepIdx < task.steps.length) {
+                viewingSolutionStepIdx++;
+                renderSolutionTaskView();
+            }
+        }
+
+        function nextSolutionTask() {
+            if (viewingSolutionTaskIdx < activeSet.tasks.length - 1) {
+                viewingSolutionTaskIdx++;
+                viewingSolutionStepIdx = 0;
+                renderSolutionTaskView();
+            }
+        }
+
+        function prevSolutionTask() {
+            if (viewingSolutionTaskIdx > 0) {
+                viewingSolutionTaskIdx--;
+                viewingSolutionStepIdx = 0;
+                renderSolutionTaskView();
+            }
+        }
+    </script>
+</body>
+</html>

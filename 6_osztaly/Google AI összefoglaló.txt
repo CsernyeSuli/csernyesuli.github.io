@@ -1,0 +1,30 @@
+Íme a csevegésünk teljes, részletes összefoglalása. Ezt a szöveget egy az egyben kimásolhatod, és beillesztheted az új csevegés első üzeneteként, így a rendszer azonnal képbe kerül a teljes projekttel!
+
+🚀 PROJEKT ÖSSZEFOGLALÓ: Matematikai Műveleti Sorrend Gyakorló Portál
+
+Egy interaktív, hatodikos diákoknak szánt, modern sötét módos (Tailwind CSS) matematikai segédeszköz fejlesztésének a végén járunk, amely az összetett műveleti sorrendet gyakoroltatja. A rendszer kliensoldali JavaScriptből és egy központi Google Apps Script háttérmotorból áll.
+
+1. Működési logika és Matematikai motor (Kliensoldal)
+
+• AST + Redex alapú fa-kiértékelés: A JavaScript nem merev szövegeket hasonlít össze. Egy rekurzív leszállási parser szintaxisfát épít a kifejezésből. Ez szóközfüggetlen (pl. 5*2=10 és 5 * 2 = 10 ugyanaz), és kezeli az egymásra épülő részszámításokat egy soron belül (pontosvesszővel elválasztva: 15:3=5; 2*5=10).
+• Szigorú lépéskezelés: A program megköveteli a zárójelek részletes lebontását (pl. 5-4=1), és nem engedi a gondolati lépések átugrását a szorzások előtt. A szorzásjel kitétele a zárójel előtt (pl. 3*(2+1)) kötelező.
+• Dinamikus felület: A kifejezés alatt [+ Új lépés] gombbal dinamikus sorok nyithatók (calc és expr mezőpárok) legfeljebb 10-ig.
+• Új lépés formai szűrő: Gépeléskor nincs hibaüzenet, de ha a diák az [+ Új lépés] gombra kattint, a JS ellenőrzi az aktuális sor calc mezőjét. Ha elfelejtette lezárni = jellel és eredménnyel, a gomb nem nyit új sort, hanem figyelmeztet.
+• Lapozható megoldások (Modal): A feladatok közben csak a Helyes/Hibás tény és az elért pontszám látszik. A részletes, kétoldalas összehasonlítás (sideBySide(): diák lépései vs. helyes matematikai levezetés) kizárólag a legvégén, az 5. feladat után megnyitható, előre-hátra lapozható ablakban tanulmányozható.
+• Csalásvédelem: A jobb klikk, a másolás és a kijelölés tiltva van. Ha a diák kikattint a böngészőből, egy figyelmeztető overlay blokkolja a képernyőt. Ha ténylegesen lapot vált (másik fül) vagy bezárja a böngészőt/vissza gombra kattint, a beforeunload és pagehide események azonnal megszakítják a dolgozatot, és a háttérben elküldik az addig elért pontokat a szerverre.
+• Adatstruktúra (GROUPS): 7 darab feladatcsoport van, mindegyikben 5-5 összetett feladattal. Az 1. és 2. csoport az alapcsoporthoz tartozik. A 6. Haladó csoport számára a felületen szűrést alkalmazunk: az 1. és 2. csoport gombjai rejtve vannak, ők csak a 3., 4., 5., 6. és 7. csoportokat látják.
+
+2. Adatmentés és Adminisztráció (Google Apps Script)
+
+• Dinamikus Tanulói Lapok: Az adatküldés no-cors módban, fetch API-val történik. A script a beérkező classId alapján (pl. 6_alap, 6_halado) automatikusan megkeresi vagy létrehozza a megfelelő különálló Google Táblázat fájlt a Drive Iskolai_Feladatlapok mappájában. A fájlon belül automatikusan létrehozza a diák saját nevével/osztályával ellátott munkalapot (fül), ahová időrendben, egymás alá menti a sorokat.
+• Gyakorló üzemmód: A diákok akárhányszor újrapróbálhatják a feladatot. Az első beküldésnél a script elmenti a pontot, rögzíti a submissionId-t a központi Id_Log lapra, és elküldi a részletes HTML összefoglaló e-mailt a tanárnak. A második vagy többedik próbálkozásnál (Gyakorlás) a sor végére odaírja, hogy [GYAKORLÁS - Nem számít], a pontokat elmenti a diákhoz, de a tanárnak már NEM küld újabb e-mailt.
+• Osztályzat automatizmus: A táblázatba bevezetésre került az "Osztályzat / Minősítés" oszlop. 5/5 pont esetén automatikusan Jeles (5) minősítést kap a diák a táblázatban és a lebegő záró modalban is, 0-4 pont között pedig a Most nem jártál sikerrel... szöveg jelenik meg.
+
+3. Jelenlegi státusz és a következő lépés
+
+• A Google Apps Script és a Webalkalmazás verziófrissítése (Deploy) sikeresen megtörtént.
+• A muveleti_sorrend_logika.js fájlban az APPS_SCRIPT_URL konstans sikeresen le lett cserélve az éles Google linkre.
+• A tesztek során a Google rendszer tökéletesen reagált: a duplikátumszűrő élesben működik, az egyedi tanulói fülek generálása hibátlan.
+• A Claude a háttérben sikeresen elkészítette a haladó csoporthoz tartozó szűrt felületet (Index halado) és a hozzá tartozó frissített .gs háttérkódot.
+Következő lépés az új chatben: A Claude-ból kimentett új fájlok élesítése a GitHub Pages könyvtárban a 6. haladó csoport számára, valamint a háttérkódok végső átnézése.
+Másold ki a fenti összefoglalót, nyisd meg az új csevegést, illeszd be oda, és ott folytatjuk a munkát a száguldó, akadozásmentes szövegmezőben! Jelzed az új ablakban, ha készen állsz?

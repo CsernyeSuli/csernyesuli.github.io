@@ -12,7 +12,7 @@
 <!-- ============ FŐOLDAL ============ -->
 <section id="view-start">
   <div class="mb-3 flex justify-start">
- <a id="backLink" href="../../../6-osztaly-alap.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 text-sm font-semibold text-slate-300 transition-all duration-200 hover:border-slate-500 hover:bg-slate-700 hover:text-white hover:shadow-[0_0_14px_rgba(148,163,184,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">⬅ Vissza az ALAP csoport oldalára</a>
+    <a id="backLink" href="../../../6-osztaly-alap.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-600 bg-slate-700/60 px-4 py-2 text-sm font-semibold text-slate-300 transition-all duration-200 hover:border-sky-400 hover:bg-sky-500 hover:text-white hover:shadow-[0_0_14px_rgba(14,165,233,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300">⬅ Vissza az ALAP csoport oldalára</a>
   </div>
   <header class="mb-4 text-center">
     <h1 class="text-2xl font-extrabold tracking-tight text-emerald-400 md:text-3xl">Műveletsorok egész számokkal</h1>
@@ -88,7 +88,7 @@
 
   <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg shadow-black/30 md:p-5">
     <label for="answer" class="mb-1.5 block text-sm text-slate-400">Végeredmény</label>
-    <input id="answer" autocomplete="off" class="w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-base text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 disabled:opacity-60">
+    <input id="answer" inputmode="numeric" autocomplete="off" class="w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-base text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 disabled:opacity-60">
     <p id="ansErr" class="mt-2 hidden text-sm text-red-400">Írd be a végeredményt egyetlen számként.</p>
     <div class="mt-5 flex flex-wrap gap-3">
       <button id="submitBtn" type="button" class="rounded-xl bg-emerald-400 px-4 py-2 font-bold text-slate-900 shadow-[0_0_18px_rgba(52,211,153,0.5)] transition hover:bg-emerald-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200">Beküldés</button>
@@ -237,6 +237,7 @@ $('#groups').addEventListener('click', e => {
 
 /* ---------- 2. Feladat ---------- */
 function renderTask() {
+  lastInput = null;
   $('#grpTitle').textContent = `${GROUP_LABEL} · ${session.group.title}`;
   $('#counter').textContent = `${session.index + 1} / ${TASKS_PER_GROUP}`;
   $('#bar').style.width = `${(session.index / TASKS_PER_GROUP) * 100}%`;
@@ -251,9 +252,9 @@ function renderTask() {
 function renderRows(locked = false) {
   $('#steps').innerHTML = session.rows.map((r, i) => `<div class="mb-3 grid items-center gap-2 md:grid-cols-[2rem_1fr_1fr]">
     <span class="text-slate-500 md:text-right">${i + 1}.</span>
-    <input data-i="${i}" data-f="calc" autocomplete="off" spellcheck="false" aria-label="${i + 1}. részszámítás" class="${INPUT}"
+    <input data-i="${i}" data-f="calc" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="${i + 1}. részszámítás" class="${INPUT}"
       placeholder="${i ? 'Következő részszámítás' : 'Írd le, mivel kezded: pl. 15:3=5'}" value="${esc(r.calc)}" ${locked ? 'disabled' : ''}>
-    <input data-i="${i}" data-f="expr" autocomplete="off" spellcheck="false" aria-label="${i + 1}. új műveletsor" class="${INPUT}"
+    <input data-i="${i}" data-f="expr" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="${i + 1}. új műveletsor" class="${INPUT}"
       placeholder="Az új, letisztázott műveletsor" value="${esc(r.expr)}" ${locked ? 'disabled' : ''}></div>`).join('');
   $('#addStep').disabled = locked || session.rows.length >= MAX_STEP_ROWS;
   document.querySelectorAll('.ins').forEach(b => { b.disabled = locked; });
@@ -272,12 +273,14 @@ const calcClosed = s => s.split(';').map(x => x.trim()).filter(Boolean)
 /* beszúró gombok: oda írnak, ahol a kurzor van */
 let lastInput = null;
 $('#steps').addEventListener('focusin', e => { if (e.target.dataset.f) lastInput = e.target; });
+$('#answer').addEventListener('focusin', () => { lastInput = $('#answer'); });
 $('#insBar').addEventListener('mousedown', e => e.preventDefault());                 // a gomb ne vegye el a fókuszt a mezőtől
 $('#insBar').addEventListener('click', e => {
   const b = e.target.closest('button[data-ins]'); if (!b || b.disabled) return;
   const t = (lastInput && document.contains(lastInput)) ? lastInput
     : document.querySelector(`#steps input[data-i="${session.rows.length - 1}"][data-f="calc"]`);
   if (!t || t.disabled) return;
+  if (t.id === 'answer' && b.dataset.ins !== '−') return;        // a végeredménybe csak mínusz kerülhet
   t.focus();
   const s = t.selectionStart ?? t.value.length, en = t.selectionEnd ?? s, ch = b.dataset.ins;
   t.value = t.value.slice(0, s) + ch + t.value.slice(en);

@@ -172,7 +172,67 @@
 
     <!-- 1. FELADAT -->
     <div class="card">
-        <h2 class="card-title"><span class="badge">1. Feladat</span> Geometria</h2>
+        <h2 class="card-title"><span class="badge">6. Feladat</span> Szöveges feladat (Zsinór feldarabolása)</h2>
+        <p><strong>Egy zsinórt három részre vágtunk. Az első levágott darab a zsinór eredeti hossza harmadánál 26 cm-rel rövidebb. A második levágott darab a zsinór eredeti hossza negyedénél 6 cm-rel rövidebb. A két darab levágása után a maradék zsinór hosszúsága a zsinór eredeti hossza felénél 30 cm-rel rövidebb lett.</strong></p>
+        
+        <div style="margin-top: 20px;">
+            <p><strong>a) Hány cm volt a zsinór eredeti hossza? Írd le a számolás menetét is!</strong></p>
+            <p style="font-size: 1.1rem; margin-top: 15px;">
+                A zsinór eredeti hossza <span class="input-placeholder">…………………</span> cm.
+            </p>
+        </div>
+        
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <p><strong>A feladat megoldása lépésről lépésre:</strong></p>
+                
+                <div class="math-step">
+                    1. <span class="highlight">Az ismeretlen és a részek felírása:</span><br>
+                    Legyen a zsinór eredeti hossza: <em>x</em> cm.<br>
+                    A három darab hossza a szöveg alapján:<br>
+                    <ul>
+                        <li>Első darab: <sup>x</sup>&frasl;<sub>3</sub> - 26</li>
+                        <li>Második darab: <sup>x</sup>&frasl;<sub>4</sub> - 6</li>
+                        <li>Harmadik darab (maradék): <sup>x</sup>&frasl;<sub>2</sub> - 30</li>
+                    </ul>
+                </div>
+                
+                <div class="math-step">
+                    2. <span class="highlight">Az egyenlet felírása:</span><br>
+                    A három rész összege kiadja a teljes eredeti hosszt (<em>x</em>):<br>
+                    <strong>(<sup>x</sup>&frasl;<sub>3</sub> - 26) + (<sup>x</sup>&frasl;<sub>4</sub> - 6) + (<sup>x</sup>&frasl;<sub>2</sub> - 30) = x</strong>
+                </div>
+                
+                <div class="math-step">
+                    3. <span class="highlight">Az egyenlet megoldása:</span><br>
+                    Vonjuk össze a számokat a bal oldalon: -26 - 6 - 30 = -62<br>
+                    <sup>x</sup>&frasl;<sub>3</sub> + <sup>x</sup>&frasl;<sub>4</sub> + <sup>x</sup>&frasl;<sub>2</sub> - 62 = x<br><br>
+                    Hozzunk közös nevezőre (a 3, 4, 2 legkisebb közös többszöröse a 12), szorozzuk meg a teljes egyenletet 12-vel:<br>
+                    4x + 3x + 6x - 744 = 12x<br>
+                    13x - 744 = 12x &emsp;<em>/-12x (kivonunk 12x-et mindkét oldalból)</em><br>
+                    x - 744 = 0 &emsp;&emsp;&emsp;<em>/+744 (hozzáadunk 744-et mindkét oldalhoz)</em><br>
+                    <strong>x = 744</strong>
+                </div>
+                
+                <div class="math-step">
+                    4. <span class="highlight">Ellenőrzés:</span><br>
+                    Ha az eredeti hossz 744 cm, akkor:<br>
+                    <ul>
+                        <li>Első darab: 744 / 3 - 26 = 248 - 26 = 222 cm</li>
+                        <li>Második darab: 744 / 4 - 6 = 186 - 6 = 180 cm</li>
+                        <li>Harmadik darab: 744 / 2 - 30 = 372 - 30 = 342 cm</li>
+                    </ul>
+                    Összegük: 222 + 180 + 342 = 744 cm. A megoldás tehát tökéletes.<br>
+                    A zsinór eredeti hossza: <span class="highlight">744 cm</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">7. Feladat</span> Geometria</h2>
         <div class="geometry-layout">
             <div class="geometry-text">
                 <p>Az alábbi ábrán vázolt <strong>ABCD négyszög</strong> CD oldalán úgy helyezkedik el az E pont, hogy <strong>BC = AB = AE = BE = DE</strong>.</p>
@@ -215,9 +275,9 @@
         </div>
     </div>
 
-    <!-- 2. FELADAT -->
+    <!-- 3. FELADAT -->
     <div class="card">
-        <h2 class="card-title"><span class="badge">2. Feladat</span> Logika és Oszthatóság</h2>
+        <h2 class="card-title"><span class="badge">8. Feladat</span> Logika és Oszthatóság</h2>
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: -5px; margin-bottom: 20px;">Minden kérdés után kattints az egyetlen helyes válasz betűjelére!</p>
         
         <!-- a) kérdés -->
@@ -281,9 +341,9 @@
         </div>
     </div>
 
-    <!-- 3. FELADAT -->
+    <!-- 4. FELADAT -->
     <div class="card">
-        <h2 class="card-title"><span class="badge">3. Feladat</span> Térgeometria (Hasábok)</h2>
+        <h2 class="card-title"><span class="badge">9. Feladat</span> Térgeometria (Hasábok)</h2>
         <div class="geometry-layout">
             <div class="geometry-text">
                 <p>Hat darab egybevágó négyzet alapú hasáb összeragasztásával hoztuk létre az ábrán látható testet. A függőleges oszlopok azonos távolságra vannak egymástól.</p>
@@ -336,9 +396,9 @@
 
     </div>
 
-    <!-- 4. FELADAT -->
+    <!-- 5. FELADAT -->
     <div class="card">
-        <h2 class="card-title"><span class="badge">4. Feladat</span> Szöveges feladat (Életkorok)</h2>
+        <h2 class="card-title"><span class="badge">10. Feladat</span> Szöveges feladat (Életkorok)</h2>
         <p><strong>Tibi 2021-ben (tehát öt éve) ötször idősebb volt, mint az unokaöccse volt akkor. Három év múlva, 2029-ben Tibi már csak háromszor annyi idős lesz, mint amennyi az unokaöccse lesz akkor.</strong></p>
         
         <div style="margin-top: 20px;">

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8. Osztály - Matematika Gyakorló Feladatok</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-blue: #38bdf8;
+            --accent-yellow: #f59e0b;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: var(--accent-yellow);
+            margin-top: 0;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+        }
+
+        .geometry-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .geometry-text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .image-box {
+            background: #0b0f19;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .btn-solution {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .btn-solution:hover {
+            background-color: #1d4ed8;
+        }
+
+        .solution-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #131c2e;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .solution-content {
+            padding: 20px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+        
+        .math-step {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #2d3748;
+        }
+        
+        .math-step:last-child {
+            border-bottom: none;
+        }
+
+        .solution-image {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .quiz-options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1px;
+            margin-top: 10px;
+        }
+        
+        .quiz-options-row .quiz-option {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            margin: 0;
+        }
+        .input-placeholder {
+            color: var(--accent-blue);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>8. Osztályos Matematika Feladatok</h1>
+
+    <!-- 1. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">1. Feladat</span> Geometria</h2>
+        <div class="geometry-layout">
+            <div class="geometry-text">
+                <p>Az alábbi ábrán vázolt <strong>ABCD négyszög</strong> CD oldalán úgy helyezkedik el az E pont, hogy <strong>BC = AB = AE = BE = DE</strong>.</p>
+                <p>Az ábrán három szög nagyságát megadtuk. (Az ábra csak tájékoztató jellegű vázlat, nem pontos méretű.)</p>
+            </div>
+            <div class="image-box">
+                <!-- Eredeti feladat képe az img mappából -->
+                <img src="img/image_26_2.png" alt="Geometriai feladat ábrája">
+            </div>
+        </div>
+        
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <div class="math-step">
+                    <strong>a) &epsilon; (epszilon) szög nagysága:</strong><br>
+                    A BCE háromszögben BC = BE, így ez egy egyenlő szárú háromszög. Az alapon fekvő szögek egyenlők: BCE&ang; = BEC&ang; = 50&deg;. <br>
+                    <span class="highlight">&epsilon; = 50&deg;</span>
+                </div>
+                <div class="math-step">
+                    <strong>b) &beta; (béta) szög nagysága:</strong><br>
+                    Mivel AB = AE = BE, az ABE háromszög szabályos, tehát minden belső szöge 60&deg; (így az egész B csúcsnál lévő ABE&ang; is 60&deg;). A rajz alapján az ABE&ang; szög a 35&deg;-os részből és &beta;-ból tevődik össze, így: &beta; = 60&deg; - 35&deg; = <span class="highlight">25&deg;</span>.
+                </div>
+                <div class="math-step">
+                    <strong>c) &alpha; (alfa) szög nagysága:</strong><br>
+                    Az E pontnál lévő egyenes szög (180&deg;) miatt: AED&ang; = 180&deg; - 60&deg; - &epsilon; (50&deg;) = 70&deg;. Mivel AE = DE, az ADE háromszög egyenlő szárú, alapmenti szögei egyenlők: (180&deg; - 70&deg;) / 2 = 55&deg;. <br>
+                    <span class="highlight">&alpha; = 55&deg;</span>
+                </div>
+                <div class="math-step">
+                    <strong>d) &delta; (delta) szög nagysága:</strong><br>
+                    Az előző pontból tudjuk, hogy a teljes ADE&ang; = 55&deg;. Mivel BE = DE, az EBD háromszög is egyenlő szárú, így az alapnál fekvő EDB&ang; szög megegyezik &beta;-val (25&deg;). A &delta; szög a kettő különbsége: 55&deg; - 25&deg; = <span class="highlight">30&deg;</span>.
+                </div>
+                
+                <!-- Megoldás jelölt képe az img mappából a magyarázat alatt -->
+                <div class="solution-image">
+                    <p style="color: var(--accent-yellow); font-size: 0.9rem; margin-bottom: 5px;">Szemléltető ábra az egyenlő szakaszokkal:</p>
+                    <img src="img/image_26_2_m.png" alt="Megoldás magyarázó ábrája" style="max-width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--border-color);">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">2. Feladat</span> Logika és Oszthatóság</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: -5px; margin-bottom: 20px;">Minden kérdés után kattints az egyetlen helyes válasz betűjelére!</p>
+        
+        <!-- a) kérdés -->
+        <div class="quiz-container">
+            <p><strong>a) Egy tó felszínén gyorsan szaporodtak az algák. Minden nap estére negyedakkora területtel nőtt az algával borított terület nagysága, mint amekkora előző nap este volt. Ma estére teljesen befedte az alga a tavat. Hány százalékát fedte alga tegnap este a tó felszínének?</strong></p>
+            <div class="quiz-options-row">
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(A) 25%</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(B) 70%</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(C) 75%</div>
+                <div class="quiz-option" onclick="checkQuiz(this, true)">(D) 80%</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(E) 90%</div>
+            </div>
+        </div>
+
+        <!-- b) kérdés -->
+        <div class="quiz-container" style="margin-top: 30px;">
+            <p><strong>b) Hány átlója van egy szabályos hétszögnek?</strong></p>
+            <div class="quiz-options-row">
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(A) 7</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(B) 12</div>
+                <div class="quiz-option" onclick="checkQuiz(this, true)">(C) 14</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(D) 21</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(E) 28</div>
+            </div>
+        </div>
+
+        <!-- c) kérdés -->
+        <div class="quiz-container" style="margin-top: 30px;">
+            <p><strong>c) Mennyi a 120 és a 186 legnagyobb közös osztója?</strong></p>
+            <div class="quiz-options-row">
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(A) 2</div>
+                <div class="quiz-option" onclick="checkQuiz(this, true)">(B) 6</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(C) 12</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(D) 31</div>
+                <div class="quiz-option" onclick="checkQuiz(this, false)">(E) 3720</div>
+            </div>
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution(this)">Részletes magyarázat</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <div class="math-step">
+                    <strong>a) Alga feladat megoldása: <span class="highlight">(D) 80%</span></strong><br>
+                    Ha a terület minden nap negyedével (25%-kal) nő az előző naphoz képest, az azt jelenti, hogy a mai terület a tegnapi terület 125%-a (azaz 1,25-szöröse).<br>
+                    Mivel ma estére a tó teljesen megtelt (100%), a tegnapi állapot kiszámítása: <br>
+                    100% / 1,25 = <span class="highlight">80%</span>. Tehát tegnap a tó 80%-át fedte alga.
+                </div>
+                <div class="math-step">
+                    <strong>b) Hétszög átlóinak megoldása: <span class="highlight">(C) 14</span></strong><br>
+                    An <em>n</em>-szög átlóinak számát az <em>n * (n - 3) / 2</em> képlettel számolhatjuk ki.<br>
+                    Hétszög esetén (n = 7): 7 * (7 - 3) / 2 = 7 * 4 / 2 = <span class="highlight">14 átló</span>.
+                </div>
+                <div class="math-step">
+                    <strong>c) Legnagyobb közös osztó megoldása: <span class="highlight">(B) 6</span></strong><br>
+                    Bontsuk fel a számokat prímtényezőkre:<br>
+                    120 = 2 * 2 * 2 * 3 * 5 = 2³ * 3 * 5<br>
+                    186 = 2 * 3 * 31<br>
+                    A legnagyobb közös osztóhoz a közös prímtényezőket vesszük az előforduló legkisebb hatványon: 2¹ * 3¹ = <span class="highlight">6</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">3. Feladat</span> Térgeometria (Hasábok)</h2>
+        <div class="geometry-layout">
+            <div class="geometry-text">
+                <p>Hat darab egybevágó négyzet alapú hasáb összeragasztásával hoztuk létre az ábrán látható testet. A függőleges oszlopok azonos távolságra vannak egymástól.</p>
+                <p>Az összeragasztott test leghosszabb éle 20 cm, legrövidebb éle 2 cm. (Az ábra csak tájékoztató jellegű vázlat, nem pontos méretű.)</p>
+            </div>
+            <div class="image-box">
+                <!-- A megadott kép beolvasása az img mappából -->
+                <img src="img/image_26_2_3.png" alt="Összeragasztott hasábok ábrája">
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p><strong>a-b) Hány cm hosszúak a négyzetes hasáb élei?</strong></p>
+            <p>A négyzet alapú hasáb alapéle: <span class="input-placeholder">......</span> cm</p>
+            <p>A négyzet alapú hasáb oldaléle (hossza): <span class="input-placeholder">......</span> cm</p>
+            
+            <p style="margin-top: 20px;"><strong>c) Hány cm² az összeragasztott test felszíne? Írd le a számolás menetét is!</strong></p>
+            <p>Az összeragasztott test felszíne: <span class="input-placeholder">............</span> cm²</p>
+        </div>
+        
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+                <div class="solution-panel">
+            <div class="solution-content">
+                <div class="math-step">
+                    <strong>a-b) Az élek hosszának meghatározása:</strong><br>
+                    A hasábok négyzet alapúak, így a legrövidebb él maga az alapél: <span class="highlight">2 cm</span>.<br>
+                    Az ábra alapján a test teljes leghosszabb éle (magassága) a belső függőleges hasábhosszból (b) és a két vízszintes elem vastagságából (2a) tevődik össze: b + 2a = 20 cm.<br>
+                    Mivel a = 2 cm, így: b + 2 · 2 = 20 &rArr; b + 4 = 20 &rArr; b = 16 cm.<br>
+                    A négyzetes hasáb élei tehát: <span class="highlight">2 cm</span> és <span class="highlight">16 cm</span>.
+                </div>
+                <div class="math-step">
+                    <strong>c) A felszín kiszámításának menete:</strong><br>
+                    1. <span class="highlight">Egyetlen hasáb felszíne (A₁):</span><br>
+                    Van 2 darab 2 &times; 2-es négyzetlapja és 4 darab 2 &times; 16-os téglalap oldallapja.<br>
+                    A₁ = 2 · (2 · 2) + 4 · (2 · 16) = 8 + 128 = <span class="highlight">136 cm²</span>.<br><br>
+                    
+                    2. <span class="highlight">A 6 darab különálló hasáb összesített felszíne:</span><br>
+                    6 · 136 cm² = <span class="highlight">816 cm²</span>.<br><br>
+                    
+                    3. <span class="highlight">Az összeragasztások miatt elvesző felületek:</span><br>
+                    A 4 függőleges oszlop mindkét végén (alul és felül) egy-egy teljes 2 &times; 2-es négyzetlap felületével tapad a vízszintes gerendákhoz. Ez összesen 4 · 2 = 8 összeragasztási hely.<br>
+                    Minden ragasztásnál két darab felület tűnik el a külvilág elől.<br>
+                    Levonandó felület: 8 · 2 · (2 · 2) = 16 · 4 = <span class="highlight">64 cm²</span>.<br><br>
+                    
+                    4. <span class="highlight">Az összeragasztott test nettó felszíne:</span><br>
+                    816 cm² - 64 cm² = <span class="highlight">752 cm²</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 4. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">4. Feladat</span> Szöveges feladat (Életkorok)</h2>
+        <p><strong>Tibi 2021-ben (tehát öt éve) ötször idősebb volt, mint az unokaöccse volt akkor. Három év múlva, 2029-ben Tibi már csak háromszor annyi idős lesz, mint amennyi az unokaöccse lesz akkor.</strong></p>
+        
+        <div style="margin-top: 20px;">
+            <p><strong>a) Hány éves Tibi most, 2026-ban? Írd le a számolás menetét is!</strong></p>
+            <p style="font-size: 1.1rem; margin-top: 15px;">
+                Tibi most <span class="input-placeholder">...........</span> éves.
+            </p>
+        </div>
+
+        
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <p><strong>A feladat megoldása lépésről lépésre:</strong></p>
+                
+                <div class="math-step">
+                    <strong>1. Készítsünk egy áttekinthető táblázatot az adatokból:</strong><br><br>
+                    <table style="width:100%; border-collapse: collapse; margin: 10px 0; background: #0b0f19; border-radius: 6px; overflow: hidden;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                                <th style="padding: 10px; color: var(--accent-yellow);">Személy</th>
+                                <th style="padding: 10px;">2021-ben (Múlt)</th>
+                                <th style="padding: 10px; color: var(--accent-blue);">2026-ban (Most)</th>
+                                <th style="padding: 10px;">2029-ben (Jövő)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 10px; font-weight: bold;">Unokaöcs</td>
+                                <td style="padding: 10px;">x</td>
+                                <td style="padding: 10px; color: var(--accent-blue);">x + 5</td>
+                                <td style="padding: 10px;">x + 8</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; font-weight: bold;">Tibi</td>
+                                <td style="padding: 10px;">5x</td>
+                                <td style="padding: 10px; color: var(--accent-blue);">5x + 5</td>
+                                <td style="padding: 10px;">5x + 8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <small style="color: var(--text-muted);">*Megjegyzés: 2021 és 2029 között pontosan 8 év telik el, ezért adunk 8-at az x-hez.</small>
+                </div>
+                
+                <div class="math-step">
+                    2. <span class="highlight">Az egyenlet felírása:</span><br>
+                    A szöveg szerint 2029-ben Tibi háromszor olyan idős lesz, mint az unokaöccse, azaz a jövőbeli korára felírható:<br>
+                    <strong>5x + 8 = 3 · (x + 8)</strong>
+                </div>
+                
+                <div class="math-step">
+                    3. <span class="highlight">Az egyenlet megoldása:</span><br>
+                    5x + 8 = 3x + 24 &emsp;<em>/-3x (kivonunk 3x-et mindkét oldalból)</em><br>
+                    2x + 8 = 24 &emsp;&emsp;<em>/-8 (kivonunk 8-at mindkét oldalból)</em><br>
+                    2x = 16 &emsp;&emsp;&emsp;<em>/:2 (osztunk 2-vel)</em><br>
+                    <strong>x = 8</strong>
+                </div>
+                
+                <div class="math-step">
+                    4. <span class="highlight">A jelenlegi életkor kiszámítása (2026-ban):</span><br>
+                    A kapott <em>x = 8</em> azt jelenti, hogy 2021-ben az unokaöcs 8 éves, Tibi pedig 5 · 8 = 40 éves volt.<br>
+                    Mivel most 2026 van (ami 5 évvel van később), Tibi jelenlegi életkora:<br>
+                    40 + 5 = <span class="highlight">45 éves</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleSolution(btn) {
+        const panel = btn.nextElementSibling;
+        if (panel.style.maxHeight && panel.style.maxHeight !== "0px") {
+            panel.style.maxHeight = "0px";
+            btn.textContent = "Megoldás megtekintése";
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            btn.textContent = "Megoldás elrejtése";
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -5,6 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematika Portál - Főoldal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>// Biztosítjuk, hogy a kód csak akkor fusson le, ha a HTML már teljesen betöltődött
+    window.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("felveteliModal");
+    const openBtn = document.getElementById("felveteliBtn");
+    const closeBtn = document.getElementById("closeModal");
+    const startQuizBtn = document.getElementById("startQuizBtn");
+    // Ellenőrizzük a konzolon, hogy minden elemet megtalált-e a program
+    console.log("Modal elemek:", { openBtn, modal, startQuizBtn });
+
+    // Modal megnyitása
+    if (openBtn && modal) {
+        openBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // Megakadályozza az oldal esetleges újratöltődését
+            modal.style.display = "flex";
+        });
+    }
+
+    // Bezárás X gombbal
+    if (closeBtn && modal) {
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+    }
+
+    // Bezárás külső (háttérre történő) kattintásra
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Átirányítás az Indítás gombra kattintva
+    if (startQuizBtn) {
+        startQuizBtn.addEventListener("click", (e) => {
+            e.preventDefault(); // Biztosítjuk, hogy ne nyomódjon le hibásan semmi más
+            
+            // Megkeressük a kiválasztott rádiógombot
+            const checkedOption = document.querySelector('input[name="feladatsor"]:checked');
+            
+            if (checkedOption) {
+                console.log("Átirányítás ide:", checkedOption.value);
+                window.location.href = checkedOption.value;
+            } else {
+                alert("Kérlek, válassz ki egy feladatsort a listából!");
+            }
+        });
+    } else {
+        console.error("Hiba: Nem található a 'startQuizBtn' azonosítójú gomb a HTML-ben!");
+    }
+});
+    </script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -181,6 +232,176 @@
         .btn-competition:hover {
             background-color: #f59e0b;
         }
+        /* Felvételihez gomb alapstílusa (ha még nem lenne meg) */
+.btn-felveteli {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-felveteli:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(236, 72, 153, 0.7);
+}
+
+/* Modal Háttér (Overlay) */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Ablak */
+.modal-content {
+    background: linear-gradient(145deg, #1e1b4b, #111827);
+    border: 2px solid #a855f7;
+    box-shadow: 0 0 35px rgba(168, 85, 247, 0.4);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 550px;
+    padding: 30px;
+    position: relative;
+    color: #f3f4f6;
+    font-family: sans-serif;
+}
+
+/* Bezáró gomb */
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.modal-close:hover {
+    color: #ec4899;
+}
+
+/* Címek és ikon */
+.modal-icon {
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.modal-title {
+    text-align: center;
+    background: linear-gradient(to right, #f472b6, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+}
+.modal-subtitle {
+    text-align: center;
+    color: #9ca3af;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+/* Lépések kezelése */
+.modal-step {
+    display: none;
+}
+.modal-step.active {
+    display: block;
+}
+
+/* Választó opciók (Radio list) */
+.quiz-list {
+    margin-bottom: 25px;
+}
+.quiz-option {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.quiz-option:hover {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: #a855f7;
+}
+.quiz-option input[type="radio"] {
+    margin-right: 15px;
+    accent-color: #ec4899;
+    transform: scale(1.2);
+}
+
+/* Tájékoztató szöveg (2. kép mintájára) */
+.modal-info-text {
+    background: rgba(15, 23, 42, 0.6);
+    border-left: 4px solid #ec4899;
+    padding: 12px;
+    border-radius: 0 8px 8px 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #d1d5db;
+    margin-bottom: 20px;
+}
+.modal-info-text strong {
+    color: #f472b6;
+}
+
+/* Input mezők */
+.input-group {
+    margin-bottom: 15px;
+}
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    background: #0f172a;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.input-group input:focus {
+    border-color: #a855f7;
+    outline: none;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+/* Akció gombok */
+.modal-submit-btn {
+    width: 100%;
+    background: linear-gradient(to right, #a855f7, #ec4899);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    transition: opacity 0.2s;
+}
+.modal-submit-btn:hover {
+    opacity: 0.9;
+}
+
     </style>
 </head>
 <body>
@@ -192,9 +413,10 @@
 
     <!-- FELSŐ GOMBOK (Ékezetmentes, helyes hivatkozásokkal) -->
     <nav>
-        <a href="8_osztaly/8-osztaly-felveteli-2026-2.html" class="btn-felveteli">
-            <i class="fa-solid fa-graduation-cap"></i> Felvételihez
-        </a>
+        <!-- <a href="8_osztaly/8-osztaly-felveteli-2026-2.html" class="btn-felveteli">
+            <i class="fa-solid fa-graduation-cap"></i> Felvételihez </a> -->
+        <!-- Módosított Felvételihez gomb -->
+        <button id="felveteliBtn" class="btn-felveteli">🏆 Felvételihez</button>
         <a href="6-osztaly.html">6. Osztály</a>
         <a href="7-osztaly.html">7. Osztály</a>
         <a href="8-osztaly.html">8. Osztály</a>
@@ -240,6 +462,37 @@
         </div>
 
     </div>
+<!-- Felvételi Választó Modal -->
+<div id="felveteliModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close" id="closeModal">&times;</button>
+        
+        <div class="modal-icon">🎓</div>
+        <h2 class="modal-title">Középiskolai Felvételi Felkészítő</h2>
+        <p class="modal-subtitle">Válaszd ki a gyakorolni kívánt feladatsort!</p>
 
+        <!-- Azonnali választás és indítás -->
+        <div class="quiz-list">
+            <label class="quiz-option">
+                <input type="radio" name="feladatsor" value="felveteli-felkeszito.html" checked>
+                <span>Középiskolai Felvételi feladatsor</span>
+            </label>
+            <!-- <label class="quiz-option">
+                <input type="radio" name="feladatsor" value="8_osztaly/8-osztaly-szoveges-feladatlap.html">
+                <span>8. Osztály - Szöveges feladatlap</span>
+            </label>-->
+            <label class="quiz-option">
+                <input type="radio" name="feladatsor" value="8_osztaly/8-osztaly-felveteli-2026-2.html">
+                <span>8. Osztály - Felvételi 2026/2 feladatsor</span>
+            </label>
+            <label class="quiz-option">
+                <input type="radio" name="feladatsor" value="8_osztaly/8-osztaly-felveteli-2022-2.html">
+                <span>8. Osztály - Felvételi 2022/2 feladatsor</span>
+            </label>
+        </div>
+        
+        <button id="startQuizBtn" class="modal-submit-btn">Indítás</button>
+    </div>
+</div>
 </body>
 </html>

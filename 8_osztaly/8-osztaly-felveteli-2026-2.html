@@ -13,6 +13,8 @@
             --accent-yellow: #f59e0b;
             --accent-green: #10b981;
             --text-main: #f8fafc;
+            --accent-red: #ef4444;
+            --text-muted: #94a3b8;
         }
 
         body {
@@ -147,7 +149,7 @@
         .quiz-options-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 1px;
+            gap: 8px;
             margin-top: 10px;
         }
         
@@ -161,6 +163,46 @@
             color: var(--accent-blue);
             font-weight: bold;
             letter-spacing: 2px;
+        }
+
+        .quiz-option {
+            background: #131c2e;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: #1a2540;
+            border-color: var(--accent-blue);
+        }
+
+        .quiz-options-row.answered .quiz-option {
+            cursor: default;
+        }
+
+        .quiz-options-row.answered .quiz-option:hover {
+            background: #131c2e;
+            border-color: var(--border-color);
+        }
+
+        .quiz-option.correct,
+        .quiz-options-row.answered .quiz-option.correct:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .quiz-option.wrong,
+        .quiz-options-row.answered .quiz-option.wrong:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+            font-weight: bold;
         }
 
     </style>
@@ -284,11 +326,11 @@
         <div class="quiz-container">
             <p><strong>a) Egy tó felszínén gyorsan szaporodtak az algák. Minden nap estére negyedakkora területtel nőtt az algával borított terület nagysága, mint amekkora előző nap este volt. Ma estére teljesen befedte az alga a tavat. Hány százalékát fedte alga tegnap este a tó felszínének?</strong></p>
             <div class="quiz-options-row">
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(A) 25%</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(B) 70%</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(C) 75%</div>
-                <div class="quiz-option" onclick="checkQuiz(this, true)">(D) 80%</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(E) 90%</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) 25%</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(B) 70%</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(C) 75%</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(D) 80%</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(E) 90%</div>
             </div>
         </div>
 
@@ -296,11 +338,11 @@
         <div class="quiz-container" style="margin-top: 30px;">
             <p><strong>b) Hány átlója van egy szabályos hétszögnek?</strong></p>
             <div class="quiz-options-row">
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(A) 7</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(B) 12</div>
-                <div class="quiz-option" onclick="checkQuiz(this, true)">(C) 14</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(D) 21</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(E) 28</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) 7</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(B) 12</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(C) 14</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(D) 21</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(E) 28</div>
             </div>
         </div>
 
@@ -308,11 +350,11 @@
         <div class="quiz-container" style="margin-top: 30px;">
             <p><strong>c) Mennyi a 120 és a 186 legnagyobb közös osztója?</strong></p>
             <div class="quiz-options-row">
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(A) 2</div>
-                <div class="quiz-option" onclick="checkQuiz(this, true)">(B) 6</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(C) 12</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(D) 31</div>
-                <div class="quiz-option" onclick="checkQuiz(this, false)">(E) 3720</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) 2</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(B) 6</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(C) 12</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(D) 31</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(E) 3720</div>
             </div>
         </div>
 
@@ -472,12 +514,26 @@
 <script>
     function toggleSolution(btn) {
         const panel = btn.nextElementSibling;
+        const showText = btn.dataset.showText || (btn.dataset.showText = btn.textContent);
         if (panel.style.maxHeight && panel.style.maxHeight !== "0px") {
             panel.style.maxHeight = "0px";
-            btn.textContent = "Megoldás megtekintése";
+            btn.textContent = showText;
         } else {
             panel.style.maxHeight = panel.scrollHeight + "px";
-            btn.textContent = "Megoldás elrejtése";
+            btn.textContent = showText.indexOf("magyarázat") !== -1 ? "Magyarázat elrejtése" : "Megoldás elrejtése";
+        }
+    }
+
+    function checkQuiz(option) {
+        const row = option.parentElement;
+        if (row.classList.contains("answered")) return;
+        row.classList.add("answered");
+        if (option.dataset.correct === "true") {
+            option.classList.add("correct");
+        } else {
+            option.classList.add("wrong");
+            const right = row.querySelector('[data-correct="true"]');
+            if (right) right.classList.add("correct");
         }
     }
 </script>

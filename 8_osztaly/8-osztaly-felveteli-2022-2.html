@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8. Osztály - Matematika Gyakorló Feladatok</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-blue: #38bdf8;
+            --accent-yellow: #f59e0b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: var(--accent-yellow);
+            margin-top: 0;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+        }
+
+        .geometry-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .geometry-text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .image-box {
+            background: #0b0f19;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .btn-solution {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .btn-solution:hover {
+            background-color: #1d4ed8;
+        }
+
+        .solution-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #131c2e;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .solution-content {
+            padding: 20px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .math-step {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #2d3748;
+        }
+
+        .math-step:last-child {
+            border-bottom: none;
+        }
+
+        .solution-image {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .quiz-options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quiz-options-row.long-options {
+            flex-direction: column;
+        }
+
+        .quiz-options-row .quiz-option {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .quiz-options-row.long-options .quiz-option {
+            text-align: left;
+        }
+
+        .quiz-option {
+            background: #131c2e;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 14px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: #1a2540;
+            border-color: var(--accent-blue);
+        }
+
+        .quiz-options-row.answered .quiz-option {
+            cursor: default;
+        }
+
+        .quiz-options-row.answered .quiz-option:hover {
+            background: #131c2e;
+            border-color: var(--border-color);
+        }
+
+        .quiz-option.correct,
+        .quiz-options-row.answered .quiz-option.correct:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .quiz-option.wrong,
+        .quiz-options-row.answered .quiz-option.wrong:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+            font-weight: bold;
+        }
+
+        .input-placeholder {
+            color: var(--accent-blue);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .pending-note {
+            color: var(--accent-yellow);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>8. Osztályos Felvételi Gyakorló Feladatok 2022/2</h1>
+
+    <!-- 1. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">1. Feladat</span> Szöveges feladat (Esővíz a hordóban)</h2>
+        <p><strong>Sári néni egy nagy hordóba gyűjti az esővizet, amellyel a kertet locsolja. Kora reggel a hordó tartalmának harmadát és még 4 liter vizet használt el locsolásra. Délután a maradék víz felét és még 10 liter vizet öntött a virágaira. Este a hordóban maradt víz felét és még 5 liter vizet locsolt a kis almafa tövére. Így éppen 10 liter víz maradt a hordóban.</strong></p>
+
+        <div style="margin-top: 20px;">
+            <p><strong>a) Hány liter esővíz volt eredetileg a hordóban? Írd le a számolás menetét is!</strong></p>
+            <p style="font-size: 1.1rem; margin-top: 15px;">
+                Eredetileg <span class="input-placeholder">…………………</span> liter esővíz volt a hordóban.
+            </p>
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <p><strong>A feladat megoldása lépésről lépésre (visszafelé következtetéssel):</strong></p>
+
+                <div class="math-step">
+                    1. <span class="highlight">Este:</span><br>
+                    Este Sári néni a hordóban lévő víz felét és még 5 litert használt el, és 10 liter maradt.<br>
+                    Ha a 10 literhez visszaadjuk az 5 litert: 10 + 5 = 15 liter, ez a víznek <em>a fele</em> volt.<br>
+                    Az esti locsolás előtt tehát: 2 · 15 = <span class="highlight">30 liter</span> volt a hordóban.
+                </div>
+
+                <div class="math-step">
+                    2. <span class="highlight">Délután:</span><br>
+                    Délután a víz felét és még 10 litert használt el, és 30 liter maradt.<br>
+                    30 + 10 = 40 liter, ez a víznek <em>a fele</em> volt.<br>
+                    A délutáni locsolás előtt tehát: 2 · 40 = <span class="highlight">80 liter</span> volt a hordóban.
+                </div>
+
+                <div class="math-step">
+                    3. <span class="highlight">Reggel:</span><br>
+                    Legyen az eredeti vízmennyiség <em>x</em> liter. Reggel a harmadát és még 4 litert használt el, így maradt:<br>
+                    <sup>2x</sup>&frasl;<sub>3</sub> - 4 = 80 &emsp;<em>/+4 (hozzáadunk 4-et mindkét oldalhoz)</em><br>
+                    <sup>2x</sup>&frasl;<sub>3</sub> = 84 &emsp;&emsp;<em>/:2 (osztunk 2-vel)</em><br>
+                    <sup>x</sup>&frasl;<sub>3</sub> = 42 &emsp;&emsp;&emsp;<em>/·3 (szorzunk 3-mal)</em><br>
+                    <strong>x = 126</strong>
+                </div>
+
+                <div class="math-step">
+                    4. <span class="highlight">Ellenőrzés:</span><br>
+                    Ha eredetileg 126 liter volt a hordóban, akkor:<br>
+                    <ul>
+                        <li>Reggel: 126 / 3 + 4 = 42 + 4 = 46 liter fogyott, maradt 126 - 46 = 80 liter.</li>
+                        <li>Délután: 80 / 2 + 10 = 40 + 10 = 50 liter fogyott, maradt 80 - 50 = 30 liter.</li>
+                        <li>Este: 30 / 2 + 5 = 15 + 5 = 20 liter fogyott, maradt 30 - 20 = 10 liter.</li>
+                    </ul>
+                    A végén valóban 10 liter maradt, így a megoldás helyes.<br>
+                    Eredetileg <span class="highlight">126 liter</span> esővíz volt a hordóban.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">2. Feladat</span> Geometria (Háromszög szögei)</h2>
+        <div class="geometry-layout">
+            <div class="geometry-text">
+                <p>Az alábbi ábrán az <strong>e</strong> és <strong>f</strong> szakasz az <strong>ABC háromszög</strong> C csúcsánál lévő belső szöget harmadolja, továbbá <strong>CP = PB</strong>.</p>
+                <p>Az ábrán egy szög nagyságát megadtuk. (Az ábra csak tájékoztató jellegű vázlat, nem pontos méretű.)</p>
+            </div>
+            <div class="image-box">
+                <img src="img/image_22_2_.png" alt="Geometriai feladat ábrája">
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p><strong>a) Mekkora a CQP háromszögben a Q csúcsnál lévő &delta; szög nagysága?</strong></p>
+            <p>&delta; = <span class="input-placeholder">........</span></p>
+
+            <p style="margin-top: 20px;"><strong>b) Mekkora az ABC háromszögben a B csúcsnál lévő &beta; szög nagysága?</strong></p>
+            <p>&beta; = <span class="input-placeholder">........</span></p>
+
+            <p style="margin-top: 20px;"><strong>c) Mekkora az ABC háromszögben a C csúcsnál lévő &gamma; szög nagysága?</strong></p>
+            <p>&gamma; = <span class="input-placeholder">........</span></p>
+
+            <p style="margin-top: 20px;"><strong>d) Mekkora az ABC háromszögben az A csúcsnál lévő &alpha; szög nagysága?</strong></p>
+            <p>&alpha; = <span class="input-placeholder">........</span></p>
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <p><strong>A feladat megoldása lépésről lépésre:</strong></p>
+
+                <div class="math-step">
+                    <strong>a) &delta; szög nagysága:</strong><br>
+                    A Q pont az AB szakaszon van, ezért az AQC&ang; (102&deg;) és a CQP&ang; (&delta;) mellékszögek, összegük 180&deg;.<br>
+                    &delta; = 180&deg; - 102&deg; = <span class="highlight">78&deg;</span>
+                </div>
+
+                <div class="math-step">
+                    <strong>b) &beta; szög nagysága:</strong><br>
+                    Mivel CP = PB, a CPB háromszög egyenlő szárú, az alapon fekvő szögei egyenlők: PCB&ang; = PBC&ang; = &beta;.<br>
+                    Az e és f szakasz harmadolja a C csúcsnál lévő &gamma; szöget, ezért PCB&ang; = <sup>&gamma;</sup>&frasl;<sub>3</sub>. Tehát <sup>&gamma;</sup>&frasl;<sub>3</sub> = &beta;, vagyis a CQP háromszögben a C csúcsnál is &beta; nagyságú szög van.<br>
+                    A CPB háromszög P csúcsnál lévő belső szöge 180&deg; - 2&beta;, ennek mellékszöge, a CPQ&ang; = 2&beta; (a külső szög egyenlő a két nem mellette fekvő belső szög összegével: &beta; + &beta;).<br>
+                    A CQP háromszög szögeinek összege 180&deg;:<br>
+                    78&deg; + &beta; + 2&beta; = 180&deg;<br>
+                    3&beta; = 102&deg; &emsp;<em>/-78&deg;</em><br>
+                    <span class="highlight">&beta; = 34&deg;</span> &emsp;<em>/:3</em>
+                </div>
+
+                <div class="math-step">
+                    <strong>c) &gamma; szög nagysága:</strong><br>
+                    A C csúcsnál lévő szöget három egyenlő részre osztották, és egy rész &beta; = 34&deg;.<br>
+                    &gamma; = 3 · 34&deg; = <span class="highlight">102&deg;</span>
+                </div>
+
+                <div class="math-step">
+                    <strong>d) &alpha; szög nagysága:</strong><br>
+                    Az ABC háromszög szögeinek összege 180&deg;:<br>
+                    &alpha; = 180&deg; - &beta; - &gamma; = 180&deg; - 34&deg; - 102&deg; = <span class="highlight">44&deg;</span><br><br>
+                    <em>Ellenőrzés:</em> az AQC háromszögben &alpha; + 102&deg; + <sup>&gamma;</sup>&frasl;<sub>3</sub> = 44&deg; + 102&deg; + 34&deg; = 180&deg;. A megoldás helyes.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">3. Feladat</span> Logika, függvények és oszthatóság</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: -5px; margin-bottom: 20px;">Minden kérdés után kattints az egyetlen helyes válasz betűjelére!</p>
+
+        <!-- a) kérdés -->
+        <div class="quiz-container">
+            <p><strong>a) Ha egy háromszögben van két olyan hegyesszög, amelyeknek az összege 90°, akkor mit állíthatunk biztosan a háromszögről?</strong></p>
+            <div class="quiz-options-row">
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) hegyesszögű</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(B) derékszögű</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(C) egyenlő szárú</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(D) tompaszögű</div>
+            </div>
+        </div>
+
+        <!-- b) kérdés -->
+        <div class="quiz-container" style="margin-top: 30px;">
+            <p><strong>b) Adott két lineáris függvény hozzárendelési szabálya: e: y = 3x - 5 és f: y = -2x + 10. Melyik függvény egyenesén van rajta a P(3; 4) pont?</strong></p>
+            <div class="quiz-options-row long-options">
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) Csak az e függvény egyenesén, de az f függvény egyenesén nem.</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(B) Csak az f függvény egyenesén, de az e függvény egyenesén nem.</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(C) Egyik függvény egyenesén sincs rajta.</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(D) A P pont az e függvény és az f függvény egyenesének közös pontja.</div>
+            </div>
+        </div>
+
+        <!-- c) kérdés -->
+        <div class="quiz-container" style="margin-top: 30px;">
+            <p><strong>c) Melyik szám a 72 és a 48 legnagyobb közös osztója?</strong></p>
+            <div class="quiz-options-row">
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) 8</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(B) 12</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(C) 24</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(D) 144</div>
+            </div>
+        </div>
+
+        <!-- d) kérdés -->
+        <div class="quiz-container" style="margin-top: 30px;">
+            <p><strong>d) Hány darab közös pontja nem lehet egy körvonalnak és egy téglalap határvonalának?</strong></p>
+            <div class="quiz-options-row">
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(A) 3</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(B) 4</div>
+                <div class="quiz-option" data-correct="false" onclick="checkQuiz(this)">(C) 8</div>
+                <div class="quiz-option" data-correct="true" onclick="checkQuiz(this)">(D) 9</div>
+            </div>
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution(this)">Részletes magyarázat</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <div class="math-step">
+                    <strong>a) Háromszög szögei: <span class="highlight">(B) derékszögű</span></strong><br>
+                    A háromszög belső szögeinek összege 180°. Ha két szög összege 90°, akkor a harmadik szög: 180° - 90° = <span class="highlight">90°</span>.<br>
+                    Tehát a háromszögnek van derékszöge, így biztosan derékszögű. (Az egyenlő szárúság nem biztos, mert a másik két szög lehet például 30° és 60° is.)
+                </div>
+                <div class="math-step">
+                    <strong>b) Függvények egyenesei: <span class="highlight">(D) a P pont mindkét egyenesen rajta van</span></strong><br>
+                    Helyettesítsük be a P(3; 4) pont koordinátáit (x = 3, y = 4) mindkét függvénybe:<br>
+                    e: y = 3 · 3 - 5 = 9 - 5 = <span class="highlight">4</span> &rArr; a P pont rajta van az e egyenesén.<br>
+                    f: y = -2 · 3 + 10 = -6 + 10 = <span class="highlight">4</span> &rArr; a P pont rajta van az f egyenesén is.<br>
+                    A P pont tehát az e és az f egyenesének közös pontja.
+                </div>
+                <div class="math-step">
+                    <strong>c) Legnagyobb közös osztó: <span class="highlight">(C) 24</span></strong><br>
+                    Bontsuk fel a számokat prímtényezőkre:<br>
+                    72 = 2 * 2 * 2 * 3 * 3 = 2³ * 3²<br>
+                    48 = 2 * 2 * 2 * 2 * 3 = 2⁴ * 3<br>
+                    A legnagyobb közös osztóhoz a közös prímtényezőket vesszük az előforduló legkisebb hatványon: 2³ * 3¹ = 8 * 3 = <span class="highlight">24</span>.
+                </div>
+                <div class="math-step">
+                    <strong>d) Közös pontok száma: <span class="highlight">(D) 9</span></strong><br>
+                    A téglalap határvonala 4 szakaszból áll, és egy körvonal egy szakaszt legfeljebb 2 pontban metszhet. Így a közös pontok száma legfeljebb 4 · 2 = <span class="highlight">8</span> lehet.<br>
+                    Ezért 9 közös pont nem lehetséges. A 3, a 4 és a 8 közös pont viszont létrehozható (például érintéssel és metszéssel kombinálva).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">4. Feladat</span> Térgeometria (Négyzetes oszlopok)</h2>
+        <div class="geometry-layout">
+            <div class="geometry-text">
+                <p>Az alábbi ábrán látható testet <strong>öt darab egybevágó négyzetes oszlopból</strong> ragasztottuk össze. (A ragasztási felületek teljes négyzetek.)</p>
+                <p>A négyzetes hasábok éleinek hossza: <strong>a = 2 cm</strong>, <strong>b = 5 cm</strong>. (Az ábra csak tájékoztató jellegű vázlat, nem pontos méretű.)</p>
+            </div>
+            <div class="image-box">
+                <img src="img/image_22_2_2_.png" alt="Összeragasztott négyzetes oszlopok ábrája">
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p><strong>a) Hány cm² az ábrán látható test felszíne? Írd le a számolás menetét is!</strong></p>
+            <p>Az összeragasztott test felszíne: <span class="input-placeholder">............</span> cm²</p>
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <div class="math-step">
+                    1. <span class="highlight">Egyetlen négyzetes oszlop felszíne (A₁):</span><br>
+                    Az oszlopnak 2 darab a &times; a = 2 &times; 2-es négyzetlapja és 4 darab a &times; b = 2 &times; 5-ös téglalap oldallapja van.<br>
+                    A₁ = 2 · (2 · 2) + 4 · (2 · 5) = 8 + 40 = <span class="highlight">48 cm²</span>.
+                </div>
+
+                <div class="math-step">
+                    2. <span class="highlight">Az 5 darab különálló oszlop összesített felszíne:</span><br>
+                    5 · 48 cm² = <span class="highlight">240 cm²</span>.
+                </div>
+
+                <div class="math-step">
+                    3. <span class="highlight">Az összeragasztások miatt elvesző felületek:</span><br>
+                    Az ábrán 2 vízszintes és 3 függőleges oszlop van. Összeragasztási helyek (mindegyik egy teljes 2 &times; 2-es négyzetlap):<br>
+                    <ul>
+                        <li>a bal oldali függőleges oszlop és a bal oldali vízszintes oszlop között: 1 hely,</li>
+                        <li>a jobb oldali függőleges oszlop és a jobb oldali vízszintes oszlop között: 1 hely,</li>
+                        <li>a középső függőleges oszlop és a két vízszintes oszlop között: 2 hely.</li>
+                    </ul>
+                    Ez összesen 4 összeragasztási hely. Minden ragasztásnál két négyzetlap tűnik el a külvilág elől (az egyik az egyik oszlopról, a másik a másikról).<br>
+                    Levonandó felület: 4 · 2 · (2 · 2) = 8 · 4 = <span class="highlight">32 cm²</span>.
+                </div>
+
+                <div class="math-step">
+                    4. <span class="highlight">Az összeragasztott test felszíne:</span><br>
+                    240 cm² - 32 cm² = <span class="highlight">208 cm²</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. FELADAT -->
+    <div class="card">
+        <h2 class="card-title"><span class="badge">5. Feladat</span> Szöveges feladat (Kerékpártúra)</h2>
+        <p><strong>Karcsi a barátaival szombaton kerékpározni ment. Amikor megtették a tervezett út 40%-át, megálltak ebédelni. Ebéd után továbbmentek, megállás nélkül megtették a teljes napra tervezett út <sup>3</sup>&frasl;<sub>7</sub> részét, és egy forráshoz érkeztek. Innen már csak 6 km-t kellett kerékpározniuk, hogy elérjék tervezett úti céljukat.</strong></p>
+
+        <div style="margin-top: 20px;">
+            <p><strong>a) Hány km-t tettek meg Karcsiék összesen? Írd le a megoldás menetét!</strong></p>
+            <p style="font-size: 1.1rem; margin-top: 15px;">
+                Karcsiék összesen <span class="input-placeholder">...........</span> km-t tettek meg.
+            </p>
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution(this)">Megoldás megtekintése</button>
+        <div class="solution-panel">
+            <div class="solution-content">
+                <p><strong>A feladat megoldása lépésről lépésre:</strong></p>
+
+                <div class="math-step">
+                    1. <span class="highlight">A részek felírása törtekkel:</span><br>
+                    Legyen a tervezett út teljes hossza <em>x</em> km. Az első szakasz: 40% = <sup>2</sup>&frasl;<sub>5</sub> · <em>x</em>.<br>
+                    A második szakasz: <sup>3</sup>&frasl;<sub>7</sub> · <em>x</em>. A harmadik szakasz 6 km.
+                </div>
+
+                <div class="math-step">
+                    2. <span class="highlight">Az egyenlet felírása:</span><br>
+                    A három szakasz együtt kiadja a teljes utat:<br>
+                    <strong><sup>2</sup>&frasl;<sub>5</sub><em>x</em> + <sup>3</sup>&frasl;<sub>7</sub><em>x</em> + 6 = <em>x</em></strong>
+                </div>
+
+                <div class="math-step">
+                    3. <span class="highlight">Az egyenlet megoldása:</span><br>
+                    Szorozzuk meg az egyenletet 35-tel (az 5 és a 7 legkisebb közös többszöröse):<br>
+                    14x + 15x + 210 = 35x<br>
+                    29x + 210 = 35x &emsp;<em>/-29x (kivonunk 29x-et mindkét oldalból)</em><br>
+                    210 = 6x &emsp;&emsp;&emsp;&emsp;<em>/:6 (osztunk 6-tal)</em><br>
+                    <strong>x = 35</strong>
+                </div>
+
+                <div class="math-step">
+                    <em>Másik gondolatmenet:</em> az első két szakasz együtt <sup>2</sup>&frasl;<sub>5</sub> + <sup>3</sup>&frasl;<sub>7</sub> = <sup>14</sup>&frasl;<sub>35</sub> + <sup>15</sup>&frasl;<sub>35</sub> = <sup>29</sup>&frasl;<sub>35</sub> rész, így az utolsó 6 km az út <sup>6</sup>&frasl;<sub>35</sub> része. Ha 6 egység 6 km, akkor 1 egység 1 km, a teljes út 35 egység, azaz 35 km.
+                </div>
+
+                <div class="math-step">
+                    4. <span class="highlight">Ellenőrzés:</span><br>
+                    Ha a teljes út 35 km, akkor:<br>
+                    <ul>
+                        <li>Első szakasz: 40%-a 35 km-nek = 14 km</li>
+                        <li>Második szakasz: 35 / 7 · 3 = 5 · 3 = 15 km</li>
+                        <li>Harmadik szakasz: 6 km</li>
+                    </ul>
+                    Összegük: 14 + 15 + 6 = 35 km. A megoldás tehát helyes.<br>
+                    Karcsiék összesen <span class="highlight">35 km-t</span> tettek meg (ebből a forrásig 29 km-t, onnan a célig még 6 km-t).
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleSolution(btn) {
+        const panel = btn.nextElementSibling;
+        const showText = btn.dataset.showText || (btn.dataset.showText = btn.textContent);
+        if (panel.style.maxHeight && panel.style.maxHeight !== "0px") {
+            panel.style.maxHeight = "0px";
+            btn.textContent = showText;
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            btn.textContent = showText.indexOf("magyarázat") !== -1 ? "Magyarázat elrejtése" : "Megoldás elrejtése";
+        }
+    }
+
+    function checkQuiz(option) {
+        const row = option.parentElement;
+        if (row.classList.contains("answered")) return;
+        row.classList.add("answered");
+        if (option.dataset.correct === "true") {
+            option.classList.add("correct");
+        } else {
+            option.classList.add("wrong");
+            const right = row.querySelector('[data-correct="true"]');
+            if (right) right.classList.add("correct");
+        }
+    }
+
+    // Ha egy ábra később töltődik be, mint ahogy a megoldás megnyílt, a panel magassága frissül.
+    document.querySelectorAll(".solution-panel img").forEach(function (img) {
+        img.addEventListener("load", function () {
+            const panel = img.closest(".solution-panel");
+            if (panel.style.maxHeight && panel.style.maxHeight !== "0px") {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

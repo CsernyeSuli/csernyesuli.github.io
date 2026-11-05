@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="hu" class="bg-slate-950 text-[15px]">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Szöveges feladatok – 8. Osztály</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="min-h-screen select-none bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 bg-fixed font-sans text-slate-100 antialiased">
+<main class="mx-auto max-w-3xl px-4 pb-16 pt-6">
+
+<!-- ============ FŐOLDAL ============ -->
+<section id="view-start">
+  <div class="mb-3 flex justify-start">
+    <a href="../8-osztaly.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-600 bg-slate-700/60 px-4 py-2 text-sm font-semibold text-slate-300 transition-all duration-200 hover:border-sky-400 hover:bg-sky-500 hover:text-white">⬅ Vissza a 8. osztály oldalára</a>
+  </div>
+  <header class="mb-4 text-center">
+    <h1 class="text-2xl font-extrabold tracking-tight text-emerald-400 md:text-3xl">Szöveges feladatok egyenlettel, egyenlőtlenséggel</h1>
+    <p class="mt-1 text-base text-slate-300">8. osztályos gyakorló feladatlap</p>
+    <div id="pill" class="mt-4 hidden items-center gap-2 rounded-full border border-slate-700 bg-slate-800/70 px-5 py-2 text-sm">
+      <span>👤</span><b id="pillName" class="text-amber-300"></b><span class="text-slate-500">|</span>
+      <span>Osztály: <b id="pillCls" class="text-amber-300"></b></span>
+    </div>
+  </header>
+  <div class="mx-auto mb-4 w-fit rounded-full border-2 border-emerald-400/70 bg-emerald-500/10 px-6 py-1 text-base font-black tracking-[0.25em] text-emerald-300 shadow-[0_0_16px_rgba(52,211,153,0.35)]">8. OSZTÁLY</div>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg shadow-black/30 md:p-5">
+    <div class="grid gap-4 md:grid-cols-2">
+      <div><label for="name" class="mb-1.5 block text-sm text-slate-400">Neved</label>
+        <input id="name" autocomplete="name" placeholder="pl. Kovács Anna" class="w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30"></div>
+      <div><label for="cls" class="mb-1.5 block text-sm text-slate-400">Osztályod</label>
+        <input id="cls" autocomplete="section" placeholder="pl. 8.a" class="w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30"></div>
+    </div>
+    <p id="startErr" class="mt-3 hidden text-sm text-red-400"></p>
+  </div>
+
+  <div class="mb-4 rounded-2xl border border-amber-600/70 bg-slate-900/60 p-4 shadow-lg shadow-black/30 md:p-5">
+    <h2 class="mb-3 flex items-center gap-2 text-lg font-bold text-amber-400"><span>ℹ️</span>Tájékoztató és Szabályzat</h2>
+    <p class="mb-4 leading-relaxed text-slate-200">Válassz egy feladatsort! Oldd meg a füzetedben a feladatokat, majd írd be a kiszámolt végeredményt. Ha az összes válaszod helyes, <strong class="text-emerald-400">Jeles (5)</strong> osztályzatot érsz el!</p>
+    <div class="rounded-xl border border-slate-800 bg-slate-950/80 p-4">
+      <h3 class="mb-3 text-sm font-semibold text-amber-300">FONTOS SZABÁLYOK:</h3>
+      <ul class="list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-300">
+        <li>A feladatsor lezárásakor az eredményed automatikusan elküldésre kerül a tanári rendszerbe és mentődik a táblázatba.</li>
+        <li>Első beküldéskor e-mail értesítőt is kap a tanár, a többszöri beküldés csak a táblázatban rögzül.</li>
+        <li>Ha elhagyod az oldalt (másik fülre váltasz), a rendszer rögzíti az addigi eredményeket!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg shadow-black/30 md:p-5">
+    <h2 class="mb-3 border-b border-slate-700 pb-2 text-lg font-bold text-emerald-400">Válassz feladatsort</h2>
+    <div id="groups" class="grid gap-3 md:grid-cols-2"></div>
+  </div>
+</section>
+
+<!-- ============ FELADAT NÉZET ============ -->
+<section id="view-task" class="hidden">
+  <div class="mb-3 flex items-center justify-between text-slate-400"><span id="grpTitle" class="font-semibold text-emerald-400"></span><b id="counter" class="text-slate-200"></b></div>
+  <div class="mb-3 h-2 overflow-hidden rounded-full bg-slate-700"><div id="bar" class="h-full rounded-full bg-emerald-400 transition-all duration-500"></div></div>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg shadow-black/30 md:p-5">
+    <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Feladat leírása:</div>
+    <div id="expr" class="break-words py-2 font-sans text-lg font-medium text-cyan-200 md:text-xl leading-relaxed"></div>
+  </div>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg shadow-black/30 md:p-5">
+    <label for="answer" class="mb-1.5 block text-sm text-slate-400">Add meg a végeredményt:</label>
+    <input id="answer" autocomplete="off" placeholder="Írd be a számot..." class="w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-base text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30">
+    <p id="ansErr" class="mt-2 hidden text-sm text-red-400">Kérlek, add meg a válaszodat!</p>
+    
+    <div class="mt-5 flex flex-wrap gap-3">
+      <button id="submitBtn" type="button" class="rounded-xl bg-emerald-400 px-4 py-2 font-bold text-slate-900 shadow-[0_0_18px_rgba(52,211,153,0.5)] transition hover:bg-emerald-300">Beküldés</button>
+      <button id="nextBtn" type="button" class="hidden rounded-xl bg-sky-500 px-4 py-2 font-bold text-white shadow-[0_0_18px_rgba(14,165,233,0.45)] transition hover:bg-sky-400">Tovább a következőre ➔</button>
+    </div>
+  </div>
+  <div id="feedback" class="hidden flex-wrap items-center gap-3 rounded-2xl border px-4 py-3"></div>
+</section>
+
+<!-- ============ MEGERŐSÍTÉS MODAL ============ -->
+<div id="confirmModal" data-ov class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/70 p-4 backdrop-blur-sm">
+  <div role="dialog" aria-modal="true" class="m-auto w-full max-w-sm rounded-2xl border border-slate-700 bg-slate-900 p-5 text-center shadow-2xl">
+    <h2 class="mb-2 text-xl font-bold">Biztosan beküldöd ezt a választ?</h2>
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <button id="cYes" type="button" class="rounded-xl bg-emerald-400 px-4 py-2 font-bold text-slate-900 shadow-[0_0_18px_rgba(52,211,153,0.5)] hover:bg-emerald-300">Igen, beküldöm</button>
+      <button id="cNo" type="button" class="rounded-xl border border-slate-600 px-4 py-2 font-semibold text-slate-200 hover:border-slate-400">Mégsem</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ÉRTÉKELŐ / EREDMÉNY LAP ============ -->
+<div id="resultModal" data-ov class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/70 p-4 backdrop-blur-sm">
+  <div role="dialog" aria-modal="true" class="m-auto w-full max-w-sm rounded-2xl border border-slate-700 bg-slate-900 p-5 text-center shadow-2xl">
+    <div id="sending"><div class="mx-auto mb-4 h-11 w-11 animate-spin rounded-full border-4 border-slate-700 border-t-emerald-400"></div>
+      <h2 class="text-xl font-bold">Adatok küldése és mentése...</h2></div>
+    <div id="done" class="hidden">
+      <h2 class="text-xl font-bold text-emerald-400">Feladatsor teljesítve! 🎉</h2>
+      <div id="score" class="my-3 text-5xl font-extrabold text-cyan-300"></div>
+      <p class="text-slate-400">sikeres feladat</p>
+      <div class="mt-4 rounded-2xl border border-slate-700 bg-slate-950/60 p-4">
+        <div class="text-sm text-slate-400">Elért Osztályzat</div>
+        <div id="grade" class="mt-1 text-2xl font-bold"></div>
+      </div>
+      <p id="sendMsg" class="mt-4 text-sm text-slate-400"></p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <button id="rClose" type="button" class="rounded-xl border border-slate-600 px-4 py-2 font-semibold text-slate-200 hover:border-slate-400">Vissza a kezdőlapra</button>
+        <button id="rSol" type="button" class="rounded-xl bg-sky-500 px-4 py-2 font-bold text-white shadow-[0_0_18px_rgba(14,165,233,0.45)] hover:bg-sky-400">Megoldások áttekintése</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MEGOLDÁSOK MODAL ============ -->
+<div id="solModal" data-ov class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/80 p-4 backdrop-blur-sm">
+  <div role="dialog" aria-modal="true" class="m-auto w-full max-w-3xl rounded-2xl border border-slate-700 bg-slate-900 p-4 shadow-2xl md:p-6">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-800 pb-5">
+      <h2 class="text-lg font-extrabold text-emerald-400 md:text-2xl">Feladatok levezetése és megoldásai</h2>
+      <button id="revClose" type="button" class="rounded-xl px-3 text-2xl leading-none text-slate-300 hover:text-white">✕</button>
+    </div>
+    <div id="reviewContent" class="mt-4 space-y-4 max-h-[60vh] overflow-y-auto pr-2"></div>
+    <div class="mt-6 text-center">
+      <button id="revDone" type="button" class="rounded-xl bg-emerald-500 px-6 py-2.5 font-bold text-slate-900 hover:bg-emerald-400 transition shadow-[0_0_18px_rgba(52,211,153,0.4)]">Vissza a feladatválasztóhoz 🏠</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FÓKUSZVESZTÉS FIGYELMEZTETÉS ============ -->
+<div id="warn" data-ov class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-6 text-center">
+  <div role="alertdialog" aria-modal="true" class="max-w-lg rounded-2xl border border-amber-500/60 bg-slate-900 p-6 shadow-2xl">
+    <div class="mb-2 text-4xl">⚠️</div>
+    <h2 class="text-2xl font-extrabold text-amber-400">Figyelem! Ne hagyd el a feladatlapot!</h2>
+    <p class="mt-3 leading-relaxed text-slate-200">Ha másik fülre váltasz, a feladatsor lezárul, és a jelenlegi pontjaidat küldjük el a tanárnak.</p>
+    <button id="warnBtn" type="button" class="mt-6 rounded-xl bg-emerald-400 px-4 py-2 font-bold text-slate-900 hover:bg-emerald-300">Vissza a feladathoz!</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+window.PAGE_CONFIG = {
+  classId: '8_osztaly',
+  assignmentType: 'Szoveges_Egyenlet',
+  subtitle: '8. osztályos szöveges feladatok'
+};
+</script>
+
+<!-- LOGIKAI FÁJL -->
+<script src="muveleti_sorrend_logika.js"></script>
+
+<script>
+// 8. Osztályos szöveges feladatok feladatsorai és levezetései (4.22 - 4.27) emeletes törtekkel
+const GROUPS_8 = [
+  {
+    id: 1,
+    title: "1. Feladatsor: Számok összege, különbsége (4.22 - 4.23)",
+    tasks: [
+      { 
+        expr: "4.22/a) Két természetes szám összege 100. Az egyik háromszor akkora, mint a másik. Melyik a nagyobb szám?", 
+        answer: "75",
+        steps: "Kisebb szám: \\(x\\), nagyobb szám: \\(3x\\).<br>Egyenlet: \\(x + 3x = 100 \\rightarrow 4x = 100 \\rightarrow x = 25\\).<br>A nagyobb szám: \\(3 \\cdot 25 = 75\\)."
+      },
+      { 
+        expr: "4.22/b) Két természetes szám különbsége 45. Az egyik szám negyedrésze a másiknak. Melyik a nagyobb szám?", 
+        answer: "60",
+        steps: "Nagyobb szám: \\(x\\), kisebb szám: \\(\\frac{x}{4}\\).<br>Egyenlet: \\(x - \\frac{x}{4} = 45 \\rightarrow \\frac{3}{4}x = 45 \\rightarrow x = 60\\) (a kisebb szám 15)."
+      },
+      { 
+        expr: "4.23/a) Ha egy szám negyedéhez hozzáadjuk a szám harmadát, 14-et kapunk. Melyik ez a szám?", 
+        answer: "24",
+        steps: "Egyenlet: \\(\\frac{x}{4} + \\frac{x}{3} = 14\\).<br>Közös nevezőre hozva (12): \\(\\frac{3x}{12} + \\frac{4x}{12} = 14 \\rightarrow \\frac{7x}{12} = 14 \\rightarrow 7x = 168 \\rightarrow x = 24\\)."
+      },
+      { 
+        expr: "4.23/b) Melyik az a szám, amelynek a négyszerese 26-tal több, mint a nála 3-mal nagyobb szám háromszorosa?", 
+        answer: "35",
+        steps: "Egyenlet: \\(4x = 3(x + 3) + 26\\).<br>Zárójel felbontása: \\(4x = 3x + 9 + 26 \\rightarrow 4x = 3x + 35 \\rightarrow x = 35\\)."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "2. Feladatsor: Százalékok, törtek és egyenlőtlenségek (4.24 - 4.25)",
+    tasks: [
+      { 
+        expr: "4.24/a) Gondoltam egy számot, a háromszorosához hozzáadtam a 40%-át, majd kivontam egyharmadát, így a szám háromszorosánál 8-cal nagyobbat kaptam. Melyik ez a szám?", 
+        answer: "120",
+        steps: "Egyenlet: \\(3x + 0{,}4x - \\frac{x}{3} = 3x + 8\\).<br>Két oldalból kivonva a \\(3x\\)-et: \\(\\frac{2}{5}x - \\frac{1}{3}x = 8\\).<br>Közös nevezővel: \\(\\frac{6}{15}x - \\frac{5}{15}x = 8 \\rightarrow \\frac{1}{15}x = 8 \\rightarrow x = 120\\)."
+      },
+      { 
+        expr: "4.24/b) Gondoltam egy számot, hozzáadtam a nála 2-vel nagyobb szám kétszeresét, így 2,4-del kisebbet kaptam a négyszeresénél. Melyik számra gondoltam?", 
+        answer: "6.4",
+        steps: "Egyenlet: \\(x + 2(x + 2) = 4x - 2{,}4\\).<br>Összevonva: \\(3x + 4 = 4x - 2{,}4 \\rightarrow 4 = x - 2{,}4 \\rightarrow x = 6{,}4\\)."
+      },
+      { 
+        expr: "4.25/a) Egy egész szám háromszorosa nagyobb, mint 19, kétszerese kisebb, mint 20. Add meg a lehetséges egész számok közül a legnagyobbat!", 
+        answer: "9",
+        steps: "Egyenlőtlenség-rendszer: \\(3x > 19\\) (azaz \\(x > 6{,}33\\)) ÉS \\(2x < 20\\) (azaz \\(x < 10\\)).<br>Lehetséges egész számok: 7, 8, 9.<br>A legnagyobb ezek közül: <b>9</b>."
+      },
+      { 
+        expr: "4.25/b) Egy egész szám 2/3 része 7-tel több, mint a szám fele. Melyik ez a szám?", 
+        answer: "42",
+        steps: "Egyenlet: \\(\\frac{2}{3}x = \\frac{1}{2}x + 7\\).<br>Közös nevezővel (6): \\(\\frac{4}{6}x = \\frac{3}{6}x + 7 \\rightarrow \\frac{1}{6}x = 7 \\rightarrow x = 42\\)."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "3. Feladatsor: Logikai, ördögös és életkoros feladatok (4.26 - 4.27)",
+    tasks: [
+      { 
+        expr: "4.26/a) Háromszori kézfogás után az ördöggel elfogyott a szegény ember pénze (minden kézfogáskor duplázódott, de 24 garast adott). Hány garasa volt eredetileg?", 
+        answer: "21",
+        steps: "Visszafele számolva: 3. kézfogás előtt 12 volt (duplázva 24, mínusz 24 = 0).<br>2. kézfogás előtt \\(\\frac{12 + 24}{2} = 18\\) volt.<br>1. kézfogás előtt (eredetileg) \\(\\frac{18 + 24}{2} = 21\\) garasa volt."
+      },
+      { 
+        expr: "4.27/a) Egy 36 éves apának 3 éves fia van. Hány év múlva lesz az apa négyszer annyi idős, mint a fia?", 
+        answer: "8",
+        steps: "\\(x\\) év múlva az apa \\(36 + x\\), a fia \\(3 + x\\) éves.<br>Egyenlet: \\(36 + x = 4(3 + x) \\rightarrow 36 + x = 12 + 4x \\rightarrow 24 = 3x \\rightarrow x = 8\\) év múlva."
+      }
+    ]
+  }
+];
+
+let session = null;
+const $ = s => document.querySelector(s);
+const show = v => { $('#view-start').classList.toggle('hidden', v !== 'start'); $('#view-task').classList.toggle('hidden', v !== 'task'); window.scrollTo(0, 0); };
+const openOv = id => { const e = $('#' + id); e.classList.remove('hidden'); e.classList.add('flex'); };
+const closeOv = id => { const e = $('#' + id); e.classList.add('hidden'); e.classList.remove('flex'); };
+
+// Visszatérés a kezdőlapra / feladatválasztóhoz
+function goHome() {
+  ['confirmModal', 'resultModal', 'solModal', 'warn'].forEach(closeOv);
+  session = null;
+  show('start');
+}
+
+// Főoldali feladatsor-gombok kirajzolása
+$('#groups').innerHTML = GROUPS_8.map(g => `<button type="button" data-id="${g.id}"
+  class="flex items-center justify-between rounded-2xl border border-slate-600 bg-slate-800/80 px-4 py-3 text-left transition hover:border-emerald-400 hover:shadow-[0_0_22px_rgba(52,211,153,0.3)]">
+  <span><span class="block text-base font-bold text-slate-100">${g.title}</span>
+  <span class="mt-1 block text-xs text-cyan-300">${g.tasks.length} feladat</span></span>
+  <span class="ml-3 text-xl text-emerald-400">➔</span></button>`).join('');
+
+$('#name').addEventListener('input', updPill);
+$('#cls').addEventListener('input', updPill);
+function updPill() {
+  const n = $('#name').value.trim(), c = $('#cls').value.trim(), p = $('#pill');
+  p.classList.toggle('hidden', !(n || c)); p.classList.toggle('inline-flex', !!(n || c));
+  $('#pillName').textContent = n || '—'; $('#pillCls').textContent = c || '—';
+}
+
+$('#groups').addEventListener('click', e => {
+  const b = e.target.closest('button[data-id]'); if (!b) return;
+  const name = $('#name').value.trim(), cls = $('#cls').value.trim(), err = $('#startErr');
+  if (!name || !cls) {
+    err.textContent = 'Add meg a neved és az osztályod, mielőtt kiválasztasz egy feladatsort!';
+    err.classList.remove('hidden'); (name ? $('#cls') : $('#name')).focus(); return;
+  }
+  err.classList.add('hidden');
+  
+  const group = GROUPS_8.find(g => g.id === +b.dataset.id);
+  session = {
+    group: group,
+    student: { name, class: cls },
+    index: 0,
+    results: [],
+    ended: false,
+    id: (crypto.randomUUID && crypto.randomUUID()) || (Date.now() + '-' + Math.random().toString(36).slice(2, 10))
+  };
+  renderTask();
+});
+
+function renderTask() {
+  const task = session.group.tasks[session.index];
+  $('#grpTitle').textContent = session.group.title;
+  $('#counter').textContent = `${session.index + 1} / ${session.group.tasks.length}`;
+  $('#bar').style.width = `${(session.index / session.group.tasks.length) * 100}%`;
+  $('#expr').textContent = task.expr;
+  $('#answer').value = ''; $('#answer').disabled = false;
+  $('#ansErr').classList.add('hidden');
+  const f = $('#feedback'); f.classList.add('hidden'); f.classList.remove('flex');
+  $('#nextBtn').classList.add('hidden'); $('#submitBtn').classList.remove('hidden');
+  show('task');
+}
+
+$('#submitBtn').addEventListener('click', () => {
+  const ans = $('#answer').value.trim();
+  if (!ans) { $('#ansErr').classList.remove('hidden'); $('#answer').focus(); return; }
+  $('#ansErr').classList.add('hidden');
+  openOv('confirmModal');
+});
+
+$('#cNo').addEventListener('click', () => closeOv('confirmModal'));
+$('#cYes').addEventListener('click', () => {
+  closeOv('confirmModal');
+  const ans = $('#answer').value.trim();
+  const currentTask = session.group.tasks[session.index];
+  const correct = ans.toLowerCase().replace(/\s+/g, '').replace(',', '.') === currentTask.answer.toLowerCase().replace(/\s+/g, '').replace(',', '.');
+  
+  session.results.push({
+    expression: currentTask.expr,
+    userAnswer: ans,
+    correctAnswer: currentTask.answer,
+    steps: currentTask.steps,
+    correct: correct
+  });
+
+  $('#answer').disabled = true;
+  $('#submitBtn').classList.add('hidden');
+
+  const f = $('#feedback');
+  f.className = 'flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 ' +
+    (correct ? 'border-emerald-500/60 bg-emerald-950/50 text-emerald-300' : 'border-red-500/60 bg-red-950/40 text-red-300');
+  f.innerHTML = `<span class="text-lg font-bold">${correct ? '✔ Helyes válasz!' : '✘ Nem teljesen jó.'}</span>
+    <span class="ml-auto text-slate-200">Elért pontszám: <b>${session.results.filter(r=>r.correct).length} / ${session.group.tasks.length}</b></span>`;
+  f.classList.remove('hidden'); f.classList.add('flex');
+
+  if (session.index < session.group.tasks.length - 1) {
+    $('#nextBtn').classList.remove('hidden');
+  } else {
+    finish('befejezve');
+  }
+});
+
+$('#nextBtn').addEventListener('click', () => {
+  session.index++;
+  renderTask();
+});
+
+async function finish(reason) {
+  if (!session || session.ended) return;
+  session.ended = true;
+  closeOv('confirmModal'); closeOv('warn');
+  
+  openOv('resultModal');
+  $('#sending').classList.remove('hidden'); $('#done').classList.add('hidden');
+
+  const correctCount = session.results.filter(r => r.correct).length;
+  const total = session.group.tasks.length;
+  const grade = correctCount === total ? 'Jeles (5)' : (correctCount >= total * 0.75 ? 'Jó (4)' : 'Gyakorlás szükséges');
+
+  const payload = {
+    token: APPS_SCRIPT_TOKEN,
+    reason: reason,
+    classId: PAGE_CONFIG.classId,
+    assignmentType: PAGE_CONFIG.assignmentType,
+    submissionId: session.id,
+    sentAt: new Date().toISOString(),
+    student: session.student,
+    group: session.group.id,
+    score: correctCount,
+    total: total,
+    tasks: session.results.map(r => ({
+      expression: r.expression,
+      correct: r.correct,
+      finalAnswer: r.userAnswer,
+      correctAnswer: r.correctAnswer,
+      seconds: 0,
+      studentSteps: r.userAnswer,
+      stepErrors: r.correct ? "" : "HIBA",
+      studentLines: [r.userAnswer],
+      correctLines: [r.correctAnswer],
+      feedback: []
+    }))
+  };
+
+  const ok = await sendResults(payload);
+
+  $('#sending').classList.add('hidden'); $('#done').classList.remove('hidden');
+  $('#score').textContent = `${correctCount} / ${total}`;
+  $('#grade').textContent = grade;
+  $('#grade').className = 'mt-1 text-2xl font-bold ' + (correctCount === total ? 'text-emerald-400' : 'text-amber-300');
+  
+  $('#sendMsg').innerHTML = ok ? 'Az eredményeid sikeresen rögzítve! ✔' 
+    : 'Az eredmények küldése sikertelen volt. <button type="button" id="retry" class="text-sky-400 underline">Újrapróbálom</button>';
+}
+
+$('#sendMsg').addEventListener('click', e => { if (e.target.id === 'retry') finish('retry'); });
+$('#rClose').addEventListener('click', goHome);
+
+// Megoldások lap megjelenítése
+$('#rSol').addEventListener('click', () => {
+  closeOv('resultModal');
+  $('#reviewContent').innerHTML = session.results.map((r, i) => `
+    <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 text-sm space-y-2">
+      <div class="font-bold text-cyan-300 text-base">${i+1}. ${r.expression}</div>
+      <div class="flex items-center gap-2 text-slate-300">
+        <span>A te válaszod:</span>
+        <span class="${r.correct ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold'} font-mono">${r.userAnswer}</span>
+        <span>${r.correct ? '✔' : '✘'}</span>
+      </div>
+      <div class="text-emerald-400 font-mono">Helyes végeredmény: <b>${r.correctAnswer}</b></div>
+      <div class="mt-2 pt-2 border-t border-slate-800/80 text-slate-300 bg-slate-900/60 p-3 rounded-lg leading-relaxed">
+        <div class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">💡 Megoldásmenet / Levezetés:</div>
+        <div>${r.steps}</div>
+      </div>
+    </div>`).join('');
+  openOv('solModal');
+});
+// Megoldások lap megjelenítése
+$('#rSol').addEventListener('click', () => {
+  closeOv('resultModal');
+  $('#reviewContent').innerHTML = session.results.map((r, i) => `
+    <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 text-sm space-y-2">
+      <div class="font-bold text-cyan-300 text-base">${i+1}. ${r.expression}</div>
+      <div class="flex items-center gap-2 text-slate-300">
+        <span>A te válaszod:</span>
+        <span class="${r.correct ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold'} font-mono">${r.userAnswer}</span>
+        <span>${r.correct ? '✔' : '✘'}</span>
+      </div>
+      <div class="text-emerald-400 font-mono">Helyes végeredmény: <b>${r.correctAnswer}</b></div>
+      <div class="mt-2 pt-2 border-t border-slate-800/80 text-slate-300 bg-slate-900/60 p-3 rounded-lg leading-relaxed">
+        <div class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1">💡 Megoldásmenet / Levezetés:</div>
+        <div>${r.steps}</div>
+      </div>
+    </div>`).join('');
+  
+  // ITT UTASÍTJUK A MATHJAX-OT AZ EMELETES TÖRTEK KIRAJZOLÁSÁRA:
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([document.getElementById('reviewContent')]);
+  }
+
+  openOv('solModal');
+});
+
+// A Megoldások ablak bezárásakor visszatérés a kezdőlapra
+$('#revClose').addEventListener('click', goHome);
+$('#revDone').addEventListener('click', goHome);
+
+// Csalásvédelem
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && session && !session.ended) {
+    finish('lapvaltas');
+  }
+});
+$('#warnBtn').addEventListener('click', () => closeOv('warn'));
+</script>
+</body>
+</html>

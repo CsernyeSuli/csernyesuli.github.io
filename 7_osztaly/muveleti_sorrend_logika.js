@@ -319,6 +319,21 @@ function parseAnswer(raw) {
   return Number(s.replace('\u2212', '-'));
 }
 
+/** Miért nem helyes egy feladat, ha a végeredmény jó? (a diáknak és az e-mailbe kerülő lépéselemzésbe is ez megy) */
+const REASON_MSG = {
+  NO_STEPS:    'A végeredmény jó, de nem írtál lépéseket – a megoldás menetét is le kell írni, ezért a feladat nem számít helyesnek.',
+  STEP_ERRORS: 'A végeredmény jó, de a leírt lépéseid hibásak vagy hiányosak, ezért a feladat nem számít helyesnek.',
+  INCOMPLETE:  'A végeredmény jó, de a lépéseid nem jutnak el a végeredményig, ezért a feladat nem számít helyesnek.',
+};
+
+/** Az utolsó lépés új műveletsora a végeredmény-e (egyetlen szám, ami megegyezik a helyes eredménnyel)? */
+function lastStepReachesResult(steps, result) {
+  try {
+    const t = foldNeg(parse(steps[steps.length - 1].expr));
+    return t.type === 'num' && Math.abs(t.value - result) < EPS;
+  } catch { return false; }
+}
+
 /* ---------- 6. MUNKAMENET (állapotgép) ---------- */
 class PracticeSession {
   constructor(group, student = {}) {
@@ -337,11 +352,19 @@ class PracticeSession {
     const steps = this.rows.filter(r => r.calc.trim() || r.expr.trim());
     const reference = solveReference(this.task);
     const finalAnswer = parseAnswer(finalRaw);
-    const correct = finalAnswer !== null && Math.abs(finalAnswer - reference.result) < EPS;
+    const analysis = analyzeSolution(this.task, steps);
+    // Helyes = jó végeredmény ÉS végigvezetett, hibátlan lépések (egyetlen szám a végén).
+    const finalOk = finalAnswer !== null && Math.abs(finalAnswer - reference.result) < EPS;
+    let reason = '';                                   // '' = helyes; 'ANSWER' = rossz végeredmény
+    if (!finalOk) reason = 'ANSWER';
+    else if (!steps.length) reason = 'NO_STEPS';
+    else if (!analysis.every(a => a.ok)) reason = 'STEP_ERRORS';
+    else if (!lastStepReachesResult(steps, reference.result)) reason = 'INCOMPLETE';
+    const correct = reason === '';
     const result = {
       taskIndex: this.index, expression: this.task,
-      steps, analysis: analyzeSolution(this.task, steps),
-      finalRaw, finalAnswer, correct, reference,
+      steps, analysis,
+      finalRaw, finalAnswer, correct, reason, reasonMsg: REASON_MSG[reason] || '', reference,
       seconds: Math.round((Date.now() - this.startedAt) / 1000),
     };
     this.results[this.index] = result;
@@ -372,7 +395,7 @@ class PracticeSession {
           stepErrors: r.analysis.flatMap(a => a.problems.map(p => p.code)).join(','),
           studentLines: sb.student,      // az e-mail egymás melletti nézetéhez
           correctLines: sb.correct,
-          feedback: r.analysis.flatMap(a => a.problems.map(p => p.msg)).filter(Boolean),
+          feedback: [r.reasonMsg, ...r.analysis.flatMap(a => a.problems.map(p => p.msg))].filter(Boolean),
         };
       }),
     };

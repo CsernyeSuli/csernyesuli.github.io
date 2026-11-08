@@ -319,7 +319,8 @@ function showFeedback(res) {
   f.className = 'flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 ' +
     (ok ? 'border-emerald-500/60 bg-emerald-950/50 text-emerald-300' : 'border-red-500/60 bg-red-950/40 text-red-300');
   f.innerHTML = `<span class="text-lg font-bold">${ok ? '✔ Helyes' : '✘ Hibás'}</span>
-    <span class="ml-auto text-slate-200">Elért pontszám: <b>${session.summary().score} / ${TASKS_PER_GROUP}</b></span>`;
+    <span class="ml-auto text-slate-200">Elért pontszám: <b>${session.summary().score} / ${TASKS_PER_GROUP}</b></span>
+    ${res.reasonMsg ? `<span class="basis-full text-sm text-amber-300">${esc(res.reasonMsg)}</span>` : ''}`;
   f.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
@@ -372,7 +373,8 @@ function renderReview() {
   $('#revExpr').textContent = fmt(r.expression);
   $('#revCount').textContent = `${currentReviewIndex + 1} / ${n}`;
   $('#revSummary').innerHTML = `<span class="rounded-full px-3 py-0.5 ${r.correct ? 'bg-emerald-900 text-emerald-300' : 'bg-red-900 text-red-200'}">${r.correct ? '✔ helyes' : '✘ hibás'}</span>
-    <span>Végeredményed: <b class="text-slate-200">${esc(r.finalRaw)}</b> · helyes eredmény: <b class="text-slate-200">${esc(r.reference.result)}</b></span>`;
+    <span>Végeredményed: <b class="text-slate-200">${esc(r.finalRaw)}</b> · helyes eredmény: <b class="text-slate-200">${esc(r.reference.result)}</b></span>
+    ${r.reasonMsg ? `<span class="block w-full text-sm text-amber-300">${esc(r.reasonMsg)}</span>` : ''}`;
   $('#revMine').innerHTML = r.analysis.length
     ? r.analysis.map((a, k) => row(k, `<span class="${a.ok ? 'text-emerald-400' : 'text-red-400'}">${a.ok ? '✔' : '✘'}</span>
         <div class="min-w-0"><div class="break-words text-slate-200">${esc(a.calc)} → ${esc(a.expr)}</div>

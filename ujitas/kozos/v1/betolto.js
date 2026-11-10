@@ -8,7 +8,8 @@
  *
  * mod: 'elo'    – azonosítás + védelem + küldés (a téma-modul előtt betöltve; ha bármelyik hiányzik, az oldal NEM indul el)
  *      'archiv' – csak a téma-modul: nincs kódbekérés, védelem, küldés (az archíváláshoz elég ezt az egy szót átírni)
- * tema:         a ../../temak/<tema>.js téma-modul (az értékelés és a feladatok). Elhagyható, ha az oldal saját szkriptet használ.
+ * tema:         a ../../temak/<tema>.js téma-modul (az értékelés és a feladatok); több fájl is megadható tömbként, sorrendben
+ *               töltődnek be (pl. ['tortek-motor', 'tortek-adat', 'tortek']). Elhagyható, ha az oldal saját szkriptet használ.
  *
  * Szerződés a téma-modul felé (window.UJITAS):
  *   await UJITAS.run('indulas')   – indítás előtt hívd; false = ne indulj (pl. a diák nem adott meg kódot)
@@ -82,7 +83,7 @@
           if (!U._modulok[m]) throw new Error('Hiányzó modul: ' + m);
         });
       }
-      if (cfg.tema) await load(temaBase + cfg.tema + '.js');
+      for (const t of [].concat(cfg.tema || [])) await load(temaBase + t + '.js');
       U.emit('kesz');
     } catch (e) { leall(e); }
   };

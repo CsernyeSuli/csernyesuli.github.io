@@ -1,7 +1,7 @@
 /**
  * kozos/v1/kuldes.js – eredmény beküldése az Apps Scriptnek (élő módban töltődik be)
  *
- * Az Apps Script webalkalmazás címe EGYETLEN helyen, itt szerepel. Archív oldalon ez a modul nem töltődik be,
+ * Az Apps Script webalkalmazás címét a vegpont.js adja (egyetlen helyen). Archív oldalon ez a modul nem töltődik be,
  * így ott sem a cím, sem a küldés nincs jelen.
  *
  * UJITAS.kuldes(payload, { csendes }) → true / false
@@ -10,11 +10,11 @@
  */
 (function (U) {
   'use strict';
-  const URL_ = 'https://script.google.com/macros/s/AKfycbzBFQODSjA1OpNhWjd_Gqeuu3okVYsXjEd5W1OBE-q0vh6_17if8EuYrTmka7ao7vIOQg/exec';
+  const URL_ = window.UJITAS_URL;
 
   U.kuldes = async function (payload, opt) {
     const c = U.cfg;
-    if (!U.kod) return false;
+    if (!U.kod || !URL_) return false;
     const uid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
     const body = Object.assign({ setId: c.setId, sentAt: new Date().toISOString(), submissionId: uid }, payload, {
       classId: c.classId, assignmentType: c.assignmentType, taskTitle: c.taskTitle, code: U.kod,

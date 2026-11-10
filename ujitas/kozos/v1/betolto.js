@@ -8,6 +8,7 @@
  *
  * mod: 'elo'    – azonosítás + védelem + küldés (a téma-modul előtt betöltve; ha bármelyik hiányzik, az oldal NEM indul el)
  *      'archiv' – csak a téma-modul: nincs kódbekérés, védelem, küldés (az archíváláshoz elég ezt az egy szót átírni)
+ *      'oldal'  – osztályoldal: a tartalomjegyzéket tölti be az Apps Scriptből (kozos/v1/osztalyoldal.js), nincs azonosítás/védelem/küldés
  * tema:         a ../../temak/<tema>.js téma-modul (az értékelés és a feladatok); több fájl is megadható tömbként, sorrendben
  *               töltődnek be (pl. ['tortek-motor', 'tortek-adat', 'tortek']). Elhagyható, ha az oldal saját szkriptet használ.
  *
@@ -22,7 +23,8 @@
 (function () {
   'use strict';
   const cfg = window.UJITAS_CFG || {};
-  const ELO = cfg.mod !== 'archiv';                       // alapértelmezés: élő (a biztonságos irány)
+  const ELO = cfg.mod !== 'archiv' && cfg.mod !== 'oldal';   // alapértelmezés: élő (a biztonságos irány)
+  const OLDAL = cfg.mod === 'oldal';
   const base = document.currentScript.src.replace(/[^\/]*$/, '');
   const temaBase = new URL('../../temak/', base).href;
   const hooks = {}, handlers = {};
@@ -58,7 +60,7 @@
     '.uj-btn:disabled{opacity:.4;cursor:not-allowed}' +
     '.uj-btn.uj-masodlagos{background:transparent;color:#94a3b8;text-decoration:underline;font-weight:400}');
 
-  const MODULOK = ELO ? ['azonosito.js', 'vedelem.js', 'kuldes.js'] : [];
+  const MODULOK = ELO ? ['vegpont.js', 'azonosito.js', 'vedelem.js', 'kuldes.js'] : (OLDAL ? ['vegpont.js', 'osztalyoldal.js'] : []);
   const load = function (src) {
     return new Promise(function (ok, fail) {
       const s = document.createElement('script');
@@ -79,10 +81,11 @@
     try {
       for (const m of MODULOK) await load(base + m);
       if (ELO) {
-        ['azonosito', 'vedelem', 'kuldes'].forEach(function (m) {
+        ['vegpont', 'azonosito', 'vedelem', 'kuldes'].forEach(function (m) {
           if (!U._modulok[m]) throw new Error('Hiányzó modul: ' + m);
         });
       }
+      if (OLDAL && !U._modulok.vegpont) throw new Error('Hiányzó modul: vegpont');
       for (const t of [].concat(cfg.tema || [])) await load(temaBase + t + '.js');
       U.emit('kesz');
     } catch (e) { leall(e); }

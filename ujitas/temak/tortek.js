@@ -43,7 +43,7 @@
         <ul class="list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-300">
           <li>A feladatcsoport lezárásakor az eredményed automatikusan elküldésre kerül a tanárodnak, a neveddel és az eredményeddel.</li>
           <li>Ha a feladatcsoportot többször nyitod meg vagy küldöd be, a rendszerben kizárólag a legkorábban beérkezett megoldásod lesz érvényes!</li>
-          <li>Ha elhagyod az oldalt (másik lapra kattintasz, kijelző kikapcsol), a feladatod lezáródik és az addigi eredményeid lesznek elküldve.</li>
+          <li>Ha elhagyod az oldalt (másik lapra kattintasz, mobilon/tableten kijelző kikapcsol), a feladatod lezáródik és az addigi eredményeid lesznek elküldve.</li>
           <li>A személyes kódod csak a tiéd: ne add oda másnak!</li>
         </ul>
       </div>

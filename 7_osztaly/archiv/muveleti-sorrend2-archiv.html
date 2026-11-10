@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="hu" class="bg-slate-950 text-[15px]">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Műveletsorok egész számokkal – Archívum</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 bg-fixed font-sans text-slate-100 antialiased">
+<main class="mx-auto max-w-3xl px-4 pb-16 pt-6">
+
+<!-- ============ FŐOLDAL ============ -->
+<section id="view-start">
+  <div class="mb-3 flex justify-start">
+    <a id="backLink" href="../../7-osztaly.html" class="inline-flex items-center gap-2 rounded-lg border border-slate-600 bg-slate-700/60 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:border-sky-400 hover:bg-sky-500 hover:text-white">⬅ Vissza a 7. osztály oldalára</a>
+  </div>
+  <header class="mb-4 text-center">
+    <h1 class="text-2xl font-extrabold tracking-tight text-emerald-400 md:text-3xl">Műveletsorok egész számokkal (Archív)</h1>
+    <p id="subtitle" class="mt-1 text-base text-slate-300">Gyakorló feladatsorok küldés és megkötések nélkül</p>
+  </header>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg md:p-5">
+    <h2 class="mb-3 flex items-center gap-2 text-lg font-bold text-amber-400"><span>ℹ️</span> Archív használat</h2>
+    <p class="leading-relaxed text-slate-200">Válassz ki egy feladatsort a számozott gombok közül! Oldd meg a feladatokat lépésről lépésre, ellenőrizd az eredményeidet és tekintsd meg a részletes megoldásmenetet.</p>
+  </div>
+
+  <div class="rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg md:p-5">
+    <h2 class="mb-3 border-b border-slate-700 pb-2 text-lg font-bold text-emerald-400">Feladatsorok</h2>
+    <div id="groups" class="grid gap-3 md:grid-cols-2"></div>
+  </div>
+</section>
+
+<!-- ============ FELADAT ============ -->
+<section id="view-task" class="hidden">
+  <div class="mb-3 flex items-center justify-between text-slate-400"><span id="grpTitle" class="font-semibold text-emerald-400"></span><b id="counter" class="text-slate-200"></b></div>
+  <div class="mb-3 h-2 overflow-hidden rounded-full bg-slate-700"><div id="bar" class="h-full rounded-full bg-emerald-400 transition-all duration-500"></div></div>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg md:p-5">
+    <div id="expr" class="break-words py-2 text-center font-mono text-xl font-bold text-cyan-300 md:text-2xl"></div>
+  </div>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg md:p-5">
+    <div class="mb-3 flex gap-3 rounded-xl border border-sky-500/50 bg-sky-950/40 p-3 text-sm leading-relaxed text-sky-100">
+      <span class="text-lg">💡</span>
+      <div><b class="text-sky-300">Szabály:</b> Egyszerre csak egyetlen műveletet végezz el! Több részszámítást pontosvesszővel választhatsz el.</div>
+    </div>
+    <div id="steps"></div>
+    <div class="mt-2 flex flex-wrap items-center gap-3">
+      <button id="addStep" type="button" class="rounded-xl bg-sky-500 px-4 py-2 font-semibold text-white transition hover:bg-sky-400 disabled:opacity-40">[+] Új lépés</button>
+      <p id="stepErr" class="hidden text-sm font-medium text-red-400">A számítást zárd le egyenlőségjellel és az eredménnyel is!</p>
+    </div>
+    <div id="insBar" class="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-slate-700 bg-slate-950/60 p-3 text-xs text-slate-400">
+      <span class="mr-1 font-semibold text-slate-300">Beszúrás:</span>
+      <button type="button" data-ins="·" class="ins h-8 min-w-[2.25rem] rounded-lg border border-emerald-500/60 bg-slate-800 px-2 font-mono text-base font-bold text-emerald-300">·</button>
+      <button type="button" data-ins=":" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">:</button>
+      <button type="button" data-ins="+" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">+</button>
+      <button type="button" data-ins="−" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">−</button>
+      <button type="button" data-ins="(" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">(</button>
+      <button type="button" data-ins=")" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">)</button>
+      <button type="button" data-ins="=" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">=</button>
+      <button type="button" data-ins=";" class="ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100">;</button>
+    </div>
+  </div>
+
+  <div class="mb-4 rounded-2xl border border-slate-700 bg-slate-900/60 p-4 shadow-lg md:p-5">
+    <label for="answer" class="mb-1.5 block text-sm text-slate-400">Végeredmény</label>
+    <input id="answer" inputmode="numeric" autocomplete="off" class="w-full rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-base text-slate-100 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30">
+    <p id="ansErr" class="mt-2 hidden text-sm text-red-400">Írd be a végeredményt egyetlen számként.</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <button id="submitBtn" type="button" class="rounded-xl bg-emerald-400 px-4 py-2 font-bold text-slate-900 transition hover:bg-emerald-300">Ellenőrzés</button>
+      <button id="nextBtn" type="button" class="hidden rounded-xl bg-sky-500 px-4 py-2 font-bold text-white transition hover:bg-sky-400">Tovább a következő feladatra</buorai
+tton>
+    </div>
+  </div>
+  <div id="feedback" class="hidden flex-wrap items-center gap-3 rounded-2xl border px-4 py-3"></div>
+</section>
+
+<!-- ============ ÉRTÉKELŐ LAP ============ -->
+<div id="resultModal" class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/70 p-4 backdrop-blur-sm flex items-center justify-center">
+  <div role="dialog" aria-modal="true" class="w-full max-w-sm rounded-2xl border border-slate-700 bg-slate-900 p-5 text-center shadow-2xl">
+    <h2 class="text-xl font-bold">Gyakorlás kész!</h2>
+    <div id="score" class="my-2 text-5xl font-extrabold text-emerald-400"></div>
+    <p class="text-slate-400">sikeres feladat</p>
+    <div class="mt-4 rounded-2xl border border-slate-700 bg-slate-950/60 p-4">
+      <div class="text-sm text-slate-400">Értékelés</div>
+      <div id="grade" class="mt-1 font-bold text-emerald-400"></div>
+    </div>
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      <button id="rClose" type="button" class="rounded-xl border border-slate-600 px-4 py-2 font-semibold text-slate-200 hover:border-slate-400">Bezárás</button>
+      <button id="rSol" type="button" class="rounded-xl bg-sky-500 px-4 py-2 font-bold text-white hover:bg-sky-400">Megoldások</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MEGOLDÁSOK ============ -->
+<div id="solModal" class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/80 p-4 backdrop-blur-sm flex items-center justify-center">
+  <div role="dialog" aria-modal="true" class="w-full max-w-3xl rounded-2xl border border-slate-700 bg-slate-900 p-4 shadow-2xl md:p-6">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-800 pb-5">
+      <h2 id="revTitle" class="text-lg font-extrabold text-emerald-400 md:text-2xl"></h2>
+      <button id="revClose" type="button" class="rounded-xl px-3 text-2xl leading-none text-slate-300 hover:text-white">✕</button>
+    </div>
+
+    <div class="mt-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-center">
+      <div class="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Kifejezés:</div>
+      <div id="revExpr" class="break-words font-mono text-xl font-bold text-cyan-300 md:text-2xl"></div>
+      <div id="revSummary" class="mt-4 flex flex-wrap items-center justify-center gap-3 text-sm text-slate-400"></div>
+    </div>
+
+    <div class="mt-3 grid gap-3 md:grid-cols-2">
+      <div class="rounded-2xl border border-slate-700 bg-slate-950/70 p-4">
+        <h3 class="mb-3 font-bold text-slate-200">A te megoldásod:</h3><div id="revMine"></div></div>
+      <div class="rounded-2xl border border-emerald-700/70 bg-slate-950/70 p-4">
+        <h3 class="mb-3 font-bold text-emerald-300">A helyes megoldásmenet:</h3><div id="revCorrect"></div></div>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between gap-3 border-t border-slate-800 pt-4">
+      <button id="revPrev" type="button" class="rounded-2xl bg-slate-800 px-4 py-2 font-semibold text-slate-100 hover:bg-slate-700">← Előző</button>
+      <span id="revCount" class="font-semibold text-slate-400"></span>
+      <button id="revNext" type="button" class="rounded-2xl bg-sky-500 px-4 py-2 font-semibold text-white hover:bg-sky-400">Következő →</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+window.PAGE_CONFIG = {
+  taskSet: 'hazi' // Házi feladathoz állítsd 'hazi'-ra
+};
+</script>
+<script src="muveleti_sorrend_logika.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let session = null;
+
+const fmt = s => String(s).replace(/\s+/g, '').replace(/[×·*]/g, ' · ').replace(/[:÷]/g, ' : ')
+  .replace(/(?<=[\d)\]])[-−]/g, ' − ').replace(/(?<=[\d)\]])\+/g, ' + ').replace(/-/g, '−');
+
+const INPUT = 'w-full rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-slate-100 placeholder-slate-500 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30';
+
+const show = v => { $('#view-start').classList.toggle('hidden', v !== 'start'); $('#view-task').classList.toggle('hidden', v !== 'task'); window.scrollTo(0, 0); };
+
+// Főoldal gombok közvetlen generálása (mivel a szkript a lap alján van, a DOM már kész)
+const groupsContainer = $('#groups');
+if (groupsContainer && typeof GROUPS !== 'undefined') {
+  groupsContainer.innerHTML = GROUPS.map(g => `<button type="button" data-id="${g.id}"
+    class="flex items-center justify-between rounded-2xl border border-slate-600 bg-slate-800/80 px-4 py-3 text-left transition hover:border-emerald-400">
+    <span><span class="block text-base font-bold text-slate-100">${esc(g.title)}</span>
+    <span class="mt-1 block font-mono text-xs text-cyan-300">${esc(fmt(g.tasks[0]))}</span></span>
+    <span class="ml-3 text-xl text-emerald-400">➔</span></button>`).join('');
+}
+
+$('#groups').addEventListener('click', e => {
+  const b = e.target.closest('button[data-id]'); if (!b) return;
+  session = new PracticeSession(GROUPS.find(g => g.id === +b.dataset.id));
+  renderTask();
+});
+
+function renderTask() {
+  lastInput = null;
+  $('#grpTitle').textContent = session.group.title;
+  $('#counter').textContent = `${session.index + 1} / ${TASKS_PER_GROUP}`;
+  $('#bar').style.width = `${(session.index / TASKS_PER_GROUP) * 100}%`;
+  $('#expr').textContent = fmt(session.task);
+  $('#answer').value = ''; $('#answer').disabled = false;
+  ['#ansErr', '#stepErr'].forEach(s => $(s).classList.add('hidden'));
+  $('#feedback').classList.add('hidden');
+  $('#nextBtn').classList.add('hidden'); $('#submitBtn').classList.remove('hidden');
+  renderRows(); show('task');
+}
+
+function renderRows(locked = false) {
+  $('#steps').innerHTML = session.rows.map((r, i) => `<div class="mb-3 grid items-center gap-2 md:grid-cols-[2rem_1fr_1fr]">
+    <span class="text-slate-500 md:text-right">${i + 1}.</span>
+    <input data-i="${i}" data-f="calc" inputmode="numeric" autocomplete="off" spellcheck="false" class="${INPUT}" placeholder="${i ? 'Következő részszámítás' : 'pl. 15:3=5'}" value="${esc(r.calc)}" ${locked ? 'disabled' : ''}>
+    <input data-i="${i}" data-f="expr" inputmode="numeric" autocomplete="off" spellcheck="false" class="${INPUT}" placeholder="Új műveletsor" value="${esc(r.expr)}" ${locked ? 'disabled' : ''}></div>`).join('');
+  $('#addStep').disabled = locked || session.rows.length >= MAX_STEP_ROWS;
+}
+
+// Aktív mező figyelése a beszúráshoz
+let lastInput = null;
+$('#steps').addEventListener('focusin', e => { if (e.target.dataset.f) lastInput = e.target; });
+$('#answer').addEventListener('focusin', () => { lastInput = $('#answer'); });
+
+// Beszúró sáv eseménykezelése - Kijavítva, hogy biztosan elkapja a gombot
+$('#insBar').addEventListener('mousedown', e => e.preventDefault()); // ne vegye el a fókuszt
+
+$('#insBar').addEventListener('click', e => {
+  const btn = e.target.closest('button'); 
+  if (!btn || !btn.dataset.ins) return; // Ha nem gombra kattintottak, kilépünk
+  
+  const ch = btn.dataset.ins;
+  const t = (lastInput && document.contains(lastInput)) ? lastInput
+    : document.querySelector(`#steps input[data-i="${session.rows.length - 1}"][data-f="calc"]`);
+  
+  if (!t || t.disabled) return;
+  
+  t.focus();
+  const s = t.selectionStart ?? t.value.length;
+  const en = t.selectionEnd ?? s;
+  
+  t.value = t.value.slice(0, s) + ch + t.value.slice(en);
+  t.setSelectionRange(s + ch.length, s + ch.length);
+  t.dispatchEvent(new Event('input', { bubbles: true }));
+});
+$('#steps').addEventListener('input', e => {
+  const t = e.target; if (!t.dataset.f) return;
+  if (t.value.includes('*')) {
+    const pos = t.selectionStart;
+    t.value = typeFix(t.value);
+    t.setSelectionRange(pos, pos);
+  }
+  session.setRow(+t.dataset.i, t.dataset.f, t.value);
+  $('#stepErr').classList.add('hidden');
+});
+
+const calcClosed = s => s.split(';').map(x => x.trim()).filter(Boolean)
+  .every(x => { const k = x.indexOf('='); return k > 0 && x.slice(k + 1).trim() !== ''; });
+
+$('#addStep').addEventListener('click', () => {
+  const lastIdx = session.rows.length - 1, calc = session.rows[lastIdx].calc.trim();
+  if (calc && !calcClosed(calc)) { $('#stepErr').classList.remove('hidden'); return; }
+  $('#stepErr').classList.add('hidden');
+  const n = session.addRow(); renderRows();
+  document.querySelector(`#steps input[data-i="${n - 1}"][data-f="calc"]`).focus();
+});
+
+$('#submitBtn').addEventListener('click', () => {
+  if (parseAnswer($('#answer').value) === null) { $('#ansErr').classList.remove('hidden'); $('#answer').focus(); return; }
+  $('#ansErr').classList.add('hidden');
+  const res = session.submit($('#answer').value);
+  renderRows(true); $('#answer').disabled = true; $('#submitBtn').classList.add('hidden');
+  
+  const f = $('#feedback');
+  f.className = 'flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3 ' + (res.correct ? 'border-emerald-500 bg-emerald-950/50 text-emerald-300' : 'border-red-500 bg-red-950/40 text-red-300');
+  f.innerHTML = `<span class="text-lg font-bold">${res.correct ? '✔ Helyes' : '✘ Hibás'}</span>
+    <span class="ml-auto">Pontszám: <b>${session.summary().score} / ${TASKS_PER_GROUP}</b></span>
+    ${res.reasonMsg ? `<span class="basis-full text-sm text-amber-300">${esc(res.reasonMsg)}</span>` : ''}`;
+  f.classList.remove('hidden'); f.classList.add('flex');
+
+  if (session.index === TASKS_PER_GROUP - 1) {
+    setTimeout(showResultModal, 1200);
+  } else {
+    $('#nextBtn').classList.remove('hidden');
+  }
+});
+
+$('#nextBtn').addEventListener('click', () => { session.next(); renderTask(); });
+
+function showResultModal() {
+  const { score, total } = session.summary();
+  $('#score').textContent = `${score} / ${total}`;
+  $('#grade').textContent = score === total ? 'Kiváló teljesítmény (Jeles)' : 'Gyakorolj még a hibás feladatokon!';
+  $('#resultModal').classList.remove('hidden');
+}
+
+$('#rClose').addEventListener('click', () => { $('#resultModal').classList.add('hidden'); show('start'); });
+$('#revClose').addEventListener('click', () => { $('#solModal').classList.add('hidden'); show('start'); });
+
+let reviewList = [], currentReviewIndex = 0;
+function renderReview() {
+  const r = reviewList[currentReviewIndex], sb = sideBySide(r);
+  $('#revTitle').textContent = `${session.group.id}. Feladatsor – ${r.taskIndex + 1}. Feladat`;
+  $('#revExpr').textContent = fmt(r.expression);
+  $('#revCount').textContent = `${currentReviewIndex + 1} / ${reviewList.length}`;
+  $('#revSummary').innerHTML = `<span class="px-3 py-0.5 rounded ${r.correct ? 'bg-emerald-900 text-emerald-300' : 'bg-red-900 text-red-200'}">${r.correct ? '✔ Helyes' : '✘ Hibás'}</span>`;
+  $('#revMine').innerHTML = r.analysis.map((a, k) => `<div class="py-1 text-sm ${a.ok ? 'text-emerald-400' : 'text-red-400'}">${a.ok ? '✔' : '✘'} ${esc(a.calc)} → ${esc(a.expr)}</div>`).join('');
+  $('#revCorrect').innerHTML = sb.correct.map((l, k) => `<div class="py-1 text-sm text-slate-200">${k + 1}. ${esc(l)}</div>`).join('');
+}
+
+$('#rSol').addEventListener('click', () => {
+  reviewList = session.results.filter(Boolean); currentReviewIndex = 0;
+  renderReview(); $('#resultModal').classList.add('hidden'); $('#solModal').classList.remove('hidden');
+});
+$('#revPrev').addEventListener('click', () => { if (currentReviewIndex > 0) { currentReviewIndex--; renderReview(); } });
+$('#revNext').addEventListener('click', () => { if (currentReviewIndex < reviewList.length - 1) { currentReviewIndex++; renderReview(); } else { $('#solModal').classList.add('hidden'); show('start'); } });
+</script>
+</body>
+</html>

@@ -504,3 +504,12 @@ a:hover {
 .modal-submit-btn:hover {
     opacity: 0.9;
 }
+/* Ha a layoutban nincs sidebar, a main-content közére igazodik */
+.layout:has(.main-content:only-child) {
+    justify-content: center;
+}
+
+.layout:has(.main-content:only-child) .main-content {
+    max-width: 900px;
+    width: 100%;
+}

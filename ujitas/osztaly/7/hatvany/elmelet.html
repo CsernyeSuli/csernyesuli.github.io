@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7. osztály - Matematika</title>
+    <title>7. osztály - Hatványozás elmélet</title>
     <!-- Külső stíluslap csatolása -->
     <link rel="stylesheet" href="../../../../osztalylap_style.css">
     <!-- MathJax betöltése a matematikai képletekhez -->
@@ -11,10 +11,16 @@
 </head>
 
 <body>
-    <main>
+    <!-- FEJLÉC VISSZALÉPÉS GOMBBAL -->
+    <header>
+        <h2 style="margin:0; color:#38bdf8; font-size:1.2rem;">7. Osztály - Matematika</h2>
+        <a href="../../../7-osztaly.html" class="btn-back">← Vissza a 7. osztály oldalára</a>
+    </header>
 
-            <div class="modal-body">
-                <!-- KIEGÉSZÍTETT MATEMATIKA SZÖVEG -->
+    <!-- KÖZPONTI KONTÉNER A MODAL KINÉZETÉHEZ -->
+    <main class="layout">
+        <div class="main-content">
+            
             <div class="math-notes">
                 <h3>🧮 Elméleti összefoglaló: A hatványozás</h3>
                 
@@ -47,81 +53,64 @@
                     <li><strong>Azonos kitevőjű hatványok osztása/hányadosa:</strong> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
                     <li><strong>Hatvány hatványozása:</strong> A hatvány alapot a kitevők szorzatára emeljük</li>
                 </ul>
-                 <!-- Kvíz indító gomb (új lapon nyílik meg) -->
-<div style="text-align: center; margin: 20px 0;">
-    <a href="7_osztaly/archiv/hatvanyozas-kviz.html" target="_blank" style="
-        display: inline-block;
-        background-color: #ff9800;
-        color: white;
-        padding: 12px 30px;
-        font-size: 18px;
-        font-weight: bold;
-        text-decoration: none;
-        border-radius: 25px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.2s, background-color 0.2s;
-    " onmouseover="this.style.backgroundColor='#e65100'; this.style.transform='scale(1.05)';" 
-       onmouseout="this.style.backgroundColor='#ff9800'; this.style.transform='scale(1)';">
-        ✨ INTERAKTÍV HATVÁNYOZÁS KVÍZ INDÍTÁSA
-    </a>
-</div>
+
+                <!-- KVÍZ INDÍTÓ GOMB -->
+                <div style="text-align: center; margin: 30px 0 10px 0;">
+                    <a href="hatvanyozas-kviz.html" target="_blank" style="
+                        display: inline-block;
+                        background-color: #ff9800;
+                        color: white;
+                        padding: 12px 30px;
+                        font-size: 18px;
+                        font-weight: bold;
+                        text-decoration: none;
+                        border-radius: 25px;
+                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        transition: transform 0.2s, background-color 0.2s;
+                    " onmouseover="this.style.backgroundColor='#e65100'; this.style.transform='scale(1.05)';" 
+                       onmouseout="this.style.backgroundColor='#ff9800'; this.style.transform='scale(1)';">
+                        ✨ INTERAKTÍV HATVÁNYOZÁS KVÍZ INDÍTÁSA
+                    </a>
+                </div>
             </div>
 
-        </main>
-
-    </div>
-   
-
-            </div>
         </div>
-    </div>
+    </main>
 
     <style>
-        /* ÚJ: Biztosítja, hogy az oldalsáv magassága csak a saját tartalmáig érjen */
-        .sidebar {
-            align-self: flex-start;
-            /* Ide jöhetnek a korábbi .sidebar stílusaid (pl. background, padding, border-radius) */
-        }
-
-        /* Szöveges rész formázása */
+        /* Önálló elmélet oldal finomhangolása */
         .math-notes {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            margin-top: 0;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
             border-left: 5px solid #38bdf8;
         }
         .math-notes h3 {
             margin-top: 0;
             color: #38bdf8;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
         }
         .math-notes h4 {
             margin-top: 25px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #f43f5e;
+            font-size: 1.1rem;
         }
         .qa-section p {
             margin-bottom: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 1rem;
         }
         .notes-list {
             padding-left: 20px;
             margin-bottom: 20px;
         }
         .notes-list li {
-            margin-bottom: 8px;
-            line-height: 1.4;
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
     </style>
-
-    <script>
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-    </script>
-
 </body>
 </html>

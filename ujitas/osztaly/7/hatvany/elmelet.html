@@ -8,16 +8,83 @@
     <link rel="stylesheet" href="../../../../osztalylap_style.css">
     <!-- MathJax betöltése a matematikai képletekhez -->
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* RÖGZÍTETT FEJLÉC GÖRGETÉSHEZ */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* VISSZAFOGOTTABB VISSZAGOMB STÍLUS */
+        .btn-back-subdued {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid #334155;
+            transition: all 0.2s ease;
+        }
+        .btn-back-subdued:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border-color: #38bdf8;
+        }
+
+        /* Önálló elmélet oldal finomhangolása */
+        .math-notes {
+            margin-top: 0;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 5px solid #38bdf8;
+        }
+        .math-notes h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+        .math-notes h4 {
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #f43f5e;
+            font-size: 1.1rem;
+        }
+        .qa-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .notes-list {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .notes-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- FEJLÉC VISSZALÉPÉS GOMBBAL -->
+    <!-- RÖGZÍTETT FEJLÉC VISSZALÉPÉS GOMBBAL -->
     <header>
         <h2 style="margin:0; color:#38bdf8; font-size:1.2rem;">7. Osztály - Matematika</h2>
-        <a href="../../../../7-osztaly.html" class="btn-back">← Vissza a 7. osztály oldalára</a>
+        <a href="../../../../7-osztaly.html" class="btn-back-subdued">← Vissza a 7. osztály oldalára</a>
     </header>
 
-    <!-- KÖZPONTI KONTÉNER A MODAL KINÉZETÉHEZ -->
+    <!-- KÖZPONTI KONTÉNER A TARTALOMHOZ -->
     <main class="layout">
         <div class="main-content">
             
@@ -76,41 +143,5 @@
 
         </div>
     </main>
-
-    <style>
-        /* Önálló elmélet oldal finomhangolása */
-        .math-notes {
-            margin-top: 0;
-            padding: 25px;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            border-left: 5px solid #38bdf8;
-        }
-        .math-notes h3 {
-            margin-top: 0;
-            color: #38bdf8;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-        }
-        .math-notes h4 {
-            margin-top: 25px;
-            margin-bottom: 12px;
-            color: #f43f5e;
-            font-size: 1.1rem;
-        }
-        .qa-section p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-        .notes-list {
-            padding-left: 20px;
-            margin-bottom: 20px;
-        }
-        .notes-list li {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-    </style>
 </body>
 </html>

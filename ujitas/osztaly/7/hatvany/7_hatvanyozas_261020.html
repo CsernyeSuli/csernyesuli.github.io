@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Osztály - Hatványozás</title>
+   <!--  <link rel="stylesheet" href="../../osztalylap_style.css"> -->
+    <style>
+        .csoport-kontener {
+            max-width: 600px;
+            margin: 80px auto;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .gomb-doboz {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .csoport-gomb {
+            padding: 20px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .alap-gomb {
+            background-color: #0066cc;
+        }
+        .alap-gomb:hover {
+            background-color: #004c99;
+            transform: translateY(-2px);
+        }
+        .halado-gomb {
+            background-color: #28a745;
+        }
+        .halado-gomb:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .vissza-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: #666;
+            text-decoration: none;
+        }
+        .vissza-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div id="modal-archive" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-archive')">&times;</span>
+            <h3 style="color: #38bdf8; margin-top:0;">📂 📅 2026. 10. 20. - Archív óra anyaga</h3>
+            <div class="modal-body">
+                <!-- KIEGÉSZÍTETT MATEMATIKA SZÖVEG -->
+            <div class="math-notes">
+                <h3>🧮 Elméleti összefoglaló: A hatványozás</h3>
+                
+                <div class="qa-section">
+                    <p><strong>Mi a hatvány?</strong><br>➔ Ismételt szorzás</p>
+                    <p><strong>Miből áll a hatvány alak?</strong><br>➔ Hatvány alapból és kitevőből</p>
+                    <p><strong>Mit mutat meg a hatvány alap?</strong><br>➔ A hatvány alapot kell szorozni önmagával</p>
+                    <p><strong>Mit jelent a hatvány kitevő?</strong><br>➔ Darabszámot, hogy az ismételt szorzásban hány tényező van</p>
+                    <p><strong>A hatvány alak mire írható át?</strong><br>➔ Szorzat alakba, ismételt szorzásba a hatvány alappal</p>
+                </div>
+
+                <h4>⚠️ Speciális esetek</h4>
+                <ul class="notes-list">
+                    <li>Minden szám 1. hatványa egyenlő önmagával</li>
+                    <li>Minden szám 0. hatványa 1, kivéve a 0-át (0 a nulladikon nem értelmezett)</li>
+                    <li>Az 1 bármelyik hatványa 1</li>
+                    <li>Negatív szám páros kitevőjű hatványa pozitív érték</li>
+                    <li>Negatív szám páratlan kitevőjű hatványa negatív érték</li>
+                </ul>
+
+                <h4>✨ Hatványozás azonosságai</h4>
+                <ul class="notes-list">
+                    <li><strong>Azonos alapú hatványok szorzása:</strong> A közös alapot a kitevők összegére emeljük</li>
+                    <li><strong>Azonos alapú hatványok osztása/hányadosa:</strong> A közös alapot a kitevők különbségére emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok szorzatára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li>Bármelyik hatványt felbonthatjuk a hatvány alappal azonos alapú hatványok osztására/hányadosára, ha azokat megfelelő kitevőre emeljük</li>
+                    <li><strong>Szorzat hatványa:</strong> A tényezőket a szorzat kitevőjére emelve összeszorozzuk</li>
+                    <li><strong>Osztás/hányados hatványa:</strong> Az osztásban/hányadosban szereplő számokat az osztás/hányados kitevőjére emelve osztjuk</li>
+                    <li><strong>Azonos kitevőjű hatványok szorzása:</strong> A hatvány alapok szorzatát a közös kitevőre emeljük</li>
+                    <li><strong>Azonos kitevőjű hatványok osztása/hányadosa:</strong> A hatvány alapok hányadosát a közös kitevőre emeljük</li>
+                    <li><strong>Hatvány hatványozása:</strong> A hatvány alapot a kitevők szorzatára emeljük</li>
+                </ul>
+                 <!-- Kvíz indító gomb (új lapon nyílik meg) -->
+<div style="text-align: center; margin: 20px 0;">
+    <a href="hatvanyozas-kviz.html" target="_blank" style="
+        display: inline-block;
+        background-color: #ff9800;
+        color: white;
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 25px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s, background-color 0.2s;
+    " onmouseover="this.style.backgroundColor='#e65100'; this.style.transform='scale(1.05)';" 
+       onmouseout="this.style.backgroundColor='#ff9800'; this.style.transform='scale(1)';">
+        ✨ INTERAKTÍV HATVÁNYOZÁS KVÍZ INDÍTÁSA
+    </a>
+</div>
+</body>
+</html>

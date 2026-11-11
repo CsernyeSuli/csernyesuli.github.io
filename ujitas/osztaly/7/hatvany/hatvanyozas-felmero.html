@@ -21,25 +21,23 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            background-color: #0f172a; /* Igazítva a sötét környezethez */
+            background-color: #0f172a; /* Sötét háttér az oldal többi részéhez igazítva */
             color: var(--text);
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* RÖGZÍTETT FEJLÉC VISSZAGOMBBAL */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
-            padding: 12px 24px;
+        /* VISSZAFOGOTT VISSZAGOMB FELÜLRE */
+        .top-bar {
+            max-width: 850px;
+            width: 100%;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            justify-content: flex-end;
+            margin-bottom: 15px;
         }
 
         .btn-back-subdued {
@@ -57,13 +55,6 @@
             background-color: rgba(56, 189, 248, 0.1);
             color: #38bdf8;
             border-color: #38bdf8;
-        }
-
-        /* FŐ KONTÉNER ELRENDEZÉS */
-        .page-wrapper {
-            padding: 20px;
-            display: flex;
-            justify-content: center;
         }
 
         .container {
@@ -476,13 +467,11 @@
 </head>
 <body>
 
-<!-- FIX FEJLÉC ÉS VISSZAGOMB -->
-<header>
-    <h2 style="margin:0; color:#38bdf8; font-size:1.2rem;">7. Osztály - Matematika</h2>
-    <a href="../../7/index.html" class="btn-back-subdued">← Vissza a 7. osztály oldalára</a>
-</header>
+<!-- Vissza gomb külön sávban a kártya felett -->
+<div class="top-bar">
+    <a href="../../../7-osztaly.html" class="btn-back-subdued">← Vissza a 7. osztály oldalára</a>
+</div>
 
-<div class="page-wrapper">
 <div class="container" id="mainContainer">
     <!-- Haladási sáv -->
     <div class="progress-container">
@@ -856,4 +845,209 @@
                     <div class="input-fraction">
                         <div class="input-power-box-tall">
                             <input type="text" id="q7a_num_base" class="base-input" inputmode="numeric">
-                            <input type="text" id="q7a_num_exp" class="exponent-input
+                            <input type="text" id="q7a_num_exp" class="exponent-input" inputmode="numeric">
+                        </div>
+                        <div class="input-fraction-line"></div>
+                        <div class="input-power-box-tall">
+                            <input type="text" id="q7a_den_base" class="base-input" inputmode="numeric">
+                            <input type="text" id="q7a_den_exp" class="exponent-input" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. b) és c) -->
+                <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <!-- b) -->
+                    <div style="display: inline-flex; align-items: center; font-size: 26px; font-weight: bold; gap: 6px;">
+                        <span class="task-number">b)</span>
+                        <span class="big-bracket">(</span>
+                        <div class="math-fraction"><span class="num">5</span><span class="den">2</span></div>
+                        <span class="big-bracket">)</span><sup class="bracket-outer-sup">5</sup>
+                        <span>=</span>
+                        <div class="input-fraction">
+                            <div class="input-power-box-tall">
+                                <input type="text" id="q7b_num_base" class="base-input" inputmode="numeric">
+                                <input type="text" id="q7b_num_exp" class="exponent-input" inputmode="numeric">
+                            </div>
+                            <div class="input-fraction-line"></div>
+                            <div class="input-power-box-tall">
+                                <input type="text" id="q7b_den_base" class="base-input" inputmode="numeric">
+                                <input type="text" id="q7b_den_exp" class="exponent-input" inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- c) -->
+                    <div style="display: inline-flex; align-items: center; font-size: 26px; font-weight: bold; gap: 6px;">
+                        <span class="task-number">c)</span>
+                        <span class="big-bracket">(</span>
+                        <span>&minus;</span>
+                        <div class="math-fraction"><span class="num">3</span><span class="den">4</span></div>
+                        <span class="big-bracket">)</span><sup class="bracket-outer-sup">6</sup>
+                        <span>=</span>
+                        <div class="input-fraction">
+                            <div class="input-power-box-tall">
+                                <input type="text" id="q7c_num_base" class="base-input" inputmode="numeric">
+                                <input type="text" id="q7c_num_exp" class="exponent-input" inputmode="numeric">
+                            </div>
+                            <div class="input-fraction-line"></div>
+                            <div class="input-power-box-tall">
+                                <input type="text" id="q7c_den_base" class="base-input" inputmode="numeric">
+                                <input type="text" id="q7c_den_exp" class="exponent-input" inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="points-info">🏆 Elérhető pontszám: 70 pont</div>
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" onclick="changePage(-1)">Vissza</button>
+                <button type="button" class="btn btn-submit" onclick="checkAnswers()">Eredmény Ellenőrzése</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    let currentPage = 0;
+    const totalPages = 7;
+
+    function updateProgress() {
+        if (currentPage <= totalPages) {
+            const progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+    }
+
+    function changePage(delta) {
+        const pages = document.querySelectorAll('.page');
+        pages[currentPage].classList.remove('active');
+        currentPage += delta;
+        if (currentPage < 0) currentPage = 0;
+        if (currentPage > totalPages) currentPage = totalPages;
+        pages[currentPage].classList.add('active');
+        updateProgress();
+        window.scrollTo(0, 0);
+    }
+
+    function markField(id, isCorrect) {
+        let el = document.getElementById(id);
+        if(!el) return;
+        el.classList.remove('input-correct', 'input-incorrect');
+        el.classList.add(isCorrect ? 'input-correct' : 'input-incorrect');
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        let maxPoints = 70;
+
+        // 1. Feladat (6p)
+        let c1 = document.getElementById('q1a_base').value.trim() === '2'; markField('q1a_base', c1); if(c1) score++;
+        let c2 = document.getElementById('q1a_exp').value.trim() === '5'; markField('q1a_exp', c2); if(c2) score++;
+        let c3 = document.getElementById('q1b_base').value.trim() === '3'; markField('q1b_base', c3); if(c3) score++;
+        let c4 = document.getElementById('q1b_exp').value.trim() === '4'; markField('q1b_exp', c4); if(c4) score++;
+        let c5 = document.getElementById('q1c_base').value.trim() === '5'; markField('q1c_base', c5); if(c5) score++;
+        let c6 = document.getElementById('q1c_exp').value.trim() === '6'; markField('q1c_exp', c6); if(c6) score++;
+
+        // 2. Feladat (3p)
+        let c7 = document.getElementById('q2a_val').value.trim() === '16'; markField('q2a_val', c7); if(c7) score++;
+        let c8 = document.getElementById('q2b_val').value.trim() === '27'; markField('q2b_val', c8); if(c8) score++;
+        let c9 = document.getElementById('q2c_val').value.trim() === '10000'; markField('q2c_val', c9); if(c9) score++;
+
+        // 3. Feladat (18p)
+        let c10 = document.getElementById('q3a2_base').value.trim() === '3'; markField('q3a2_base', c10); if(c10) score++;
+        let c11 = document.getElementById('q3a2_exp').value.trim() === '4'; markField('q3a2_exp', c11); if(c11) score++;
+        let c12 = document.getElementById('q3a3_base').value.trim() === '5'; markField('q3a3_base', c12); if(c12) score++;
+        let c13 = document.getElementById('q3a3_exp').value.trim() === '1'; markField('q3a3_exp', c13); if(c13) score++;
+        let c14 = document.getElementById('q3a4_base').value.trim() === '4'; markField('q3a4_base', c14); if(c14) score++;
+        let c15 = document.getElementById('q3a4_exp').value.trim() === '0'; markField('q3a4_exp', c15); if(c15) score++;
+
+        let c16 = document.getElementById('q3b1_base').value.trim() === '4'; markField('q3b1_base', c16); if(c16) score++;
+        let c17 = document.getElementById('q3b1_exp').value.trim() === '2'; markField('q3b1_exp', c17); if(c17) score++;
+        let c18 = document.getElementById('q3b2_base').value.trim() === '5'; markField('q3b2_base', c18); if(c18) score++;
+        let c19 = document.getElementById('q3b2_exp').value.trim() === '5'; markField('q3b2_exp', c19); if(c19) score++;
+        let c20 = document.getElementById('q3b3_base').value.trim() === '10'; markField('q3b3_base', c20); if(c20) score++;
+        let c21 = document.getElementById('q3b3_exp').value.trim() === '2'; markField('q3b3_exp', c21); if(c21) score++;
+
+        let c22 = document.getElementById('q3c1_base').value.trim() === '7'; markField('q3c1_base', c22); if(c22) score++;
+        let c23 = document.getElementById('q3c1_exp').value.trim() === '2'; markField('q3c1_exp', c23); if(c23) score++;
+        let c24 = document.getElementById('q3c2_base').value.trim() === '5'; markField('q3c2_base', c24); if(c24) score++;
+        let c25 = document.getElementById('q3c2_exp').value.trim() === '6'; markField('q3c2_exp', c25); if(c25) score++;
+        let c26 = document.getElementById('q3c3_base').value.trim() === '1'; markField('q3c3_base', c26); if(c26) score++;
+        let c27 = document.getElementById('q3c3_exp').value.trim() === '5'; markField('q3c3_exp', c27); if(c27) score++;
+
+        // 4. Feladat (8p)
+        let c28 = document.getElementById('q4a_base').value.trim() === '5'; markField('q4a_base', c28); if(c28) score++;
+        let c29 = document.getElementById('q4a_exp').value.trim() === '8'; markField('q4a_exp', c29); if(c29) score++;
+        let c30 = document.getElementById('q4b_base').value.trim() === '10'; markField('q4b_base', c30); if(c30) score++;
+        let c31 = document.getElementById('q4b_exp').value.trim() === '12'; markField('q4b_exp', c31); if(c31) score++;
+        let c_val = document.getElementById('q4c_base').value.trim().replace(',', '.');
+        let c32 = (c_val === '0.1' || c_val === '.1'); markField('q4c_base', c32); if(c32) score++;
+        let c33 = document.getElementById('q4c_exp').value.trim() === '6'; markField('q4c_exp', c33); if(c33) score++;
+        let c34 = document.getElementById('q4d_base').value.trim().toLowerCase() === 'c'; markField('q4d_base', c34); if(c34) score++;
+        let c35 = document.getElementById('q4d_exp').value.trim() === '12'; markField('q4d_exp', c35); if(c35) score++;
+
+        // 5. Feladat (6p)
+        let c36 = document.getElementById('q5a_base').value.trim() === '2'; markField('q5a_base', c36); if(c36) score++;
+        let c37 = document.getElementById('q5a_exp').value.trim() === '7'; markField('q5a_exp', c37); if(c37) score++;
+        let c38 = document.getElementById('q5b_base').value.trim() === '2'; markField('q5b_base', c38); if(c38) score++;
+        let c39 = document.getElementById('q5b_exp').value.trim() === '7'; markField('q5b_exp', c39); if(c39) score++;
+        let c40 = document.getElementById('q5c_base').value.trim() === '5'; markField('q5c_base', c40); if(c40) score++;
+        let c41 = document.getElementById('q5c_exp').value.trim() === '4'; markField('q5c_exp', c41); if(c41) score++;
+
+        // 6. Feladat (17p)
+        let c42 = document.getElementById('q6a_exp').value.trim() === '4'; markField('q6a_exp', c42); if(c42) score++;
+        let c43 = document.getElementById('q6a_exp2').value.trim() === '4'; markField('q6a_exp2', c43); if(c43) score++;
+        let d1_ok = document.getElementById('q6a_d1').value.trim() === '1'; markField('q6a_d1', d1_ok); if(d1_ok) score++;
+        let d2_ok = document.getElementById('q6a_d2').value.trim() === '0'; markField('q6a_d2', d2_ok); if(d2_ok) score++;
+        let d3_ok = document.getElementById('q6a_d3').value.trim() === '0'; markField('q6a_d3', d3_ok); if(d3_ok) score++;
+        let d4_ok = document.getElementById('q6a_d4').value.trim() === '0'; markField('q6a_d4', d4_ok); if(d4_ok) score++;
+        let d5_ok = document.getElementById('q6a_d5').value.trim() === '0'; markField('q6a_d5', d5_ok); if(d5_ok) score++;
+
+        let c44 = document.getElementById('q6b1_base').value.trim() === '2'; markField('q6b1_base', c44); if(c44) score++;
+        let c45 = document.getElementById('q6b1_exp').value.trim() === '3'; markField('q6b1_exp', c45); if(c45) score++;
+        let c46 = document.getElementById('q6b2_base').value.trim() === '10'; markField('q6b2_base', c46); if(c46) score++;
+        let c47 = document.getElementById('q6b2_exp').value.trim() === '3'; markField('q6b2_exp', c47); if(c47) score++;
+
+        let c6_base = document.getElementById('q6c_base').value.trim();
+        let c48 = (c6_base === '20' || c6_base === '(20)' || c6_base === '(5*4)' || c6_base === '(5·4)'); markField('q6c_base', c48); if(c48) score++;
+        let c49 = document.getElementById('q6c_exp').value.trim() === '3'; markField('q6c_exp', c49); if(c49) score++;
+
+        let d6_base = document.getElementById('q6d_base').value.trim();
+        let c50 = (d6_base === '20' || d6_base === '(20)' || d6_base === '(2*10)' || d6_base === '(2·10)'); markField('q6d_base', c50); if(c50) score++;
+        let c51 = document.getElementById('q6d_exp').value.trim() === '5'; markField('q6d_exp', c51); if(c51) score++;
+
+        let e6_base = document.getElementById('q6e_base').value.trim();
+        let c52 = (e6_base === '30' || e6_base === '(30)' || e6_base === '(2*3*5)' || e6_base === '(2·3·5)'); markField('q6e_base', c52); if(e6_base) score++;
+        let c53 = document.getElementById('q6e_exp').value.trim() === '4'; markField('q6e_exp', c53); if(c53) score++;
+
+        // 7. Feladat (12p)
+        let c54 = document.getElementById('q7a_num_base').value.trim() === '2'; markField('q7a_num_base', c54); if(c54) score++;
+        let c55 = document.getElementById('q7a_num_exp').value.trim() === '3'; markField('q7a_num_exp', c55); if(c55) score++;
+        let c56 = document.getElementById('q7a_den_base').value.trim() === '5'; markField('q7a_den_base', c56); if(c56) score++;
+        let c57 = document.getElementById('q7a_den_exp').value.trim() === '3'; markField('q7a_den_exp', c57); if(c57) score++;
+
+        let c58 = document.getElementById('q7b_num_base').value.trim() === '5'; markField('q7b_num_base', c58); if(c58) score++;
+        let c59 = document.getElementById('q7b_num_exp').value.trim() === '5'; markField('q7b_num_exp', c59); if(c59) score++;
+        let c60 = document.getElementById('q7b_den_base').value.trim() === '2'; markField('q7b_den_base', c60); if(c60) score++;
+        let c61 = document.getElementById('q7b_den_exp').value.trim() === '5'; markField('q61_den_exp', c61); if(c61) score++;
+
+        let q7c_nb = document.getElementById('q7c_num_base').value.trim();
+        let c62 = (q7c_nb === '3' || q7c_nb === '(-3)' || q7c_nb === '-3'); markField('q7c_num_base', c62); if(c62) score++;
+        let c63 = document.getElementById('q7c_num_exp').value.trim() === '6'; markField('q7c_num_exp', c63); if(c63) score++;
+        let c64 = document.getElementById('q7c_den_base').value.trim() === '4'; markField('q7c_den_base', c64); if(c64) score++;
+        let c65 = document.getElementById('q7c_den_exp').value.trim() === '6'; markField('q7c_den_exp', c65); if(c65) score++;
+
+        let percentage = Math.round((score / maxPoints) * 100);
+        document.getElementById('scoreDisplay').innerHTML = `Elért eredmény: ${score} / ${maxPoints} pont (${percentage}%)`;
+        document.getElementById('scoreBanner').style.display = 'block';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    updateProgress();
+</script>
+</body>
+</html>

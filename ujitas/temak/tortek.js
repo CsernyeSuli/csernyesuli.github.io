@@ -11,6 +11,7 @@
 (function (U) {
   'use strict';
   const M = window.TORTEK_MOTOR, D = window.TORTEK_ADAT, cfg = U.cfg;
+  const FX = M.fx();      // törtmegjelenítés: MathML, ha a böngésző érti, különben HTML/CSS (régebbi tabletek)
   const $ = function (s) { return document.querySelector(s); };
   const esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   const MAX_STEP_ROWS = 10;
@@ -23,8 +24,14 @@
   if (!mount || !groups.length) throw new Error('A téma beállítása hibás (hiányzó #app vagy ismeretlen készlet: ' + cfg.keszlet + ').');
 
   U.css('tortek-stilus',
-    'math{font-size:1.2em}.tk-expr{overflow-x:auto}.tk-expr math{font-size:clamp(1.15rem,4.2vw,1.9rem);color:#67e8f9}' +
-    '.tk-pv math{font-size:1.05em;color:#a5f3fc}.tk-sol math{font-size:1.1em}.tk-sol .tk-big math{font-size:1.5em;color:#67e8f9}');
+    'math{font-size:1.2em}.tk-expr{overflow-x:auto}.tk-expr math,.tk-expr .tk-m{font-size:clamp(1.15rem,4.2vw,1.9rem);color:#67e8f9}' +
+    '.tk-pv math,.tk-pv .tk-m{font-size:1.05em;color:#a5f3fc}.tk-sol math,.tk-sol .tk-m{font-size:1.1em}.tk-sol .tk-big math,.tk-sol .tk-big .tk-m{font-size:1.5em;color:#67e8f9}' +
+    // beépített számbillentyűzet
+    '#tkPad{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(2,6,23,.97);border-top:1px solid #475569;box-shadow:0 -8px 24px rgba(0,0,0,.45)}' +
+    '#tkPad.hidden{display:none}.tk-padgrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;max-width:820px;margin:0 auto}' +
+    '.tk-key{height:46px;padding:0;border:1px solid #475569;border-radius:10px;background:#1e293b;color:#f1f5f9;font:600 20px/1 system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}' +
+    '.tk-key.sym{background:#0b1220;color:#7dd3fc}.tk-key.act{background:#0f766e;color:#ecfeff}.tk-key:active{background:#334155}.tk-key[disabled]{opacity:.28}' +
+    '@media(max-width:640px){.tk-padgrid{grid-template-columns:repeat(6,minmax(0,1fr))}.tk-key{height:44px}}');
 
   const INPUT = 'w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-slate-100 placeholder-slate-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 disabled:opacity-60';
   const INSB = 'ins h-8 min-w-[2.25rem] rounded-lg border border-slate-600 bg-slate-800 px-2 font-mono text-base text-slate-100 transition hover:border-emerald-400 disabled:opacity-40';
@@ -95,13 +102,14 @@
       <button type="button" data-ins="=" class="${INSB}">=</button>
       <button type="button" data-ins=";" class="${INSB}">;</button>
       <span class="basis-full">A szorzáshoz használhatod a csillagot (*) is, a program szorzóponttá alakítja. A beírt képlet alatt emeletes alakban látod, hogyan értelmezte a program.</span>
+      <button type="button" id="padOnBtn" class="hidden rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 hover:border-emerald-400">▦ Beépített számbillentyűzet</button>
     </div>
   </div>
 
   <div class="${CARD}">
     <label for="answer" class="mb-1.5 block text-sm text-slate-400">Végeredmény</label>
     <input id="answer" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="pl. 3/5 vagy 1 1/3" class="${INPUT}">
-    <div class="mt-2 flex flex-wrap items-center gap-2">
+    <div id="ansBar" class="mt-2 flex flex-wrap items-center gap-2">
       <button type="button" data-ins="−" data-target="answer" title="mínusz" class="${INSB}">−</button>
       <button type="button" data-ins="/" data-target="answer" title="törtvonal" class="${INSB}">/</button>
       <button type="button" data-ins=" " data-target="answer" title="szóköz (vegyes számhoz)" class="${INSB} px-3 text-sm">szóköz</button>
@@ -168,6 +176,7 @@
     </div>
   </div>
 </div>
+<div id="tkPad" class="hidden" role="group" aria-label="Számbillentyűzet"><div id="tkPadGrid" class="tk-padgrid"></div></div>
 </main>`;
 
   $('#title').textContent = D.cim;
@@ -217,8 +226,8 @@
   }
 
   /* ===================== MEGJELENÍTÉS-SEGÉDEK ===================== */
-  let session = null, lastInput = null;
-  const show = function (v) { $('#view-start').classList.toggle('hidden', v !== 'start'); $('#view-task').classList.toggle('hidden', v !== 'task'); window.scrollTo(0, 0); };
+  let session = null, lastInput = null, curView = 'start', taskLocked = false;
+  const show = function (v) { $('#view-start').classList.toggle('hidden', v !== 'start'); $('#view-task').classList.toggle('hidden', v !== 'task'); curView = v; updatePad(); window.scrollTo(0, 0); };
   function syncLock() {
     const any = [].slice.call(document.querySelectorAll('[data-ov]')).some(function (e) { return !e.classList.contains('hidden'); });
     document.documentElement.classList.toggle('overflow-hidden', any); document.body.classList.toggle('overflow-hidden', any);
@@ -226,7 +235,7 @@
   const openOv = function (id) { const e = $('#' + id); e.classList.remove('hidden'); e.classList.add('flex'); syncLock(); };
   const closeOv = function (id) { const e = $('#' + id); e.classList.add('hidden'); e.classList.remove('flex'); syncLock(); };
   /** Képlet, ha értelmezhető; különben a beírt szöveg. */
-  const mm = function (text) { return M.previewMathML(text) || esc(text); };
+  const mm = function (text) { return FX.preview(text) || esc(text); };
 
   /* ===================== 1. KEZDŐLAP ===================== */
   $('#groups').innerHTML = groups.map(function (g) {
@@ -249,7 +258,7 @@
     $('#grpTitle').textContent = session.group.cim;
     $('#counter').textContent = (session.index + 1) + ' / ' + session.total;
     $('#bar').style.width = (session.index / session.total * 100) + '%';
-    $('#expr').innerHTML = M.taskMathML(session.task.kif);
+    $('#expr').innerHTML = FX.task(session.task.kif);
     $('#answer').value = ''; $('#answer').disabled = false;
     ['#ansErr', '#stepErr'].forEach(function (s) { $(s).classList.add('hidden'); });
     const f = $('#feedback'); f.classList.add('hidden'); f.classList.remove('flex');
@@ -261,16 +270,17 @@
     $('#steps').innerHTML = session.rows.map(function (r, i) {
       return '<div class="mb-3"><div class="grid items-center gap-2 md:grid-cols-[2rem_1fr_1fr]">' +
         '<span class="text-slate-500 md:text-right">' + (i + 1) + '.</span>' +
-        '<input data-i="' + i + '" data-f="calc" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. részszámítás" class="' + INPUT + '" ' +
+        '<input data-i="' + i + '" data-f="calc" inputmode="' + inputMode() + '" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. részszámítás" class="' + INPUT + '" ' +
         'placeholder="' + (i ? 'Következő részszámítás' : 'Írd le, mivel kezded: pl. 2/3:1/2=4/3') + '" value="' + esc(r.calc) + '" ' + (locked ? 'disabled' : '') + '>' +
-        '<input data-i="' + i + '" data-f="expr" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. új műveletsor" class="' + INPUT + '" ' +
+        '<input data-i="' + i + '" data-f="expr" inputmode="' + inputMode() + '" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. új műveletsor" class="' + INPUT + '" ' +
         'placeholder="Az új, letisztázott műveletsor" value="' + esc(r.expr) + '" ' + (locked ? 'disabled' : '') + '></div>' +
         '<div class="tk-pv mt-1 grid gap-2 md:grid-cols-[2rem_1fr_1fr]"><span></span>' +
-        '<div data-pv="calc" data-i="' + i + '" class="min-h-[1.5rem] overflow-x-auto px-1">' + (r.calc ? M.previewMathML(r.calc) : '') + '</div>' +
-        '<div data-pv="expr" data-i="' + i + '" class="min-h-[1.5rem] overflow-x-auto px-1">' + (r.expr ? M.previewMathML(r.expr) : '') + '</div></div></div>';
+        '<div data-pv="calc" data-i="' + i + '" class="min-h-[1.5rem] overflow-x-auto px-1">' + (r.calc ? FX.preview(r.calc) : '') + '</div>' +
+        '<div data-pv="expr" data-i="' + i + '" class="min-h-[1.5rem] overflow-x-auto px-1">' + (r.expr ? FX.preview(r.expr) : '') + '</div></div></div>';
     }).join('');
     $('#addStep').disabled = !!locked || session.rows.length >= MAX_STEP_ROWS;
     document.querySelectorAll('.ins').forEach(function (b) { b.disabled = !!locked; });
+    taskLocked = !!locked; updatePad();
   }
 
   $('#steps').addEventListener('input', function (e) {         // gépelés közben csak az előnézet frissül
@@ -278,7 +288,7 @@
     if (t.value.indexOf('*') >= 0) { const pos = t.selectionStart; t.value = typeFix(t.value); t.setSelectionRange(pos, pos); }
     session.setRow(+t.dataset.i, t.dataset.f, t.value); $('#stepErr').classList.add('hidden');
     const pv = document.querySelector('[data-pv="' + t.dataset.f + '"][data-i="' + t.dataset.i + '"]');
-    if (pv) pv.innerHTML = M.previewMathML(t.value);
+    if (pv) pv.innerHTML = FX.preview(t.value);
   });
 
   const calcClosed = function (s) {
@@ -286,21 +296,111 @@
       .every(function (x) { const k = x.indexOf('='); return k > 0 && x.slice(k + 1).trim() !== ''; });
   };
 
-  $('#steps').addEventListener('focusin', function (e) { if (e.target.dataset.f) lastInput = e.target; });
-  $('#answer').addEventListener('focusin', function () { lastInput = $('#answer'); });
-  document.addEventListener('mousedown', function (e) { if (e.target.closest('button[data-ins]')) e.preventDefault(); });   // a fókusz (és a billentyűzet) maradjon
-  document.addEventListener('click', function (e) {
-    const b = e.target.closest('button[data-ins]'); if (!b || b.disabled || !session) return;
-    const t = b.dataset.target === 'answer' ? $('#answer')
-      : ((lastInput && document.contains(lastInput)) ? lastInput
-        : document.querySelector('#steps input[data-i="' + (session.rows.length - 1) + '"][data-f="calc"]'));
-    if (!t || t.disabled) return;
-    if (t.id === 'answer' && '−/ '.indexOf(b.dataset.ins) < 0) return;      // a végeredménybe csak mínusz, törtvonal és szóköz kerülhet
-    t.focus();
-    const s = t.selectionStart == null ? t.value.length : t.selectionStart, en = t.selectionEnd == null ? s : t.selectionEnd, ch = b.dataset.ins;
+  /* ----- beépített számbillentyűzet (érintőképernyős eszközökön) -----
+     A rendszerbillentyűzet a képernyő felét is elfoglalja, és az oldal nem tudja kisebbre venni. Mivel csak számokra és néhány
+     jelre van szükség, saját, kompakt billentyűzet kerül az oldal aljára; a rendszerbillentyűzet nem jön elő (inputmode="none").
+     A ⌨ gombbal vissza lehet váltani a rendszerbillentyűzetre. Egérrel/fizikai billentyűzettel használt gépen nem jelenik meg. */
+  const TOUCH = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+  const tar = {
+    get: function () { try { return sessionStorage.getItem('tkPad') || ''; } catch (e) { return ''; } },
+    set: function (v) { try { sessionStorage.setItem('tkPad', v); } catch (e) { /* nem kritikus */ } },
+  };
+  let padOn = TOUCH && tar.get() !== 'off';
+  function inputMode() { return padOn ? 'none' : 'decimal'; }
+  const STEP_ONLY = ['·', ':', '+', '(', ')', '=', ';'];            // a végeredménybe nem kerülhetnek
+  const PAD = [
+    ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9'], ['0'], [','], ['⌫', 'back', 'act', 'törlés'],
+    ['/', '/', 'sym', 'törtvonal'], ['·', '·', 'sym', 'szorzás'], [':', ':', 'sym', 'osztás'], ['+', '+', 'sym', 'összeadás'], ['−', '−', 'sym', 'kivonás'],
+    ['(', '(', 'sym'], [')', ')', 'sym'], ['=', '=', 'sym'], [';', ';', 'sym'], ['␣', 'space', 'sym', 'szóköz (vegyes számhoz)'],
+    ['⏎', 'next', 'act', 'következő mező'], ['⌨', 'sys', 'sym', 'rendszerbillentyűzet'],
+  ];
+  $('#tkPadGrid').innerHTML = PAD.map(function (k) {
+    return '<button type="button" class="tk-key' + (k[2] ? ' ' + k[2] : '') + '" data-k="' + esc(k[1] || k[0]) + '"' + (k[3] ? ' aria-label="' + k[3] + '" title="' + k[3] + '"' : '') + '>' + k[0] + '</button>';
+  }).join('');
+
+  function updatePadKeys() {
+    const ans = !!(lastInput && lastInput.id === 'answer');
+    document.querySelectorAll('.tk-key').forEach(function (b) {
+      const k = b.dataset.k;
+      b.disabled = k === 'sys' ? false : (taskLocked || (ans ? STEP_ONLY.indexOf(k) >= 0 : k === 'space'));
+    });
+  }
+  function updatePad() {
+    const vis = padOn && curView === 'task' && !taskLocked, pad = $('#tkPad');
+    pad.classList.toggle('hidden', !vis);
+    $('#insBar').classList.toggle('hidden', padOn); $('#ansBar').classList.toggle('hidden', padOn);
+    $('#padOnBtn').classList.toggle('hidden', !(TOUCH && !padOn));
+    document.querySelectorAll('#steps input, #answer').forEach(function (i) { i.setAttribute('inputmode', inputMode()); });
+    const h = vis ? pad.offsetHeight + 12 : 0;                      // hogy a legalsó elemek is a billentyűzet fölé görgethetők legyenek
+    document.body.style.paddingBottom = h ? h + 'px' : '';
+    document.documentElement.style.scrollPaddingBottom = h ? h + 'px' : '';
+    updatePadKeys();
+  }
+  function setPadOn(v) {
+    padOn = v; tar.set(v ? 'on' : 'off'); updatePad();
+    if (lastInput && document.contains(lastInput) && !lastInput.disabled) { lastInput.blur(); lastInput.focus(); }   // az új billentyűzet-mód érvényesüljön
+  }
+  $('#padOnBtn').addEventListener('click', function () { setPadOn(true); });
+  window.addEventListener('resize', updatePad);
+
+  /** Szöveg beírása a kurzor helyére (a kijelölést felülírja). */
+  function typeInto(t, ch) {
+    const s = t.selectionStart == null ? t.value.length : t.selectionStart, en = t.selectionEnd == null ? s : t.selectionEnd;
     t.value = t.value.slice(0, s) + ch + t.value.slice(en);
     t.setSelectionRange(s + ch.length, s + ch.length);
     t.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  function backspace(t) {
+    const s = t.selectionStart == null ? t.value.length : t.selectionStart, en = t.selectionEnd == null ? s : t.selectionEnd;
+    let a = s;
+    if (s === en) { if (s === 0) return; a = s - 1; }
+    t.value = t.value.slice(0, a) + t.value.slice(en);
+    t.setSelectionRange(a, a);
+    t.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  /** Ugrás a következő mezőre (részszámítás → új műveletsor → következő sor → végeredmény); a végeredményben beküld. */
+  function nextField(t) {
+    if (t && t.id === 'answer') { $('#submitBtn').click(); return; }
+    const list = [].slice.call(document.querySelectorAll('#steps input')).concat([$('#answer')]);
+    const i = list.indexOf(t), nx = list[i < 0 ? 0 : i + 1];
+    if (nx && !nx.disabled) nx.focus();
+  }
+  const targetInput = function () {
+    return (lastInput && document.contains(lastInput)) ? lastInput
+      : document.querySelector('#steps input[data-i="' + (session.rows.length - 1) + '"][data-f="calc"]');
+  };
+
+  $('#steps').addEventListener('focusin', function (e) { if (e.target.dataset.f) { lastInput = e.target; focusSeen(e.target); } });
+  $('#answer').addEventListener('focusin', function () { lastInput = $('#answer'); focusSeen(lastInput); });
+  function focusSeen(t) {
+    updatePadKeys();
+    if (padOn) setTimeout(function () { try { t.scrollIntoView({ block: 'center' }); } catch (e) { /* régi böngésző */ } }, 30);   // nincs rendszerbillentyűzet, ami odagörgetne
+  }
+  document.addEventListener('mousedown', function (e) { if (e.target.closest('button[data-ins], .tk-key')) e.preventDefault(); });   // a fókusz maradjon
+
+  // a „Beszúrás” gombsorok (rendszerbillentyűzettel vagy egérrel használva)
+  document.addEventListener('click', function (e) {
+    const b = e.target.closest('button[data-ins]'); if (!b || b.disabled || !session) return;
+    const t = b.dataset.target === 'answer' ? $('#answer') : targetInput();
+    if (!t || t.disabled) return;
+    if (t.id === 'answer' && '−/ '.indexOf(b.dataset.ins) < 0) return;      // a végeredménybe csak mínusz, törtvonal és szóköz kerülhet
+    t.focus(); typeInto(t, b.dataset.ins);
+  });
+  // a beépített számbillentyűzet
+  $('#tkPad').addEventListener('click', function (e) {
+    const b = e.target.closest('.tk-key'); if (!b || b.disabled || !session) return;
+    const k = b.dataset.k;
+    if (k === 'sys') { setPadOn(false); return; }
+    const t = targetInput();
+    if (k === 'next') { nextField(t); return; }
+    if (!t || t.disabled) return;
+    t.focus();
+    if (k === 'back') backspace(t); else typeInto(t, k === 'space' ? ' ' : k);
+  });
+  // fizikai billentyűzet: Enter = következő mező (a végeredményben beküldés)
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || !session || session.ended || !e.target.matches || !e.target.matches('#steps input, #answer')) return;
+    e.preventDefault(); nextField(e.target);
   });
 
   $('#addStep').addEventListener('click', function () {
@@ -384,10 +484,10 @@
     }
     const r = reviewList[cur];
     $('#revTitle').textContent = session.group.cim + ' – ' + (r.taskIndex + 1) + '. feladat megoldásai';
-    $('#revExpr').innerHTML = M.taskMathML(r.expression);
+    $('#revExpr').innerHTML = FX.task(r.expression);
     $('#revCount').textContent = (cur + 1) + ' / ' + n;
     $('#revSummary').innerHTML = '<span class="rounded-full px-3 py-0.5 ' + (r.correct ? 'bg-emerald-900 text-emerald-300' : 'bg-red-900 text-red-200') + '">' + (r.correct ? '✔ helyes' : '✘ hibás') + '</span>' +
-      '<span>Végeredményed: <b class="text-slate-200">' + (M.answerMathML(r.finalRaw) || esc(r.finalRaw)) + '</b> · helyes eredmény: <b class="text-slate-200">' + (M.answerMathML(r.reference.answerText) || esc(r.reference.answerText)) + '</b></span>' +
+      '<span>Végeredményed: <b class="text-slate-200">' + (FX.answer(r.finalRaw) || esc(r.finalRaw)) + '</b> · helyes eredmény: <b class="text-slate-200">' + (FX.answer(r.reference.answerText) || esc(r.reference.answerText)) + '</b></span>' +
       (r.reasonMsg ? '<span class="block w-full text-sm text-amber-300">' + esc(r.reasonMsg) + '</span>' : '');
     $('#revMine').innerHTML = r.analysis.length
       ? r.analysis.map(function (a, k) {
@@ -398,7 +498,7 @@
       : '<p class="italic text-slate-500">nem írtál lépéseket</p>';
     $('#revCorrect').innerHTML = r.reference.steps.map(function (l, k) {
       return row(k, '<span class="text-slate-500">' + (k + 1) + '.</span><span class="break-words text-slate-200">' + arrow(l) + '</span>');
-    }).join('') + row(1, '<span class="text-slate-500">✔</span><span class="text-slate-200">Végeredmény: ' + (M.answerMathML(r.reference.answerText) || esc(r.reference.answerText)) + '</span>');
+    }).join('') + row(1, '<span class="text-slate-500">✔</span><span class="text-slate-200">Végeredmény: ' + (FX.answer(r.reference.answerText) || esc(r.reference.answerText)) + '</span>');
   }
   const reviewGo = function (d) { cur += d; renderReview(); $('#solModal').scrollTop = 0; };
   $('#rSol').addEventListener('click', function () {

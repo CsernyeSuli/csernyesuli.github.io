@@ -259,21 +259,114 @@
     } catch (e) { return ''; }
   }
 
-  /** Végeredmény megjelenítése: 1 1/3, −3/5, 0,76, 18. Nem értelmezhető szövegnél '' . */
-  function answerMathML(text) {
+  /** A végeredmény szövegének részei megjelenítéshez: {sign, whole, a, b} | {sign, dec}. Nem értelmezhető szövegnél null. */
+  function answerParts(text) {
     const s = String(text == null ? '' : text).replace(/[\u2212\u2013\u2014]/g, '-').trim();
-    let m;
-    const sign = s.charAt(0) === '-' ? '<mo>−</mo>' : '';
+    const sign = s.charAt(0) === '-';
     const body = s.replace(/^[-+]\s?/, '');
-    const frac = function (a, b) { return '<mfrac><mn>' + a + '</mn><mn>' + b + '</mn></mfrac>'; };
-    let inner = '';
-    if ((m = /^(\d+) (\d+) ?\/ ?(\d+)$/.exec(body))) inner = '<mn>' + m[1] + '</mn>' + frac(m[2], m[3]);
-    else if ((m = /^(\d+) ?\/ ?(\d+)$/.exec(body))) inner = frac(m[1], m[2]);
-    else if ((m = /^(\d+(?:[.,]\d+)?)$/.exec(body))) inner = '<mn>' + m[1].replace('.', ',') + '</mn>';
-    else return '';
-    return '<math ' + MML_NS + '><mrow>' + sign + inner + '</mrow></math>';
+    let m;
+    if ((m = /^(\d+) (\d+) ?\/ ?(\d+)$/.exec(body))) return { sign: sign, whole: m[1], a: m[2], b: m[3] };
+    if ((m = /^(\d+) ?\/ ?(\d+)$/.exec(body))) return { sign: sign, a: m[1], b: m[2] };
+    if ((m = /^(\d+(?:[.,]\d+)?)$/.exec(body))) return { sign: sign, dec: m[1].replace('.', ',') };
+    return null;
   }
 
+  /** Végeredmény megjelenítése: 1 1/3, −3/5, 0,76, 18. Nem értelmezhető szövegnél '' . */
+  function answerMathML(text) {
+    const q = answerParts(text);
+    if (!q) return '';
+    const frac = '<mfrac><mn>' + q.a + '</mn><mn>' + q.b + '</mn></mfrac>';
+    const inner = q.dec != null ? '<mn>' + q.dec + '</mn>' : (q.whole != null ? '<mn>' + q.whole + '</mn>' : '') + frac;
+    return '<math ' + MML_NS + '><mrow>' + (q.sign ? '<mo>−</mo>' : '') + inner + '</mrow></math>';
+  }
+
+  /* ===================== HTML/CSS-ES TÖRTMEGJELENÍTÉS ===================== */
+  // A régebbi Chrome/WebView (109 előtt, pl. egy 2017-es tabletén) a MathML-t nem jeleníti meg: a számlálót és a nevezőt
+  // egymás mellé írja (5/3 helyett „53”). Ezért van egy minden böngészőben működő, HTML/CSS-es változat is.
+  const HTML_CSS =
+    '.tk-m{white-space:nowrap}' +
+    '.tk-f{display:inline-block;vertical-align:middle;text-align:center;line-height:1.25;margin:0 .1em}' +
+    '.tk-f>span{display:block;padding:0 .2em}.tk-f>.tk-n{border-bottom:.09em solid currentColor}' +
+    '.tk-o{margin:0 .28em}.tk-s{margin-right:.08em}' +
+    '.tk-p{display:inline-block;vertical-align:middle;transform:scaleX(.8);font-weight:300}' +
+    '.tk-p.tk-b{font-size:2.3em;line-height:.85}';
+
+  const hasFracNode = function (n) {
+    return n.type === 'num' ? n.form === 'frac' : (n.type === 'neg' ? hasFracNode(n.e) : hasFracNode(n.l) || hasFracNode(n.r));
+  };
+  const htmlFrac = function (a, b) { return '<span class="tk-f"><span class="tk-n">' + a + '</span><span class="tk-d">' + b + '</span></span>'; };
+
+  function toHTML(n, bare) {
+    const par = function (open, big) { return '<span class="tk-p' + (big ? ' tk-b' : '') + '">' + (open ? '(' : ')') + '</span>'; };
+    const leaf = function (l) {
+      if (l.form === 'frac') return (l.q.n < 0n ? '<span class="tk-s">−</span>' : '') + htmlFrac(l.a, l.b);
+      return '<span>' + leafText(l) + '</span>';
+    };
+    const go = function (x) {
+      if (x.type === 'num') return leaf(x);
+      if (x.type === 'neg') { const big = hasFracNode(x.e); return '<span class="tk-s">−</span>' + par(true, big) + go(x.e) + par(false, big); }
+      const p = PREC[x.op];
+      const lNeed = (x.l.type === 'bin' && PREC[x.l.op] < p) ||
+                    (isNegLeaf(x.l) && x.l.form !== 'int' && (x.op === '*' || x.op === ':'));
+      const rNeed = x.r.type === 'bin' ? PREC[x.r.op] <= p : (x.r.type === 'neg' || isNegLeaf(x.r));
+      const wrap = function (need, node, str) { const big = hasFracNode(node); return need ? par(true, big) + str + par(false, big) : str; };
+      return wrap(lNeed, x.l, go(x.l)) + '<span class="tk-o">' + OPTXT[x.op] + '</span>' + wrap(rNeed, x.r, go(x.r));
+    };
+    const inner = go(n);
+    return bare ? inner : '<span class="tk-m">' + inner + '</span>';
+  }
+  function previewHTML(text) {
+    const t = String(text == null ? '' : text).trim();
+    if (!t) return '';
+    try {
+      const inner = t.split(';').map(function (x) { return x.trim(); }).filter(Boolean).map(function (st) {
+        return st.split('=').map(function (p) { return toHTML(parse(p), true); }).join('<span class="tk-o">=</span>');
+      }).join('<span class="tk-o">;</span>');
+      return '<span class="tk-m">' + inner + '</span>';
+    } catch (e) { return ''; }
+  }
+  function answerHTML(text) {
+    const q = answerParts(text);
+    if (!q) return '';
+    const inner = q.dec != null ? '<span>' + q.dec + '</span>' : (q.whole != null ? '<span>' + q.whole + '</span>' : '') + htmlFrac(q.a, q.b);
+    return '<span class="tk-m">' + (q.sign ? '<span class="tk-s">−</span>' : '') + inner + '</span>';
+  }
+
+  /** Van-e MathML-támogatás? Egy 1/2 törtet mér: ha a tört kétszer olyan magas, mint a szám, a böngésző érti.
+      A „html” paraméter csak teszteléshez van: ismeretlen elemekkel utánozza a MathML-t nem ismerő böngészőt. */
+  function detectMathML(mode) {
+    if (typeof document === 'undefined' || !document.body) return true;
+    try {
+      const host = document.createElement('div');
+      host.style.cssText = 'position:absolute;visibility:hidden;left:-9999px;top:0;font-size:20px';
+      host.innerHTML = mode === 'html' ? '<span><mfrac><mn>1</mn><mn>2</mn></mfrac></span>'
+        : '<math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mn>2</mn></mfrac></math>';
+      document.body.appendChild(host);
+      const f = host.querySelector('mfrac'), n = host.querySelector('mn');
+      const ok = !!f && !!n && f.getBoundingClientRect().height > n.getBoundingClientRect().height * 1.5;
+      host.parentNode.removeChild(host);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function installCss() {
+    if (typeof document === 'undefined' || document.getElementById('tk-fx-css')) return;
+    const st = document.createElement('style'); st.id = 'tk-fx-css'; st.textContent = HTML_CSS; document.head.appendChild(st);
+  }
+  let FX = null;
+  /** Automatikus választás: MathML, ha a böngésző érti, különben HTML/CSS. Kipróbáláshoz az oldal címéhez fűzhető:
+      ?tort=html (kényszerített HTML/CSS) vagy ?tort=mathml. Eredmény: { mathml, task(kif), preview(szöveg), answer(szöveg) }. */
+  function fx() {
+    if (FX) return FX;
+    let mml = detectMathML();
+    try { const m = /[?&]tort=(html|mathml)\b/.exec(location.search); if (m) mml = m[1] === 'mathml'; } catch (e) { /* nincs böngésző */ }
+    FX = mml
+      ? { mathml: true, task: function (k) { return toMathML(parse(k)); }, preview: previewMathML, answer: answerMathML }
+      : { mathml: false, task: function (k) { return toHTML(parse(k)); }, preview: previewHTML, answer: answerHTML };
+    installCss();
+    return FX;
+  }
+
+  /* ===================== FA-ESZKÖZÖK (redex, csere, összegyűjtés) ===================== */
   /** Redex = olyan művelet, aminek mindkét operandusa már szám (a tört is egy szám). */
   function findRedexes(n, path) {
     path = path || [];
@@ -578,5 +671,7 @@
     evaluateTask: evaluateTask, lastStepReachesResult: lastStepReachesResult, REASON_MSG: REASON_MSG,
     taskMathML: function (src) { return toMathML(parse(src)); },
     previewMathML: previewMathML, answerMathML: answerMathML,
+    toHTML: toHTML, previewHTML: previewHTML, answerHTML: answerHTML, taskHTML: function (src) { return toHTML(parse(src)); },
+    fx: fx, installCss: installCss, detectMathML: detectMathML,
   };
 })(typeof window !== 'undefined' ? window : globalThis);

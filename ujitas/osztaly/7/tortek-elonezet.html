@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Törtes feladatok – előnézet (tanári ellenőrzéshez)</title>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#e2e8f0}
+    main{max-width:900px;margin:32px auto;padding:0 16px}
+    h1{font-size:24px} h2{margin:28px 0 8px;color:#34d399;font-size:20px}
+    .info{color:#94a3b8;font-size:14px}
+    ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:10px}
+    li{display:flex;align-items:center;gap:12px;min-width:0;overflow-x:auto;padding:10px 14px;border:1px solid #334155;border-radius:12px;background:#1e293b}
+    .jel{flex:0 0 120px;color:#94a3b8;font-size:13px}
+    math,.tk-m{font-size:1.35rem;color:#7dd3fc;white-space:nowrap}
+    .hiba{color:#f87171}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Törtes feladatok – előnézet</h1>
+  <p class="info">Csak a feladatok megjelenítését ellenőrzi (a tankönyvvel összevetve). A megoldásokat nem tartalmazza.
+     Tanári ellenőrzéshez készült: ne töltsd fel a nyilvános oldalra.</p>
+  <div id="lista"></div>
+</main>
+<script src="../../temak/tortek-motor.js"></script>
+<script src="../../temak/tortek-adat.js"></script>
+<script>
+(function () {
+  const M = window.TORTEK_MOTOR, D = window.TORTEK_ADAT, root = document.getElementById('lista');
+  const FX = M.fx();      // MathML, ha a böngésző érti, különben HTML/CSS (kipróbálás: ?tort=html)
+  D.csoportok.forEach(function (g) {
+    const h = document.createElement('h2');
+    const hol = Object.keys(D.keszletek).filter(function (k) { return D.keszletek[k].indexOf(g.id) >= 0; });
+    h.textContent = g.cim + ' (' + hol.join(', ') + ') – ' + g.feladatok.length + ' feladat';
+    root.appendChild(h);
+    const ol = document.createElement('ol');
+    g.feladatok.forEach(function (f) {
+      const li = document.createElement('li');
+      const jel = document.createElement('span'); jel.className = 'jel'; jel.textContent = f.jel;
+      li.appendChild(jel);
+      const kif = document.createElement('span');
+      try { kif.innerHTML = FX.task(f.kif); } catch (e) { kif.className = 'hiba'; kif.textContent = 'Hiba: ' + e.message; }
+      li.appendChild(kif); ol.appendChild(li);
+    });
+    root.appendChild(ol);
+  });
+})();
+</script>
+</body>
+</html>

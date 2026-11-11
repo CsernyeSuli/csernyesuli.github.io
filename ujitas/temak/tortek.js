@@ -43,7 +43,7 @@
         <ul class="list-disc space-y-2 pl-5 text-sm leading-relaxed text-slate-300">
           <li>A feladatcsoport lezárásakor az eredményed automatikusan elküldésre kerül a tanárodnak, a neveddel és az eredményeddel.</li>
           <li>Ha a feladatcsoportot többször nyitod meg vagy küldöd be, a rendszerben kizárólag a legkorábban beérkezett megoldásod lesz érvényes!</li>
-          <li>Ha elhagyod az oldalt (másik lapra kattintasz, mobilon/tableten kijelző kikapcsol), a feladatod lezáródik és az addigi eredményeid lesznek elküldve.</li>
+          <li>Ha elhagyod az oldalt (másik lapra kattintasz), a feladatod lezáródik és az addigi eredményeid lesznek elküldve.</li>
           <li>A személyes kódod csak a tiéd: ne add oda másnak!</li>
         </ul>
       </div>
@@ -100,8 +100,13 @@
 
   <div class="${CARD}">
     <label for="answer" class="mb-1.5 block text-sm text-slate-400">Végeredmény</label>
-    <input id="answer" inputmode="text" autocomplete="off" spellcheck="false" placeholder="pl. 3/5 vagy 1 1/3" class="${INPUT}">
-    <p class="mt-2 text-xs text-slate-400">Egyszerűsítve add meg. Az 1-nél nagyobb értékű törtet vegyes számként írd (pl. 4/3 helyett 1 1/3).</p>
+    <input id="answer" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="pl. 3/5 vagy 1 1/3" class="${INPUT}">
+    <div class="mt-2 flex flex-wrap items-center gap-2">
+      <button type="button" data-ins="−" data-target="answer" title="mínusz" class="${INSB}">−</button>
+      <button type="button" data-ins="/" data-target="answer" title="törtvonal" class="${INSB}">/</button>
+      <button type="button" data-ins=" " data-target="answer" title="szóköz (vegyes számhoz)" class="${INSB} px-3 text-sm">szóköz</button>
+    </div>
+    <p class="mt-2 text-xs text-slate-400">Egyszerűsítve add meg. Az 1-nél nagyobb értékű törtet vegyes számként írd (pl. 4/3 helyett 1 1/3: 1, szóköz, 1, /, 3).</p>
     <p id="ansErr" class="mt-2 hidden text-sm text-red-400">Írd be a végeredményt: egész szám, tört, vegyes szám (pl. 1 1/3) vagy tizedes tört.</p>
     <div class="mt-5 flex flex-wrap gap-3">
       <button id="submitBtn" type="button" class="${BTN_G}">Beküld</button>
@@ -256,9 +261,9 @@
     $('#steps').innerHTML = session.rows.map(function (r, i) {
       return '<div class="mb-3"><div class="grid items-center gap-2 md:grid-cols-[2rem_1fr_1fr]">' +
         '<span class="text-slate-500 md:text-right">' + (i + 1) + '.</span>' +
-        '<input data-i="' + i + '" data-f="calc" inputmode="text" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. részszámítás" class="' + INPUT + '" ' +
+        '<input data-i="' + i + '" data-f="calc" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. részszámítás" class="' + INPUT + '" ' +
         'placeholder="' + (i ? 'Következő részszámítás' : 'Írd le, mivel kezded: pl. 2/3:1/2=4/3') + '" value="' + esc(r.calc) + '" ' + (locked ? 'disabled' : '') + '>' +
-        '<input data-i="' + i + '" data-f="expr" inputmode="text" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. új műveletsor" class="' + INPUT + '" ' +
+        '<input data-i="' + i + '" data-f="expr" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="' + (i + 1) + '. új műveletsor" class="' + INPUT + '" ' +
         'placeholder="Az új, letisztázott műveletsor" value="' + esc(r.expr) + '" ' + (locked ? 'disabled' : '') + '></div>' +
         '<div class="tk-pv mt-1 grid gap-2 md:grid-cols-[2rem_1fr_1fr]"><span></span>' +
         '<div data-pv="calc" data-i="' + i + '" class="min-h-[1.5rem] overflow-x-auto px-1">' + (r.calc ? M.previewMathML(r.calc) : '') + '</div>' +
@@ -283,13 +288,14 @@
 
   $('#steps').addEventListener('focusin', function (e) { if (e.target.dataset.f) lastInput = e.target; });
   $('#answer').addEventListener('focusin', function () { lastInput = $('#answer'); });
-  $('#insBar').addEventListener('mousedown', function (e) { e.preventDefault(); });
-  $('#insBar').addEventListener('click', function (e) {
-    const b = e.target.closest('button[data-ins]'); if (!b || b.disabled) return;
-    const t = (lastInput && document.contains(lastInput)) ? lastInput
-      : document.querySelector('#steps input[data-i="' + (session.rows.length - 1) + '"][data-f="calc"]');
+  document.addEventListener('mousedown', function (e) { if (e.target.closest('button[data-ins]')) e.preventDefault(); });   // a fókusz (és a billentyűzet) maradjon
+  document.addEventListener('click', function (e) {
+    const b = e.target.closest('button[data-ins]'); if (!b || b.disabled || !session) return;
+    const t = b.dataset.target === 'answer' ? $('#answer')
+      : ((lastInput && document.contains(lastInput)) ? lastInput
+        : document.querySelector('#steps input[data-i="' + (session.rows.length - 1) + '"][data-f="calc"]'));
     if (!t || t.disabled) return;
-    if (t.id === 'answer' && '−/'.indexOf(b.dataset.ins) < 0) return;      // a végeredménybe csak mínusz és törtvonal kerülhet
+    if (t.id === 'answer' && '−/ '.indexOf(b.dataset.ins) < 0) return;      // a végeredménybe csak mínusz, törtvonal és szóköz kerülhet
     t.focus();
     const s = t.selectionStart == null ? t.value.length : t.selectionStart, en = t.selectionEnd == null ? s : t.selectionEnd, ch = b.dataset.ins;
     t.value = t.value.slice(0, s) + ch + t.value.slice(en);

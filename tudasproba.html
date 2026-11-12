@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Számok és műveletek – Tudáspróba</title>
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  body {
+    background-color: #f3f5f8;
+    color: #222;
+    margin: 0;
+    padding: 15px;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+  header {
+    text-align: center;
+    border-bottom: 3px solid #f08a24;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  .badge {
+    background-color: #f08a24;
+    color: white;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  h1 {
+    margin: 5px 0;
+    color: #2c3e50;
+    font-size: 1.7em;
+  }
+  .subtitle {
+    color: #666;
+    font-size: 0.95em;
+    margin: 0;
+  }
+  /* Figyelemfelkeltő információs blokk */
+  .info-banner {
+    background-color: #fffbeb;
+    border: 2px solid #f59e0b;
+    border-left: 6px solid #d97706;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+    color: #78350f;
+  }
+  .info-banner-title {
+    font-weight: bold;
+    font-size: 1.12em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #b45309;
+  }
+  .info-list {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .info-list li {
+    margin-bottom: 8px;
+  }
+  .key-badge {
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid #d97706;
+    border-bottom: 3px solid #b45309;
+    border-radius: 5px;
+    padding: 1px 7px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 0.95em;
+    color: #222;
+  }
+  .example-code {
+    background: #fef3c7;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #92400e;
+  }
+  .btn-copy {
+    background-color: #d97706;
+    color: white;
+    border: none;
+    padding: 3px 9px;
+    font-size: 0.85em;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .btn-copy:active {
+    background-color: #92400e;
+  }
+  .task-card {
+    background: #fafbfc;
+    border: 1px solid #e1e4e8;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 22px;
+  }
+  .task-title {
+    font-weight: bold;
+    font-size: 1.15em;
+    color: #1a365d;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  .grid-2 {
+    display: block;
+    font-size: 0;
+  }
+  .grid-item {
+    display: inline-block;
+    vertical-align: top;
+    width: 48.5%;
+    margin-right: 3%;
+    margin-bottom: 12px;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 16px;
+  }
+  .grid-item:nth-child(2n) {
+    margin-right: 0;
+  }
+  .math-row {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 1.08em;
+    line-height: 2.2;
+  }
+  sup {
+    font-size: 0.72em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+    top: -0.55em;
+    font-weight: bold;
+    margin-left: 1px;
+  }
+  .frac {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 3px;
+    font-size: 0.9em;
+    line-height: 1.15;
+  }
+  .frac > span {
+    display: block;
+    padding: 1px 4px;
+  }
+  .frac span.bottom {
+    border-top: 1.5px solid #222;
+  }
+  input[type="text"], select {
+    padding: 6px 10px;
+    font-size: 0.95em;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    min-height: 36px;
+    vertical-align: middle;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+  input[type="text"] {
+    width: 155px;
+    max-width: 100%;
+  }
+  input.short-input {
+    width: 80px;
+    text-align: center;
+  }
+  input.long-input {
+    width: 280px;
+  }
+  select {
+    font-weight: bold;
+    cursor: pointer;
+  }
+  /* Ellenőrzés színei */
+  .correct {
+    background-color: #d4edda !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+  }
+  .incorrect {
+    background-color: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
+  }
+  .btn-check {
+    background-color: #2f855a;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 0.95em;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-top: 8px;
+    vertical-align: middle;
+  }
+  .btn-check:hover {
+    background-color: #276749;
+  }
+  details.sol-details {
+    display: inline-block;
+    margin-top: 8px;
+    vertical-align: top;
+    width: 100%;
+  }
+  details.sol-details summary {
+    background-color: #2b6cb0;
+    color: white;
+    padding: 10px 16px;
+    font-size: 0.95em;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-block;
+    list-style: none;
+    user-select: none;
+  }
+  details.sol-details summary::-webkit-details-marker {
+    display: none;
+  }
+  details.sol-details[open] summary {
+    background-color: #1a365d;
+  }
+  .solution-box {
+    margin-top: 10px;
+    padding: 14px;
+    background-color: #ebf8ff;
+    border-left: 4px solid #3182ce;
+    border-radius: 6px;
+    font-size: 0.98em;
+    line-height: 1.6;
+  }
+  .sol-item {
+    margin-bottom: 6px;
+  }
+  .btn-reset {
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: block;
+    margin: 20px auto 0;
+  }
+  @media (max-width: 650px) {
+    body { padding: 8px; }
+    .container { padding: 14px; }
+    .grid-item {
+      width: 100%;
+      margin-right: 0;
+    }
+    input.long-input {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">Számok és műveletek</div>
+    <h1>Tudáspróba – Interaktív gyakorló</h1>
+    <p class="subtitle">Töltsd ki a mezőket, ellenőrizd a válaszaidat zöld/piros jelzéssel, vagy nyisd le a levezetést!</p>
+  </header>
+
+  <!-- FIGYELEMFELKELTŐ INFORMÁCIÓS BLOKK -->
+  <div class="info-banner">
+    <p class="info-banner-title">💡 Fontos tudnivalók a jelek begépeléséhez (példákkal):</p>
+    <ul class="info-list">
+      <li>
+        <strong>Hatványozás (<span class="key-badge">^</span> jel):</strong> Írd a hatványkitevő elé a kalap jelet! Például: <span class="example-code">7^6</span> vagy <span class="example-code">(2/5)^4</span>.<br>
+        • <em>Számítógépen (PC):</em> Nyomd le egyszerre az <span class="key-badge">Alt Gr</span> + <span class="key-badge">3</span> billentyűt, majd nyomj egy <span class="key-badge">Szóköz</span>-t!<br>
+        • <em>Tableten / mobilon:</em> Válts a számok és jelek billentyűzetre (<span class="key-badge">?123</span>, majd <span class="key-badge">=\&lt;</span>), ott találod a <span class="key-badge">^</span> jelet. 
+        <button type="button" class="btn-copy" onclick="copyCaret()">^ jel másolása</button> <span id="copyStatus" style="font-size:0.85em; font-weight:bold; color:#15803d;"></span>
+      </li>
+      <li>
+        <strong>Szorzás:</strong> Használd nyugodtan a csillag (<span class="key-badge">*</span>) vagy a kis <span class="key-badge">x</span> betűt! Például: <span class="example-code">2*2*2*2*2</span>.
+      </li>
+      <li>
+        <strong>Törtek és osztás:</strong> A törtvonalhoz használd a perjelet (<span class="key-badge">/</span>), az osztáshoz pedig a kettőspontot (<span class="key-badge">:</span>) vagy a perjelet. Például: <span class="example-code">-1/5</span> vagy <span class="example-code">88:28</span>.
+      </li>
+      <li>
+        <strong>Tizedesvessző és előjel:</strong> Használj tizedesvesszőt (pl. <span class="example-code">-2,1145</span>), a negatív számok elé pedig sima kötőjelet (<span class="key-badge">-</span>) írj! A szóközök nem számítanak.
+      </li>
+    </ul>
+  </div>
+
+  <form id="quizForm">
+    <!-- 1. FELADAT -->
+    <div class="task-card" id="task1">
+      <p class="task-title">1. A hatványokat írd szorzatalakba, a szorzatokat írd hatványalakba!</p>
+      <div class="grid-2">
+        <div class="grid-item">
+          <div class="math-row">2<sup>5</sup> = <input type="text" data-ans="2*2*2*2*2" placeholder="pl. 2*2*2*2*2"></div>
+          <div class="math-row">10<sup>6</sup> = <input type="text" data-ans="10*10*10*10*10*10" placeholder="szorzatalak"></div>
+          <div class="math-row">
+            (<span class="frac"><span>3</span><span class="bottom">5</span></span>)<sup>2</sup> = 
+            <input type="text" data-ans="(3/5)*(3/5)|3/5*3/5" placeholder="pl. 3/5 * 3/5">
+          </div>
+          <div class="math-row">1,2<sup>3</sup> = <input type="text" data-ans="1,2*1,2*1,2|1.2*1.2*1.2" placeholder="szorzatalak"></div>
+        </div>
+        <div class="grid-item">
+          <div class="math-row">7 · 7 · 7 · 7 · 7 · 7 = <input type="text" data-ans="7^6" placeholder="pl. 7^6"></div>
+          <div class="math-row">
+            <span class="frac"><span>2</span><span class="bottom">5</span></span> · 
+            <span class="frac"><span>2</span><span class="bottom">5</span></span> · 
+            <span class="frac"><span>2</span><span class="bottom">5</span></span> · 
+            <span class="frac"><span>2</span><span class="bottom">5</span></span> = 
+            <input type="text" data-ans="(2/5)^4|2/5^4" placeholder="pl. (2/5)^4">
+          </div>
+          <div class="math-row">0,3 · 0,3 · 0,3 = <input type="text" data-ans="0,3^3|0.3^3" placeholder="hatványalak"></div>
+          <div class="math-row">2,01 · 2,01 = <input type="text" data-ans="2,01^2|2.01^2" placeholder="hatványalak"></div>
+        </div>
+      </div>
+      <button type="button" class="btn-check" onclick="checkTask('task1')">Válaszok ellenőrzése</button>
+      <details class="sol-details">

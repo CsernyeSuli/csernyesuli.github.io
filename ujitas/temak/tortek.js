@@ -30,7 +30,8 @@
     '#tkPad{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(2,6,23,.97);border-top:1px solid #475569;box-shadow:0 -8px 24px rgba(0,0,0,.45)}' +
     '#tkPad.hidden{display:none}.tk-padgrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;max-width:820px;margin:0 auto}' +
     '.tk-key{height:46px;padding:0;border:1px solid #475569;border-radius:10px;background:#1e293b;color:#f1f5f9;font:600 20px/1 system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}' +
-    '.tk-key.sym{background:#0b1220;color:#7dd3fc}.tk-key.act{background:#0f766e;color:#ecfeff}.tk-key:active{background:#334155}.tk-key[disabled]{opacity:.28}' +
+    '.tk-top-sticky{position:sticky;top:0;z-index:20;margin-left:-1rem;margin-right:-1rem;padding:8px 1rem;background:rgba(2,6,23,.94)}' +
+    '.tk-key.txt{font-size:13px}.tk-key.sym{background:#0b1220;color:#7dd3fc}.tk-key.act{background:#0f766e;color:#ecfeff}.tk-key:active{background:#334155}.tk-key[disabled]{opacity:.28}' +
     '@media(max-width:640px){.tk-padgrid{grid-template-columns:repeat(6,minmax(0,1fr))}.tk-key{height:44px}}');
 
   const INPUT = 'w-full select-text rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-slate-100 placeholder-slate-500 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/30 disabled:opacity-60';
@@ -74,7 +75,11 @@
 </section>
 
 <section id="view-task" class="hidden">
-  <div class="mb-3 flex items-center justify-between text-slate-400"><span id="grpTitle" class="font-semibold text-emerald-400"></span><b id="counter" class="text-slate-200"></b></div>
+  <div id="tkTop" class="mb-3 flex items-center justify-between gap-2 text-slate-400">
+    <span id="grpTitle" class="font-semibold text-emerald-400"></span>
+    <button type="button" id="kbToggle" class="hidden rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm font-semibold text-slate-100 transition hover:border-emerald-400"></button>
+    <b id="counter" class="text-slate-200"></b>
+  </div>
   <div class="mb-3 h-2 overflow-hidden rounded-full bg-slate-700"><div id="bar" class="h-full rounded-full bg-emerald-400 transition-all duration-500"></div></div>
 
   <div class="${CARD}"><div id="expr" class="tk-expr py-2 text-center"></div></div>
@@ -102,7 +107,6 @@
       <button type="button" data-ins="=" class="${INSB}">=</button>
       <button type="button" data-ins=";" class="${INSB}">;</button>
       <span class="basis-full">A szorzáshoz használhatod a csillagot (*) is, a program szorzóponttá alakítja. A beírt képlet alatt emeletes alakban látod, hogyan értelmezte a program.</span>
-      <button type="button" id="padOnBtn" class="hidden rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 hover:border-emerald-400">▦ Beépített számbillentyűzet</button>
     </div>
   </div>
 
@@ -301,17 +305,13 @@
      jelre van szükség, saját, kompakt billentyűzet kerül az oldal aljára; a rendszerbillentyűzet nem jön elő (inputmode="none").
      A ⌨ gombbal vissza lehet váltani a rendszerbillentyűzetre. Egérrel/fizikai billentyűzettel használt gépen nem jelenik meg. */
   const TOUCH = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
-  const tar = {
-    get: function () { try { return sessionStorage.getItem('tkPad') || ''; } catch (e) { return ''; } },
-    set: function (v) { try { sessionStorage.setItem('tkPad', v); } catch (e) { /* nem kritikus */ } },
-  };
-  let padOn = TOUCH && tar.get() !== 'off';
+  let padOn = TOUCH;                                                  // újratöltéskor mindig a beépített billentyűzet indul
   function inputMode() { return padOn ? 'none' : 'decimal'; }
   const STEP_ONLY = ['·', ':', '+', '(', ')', '=', ';'];            // a végeredménybe nem kerülhetnek
   const PAD = [
     ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9'], ['0'], [','], ['⌫', 'back', 'act', 'törlés'],
     ['/', '/', 'sym', 'törtvonal'], ['·', '·', 'sym', 'szorzás'], [':', ':', 'sym', 'osztás'], ['+', '+', 'sym', 'összeadás'], ['−', '−', 'sym', 'kivonás'],
-    ['(', '(', 'sym'], [')', ')', 'sym'], ['=', '=', 'sym'], [';', ';', 'sym'], ['␣', 'space', 'sym', 'szóköz (vegyes számhoz)'],
+    ['(', '(', 'sym'], [')', ')', 'sym'], ['=', '=', 'sym'], [';', ';', 'sym'], ['szóköz', 'space', 'sym txt', 'szóköz (vegyes számhoz)'],
     ['⏎', 'next', 'act', 'következő mező'], ['⌨', 'sys', 'sym', 'rendszerbillentyűzet'],
   ];
   $('#tkPadGrid').innerHTML = PAD.map(function (k) {
@@ -322,14 +322,17 @@
     const ans = !!(lastInput && lastInput.id === 'answer');
     document.querySelectorAll('.tk-key').forEach(function (b) {
       const k = b.dataset.k;
-      b.disabled = k === 'sys' ? false : (taskLocked || (ans ? STEP_ONLY.indexOf(k) >= 0 : k === 'space'));
+      b.disabled = k === 'sys' ? false : (taskLocked || (ans && STEP_ONLY.indexOf(k) >= 0));
     });
   }
   function updatePad() {
     const vis = padOn && curView === 'task' && !taskLocked, pad = $('#tkPad');
     pad.classList.toggle('hidden', !vis);
     $('#insBar').classList.toggle('hidden', padOn); $('#ansBar').classList.toggle('hidden', padOn);
-    $('#padOnBtn').classList.toggle('hidden', !(TOUCH && !padOn));
+    const kb = $('#kbToggle');
+    kb.classList.toggle('hidden', !TOUCH);
+    kb.textContent = padOn ? '⌨ Rendszerbillentyűzet' : '▦ Beépített billentyűzet';
+    kb.setAttribute('aria-label', padOn ? 'Váltás a rendszerbillentyűzetre' : 'Váltás a beépített számbillentyűzetre');
     document.querySelectorAll('#steps input, #answer').forEach(function (i) { i.setAttribute('inputmode', inputMode()); });
     const h = vis ? pad.offsetHeight + 12 : 0;                      // hogy a legalsó elemek is a billentyűzet fölé görgethetők legyenek
     document.body.style.paddingBottom = h ? h + 'px' : '';
@@ -337,10 +340,11 @@
     updatePadKeys();
   }
   function setPadOn(v) {
-    padOn = v; tar.set(v ? 'on' : 'off'); updatePad();
+    padOn = v; updatePad();
     if (lastInput && document.contains(lastInput) && !lastInput.disabled) { lastInput.blur(); lastInput.focus(); }   // az új billentyűzet-mód érvényesüljön
   }
-  $('#padOnBtn').addEventListener('click', function () { setPadOn(true); });
+  $('#kbToggle').addEventListener('click', function () { setPadOn(!padOn); });
+  if (TOUCH) $('#tkTop').classList.add('tk-top-sticky');
   window.addEventListener('resize', updatePad);
 
   /** Szöveg beírása a kurzor helyére (a kijelölést felülírja). */

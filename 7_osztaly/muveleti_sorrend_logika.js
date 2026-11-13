@@ -14,7 +14,7 @@
 /* ---------- 1. ADATOK ---------- */
 const TASKS_PER_GROUP = 5;
 const MAX_STEP_ROWS = 10;
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzW-F9Ghs7nRdIfacLCscFCEkPSSfe1c6u8Bgg3aJpO0A1oxE7xBkhE2XDvkaJ2zOhrGg/exec'; // .../exec
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJJ50H2q0oY2OJLYZA0ULAS9Aga2rr4ZVK-iS0blAYgVGwp-QkHvZ4KDl-Zs9cWqQ2mQ/exec'; // .../exec
 /** Oldalanként eltérő beállítás: a muveleti-sorrend*.html a logikai fájl ELŐTT definiálja a window.PAGE_CONFIG-ot:
     classId        – az osztály azonosítója az adatküldéshez (a táblázat-lap kiválasztása),
     taskSet        – melyik feladatsor-készlet érvényes az oldalon (GROUPS_BY_SET kulcsa),

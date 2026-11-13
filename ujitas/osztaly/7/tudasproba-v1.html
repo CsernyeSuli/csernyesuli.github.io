@@ -37,12 +37,6 @@
   .correct { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; }
   .incorrect { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
   .btn-check { background-color: #2f855a; color: #fff; border: none; padding: 10px 16px; font-size: 0.95em; border-radius: 6px; cursor: pointer; font-weight: 600; margin-right: 8px; margin-top: 8px; vertical-align: middle; }
-  details.sol-details { display: inline-block; margin-top: 8px; vertical-align: top; width: 100%; }
-  details.sol-details summary { background-color: #2b6cb0; color: #fff; padding: 10px 16px; font-size: 0.95em; border-radius: 6px; cursor: pointer; font-weight: 600; display: inline-block; list-style: none; user-select: none; }
-  details.sol-details summary::-webkit-details-marker { display: none; }
-  details.sol-details[open] summary { background-color: #1a365d; }
-  .solution-box { margin-top: 10px; padding: 14px; background-color: #ebf8ff; border-left: 4px solid #3182ce; border-radius: 6px; font-size: 0.98em; line-height: 1.6; }
-  .sol-item { margin-bottom: 6px; }
   .action-bar { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px solid #e2e8f0; }
   .btn-submit { background-color: #2563eb; color: #fff; border: none; padding: 14px 28px; font-size: 1.05em; border-radius: 8px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 6px rgba(37,99,235,0.3); }
   .btn-submit:hover { background-color: #1d4ed8; }
@@ -52,6 +46,14 @@
   .status-ok { background: #dcfce7; color: #166534; border: 2px solid #22c55e; }
   .status-warn { background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; }
   .status-err { background: #fee2e2; color: #991b1b; border: 2px solid #ef4444; }
+
+  /* JAVÍTÁS: Az azonosító kód mezőjének láthatósága és fekete betűszíne */
+  .uj-kod {
+    color: #000 !important;
+    background-color: #fff !important;
+    -webkit-text-fill-color: #000 !important;
+  }
+
   @media (max-width: 650px) { body { padding: 8px; } .container { padding: 14px; } .grid-item { width: 100%; margin-right: 0; } input.long-input { width: 100%; } }
 </style>
 </head>
@@ -97,14 +99,6 @@
         </div>
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task1')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• 2<sup>5</sup> = <strong>2 · 2 · 2 · 2 · 2</strong> &nbsp;|&nbsp; 10<sup>6</sup> = <strong>10 · 10 · 10 · 10 · 10 · 10</strong></div>
-          <div class="sol-item">• (3/5)<sup>2</sup> = <strong>(3/5) · (3/5)</strong> &nbsp;|&nbsp; 1,2<sup>3</sup> = <strong>1,2 · 1,2 · 1,2</strong></div>
-          <div class="sol-item">• 7 · 7 · 7 · 7 · 7 · 7 = <strong>7<sup>6</sup></strong> &nbsp;|&nbsp; (2/5) · (2/5) · (2/5) · (2/5) = <strong>(2/5)<sup>4</sup></strong></div>
-          <div class="sol-item">• 0,3 · 0,3 · 0,3 = <strong>0,3<sup>3</sup></strong> &nbsp;|&nbsp; 2,01 · 2,01 = <strong>2,01<sup>2</sup></strong></div>
-        </div>
-      </details>
     </div>
 
     <!-- 2. FELADAT -->
@@ -123,13 +117,6 @@
         </div>
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task2')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• 3 · 5<sup>4</sup> <strong>&lt;</strong> (3 · 5)<sup>4</sup> <em>(1875 &lt; 50 625)</em> &nbsp;|&nbsp; 10<sup>2</sup> <strong>&lt;</strong> 2<sup>10</sup> <em>(100 &lt; 1024)</em></div>
-          <div class="sol-item">• 1,2<sup>4</sup> <strong>&lt;</strong> 2,1<sup>2</sup> <em>(2,0736 &lt; 4,41)</em> &nbsp;|&nbsp; 1/10<sup>4</sup> <strong>&lt;</strong> 0,001 <em>(0,0001 &lt; 0,001)</em></div>
-          <div class="sol-item">• 0,1<sup>3</sup> <strong>&gt;</strong> 0,001<sup>2</sup> <em>(0,001 &gt; 0,000001)</em> &nbsp;|&nbsp; (1/2)<sup>6</sup> <strong>&gt;</strong> (1/2)<sup>8</sup> <em>(1/64 &gt; 1/256)</em></div>
-        </div>
-      </details>
     </div>
 
     <!-- 3. FELADAT -->
@@ -152,11 +139,6 @@
         6.: <select data-q="Sorrend 6." data-ans="1223/2514"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select>
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task3')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• <span class="frac"><span>8</span><span class="bottom">15</span></span> ≈ 0,5333 &gt; 0,0053 · 10<sup>2</sup> = 0,53 &gt; <span class="frac"><span>9</span><span class="bottom">17</span></span> ≈ 0,5294 &gt; 5,2 : 10 = 52 000 : 10<sup>5</sup> = 0,52 &gt; <span class="frac"><span>1223</span><span class="bottom">2514</span></span> ≈ 0,4864</div>
-        </div>
-      </details>
     </div>
 
     <!-- 4. FELADAT -->
@@ -175,12 +157,6 @@
         </div>
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task4')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• <strong>a)</strong> −2,1145 &nbsp;|&nbsp; <strong>b)</strong> −0,50996 &nbsp;|&nbsp; <strong>c)</strong> 76/1125</div>
-          <div class="sol-item">• <strong>d)</strong> 0,1 (vagy 1/10) &nbsp;|&nbsp; <strong>e)</strong> −1/5 (vagy −0,2) &nbsp;|&nbsp; <strong>f)</strong> −7,6 (vagy −38/5)</div>
-        </div>
-      </details>
     </div>
 
     <!-- 5. FELADAT -->
@@ -190,13 +166,6 @@
       <div class="math-row">b) 88 : (28 · 11 : 7) · (15 · 16 : 24) = <input type="text" class="long-input" data-q="5b" data-ans="88:28:11*7*15*16:24|88/28/11*7*15*16/24"></div>
       <div class="math-row">c) 9 · (111 − 20) − (23 + 2) · 10 = <input type="text" class="long-input" data-q="5c" data-ans="9*111-9*20-23*10-2*10"></div>
       <button type="button" class="btn-check" onclick="checkTask('task5')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• <strong>a)</strong> <strong>43 + 5 − 12 − 3 + 21 − 12</strong> <em>(értéke: 42)</em></div>
-          <div class="sol-item">• <strong>b)</strong> <strong>88 : 28 : 11 · 7 · 15 · 16 : 24</strong> <em>(értéke: 20)</em></div>
-          <div class="sol-item">• <strong>c)</strong> <strong>9 · 111 − 9 · 20 − 23 · 10 − 2 · 10</strong> <em>(értéke: 569)</em></div>
-        </div>
-      </details>
     </div>
 
     <!-- 6. FELADAT -->
@@ -213,12 +182,6 @@
         </div>
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task6')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• <strong>a)</strong> 5<sup><strong>4</strong></sup> = 625 &nbsp;|&nbsp; <strong>b)</strong> <strong>6</strong><sup>4</sup> = 1296 <em>(vagy <strong>−6</strong>)</em></div>
-          <div class="sol-item">• <strong>c)</strong> <strong>−5,5</strong> <em>(vagy −11/2)</em> &nbsp;|&nbsp; <strong>d)</strong> <strong>100</strong></div>
-        </div>
-      </details>
     </div>
 
     <!-- 7. FELADAT -->
@@ -235,12 +198,6 @@
         a 18 <span class="frac"><span>5</span><span class="bottom">3</span></span> részének az <span class="frac"><span>1</span><span class="bottom">2</span></span> része
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task7')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• <strong>a)</strong> <strong>=</strong> &nbsp;<em>(Mindkettő 28 · 2/3 · 3/7 = 8)</em></div>
-          <div class="sol-item">• <strong>b)</strong> <strong>&lt;</strong> &nbsp;<em>(Bal oldal: 18 · 5/6 · 2/3 = 10; Jobb oldal: 18 · 5/3 · 1/2 = 15. Tehát 10 &lt; 15)</em></div>
-        </div>
-      </details>
     </div>
 
     <!-- 8. FELADAT -->
@@ -261,12 +218,6 @@
         </div>
       </div>
       <button type="button" class="btn-check" onclick="checkTask('task8')">Válaszok ellenőrzése</button>
-      <details class="sol-details"><summary>Megoldás megtekintése / elrejtése</summary>
-        <div class="solution-box">
-          <div class="sol-item">• <strong>a) – D)</strong> &nbsp;<em>(80 · 13/5 = 208)</em> &nbsp;|&nbsp; <strong>b) – A)</strong> &nbsp;<em>(400/13 ≈ 30,77)</em></div>
-          <div class="sol-item">• <strong>c) – C)</strong> &nbsp;<em>(13/400)</em> &nbsp;|&nbsp; <strong>d) – B)</strong> &nbsp;<em>(80 · 2,6 = 208)</em></div>
-        </div>
-      </details>
     </div>
 
     <div class="action-bar">
@@ -277,7 +228,7 @@
   </form>
 </div>
 
-<!-- 1. Közös keretrendszer konfigurációja -->
+<!-- 1. Konfiguráció -->
 <script>
 window.UJITAS_CFG = {
   mod: 'elo',                                     // 'elo' = kód bekérés + védelem + küldés | 'archiv' = csak gyakorló
@@ -287,10 +238,10 @@ window.UJITAS_CFG = {
   setId: '1'
 };
 </script>
-<!-- 2. Közös betöltő (ujitas/osztaly/7/ -> ../../kozos/v1/betolto.js) -->
+<!-- 2. Közös betöltő -->
 <script src="../../kozos/v1/betolto.js"></script>
 
-<!-- 3. Feladatsor logika és UJITAS szerződés összekötése -->
+<!-- 3. Logika -->
 <script>
   let sessionAktiv = false;
   let lezarva = false;
@@ -408,7 +359,6 @@ window.UJITAS_CFG = {
     var eredmeny = await window.UJITAS.kuldes(payload, { csendes: !!csendes });
 
     if (eredmeny === null) {
-      // Archív mód: nincs küldés
       banner.className = 'status-banner status-ok';
       banner.textContent = 'Archív gyakorló mód – Eredményed: ' + payload.score + ' / ' + payload.total + ' pont (' + payload.grade + '-es).';
     } else if (eredmeny === true) {
@@ -428,39 +378,30 @@ window.UJITAS_CFG = {
     for (var i = 0; i < fields.length; i++) {
       fields[i].className = fields[i].className.replace(/\bcorrect\b/g, '').replace(/\bincorrect\b/g, '').trim();
     }
-    var details = form.querySelectorAll('details');
-    for (var j = 0; j < details.length; j++) {
-      details[j].removeAttribute('open');
-    }
     window.scrollTo(0, 0);
   }
 
-  // Indítás a kozos/v1/betolto.js 'kesz' eseménye után
   window.addEventListener('DOMContentLoaded', function () {
     const U = window.UJITAS;
     if (!U) return;
 
     U.on('kesz', async function () {
-      // 1. Azonosítás (élő módban bekéri a diák kódját)
       const mehet = await U.run('indulas');
       if (!mehet) {
         document.body.innerHTML = '<div style="text-align:center;padding:50px;font-family:sans-serif;"><h2>A feladatsor elindítása megszakítva.</h2><p>Frissítsd az oldalt, ha mégis szeretnéd kitölteni.</p></div>';
         return;
       }
 
-      // 2. Felület megjelenítése és védelem aktiválása
       document.getElementById('mainContainer').style.display = 'block';
       startTime = Date.now();
       sessionAktiv = true;
 
       if (!U.elo) {
-        // Archív módban a küldés gombot átnevezzük kiértékelésre
         document.getElementById('btnFinish').textContent = '📊 Összes feladat kiértékelése';
       } else {
-        document.getElementById('btnReset').style.display = 'none'; // Élő felmérőn ne törölhesse véletlenül
+        document.getElementById('btnReset').style.display = 'none';
       }
 
-      // 3. Szerződés bekötése (lapváltás és kilépés figyelése)
       U.aktiv = function () { return sessionAktiv && !lezarva; };
       U.on('lapvaltas', function () { befejezes('lapvaltas', false); });
       U.on('kilepes', function () {

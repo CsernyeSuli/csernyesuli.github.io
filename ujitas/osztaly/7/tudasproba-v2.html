@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Számok és műveletek – Tudáspróba</title>
+<style>
+  * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  body { background-color: #f3f5f8; color: #222; margin: 0; padding: 15px; line-height: 1.6; }
+  .container { max-width: 850px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+  header { text-align: center; border-bottom: 3px solid #f08a24; padding-bottom: 15px; margin-bottom: 20px; }
+  .badge { background-color: #f08a24; color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 0.9em; font-weight: bold; display: inline-block; margin-bottom: 8px; }
+  h1 { margin: 5px 0; color: #2c3e50; font-size: 1.7em; }
+  .subtitle { color: #666; font-size: 0.95em; margin: 0; }
+  .info-banner { background-color: #fffbeb; border: 2px solid #f59e0b; border-left: 6px solid #d97706; border-radius: 10px; padding: 16px; margin-bottom: 24px; color: #78350f; }
+  .info-banner-title { font-weight: bold; font-size: 1.12em; margin-top: 0; margin-bottom: 10px; color: #b45309; }
+  .info-list { margin: 0; padding-left: 20px; }
+  .info-list li { margin-bottom: 8px; }
+  .key-badge { display: inline-block; background: #fff; border: 1px solid #d97706; border-bottom: 3px solid #b45309; border-radius: 5px; padding: 1px 7px; font-family: monospace; font-weight: bold; font-size: 0.95em; color: #222; }
+  .example-code { background: #fef3c7; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-weight: bold; color: #92400e; }
+  .btn-copy { background-color: #d97706; color: #fff; border: none; padding: 3px 9px; font-size: 0.85em; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px; vertical-align: middle; }
+  .task-card { background: #fafbfc; border: 1px solid #e1e4e8; border-radius: 10px; padding: 18px; margin-bottom: 22px; }
+  .task-title { font-weight: bold; font-size: 1.15em; color: #1a365d; margin-top: 0; margin-bottom: 15px; }
+  .grid-2 { display: block; font-size: 0; }
+  .grid-item { display: inline-block; vertical-align: top; width: 48.5%; margin-right: 3%; margin-bottom: 12px; background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 16px; }
+  .grid-item:nth-child(2n) { margin-right: 0; }
+  .math-row { display: block; margin-bottom: 12px; font-size: 1.08em; line-height: 2.2; }
+  sup { font-size: 0.72em; line-height: 0; position: relative; vertical-align: baseline; top: -0.55em; font-weight: bold; margin-left: 1px; }
+  .frac { display: inline-block; vertical-align: middle; text-align: center; margin: 0 3px; font-size: 0.9em; line-height: 1.15; }
+  .frac > span { display: block; padding: 1px 4px; }
+  .frac span.bottom { border-top: 1.5px solid #222; }
+
+  .container input[type="text"], .container select { padding: 6px 10px; font-size: 0.95em; border: 2px solid #cbd5e1; border-radius: 6px; background: #fff; color: #222; min-height: 36px; vertical-align: middle; }
+  .container input[type="text"] { width: 155px; max-width: 100%; }
+  .container input.short-input { width: 80px; text-align: center; }
+  .container input.long-input { width: 280px; }
+  .container select { font-weight: bold; cursor: pointer; }
+
+  .correct { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; }
+  .incorrect { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
+
+  .action-bar { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px solid #e2e8f0; }
+  .btn-submit { background-color: #2563eb; color: #fff; border: none; padding: 14px 28px; font-size: 1.05em; border-radius: 8px; cursor: pointer; font-weight: bold; margin: 5px; box-shadow: 0 2px 6px rgba(37,99,235,0.3); }
+  .btn-submit:hover { background-color: #1d4ed8; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-reset { background-color: #e53e3e; color: #fff; border: none; padding: 12px 20px; font-size: 0.95em; border-radius: 8px; cursor: pointer; font-weight: bold; margin: 5px; }
+  .status-banner { display: none; padding: 16px; border-radius: 10px; margin-top: 20px; font-weight: bold; text-align: center; font-size: 1.05em; }
+  .status-ok { background: #dcfce7; color: #166534; border: 2px solid #22c55e; }
+  .status-warn { background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; }
+  .status-err { background: #fee2e2; color: #991b1b; border: 2px solid #ef4444; }
+
+  @media (max-width: 650px) { body { padding: 8px; } .container { padding: 14px; } .grid-item { width: 100%; margin-right: 0; } .container input.long-input { width: 100%; } }
+</style>
+</head>
+<body>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <header>
+    <div class="badge">Számok és műveletek</div>
+    <h1>Tudáspróba – Önálló felmérő</h1>
+    <p class="subtitle" id="subHeader">Töltsd ki a mezőket, majd a végén kattints a beküldés gombra!</p>
+  </header>
+
+  <div class="info-banner">
+    <p class="info-banner-title">💡 Fontos tudnivalók a jelek begépeléséhez (példákkal):</p>
+    <ul class="info-list">
+      <li><strong>Hatványozás (<span class="key-badge">^</span> jel):</strong> Írd a hatványkitevő elé a kalap jelet! Pl.: <span class="example-code">7^6</span> vagy <span class="example-code">(2/5)^4</span>.<br>
+        • <em>Számítógépen (PC):</em> Nyomd le egyszerre az <span class="key-badge">Alt Gr</span> + <span class="key-badge">3</span> billentyűt, majd nyomj egy <span class="key-badge">Szóköz</span>-t!<br>
+        • <em>Tableten / mobilon:</em> Válts a számok és jelek billentyűzetre (<span class="key-badge">?123</span>, majd <span class="key-badge">=\&lt;</span>), ott találod a <span class="key-badge">^</span> jelet. 
+        <button type="button" class="btn-copy" onclick="copyCaret()">^ jel másolása</button> <span id="copyStatus" style="font-size:0.85em; font-weight:bold; color:#15803d;"></span>
+      </li>
+      <li><strong>Szorzás:</strong> Használd a csillag (<span class="key-badge">*</span>) vagy a kis <span class="key-badge">x</span> betűt! Pl.: <span class="example-code">2*2*2*2*2</span>.</li>
+      <li><strong>Törtek és osztás:</strong> Törtvonalhoz perjel (<span class="key-badge">/</span>), osztáshoz kettőspont (<span class="key-badge">:</span>) vagy perjel. Pl.: <span class="example-code">-1/5</span> vagy <span class="example-code">88:28</span>.</li>
+      <li><strong>Tizedesvessző és előjel:</strong> Használj tizedesvesszőt (pl. <span class="example-code">-2,1145</span>), negatív számok elé sima kötőjelet (<span class="key-badge">-</span>) írj!</li>
+    </ul>
+  </div>
+
+  <form id="quizForm">
+    <!-- 1. FELADAT -->
+    <div class="task-card" id="task1" data-label="1. Hatvány és szorzatalak">
+      <p class="task-title">1. A hatványokat írd szorzatalakba, a szorzatokat írd hatványalakba!</p>
+      <div class="grid-2">
+        <div class="grid-item">
+          <div class="math-row">2<sup>5</sup> = <input type="text" data-q="2^5" data-ans="2*2*2*2*2" placeholder="szorzatalak"></div>
+          <div class="math-row">10<sup>6</sup> = <input type="text" data-q="10^6" data-ans="10*10*10*10*10*10" placeholder="szorzatalak"></div>
+          <div class="math-row">(<span class="frac"><span>3</span><span class="bottom">5</span></span>)<sup>2</sup> = <input type="text" data-q="(3/5)^2" data-ans="(3/5)*(3/5)|3/5*3/5" placeholder="szorzatalak"></div>
+          <div class="math-row">1,2<sup>3</sup> = <input type="text" data-q="1,2^3" data-ans="1,2*1,2*1,2|1.2*1.2*1.2" placeholder="szorzatalak"></div>
+        </div>
+        <div class="grid-item">
+          <div class="math-row">7 · 7 · 7 · 7 · 7 · 7 = <input type="text" data-q="7*7*7*7*7*7" data-ans="7^6" placeholder="hatványalak"></div>
+          <div class="math-row"><span class="frac"><span>2</span><span class="bottom">5</span></span> · <span class="frac"><span>2</span><span class="bottom">5</span></span> · <span class="frac"><span>2</span><span class="bottom">5</span></span> · <span class="frac"><span>2</span><span class="bottom">5</span></span> = <input type="text" data-q="(2/5)^4" data-ans="(2/5)^4|2/5^4" placeholder="hatványalak"></div>
+          <div class="math-row">0,3 · 0,3 · 0,3 = <input type="text" data-q="0,3^3" data-ans="0,3^3|0.3^3" placeholder="hatványalak"></div>
+          <div class="math-row">2,01 · 2,01 = <input type="text" data-q="2,01^2" data-ans="2,01^2|2.01^2" placeholder="hatványalak"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. FELADAT -->
+    <div class="task-card" id="task2" data-label="2. Relációs jelek">
+      <p class="task-title">2. Melyik nagyobb? Tedd ki a megfelelő (&lt;, =, &gt;) jelet!</p>
+      <div class="grid-2">
+        <div class="grid-item">
+          <div class="math-row">3 · 5<sup>4</sup> <select data-q="3*5^4 ? (3*5)^4" data-ans="<"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select> (3 · 5)<sup>4</sup></div>
+          <div class="math-row">10<sup>2</sup> <select data-q="10^2 ? 2^10" data-ans="<"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select> 2<sup>10</sup></div>
+          <div class="math-row">1,2<sup>4</sup> <select data-q="1,2^4 ? 2,1^2" data-ans="<"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select> 2,1<sup>2</sup></div>
+        </div>
+        <div class="grid-item">
+          <div class="math-row"><span class="frac"><span>1</span><span class="bottom">10<sup>4</sup></span></span> <select data-q="1/10^4 ? 0,001" data-ans="<"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select> 0,001</div>
+          <div class="math-row">0,1<sup>3</sup> <select data-q="0,1^3 ? 0,001^2" data-ans=">"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select> 0,001<sup>2</sup></div>
+          <div class="math-row">(<span class="frac"><span>1</span><span class="bottom">2</span></span>)<sup>6</sup> <select data-q="(1/2)^6 ? (1/2)^8" data-ans=">"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select> (<span class="frac"><span>1</span><span class="bottom">2</span></span>)<sup>8</sup></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. FELADAT -->
+    <div class="task-card" id="task3" data-label="3. Csökkenő sorrend">
+      <p class="task-title">3. Állítsd nagyság szerint csökkenő sorrendbe!</p>
+      <div class="math-row">Számok: &nbsp;
+        <strong><span class="frac"><span>9</span><span class="bottom">17</span></span></strong> , &nbsp;
+        <strong><span class="frac"><span>8</span><span class="bottom">15</span></span></strong> , &nbsp;
+        <strong><span class="frac"><span>1223</span><span class="bottom">2514</span></span></strong> , &nbsp;
+        <strong>0,0053 · 10<sup>2</sup></strong> , &nbsp;
+        <strong>5,2 : 10</strong> , &nbsp;
+        <strong>52 000 : 10<sup>5</sup></strong>
+      </div>
+      <div class="math-row">
+        1.: <select data-q="Sorrend 1." data-ans="8/15"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select> &gt; 
+        2.: <select data-q="Sorrend 2." data-ans="0,0053*10^2"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select> &gt; 
+        3.: <select data-q="Sorrend 3." data-ans="9/17"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select> &gt; 
+        4.: <select data-q="Sorrend 4." data-ans="5,2:10|52000:10^5"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select> = 
+        5.: <select data-q="Sorrend 5." data-ans="5,2:10|52000:10^5"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select> &gt; 
+        6.: <select data-q="Sorrend 6." data-ans="1223/2514"><option value="">?</option><option value="9/17">9/17</option><option value="8/15">8/15</option><option value="1223/2514">1223/2514</option><option value="0,0053*10^2">0,0053 · 10²</option><option value="5,2:10">5,2 : 10</option><option value="52000:10^5">52 000 : 10⁵</option></select>
+      </div>
+    </div>
+
+    <!-- 4. FELADAT -->
+    <div class="task-card" id="task4" data-label="4. Műveletek">
+      <p class="task-title">4. Végezd el a műveleteket!</p>
+      <div class="grid-2">
+        <div class="grid-item">
+          <div class="math-row">a) 0,023 + (−2,1375) = <input type="text" class="short-input" data-q="4a" data-ans="-2,1145|-2.1145"></div>
+          <div class="math-row">b) 23,18 · (−0,022) = <input type="text" class="short-input" data-q="4b" data-ans="-0,50996|-0.50996"></div>
+          <div class="math-row">c) 0,152 : 2,25 = <input type="text" class="short-input" data-q="4c" data-ans="76/1125" placeholder="törtben"></div>
+        </div>
+        <div class="grid-item">
+          <div class="math-row">d) (<span class="frac"><span>1</span><span class="bottom">2</span></span> + 0,7) : 12 = <input type="text" class="short-input" data-q="4d" data-ans="0,1|0.1|1/10"></div>
+          <div class="math-row">e) −<span class="frac"><span>3</span><span class="bottom">7</span></span> + <span class="frac"><span>3</span><span class="bottom">5</span></span> · <span class="frac"><span>8</span><span class="bottom">21</span></span> = <input type="text" class="short-input" data-q="4e" data-ans="-1/5|-0,2|-0.2"></div>
+          <div class="math-row">f) (<span class="frac"><span>22</span><span class="bottom">25</span></span> − <span class="frac"><span>4</span><span class="bottom">15</span></span> · 9) · 5 = <input type="text" class="short-input" data-q="4f" data-ans="-7,6|-7.6|-38/5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. FELADAT -->
+    <div class="task-card" id="task5" data-label="5. Zárójelek felbontása">
+      <p class="task-title">5. Írd fel zárójelek nélkül a műveletsorokat! (Az eredmény nem változhat, a számok maradjanak változatlanul!)</p>
+      <div class="math-row">a) 43 + (5 − 12) − (3 − 21 + 12) = <input type="text" class="long-input" data-q="5a" data-ans="43+5-12-3+21-12"></div>
+      <div class="math-row">b) 88 : (28 · 11 : 7) · (15 · 16 : 24) = <input type="text" class="long-input" data-q="5b" data-ans="88:28:11*7*15*16:24|88/28/11*7*15*16/24"></div>
+      <div class="math-row">c) 9 · (111 − 20) − (23 + 2) · 10 = <input type="text" class="long-input" data-q="5c" data-ans="9*111-9*20-23*10-2*10"></div>
+    </div>
+
+    <!-- 6. FELADAT -->
+    <div class="task-card" id="task6" data-label="6. Hiányzó számok">
+      <p class="task-title">6. Írj a keretekbe számokat úgy, hogy igaz állítást kapj!</p>
+      <div class="grid-2">
+        <div class="grid-item">
+          <div class="math-row">a) 5<sup><input type="text" data-q="6a" data-ans="4" style="width:45px; text-align:center; padding:2px; min-height:28px;"></sup> = 625</div>
+          <div class="math-row">b) <input type="text" class="short-input" data-q="6b" data-ans="6|-6"><sup>4</sup> = 1296</div>
+        </div>
+        <div class="grid-item">
+          <div class="math-row">c) (<input type="text" class="short-input" data-q="6c" data-ans="-5,5|-5.5|-11/2"> + <span class="frac"><span>1</span><span class="bottom">2</span></span>) : 3 = −<span class="frac"><span>5</span><span class="bottom">3</span></span></div>
+          <div class="math-row">d) <input type="text" class="short-input" data-q="6d" data-ans="100"> · 0,23 − 11,5 = 11,5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. FELADAT -->
+    <div class="task-card" id="task7" data-label="7. Törtrészek összehasonlítása">
+      <p class="task-title">7. Melyik nagyobb? Tedd ki a &lt;, &gt; vagy = jelet!</p>
+      <div class="math-row">
+        a) a 28 <span class="frac"><span>2</span><span class="bottom">3</span></span> részének a <span class="frac"><span>3</span><span class="bottom">7</span></span> része
+        <select data-q="7a" data-ans="="><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select>
+        a 28 <span class="frac"><span>3</span><span class="bottom">7</span></span> részének a <span class="frac"><span>2</span><span class="bottom">3</span></span> része
+      </div>
+      <div class="math-row">
+        b) a 18 <span class="frac"><span>5</span><span class="bottom">6</span></span> részének a <span class="frac"><span>2</span><span class="bottom">3</span></span> része
+        <select data-q="7b" data-ans="<"><option value="">?</option><option value="<">&lt;</option><option value="=">=</option><option value=">">&gt;</option></select>
+        a 18 <span class="frac"><span>5</span><span class="bottom">3</span></span> részének az <span class="frac"><span>1</span><span class="bottom">2</span></span> része
+      </div>
+    </div>
+
+    <!-- 8. FELADAT -->
+    <div class="task-card" id="task8" data-label="8. Párosítás">
+      <p class="task-title">8. Párosítsd össze az egymásnak megfelelőket!</p>
+      <div class="grid-2">
+        <div class="grid-item">
+          <div class="math-row"><strong>a)</strong> Mennyi 80-nak a <span class="frac"><span>13</span><span class="bottom">5</span></span> része? &rarr; <select data-q="8a" data-ans="D"><option value="">Válassz...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+          <div class="math-row"><strong>b)</strong> Melyik szám <span class="frac"><span>13</span><span class="bottom">5</span></span> része a 80? &rarr; <select data-q="8b" data-ans="A"><option value="">Válassz...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+          <div class="math-row"><strong>c)</strong> Mekkora része 80-nak a <span class="frac"><span>13</span><span class="bottom">5</span></span>? &rarr; <select data-q="8c" data-ans="C"><option value="">Válassz...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+          <div class="math-row"><strong>d)</strong> Mennyi 80-nak a 260 százaléka? &rarr; <select data-q="8d" data-ans="B"><option value="">Válassz...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>
+        </div>
+        <div class="grid-item">
+          <div class="math-row"><strong>A)</strong> &square; · <span class="frac"><span>13</span><span class="bottom">5</span></span> = 80</div>
+          <div class="math-row"><strong>B)</strong> 80 · 2,6 = &square;</div>
+          <div class="math-row"><strong>C)</strong> 80 · &square; = <span class="frac"><span>13</span><span class="bottom">5</span></span></div>
+          <div class="math-row"><strong>D)</strong> 80 · <span class="frac"><span>13</span><span class="bottom">5</span></span> = &square;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button type="button" id="btnFinish" class="btn-submit" onclick="befejezes('befejezve')">📤 Feladatsor lezárása és beküldése</button>
+      <button type="button" id="btnReset" class="btn-reset" onclick="resetAll()" style="display:none;">Összes mező törlése (Újrakezdés)</button>
+      <div id="statusBanner" class="status-banner"></div>
+    </div>
+  </form>
+</div>
+
+<!-- 1. Konfiguráció -->
+<script>
+window.UJITAS_CFG = {
+  mod: 'elo',                                     // 'elo' = kód bekérés + védelem + küldés | 'archiv' = csak gyakorló
+  classId: '7',
+  assignmentType: 'Orai',                         // Orai | Hazi | Szorgalmi | Felmero
+  taskTitle: 'Számok és műveletek – Tudáspróba',
+  setId: '1'
+};
+</script>
+<!-- 2. Közös betöltő -->
+<script src="../../kozos/v1/betolto.js"></script>
+
+<!-- 3. Logika -->
+<script>
+  let sessionAktiv = false;
+  let lezarva = false;
+  let startTime = Date.now();
+
+  function copyCaret() {
+    var tempInput = document.createElement("input");
+    tempInput.value = "^";
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    var status = document.getElementById("copyStatus");
+    status.innerHTML = "✔ Kimásolva!";
+    setTimeout(function() { status.innerHTML = ""; }, 2000);
+  }
+
+  function normalizeStr(str) {
+    return String(str || '')
+      .replace(/\s+/g, '')
+      .replace(/·/g, '*')
+      .replace(/×/g, '*')
+      .replace(/x/gi, '*')
+      .replace(/−/g, '-')
+      .replace(/–/g, '-')
+      .replace(/²/g, '^2')
+      .replace(/³/g, '^3')
+      .replace(/⁴/g, '^4')
+      .replace(/⁵/g, '^5')
+      .replace(/⁶/g, '^6');
+  }
+
+  function checkField(el) {
+    var userVal = normalizeStr(el.value);
+    el.className = el.className.replace(/\bcorrect\b/g, '').replace(/\bincorrect\b/g, '').trim();
+    var validAnswers = el.getAttribute('data-ans').split('|');
+    var isMatch = false;
+    if (userVal !== '') {
+      for (var j = 0; j < validAnswers.length; j++) {
+        if (userVal === normalizeStr(validAnswers[j])) { isMatch = true; break; }
+      }
+    }
+    return {
+      expression: el.getAttribute('data-q') || '',
+      correct: isMatch,
+      finalAnswer: el.value.trim(),
+      correctAnswer: validAnswers[0],
+      seconds: 0,
+      stepErrors: 0,
+      studentLines: [el.value.trim()],
+      correctLines: [validAnswers[0]],
+      feedback: [isMatch ? 'Helyes' : 'Hibás']
+    };
+  }
+
+  function osszeallitPayload(reason) {
+    var fields = document.querySelectorAll('#quizForm input[data-ans], #quizForm select[data-ans]');
+    var tasks = [];
+    var score = 0;
+    var total = fields.length;
+    var elteltMp = Math.round((Date.now() - startTime) / 1000);
+
+    for (var i = 0; i < fields.length; i++) {
+      var res = checkField(fields[i]);
+      if (i === 0) res.seconds = elteltMp;
+      if (res.correct) score++;
+      tasks.push(res);
+    }
+
+    var szazalek = total > 0 ? (score / total) * 100 : 0;
+    var grade = szazalek >= 85 ? 5 : (szazalek >= 70 ? 4 : (szazalek >= 55 ? 3 : (szazalek >= 40 ? 2 : 1)));
+
+    return {
+      score: score,
+      total: total,
+      grade: grade,
+      reason: reason,
+      tasks: tasks
+    };
+  }
+
+  function zarolMezoket() {
+    var fields = document.querySelectorAll('#quizForm input, #quizForm select, #quizForm button');
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].id !== 'btnReset') fields[i].disabled = true;
+    }
+  }
+
+  async function befejezes(reason, csendes) {
+    if (lezarva) return;
+    if (reason === 'befejezve' && !csendes) {
+      if (!confirm('Biztosan lezárod és elküldöd a feladatsort? Utána már nem módosíthatsz.')) return;
+    }
+
+    lezarva = true;
+    sessionAktiv = false;
+    window.UJITAS.emit('lezarva');
+    zarolMezoket();
+
+    var payload = osszeallitPayload(reason);
+    var banner = document.getElementById('statusBanner');
+    banner.style.display = 'block';
+    banner.className = 'status-banner status-warn';
+    banner.textContent = 'Eredmények küldése folyamatban... (' + payload.score + ' / ' + payload.total + ' pont)';
+
+    var eredmeny = await window.UJITAS.kuldes(payload, { csendes: !!csendes });
+
+    if (eredmeny === null) {
+      banner.className = 'status-banner status-ok';
+      banner.textContent = 'Archív gyakorló mód – Eredményed: ' + payload.score + ' / ' + payload.total + ' pont (' + payload.grade + '-es).';
+    } else if (eredmeny === true) {
+      banner.className = 'status-banner status-ok';
+      banner.textContent = '✔ Sikeresen elküldve a tanárnak! Eredményed: ' + payload.score + ' / ' + payload.total + ' pont (becsült jegy: ' + payload.grade + ').';
+    } else {
+      banner.className = 'status-banner status-err';
+      banner.textContent = '⚠️ Nem sikerült elküldeni az eredményt (hálózati hiba). Készíts képernyőképet az eredményedről: ' + payload.score + ' / ' + payload.total + ' pont!';
+    }
+  }
+
+  function resetAll() {
+    if (lezarva) return;
+    var form = document.getElementById('quizForm');
+    form.reset();
+    window.scrollTo(0, 0);
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    const U = window.UJITAS;
+    if (!U) return;
+
+    U.on('kesz', async function () {
+      const mehet = await U.run('indulas');
+      if (!mehet) {
+        document.body.innerHTML = '<div style="text-align:center;padding:50px;font-family:sans-serif;"><h2>A feladatsor elindítása megszakítva.</h2><p>Frissítsd az oldalt, ha mégis szeretnéd kitölteni.</p></div>';
+        return;
+      }
+
+      document.getElementById('mainContainer').style.display = 'block';
+      startTime = Date.now();
+      sessionAktiv = true;
+
+      if (!U.elo) {
+        document.getElementById('btnFinish').textContent = '📊 Összes feladat kiértékelése';
+      }
+
+      U.aktiv = function () { return sessionAktiv && !lezarva; };
+      U.on('lapvaltas', function () { befejezes('lapvaltas', false); });
+      U.on('kilepes', function () {
+        if (sessionAktiv && !lezarva) {
+          lezarva = true;
+          sessionAktiv = false;
+          U.kuldes(osszeallitPayload('lapvaltas'), { csendes: true });
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

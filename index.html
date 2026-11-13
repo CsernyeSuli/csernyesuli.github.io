@@ -4,6 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematika Portál - Főoldal</title>
+    <!-- KARBANTARTÁS KAPCSOLÓ -->
+    <script>
+        // Ha ezt true-ra állítod, azonnal bekapcsol a karbantartási nézet!
+        // Ha false, az oldal a szokásos módon működik.
+        const KARBANTARTAS_AKTIV = false; 
+
+        if (KARBANTARTAS_AKTIV) {
+            // Azonnal átirányít vagy bebetonozza a karbantartási képernyőt
+            document.addEventListener("DOMContentLoaded", function() {
+                document.body.innerHTML = `
+                    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #030712; color: #f3f4f6; font-family: sans-serif; padding: 1rem;">
+                        <div style="max-width: 28rem; width: 100%; border: 1px solid rgba(245, 158, 11, 0.5); background-color: rgba(15, 23, 42, 0.9); padding: 2rem; border-radius: 1rem; text-align: box; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; text-align: center;">🛠️</div>
+                            <h1 style="font-size: 1.5rem; font-weight: bold; color: #fbbf24; text-align: center; margin-bottom: 0.75rem;">Rendszer karbantartás</h1>
+                            <p style="color: #cbd5e1; text-align: center; font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                                A feladatkezelő rendszerünkben jelenleg ütemezett karbantartás vagy frissítés zajlik. Kérlek, próbálkozz újra később!
+                            </p>
+                            <div style="text-align: center;">
+                                <button onclick="location.reload()" style="background-color: #34d399; color: #030712; font-weight: bold; padding: 0.6rem 1.2rem; border: none; border-radius: 0.75rem; cursor: pointer;">
+                                    Újrapróbálás
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>// Biztosítjuk, hogy a kód csak akkor fusson le, ha a HTML már teljesen betöltődött
     window.addEventListener("DOMContentLoaded", () => {

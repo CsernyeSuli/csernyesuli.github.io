@@ -46,8 +46,8 @@
   const TRAY_Y = 446, BH = 572;                                // a tálca helye, a teljes tábla magassága
   const LABELS = [
     { x: R.cx - 72, y: 4, w: 144, h: 28, t: 'Racionális számok', c: '#38bdf8' },
-    { x: E.cx - 56, y: E.cy - E.ry - 13, w: 112, h: 26, t: 'Egész számok', c: '#34d399' },
-    { x: N.cx - 56, y: N.cy - N.ry - 13, w: 112, h: 26, t: 'Negatív számok', c: '#fbbf24' },
+    { x: 234, y: 120, w: 114, h: 26, t: 'Egész számok', c: '#34d399' },
+    { x: 352, y: 120, w: 114, h: 26, t: 'Negatív számok', c: '#fbbf24' },
   ];
   const inEl = function (e, x, y) { return Math.pow((x - e.cx) / e.rx, 2) + Math.pow((y - e.cy) / e.ry, 2) <= 1; };
   /** Melyik részben van a pont? 'R' (csak racionális) | 'E' | 'N' | 'EN' (közös) | null (a halmazábrán kívül) */
@@ -161,7 +161,7 @@
       el.className = 'hz-card' + (k.kif.indexOf('/') >= 0 ? ' frac' : '');
       el.setAttribute('role', 'img'); el.setAttribute('aria-label', k.kif + ' számkártya');
       el.style.width = CW + 'px'; el.style.height = CH + 'px';
-      el.innerHTML = FX.task(k.kif);
+      el.innerHTML = M.toHTML(M.parse(k.kif));                    // a kártyákon mindig a HTML/CSS-es tört: egyenletes méret, régi böngészőben is jó
       el.dataset.id = k.id;
       board.appendChild(el); kartyaEl[k.id] = el;
       tegyHelyre(k.id, otthon(i), false);
@@ -285,12 +285,17 @@
       };
     }
     function eredmenyNezet(e) {
+      const KOZEP = { R: { x: R.cx, y: 78 }, E: { x: 168, y: 256 }, EN: { x: 350, y: 256 }, N: { x: 532, y: 256 } };   // a pontok helye (a pontozási ábra szerint)
+      const pontok = e.reszek.map(function (r) {
+        const k = KOZEP[r.kod];
+        return '<text x="' + k.x + '" y="' + k.y + '" text-anchor="middle" font-size="24" font-weight="800" font-family="system-ui,sans-serif" fill="' +
+          (r.pont === r.max ? '#34d399' : '#f87171') + '">' + r.pont + ' pont</text>';
+      }).join('');
       host.innerHTML = '<div class="hz"><h2>Értékelés</h2>' +
         '<div class="hz-pont">Elért pontszám: ' + e.pont + ' / ' + e.max + '</div>' +
-        '<table class="hz-reszek">' + e.reszek.map(function (r) {
-          return '<tr><td>' + r.nev + '</td><td class="' + (r.pont === r.max ? 'ok' : 'nem') + '">' + r.pont + ' / ' + r.max + ' pont</td></tr>';
-        }).join('') + '</table>' +
-        '<div class="hz-gombok"><button type="button" class="hz-gomb" data-hz="bezar">Bezárás</button></div></div>';
+        '<div style="max-width:560px;margin:0 auto 12px">' + svgEl.replace('class="hz-svg" width="' + W + '" height="' + H + '"', 'style="width:100%;height:auto;display:block"').replace('</svg>', pontok + '</svg>') + '</div>' +
+        '<p style="text-align:center;font-size:14px;color:#94a3b8">A halmazábra mind a 4 része 2-2 pontot ér, ha pontosan a helyes számok vannak benne.</p>' +
+        '<div class="hz-gombok" style="justify-content:center"><button type="button" class="hz-gomb" data-hz="bezar">Bezárás</button></div></div>';
       const b = host.querySelector('[data-hz="bezar"]');
       b.addEventListener('click', function () { api.kesz(e); });
       b.focus();

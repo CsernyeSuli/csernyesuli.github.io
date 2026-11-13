@@ -5,6 +5,9 @@
  * Az utolsó karakter ellenőrző: az elgépelést azonnal jelzi (ugyanaz a számítás, mint az Apps Scriptben).
  * A kód csak a böngésző munkamenetében (sessionStorage) marad meg, a lap bezárásával törlődik –
  * közös tableten így nem maradhat meg a következő diáknak.
+ *
+ * UJITAS_CFG.kodEllenorzes = true: az ellenőrző karakter mellett a SZERVER is megmondja, hogy a kód létezik-e és az osztályé-e
+ * (Apps Script: ?akcio=kod). Beküldés nélküli oldalakon (pl. gyakorló felmérő) ez adja a „csak kóddal indítható” védelmet.
  */
 (function (U) {
   'use strict';
@@ -22,6 +25,24 @@
     get: function () { try { return sessionStorage.getItem(KULCS) || ''; } catch (e) { return ''; } },
     set: function (v) { try { sessionStorage.setItem(KULCS, v); } catch (e) { /* nem kritikus */ } },
   };
+  const OK_KULCS = 'ujitas_kod_ok';                          // a szerver által megerősített kód + osztály
+  const okTar = {
+    get: function () { try { return sessionStorage.getItem(OK_KULCS) || ''; } catch (e) { return ''; } },
+    set: function (v) { try { sessionStorage.setItem(OK_KULCS, v); } catch (e) { /* nem kritikus */ } },
+  };
+  const okJel = function (n) { return n + '|' + (U.cfg.classId || ''); };
+  /** 'ok' | 'rossz' (a szerver szerint nem érvényes) | 'hiba' (nem sikerült megkérdezni) */
+  async function szerverEllenorzes(n) {
+    const url = window.UJITAS_URL;
+    if (!url) return 'hiba';
+    try {
+      const ctl = new AbortController(), to = setTimeout(function () { ctl.abort(); }, 15000);
+      const r = await fetch(url + '?akcio=kod&kod=' + encodeURIComponent(n) + '&osztaly=' + encodeURIComponent(U.cfg.classId || ''), { cache: 'no-store', signal: ctl.signal });
+      clearTimeout(to);
+      const d = await r.json();
+      return d && d.ok === true ? 'ok' : (d && d.ok === false ? 'rossz' : 'hiba');
+    } catch (e) { return 'hiba'; }
+  }
 
   U.css('uj-azonosito',
     '.uj-kod{width:100%;box-sizing:border-box;margin-top:12px;padding:12px;border:2px solid #475569;border-radius:12px;' +
@@ -53,7 +74,20 @@
         msg.className = 'uj-uzenet' + (n.length === 8 ? (j ? ' uj-ok' : ' uj-hiba') : '');
         msg.textContent = n.length === 8 ? (j ? 'Rendben ✔' : 'Elgépelted a kódot, ellenőrizd még egyszer.') : '';
       };
-      const tovabb = function () { const n = norm(inp.value); if (ervenyes(n)) { tar.set(n); lezar(n); } };
+      const tovabb = async function () {
+        const n = norm(inp.value); if (!ervenyes(n)) return;
+        if (U.cfg.kodEllenorzes) {
+          ok.disabled = true; msg.className = 'uj-uzenet'; msg.textContent = 'Ellenőrzés…';
+          const v = await szerverEllenorzes(n);
+          if (v !== 'ok') {
+            ok.disabled = false; msg.className = 'uj-uzenet uj-hiba';
+            msg.textContent = v === 'rossz' ? 'Ez a kód nem érvényes ehhez a felméréshez.' : 'Nem sikerült ellenőrizni a kódot. Próbáld újra.';
+            return;
+          }
+          okTar.set(okJel(n));
+        }
+        tar.set(n); lezar(n);
+      };
       inp.addEventListener('input', frissit);
       inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') tovabb(); });
       ok.addEventListener('click', tovabb);
@@ -63,12 +97,13 @@
   }
 
   U.hook('indulas', async function () {
-    if (U.kod) return true;
+    const kell = !!U.cfg.kodEllenorzes;
+    if (U.kod && (!kell || U._kodOk)) return true;
     const mentett = norm(tar.get());
-    if (ervenyes(mentett)) { U.kod = mentett; return true; }
+    if (ervenyes(mentett) && (!kell || okTar.get() === okJel(mentett))) { U.kod = mentett; U._kodOk = true; return true; }
     const n = await kerdez();
     if (!n) return false;
-    U.kod = n;
+    U.kod = n; U._kodOk = kell;
     return true;
   });
   U._modulok.azonosito = true;

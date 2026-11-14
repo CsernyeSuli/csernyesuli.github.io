@@ -8,7 +8,7 @@
  *   indit() visszaadja: { lezar(ok) → eredmeny }                 a gyűjtő lap külső lezárásához (pl. lapváltás)
  * eredmeny: { feladat, cim, pont, max, helyes, ellenorzesek, ujra, lezaras, mp, reszek: [{kod, nev, pont, max}], elhelyezes }
  *
- * Pontozás: a halmazábra 4 részére részenként 2 pont jár, ha a részben pontosan a helyes számok vannak (összesen 8 pont).
+ * Pontozás: minden jó helyre kerülő szám 1 pont (10 szám, összesen 10 pont). A részekhez tartozó pont a részben jó helyen lévő számok száma.
  * Az Ellenőrzés csak azt mondja meg, hogy helyes-e (a rossz helyen lévő kártyákat nem mutatja); az elért pontszám az Értékelésnél látszik.
  * A számok megjelenítéséhez és besorolásához a tortek-motor.js-t használja (emeletes törtek, pontos számítás).
  */
@@ -27,7 +27,6 @@
     N:  'Negatív számok (csak)',
   };
   const ZONAK = ['R', 'E', 'EN', 'N'];
-  const ZONA_PONT = 2;
 
   /** Egy szám helye a halmazábrán az értéke alapján (pontos számolással, nem kézzel megadva). */
   function zonaSzamhoz(kif) {
@@ -95,11 +94,11 @@
   /** elhelyezes: { kartyaId: zóna | null } → { pont, max, helyes, reszek: [{kod, nev, pont, max}] } */
   function pontoz(elhelyezes) {
     const reszek = ZONAK.map(function (Z) {
-      const vart = KARTYAK.filter(function (k) { return k.zona === Z; }).map(function (k) { return k.id; }).sort().join(',');
-      const van = KARTYAK.filter(function (k) { return elhelyezes[k.id] === Z; }).map(function (k) { return k.id; }).sort().join(',');
-      return { kod: Z, nev: ZONA_NEV[Z], pont: vart === van ? ZONA_PONT : 0, max: ZONA_PONT };
+      const vart = KARTYAK.filter(function (k) { return k.zona === Z; });
+      const jo = vart.filter(function (k) { return elhelyezes[k.id] === Z; }).length;
+      return { kod: Z, nev: ZONA_NEV[Z], pont: jo, max: vart.length };
     });
-    const pont = reszek.reduce(function (a, r) { return a + r.pont; }, 0), max = ZONAK.length * ZONA_PONT;
+    const pont = reszek.reduce(function (a, r) { return a + r.pont; }, 0), max = KARTYAK.length;
     return { pont: pont, max: max, helyes: pont === max, reszek: reszek };
   }
 
@@ -142,7 +141,7 @@
     host.innerHTML =
       '<div class="hz">' +
       '<h2>Helyezd el a számokat a halmazábrában!</h2>' +
-      '<p class="hz-info">Értékelés: 2-2 pont a halmazábra egyes részeinek a számokkal való helyes kitöltése esetén. Összesen 8 pont.</p>' +
+      '<p class="hz-info">Értékelés: minden jó helyre kerülő szám 1-1 pont. Összesen 10 pont.</p>' +
       '<p style="font-size:14px;color:#94a3b8">Húzd a számkártyákat a halmazábra megfelelő részébe. A kártyákat a lezárásig szabadon mozgathatod, a halmazábrán kívülre húzott kártya visszakerül a tálcára.</p>' +
       '<div class="hz-wrap" data-hz="wrap"><div class="hz-board" data-hz="board" style="width:' + W + 'px;height:' + BH + 'px">' + svgEl +
       '<div class="hz-tray" style="top:' + TRAY_Y + 'px;height:' + (BH - TRAY_Y) + 'px"></div></div></div>' +
@@ -294,7 +293,7 @@
       host.innerHTML = '<div class="hz"><h2>Értékelés</h2>' +
         '<div class="hz-pont">Elért pontszám: ' + e.pont + ' / ' + e.max + '</div>' +
         '<div style="max-width:560px;margin:0 auto 12px">' + svgEl.replace('class="hz-svg" width="' + W + '" height="' + H + '"', 'style="width:100%;height:auto;display:block"').replace('</svg>', pontok + '</svg>') + '</div>' +
-        '<p style="text-align:center;font-size:14px;color:#94a3b8">A halmazábra mind a 4 része 2-2 pontot ér, ha pontosan a helyes számok vannak benne.</p>' +
+        '<p style="text-align:center;font-size:14px;color:#94a3b8">Minden jó helyre kerülő szám 1 pontot ér. A halmazábra egyes részeinél a bennük jó helyen álló számok pontjai látszanak.</p>' +
         '<div class="hz-gombok" style="justify-content:center"><button type="button" class="hz-gomb" data-hz="bezar">Bezárás</button></div></div>';
       const b = host.querySelector('[data-hz="bezar"]');
       b.addEventListener('click', function () { api.kesz(e); });
@@ -306,7 +305,7 @@
 
   window.UJITAS_FELADATOK = window.UJITAS_FELADATOK || {};
   window.UJITAS_FELADATOK.halmazabra = {
-    cim: 'Halmazábra', max: ZONAK.length * ZONA_PONT, indit: indit,
+    cim: 'Halmazábra', max: KARTYAK.length, indit: indit,
     _teszt: { kartyak: KARTYAK, zonaAt: zonaAt, helyek: helyek, pontoz: pontoz, otthon: otthon, meretek: { W: W, H: H, CW: CW, CH: CH, BH: BH } },   // csak a teszteléshez
   };
 })();

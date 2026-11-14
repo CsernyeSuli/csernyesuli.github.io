@@ -62,7 +62,7 @@
     const t = TIPUSOK[tipus] || TIPUSOK.anyag;
     const href = it ? biztonsagosLink(it.link) : '';
     const elo = it
-      ? esc(it.cim) + (it.leiras ? '<br>' + sortKieg(it.leiras) : '')
+      ? esc(it.cim) + (it.leiras ? '<br><br>' + sortKieg(it.leiras) : '')
       : 'Szerkesztés alatt';
     return '<div class="task-card ' + t.cls + '"' + (href ? ' data-href="' + esc(href) + '" tabindex="0" role="link"' : '') + '>' +
       '<h4>' + t.ikon + ' ' + t.cim + '</h4>' +

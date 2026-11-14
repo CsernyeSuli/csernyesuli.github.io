@@ -405,7 +405,7 @@
     ['szóköz', ' ', 'szóköz (vegyes szám: egész, szóköz, tört)', 'txt'], ['⌫', 'BACK', 'törlés', 'txt'],
   ];
   const billentyuHtml = function () {
-    return '<div class="sz-bill" role="group" aria-label="Műveleti jelek">' + KEYS.map(function (k) {
+    return '<div class="sz-bill" role="group" aria-label="Műveleti jelek" hidden>' + KEYS.map(function (k) {
       return '<button type="button" class="sz-bt' + (k[3] ? ' ' + k[3] : '') + '" data-k="' + esc(k[1]) + '" title="' + esc(k[2]) + '" aria-label="' + esc(k[2]) + '">' + k[0] + '</button>';
     }).join('') + '</div>' +
       '<p class="sz-sugo">Tört: <b>/</b> jellel (pl. 3/4) · vegyes szám: egész, <b>szóköz</b>, tört (pl. 2 1/3) · hatvány: <b>²</b> <b>³</b> gombbal vagy <b>^</b> jellel (pl. 4^5) · ' +
@@ -475,7 +475,16 @@
         if (!st.zarolt[k]) { tetelEl(k).className = 'sz-tetel'; host.querySelector('[data-jel="' + k + '"]').textContent = ''; }
         uzenet('', '');
       });
-      gyoker.addEventListener('focusin', function (e) { if (e.target.classList && e.target.classList.contains('sz-in')) utolsoMezo = e.target; });
+      const bill = gyoker.querySelector('.sz-bill');
+      gyoker.addEventListener('focusin', function (e) {
+        if (!e.target.classList || !e.target.classList.contains('sz-in')) return;
+        utolsoMezo = e.target;
+        if (bill) {                                                  // a gombsor közvetlenül a kiválasztott mező (és előnézete) alatt jelenik meg
+          const tet = e.target.closest('.sz-tetel');
+          if (bill.parentNode !== tet) tet.insertBefore(bill, tet.querySelector('.sz-jel'));
+          bill.hidden = false;
+        }
+      });
       gyoker.addEventListener('keydown', function (e) {                // Enter: következő mező
         if (e.key !== 'Enter' || !e.target.classList || !e.target.classList.contains('sz-in')) return;
         e.preventDefault();

@@ -173,7 +173,12 @@
             flex-grow: 1;
             white-space: pre-line;
         }
-
+/* Ha a szkript külön elemként hozza létre a címet a leírás előtt: */
+        .task-card .card-preview strong,
+        .task-card .card-preview span:first-child {
+            display: block;
+            margin-bottom: 10px; /* <--- Ez a távolság a Cím és a Leírás között */
+        }
         .click-hint {
             font-size: 0.8rem;
             color: #38bdf8;

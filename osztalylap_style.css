@@ -407,6 +407,7 @@ a:hover {
 .modal-title {
     text-align: center;
     background: linear-gradient(to right, #f472b6, #c084fc);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0 0 10px 0;
@@ -513,4 +514,10 @@ a:hover {
 .layout:has(.main-content:only-child) .main-content {
     max-width: 900px;
     width: 100%;
+}
+/* Automatikus sorkihagyás a kártyák címe és leírása között */
+.task-card .card-title, 
+.task-card .card-preview > *:first-child {
+    margin-bottom: 12px; 
+    display: block;
 }

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. osztály - Archív óra: Műveletek egész számokkal</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Közös külső stíluslap: https://csernyesuli.github.io/osztalylap_style.css -->
+    <link rel="stylesheet" href="../osztalylap_style.css">
+    <style>
+        /* Fejléc gombjai */
+        .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-back.btn-alt {
+            background-color: transparent;
+            border: 1px solid var(--accent-blue);
+            color: #38bdf8;
+        }
+        .btn-back.btn-alt:hover { background-color: #38bdf8; color: #0f172a; }
+        .back-row {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 25px; padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        @media (max-width: 768px) {
+            header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+
+        /* VENN DIAGRAM KÖZÖS (ALAP) STÍLUSOK */
+.venn-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #0f172a;
+    margin: 15px auto;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.venn-circle {
+    position: absolute;
+    border-radius: 50%;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.venn-circle-a {
+    border: 3px solid #2980b9;
+    background-color: rgba(41, 128, 185, 0.25);
+}
+
+.venn-circle-b {
+    border: 3px solid #27ae60;
+    background-color: rgba(39, 174, 96, 0.25);
+}
+
+.venn-label {
+    position: absolute;
+    color: white;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.venn-label-a { background-color: #2980b9; top: -18px; left: 15px; }
+.venn-label-b { background-color: #27ae60; top: -18px; right: 15px; }
+
+.venn-text {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    z-index: 2;
+}
+
+.venn-text-a { left: 25%; font-size: 15px; color: var(--text-color); }
+.venn-text-b { left: 75%; font-size: 14px; color: var(--text-color); text-align: center; line-height: 1.2; }
+.venn-text-ab { left: 50%; font-size: 13px; color: #a855f7; text-align: center; line-height: 1.2; z-index: 5; }
+.venn-text-out { position: absolute; bottom: 8px; left: 12px; font-weight: bold; font-size: 14px; color: #ef4444; z-index: 2; }
+
+
+/* --- ASZTALI / LAPTOP NÉZET (SZÉLES KIJELZŐ) --- */
+@media (min-width: 769px) {
+    .venn-container { height: 200px; }
+    .venn-circle { top: 15px; width: 54%; height: 170px; }
+    .venn-circle-a { left: 6%; }
+    .venn-circle-b { right: 6%; }
+    .venn-text-a { left: 22%; }
+    .venn-text-b { left: 78%; }
+    .venn-text-ab { width: 35%; font-size: 18px; }
+}
+
+
+/* --- MOBIL NÉZET (KESKENY KIJELZŐ) --- */
+@media (max-width: 768px) {
+    .venn-container { height: 170px; }
+    .venn-circle { top: 10px; width: 62%; height: 150px; }
+    .venn-circle-a { left: 4%; }
+    .venn-circle-b { right: 4%; }
+    .venn-text-a { left: 22%; }
+    .venn-text-b { left: 78%; }
+    .venn-text-ab { width: 40%; font-size: 12px; }
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2 style="margin:0;">6. Osztály - Matematika</h2>
+        <div class="header-buttons">
+            <a href="../ujitas/osztaly/6a/index.html" class="btn-back" id="back-alap">⬅ Vissza 6. ALAP oldalra</a>
+            <a href="../ujitas/osztaly/6h/index.html" class="btn-back" id="back-halado">⬅ Vissza 6. HALADÓ oldalra</a>
+        </div>
+    </header>
+
+    <div class="layout">
+        <main class="main-content">
+            <h3 class="date-title">📂 Archív óra anyaga (2026. 09. 25. - Műveletek egész számokkal)</h3>
+
+                    <!-- 1. FELADAT -->
+                    <div class="feladat-container">
+                        <h3>1. Feladat</h3>
+                        <p>Helyezd el a felsorolt számokat a címkéknek megfelelő halmazokba!<br>
+                        <strong>Felsorolt számok:</strong> \(-12, 8, 0, -7, 12, 6, -8, -6, 5, 3, -18, 7\)<br>
+                        <strong>A halmaz:</strong> abszolút értéke legalább 8<br>
+                        <strong>B halmaz:</strong> azok a számok, amelyeknek az ellentettje is szerepel a felsoroltak között</p>
+
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <h4>Helyes elrendezés a Venn-diagramban:</h4>
+
+                                <!-- Venn Diagram Doboz (Eszközfüggő automatikus méretezéssel) -->
+            <div class="venn-container">
+            <!-- A kör -->
+            <div class="venn-circle venn-circle-a">
+                <span class="venn-label venn-label-a">A</span>
+            </div>
+
+            <!-- B kör -->
+            <div class="venn-circle venn-circle-b">
+                <span class="venn-label venn-label-b">B</span>
+            </div>
+
+            <!-- Csak A elemei -->
+            <div class="venn-text venn-text-a">-18</div>
+
+            <!-- A és B metszete -->
+            <div class="venn-text venn-text-ab">-8, 8,<br>-12, 12</div>
+
+            <!-- Csak B elemei -->
+            <div class="venn-text venn-text-b">-6, 6,<br>-7, 7</div>
+
+            <!-- Halmazon kívüli elemek -->
+            <div class="venn-text-out">0, 3, 5</div>
+            </div>
+                                <!-- Részletes magyarázat -->
+                                <ul style="padding-left: 20px; font-size: 14px; color: var(--text-color); line-height: 1.6;">
+                                    <li><strong>A halmaz (Abszolút értéke legalább 8):</strong> \(-18, -8, 8, -12, 12\)</li>
+                                    <li><strong>B halmaz (Van ellentettje a listában):</strong> \(-8, 8, -12, 12, -6, 6, -7, 7, 0\)</li>
+                                    <li><strong>Metszet (A ∩ B):</strong> \(-8, 8, -12, 12\)</li>
+                                    <li><strong>Halmazon kívül:</strong> \(0, 3, 5\)</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 2. FELADAT -->
+                    <div class="feladat-container">
+                        <h3>2. Feladat</h3>
+                        <p>Számítsd ki!</p>
+
+                        <p><strong>a)</strong> \((-623) + (-412) =\)</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <ul>
+                                    <li><strong>Művelet:</strong> Két azonos előjelű (negatív) szám összeadása.</li>
+                                    <li><em>Előjelek összevonása:</em> Plusz és mínusz egymás mellett mínuszt eredményez: \((-623) - 412\).</li>
+                                    <li><em>Modellezés:</em> Összeadjuk a két szám abszolút értékét, az eredmény előjele negatív marad: \(623 + 412 = 1035\).</li>
+                                </ul>
+                                <p><strong>Végeredmény:</strong> \((-623) + (-412) = \mathbf{-1035}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>b)</strong> \((-846) - (-1234) =\)</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <ul>
+                                    <li><strong>Művelet:</strong> Kivonás negatív számból.</li>
+                                    <li><em>Előjelek összevonása:</em> A dupla mínusz pluszzá alakul: \(-(-1234) = +1234\).</li>
+                                    <li><strong>Köztes állapot:</strong> \(-846 + 1234\)</li>
+                                    <li><em>Modellezés:</em> Kivonjuk a kisebb abszolút értékűt a nagyobb abszolút értékűből: \(1234 - 846 = 388\).</li>
+                                </ul>
+                                <p><strong>Végeredmény:</strong> \((-846) - (-1234) = \mathbf{388}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>c)</strong> \((-47) \cdot (-34) =\)</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <ul>
+                                    <li><strong>Művelet:</strong> Két negatív szám szorzása. Mínusz szorozva mínusszal pluszt ad.</li>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> Érdemes észrevenni, hogy mindkét tényező negatív, így az eredmény eleve pozitív lesz, vagyis elegendő a pozitív számok szorzását elvégezni: \(47 \cdot 34\).</li>
+                                    <li><em>Számítás:</em> \(47 \cdot 34 = 1598\).</li>
+                                </ul>
+                                <p><strong>Végeredmény:</strong> \((-47) \cdot (-34) = \mathbf{1598}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>d)</strong> \(536 : (-8) =\)</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <ul>
+                                    <li><strong>Művelet:</strong> Pozitív szám osztása negatív számmal. Plusz osztva mínusszal mínuszt ad.</li>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> Először határozzuk meg az előjelet (mínusz), majd végezzük el az osztást: \(536 : 8 = 67\).</li>
+                                </ul>
+                                <p><strong>Végeredmény:</strong> \(536 : (-8) = \mathbf{-67}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>e)</strong> \((-612) + 35 - (-312) + 65 =\)</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <ul>
+                                    <li><em>Előjelek összevonása:</em> A \(-(-312)\)-ből \(+312\) lesz.</li>
+                                    <li><strong>Köztes állapot:</strong> \(-612 + 35 + 312 + 65\)</li>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> Ne sorban haladjunk, hanem csoportosítsuk a jól összetartozó (kerek eredményt adó) tagokat:
+                                        <ul>
+                                            <li>\((-612) + 312 = -300\)</li>
+                                            <li>\(35 + 65 = 100\)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Köztes állapot:</strong> \(-300 + 100 = -200\)</li>
+                                </ul>
+                                <p><strong>Végeredmény:</strong> \((-612) + 35 - (-312) + 65 = \mathbf{-200}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>f)</strong> \((-12) \cdot 45 : 15 =\)</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <ul>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> Mivel szorzás és osztás szerepel (azonos erősségű műveletek), nem kötelező szigorúan balról jobbra haladni! Ha előbb az osztást végezzük el, elkerüljük a nagy számokat:
+                                        <ul>
+                                            <li>\(45 : 15 = 3\)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Köztes állapot:</strong> Visszaírva a szorzatba: \((-12) \cdot 3\)</li>
+                                    <li><strong>Végső lépés:</strong> \((-12) \cdot 3 = -36\). (Sokkal egyszerűbb, mint \(-540 : 15\)-öt számolni!)</li>
+                                </ul>
+                                <p><strong>Végeredmény:</strong> \((-12) \cdot 45 : 15 = \mathbf{-36}\)</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 3. FELADAT -->
+                    <div class="feladat-container">
+                        <h3>3. Feladat</h3>
+                        <p>Végezd el a műveleteket, majd állítsd növekvő sorrendbe a feladatok eredményeit!</p>
+                        <p>\(A = (-123) \cdot (-3) + (-7) \cdot 0 \cdot 8\)<br>
+                           \(B = [(-13) + (-7)] : (-5) \cdot 4\)<br>
+                           \(C = 12 \cdot [(-17) - (-38)] + (-168) : 2\)</p>
+
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <p><strong>1. Az \(A\) kifejezés:</strong> \((-123) \cdot (-3) + (-7) \cdot 0 \cdot 8\)</p>
+                                <ul>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> A második tagban szerepel egy \(\cdot 0\) szorzás. Mivel bármilyen számot nullával szorozva a szorzat \(0\) lesz, a \((-7) \cdot 0 \cdot 8\) rész azonnal elhagyható (\(0\)-vá válik).</li>
+                                    <li>Így csak az első szorzást kell kiszámolni: \((-123) \cdot (-3) = 369\).</li>
+                                    <li><strong>Eredmény:</strong> \(A = 369\)</li>
+                                </ul>
+
+                                <p><strong>2. A \(B\) kifejezés:</strong> \([(-13) + (-7)] : (-5) \cdot 4\)</p>
+                                <ul>
+                                    <li><strong>Zárójel belseje:</strong> \((-13) + (-7) = -20\) (két adósság összeadódik).</li>
+                                    <li><strong>Köztes állapot:</strong> \((-20) : (-5) \cdot 4\)</li>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> Az osztás és a szorzás balról jobbra: \((-20) : (-5) = 4\), majd \(4 \cdot 4 = 16\).</li>
+                                    <li><strong>Eredmény:</strong> \(B = 16\)</li>
+                                </ul>
+
+                                <p><strong>3. A \(C\) kifejezés:</strong> \(12 \cdot [(-17) - (-38)] + (-168) : 2\)</p>
+                                <ul>
+                                    <li><strong>Zárójel belseje:</strong> \((-17) - (-38)\)
+                                        <ul>
+                                            <li><em>Előjel összevonás:</em> \(-(-38) = +38\), azaz \(-17 + 38 = 21\).</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Köztes állapot:</strong> \(12 \cdot 21 + (-168) : 2\)</li>
+                                    <li><strong>Tipp / Ésszerűsítés:</strong> Számoljuk ki a két tagot külön:
+                                        <ul>
+                                            <li>\(12 \cdot 21 = 252\)</li>
+                                            <li>\((-168) : 2 = -84\)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Köztes állapot:</strong> \(252 + (-84) = 252 - 84 = 168\)</li>
+                                    <li><strong>Eredmény:</strong> \(C = 168\)</li>
+                                </ul>
+
+                                <hr style="border-color: var(--border-color);">
+                                <p><strong>Növekvő sorrend:</strong> \(16 < 168 < 369 \quad \rightarrow \quad \mathbf{B < C < A}\)</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- 4. FELADAT -->
+                    <div class="feladat-container">
+                        <h3>4. Feladat</h3>
+                        <p>Írd le műveleti jelekkel, és számítsd ki!</p>
+
+                        <p><strong>a)</strong> Mennyit adjunk a \((-236)\)-hoz, hogy \(567\)-et kapjunk?</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <p>Egyneműsítés: \((-236) + x = 567 \implies x = 567 - (-236) = 567 + 236 = \mathbf{803}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>b)</strong> Mennyit adjunk az \(589\)-hez, hogy \((-42)\)-t kapjunk?</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <p>\(589 + x = -42 \implies x = (-42) - 589 = \mathbf{-631}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>c)</strong> Mennyi \((-43)\) és \(157\) összegének a háromszorosa?</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <p>\([(-43) + 157] \cdot 3 = 114 \cdot 3 = \mathbf{342}\)</p>
+                            </div>
+                        </details>
+
+                        <p style="margin-top: 15px;"><strong>d)</strong> Mennyi \((-208)\) felének és \(756\)-nak a különbsége?</p>
+                        <details>
+                            <summary>Megoldás megjelenítése / elrejtése</summary>
+                            <div class="solution-content">
+                                <p>\([(-208) : 2] - 756 = (-104) - 756 = \mathbf{-860}\)</p>
+                            </div>
+                        </details>
+                    </div>
+
+            <div class="back-row">
+                <a href="../ujitas/osztaly/6a/index.html" class="btn-back" id="back-alap-bottom">⬅ Vissza 6. ALAP oldalra</a>
+                <a href="../ujitas/osztaly/6h/index.html" class="btn-back" id="back-halado-bottom">⬅ Vissza 6. HALADÓ oldalra</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Az a gomb marad kiemelve, amelyik oldalról a látogató érkezett;
+        // a másik körvonalas (másodlagos) stílust kap. Ha nem ismert a
+        // forrás (pl. közvetlen link), mindkettő egyformán kiemelt marad.
+        (function () {
+            var ref = document.referrer || '';
+            var from = ref.indexOf('/6a/') !== -1 ? 'alap' : (ref.indexOf('/6h/') !== -1 ? 'halado' : '');
+            if (!from) return;
+            var other = from === 'alap' ? 'halado' : 'alap';
+            ['back-' + other, 'back-' + other + '-bottom'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.classList.add('btn-alt');
+            });
+        })();
+    </script>
+
+</body>
+</html>

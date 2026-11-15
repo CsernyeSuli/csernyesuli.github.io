@@ -8,6 +8,15 @@
     <!-- Közös külső stíluslap: https://csernyesuli.github.io/osztalylap_style.css -->
     <link rel="stylesheet" href="../osztalylap_style.css">
     <style>
+        /* Rögzített fejléc: görgetéskor is látszik */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        /* Horgonyra ugrásnál ne takarja el a fejléc a tartalmat */
+        html { scroll-padding-top: 80px; }
+
         /* Fejléc gombjai */
         .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-back.btn-alt {
@@ -16,14 +25,12 @@
             color: #38bdf8;
         }
         .btn-back.btn-alt:hover { background-color: #38bdf8; color: #0f172a; }
-        .back-row {
-            display: flex; gap: 10px; flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 25px; padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
         @media (max-width: 768px) {
-            header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            header { flex-direction: column; align-items: flex-start; gap: 8px; padding: 8px 12px; }
+            header h2 { font-size: 1rem; }
+            .header-buttons { gap: 6px; }
+            .header-buttons .btn-back { font-size: 0.8rem; padding: 6px 10px; }
+            html { scroll-padding-top: 110px; }
         }
 
         /* VENN DIAGRAM KÖZÖS (ALAP) STÍLUSOK */
@@ -349,11 +356,6 @@
                             </div>
                         </details>
                     </div>
-
-            <div class="back-row">
-                <a href="../ujitas/osztaly/6a/index.html" class="btn-back" id="back-alap-bottom">⬅ Vissza 6. ALAP oldalra</a>
-                <a href="../ujitas/osztaly/6h/index.html" class="btn-back" id="back-halado-bottom">⬅ Vissza 6. HALADÓ oldalra</a>
-            </div>
         </main>
     </div>
 
@@ -366,10 +368,8 @@
             var from = ref.indexOf('/6a/') !== -1 ? 'alap' : (ref.indexOf('/6h/') !== -1 ? 'halado' : '');
             if (!from) return;
             var other = from === 'alap' ? 'halado' : 'alap';
-            ['back-' + other, 'back-' + other + '-bottom'].forEach(function (id) {
-                var el = document.getElementById(id);
-                if (el) el.classList.add('btn-alt');
-            });
+            var el = document.getElementById('back-' + other);
+            if (el) el.classList.add('btn-alt');
         })();
     </script>
 

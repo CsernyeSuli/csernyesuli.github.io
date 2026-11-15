@@ -10,12 +10,18 @@
     <style>
         /* Rögzített fejléc: görgetéskor is látszik */
         header {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            box-sizing: border-box;
             z-index: 100;
         }
+        /* Hely a rögzített fejlécnek (a pontos magasságot a script állítja be) */
+        body { padding-top: var(--header-h, 70px); }
         /* Horgonyra ugrásnál ne takarja el a fejléc a tartalmat */
-        html { scroll-padding-top: 80px; }
+        html { scroll-padding-top: calc(var(--header-h, 70px) + 10px); }
 
         /* Fejléc gombjai */
         .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -26,11 +32,14 @@
         }
         .btn-back.btn-alt:hover { background-color: #38bdf8; color: #0f172a; }
         @media (max-width: 768px) {
-            header { flex-direction: column; align-items: flex-start; gap: 8px; padding: 8px 12px; }
-            header h2 { font-size: 1rem; }
-            .header-buttons { gap: 6px; }
-            .header-buttons .btn-back { font-size: 0.8rem; padding: 6px 10px; }
-            html { scroll-padding-top: 110px; }
+            header { padding: 8px 10px; }
+            header h2 { display: none; }
+            .header-buttons { width: 100%; gap: 8px; flex-wrap: nowrap; }
+            .header-buttons .btn-back {
+                flex: 1; text-align: center; font-size: 0.85rem;
+                padding: 8px 6px; white-space: nowrap;
+            }
+            .label-long { display: none; }
         }
 
         /* VENN DIAGRAM KÖZÖS (ALAP) STÍLUSOK */
@@ -72,8 +81,8 @@
     font-size: 11px;
 }
 
-.venn-label-a { background-color: #2980b9; top: -18px; left: 15px; }
-.venn-label-b { background-color: #27ae60; top: -18px; right: 15px; }
+.venn-label-a { background-color: #2980b9; top: 2px; left: 15px; }
+.venn-label-b { background-color: #27ae60; top: 2px; right: 15px; }
 
 .venn-text {
     position: absolute;
@@ -118,8 +127,8 @@
     <header>
         <h2 style="margin:0;">6. Osztály - Matematika</h2>
         <div class="header-buttons">
-            <a href="../ujitas/osztaly/6a/index.html" class="btn-back" id="back-alap">⬅ Vissza 6. ALAP oldalra</a>
-            <a href="../ujitas/osztaly/6h/index.html" class="btn-back" id="back-halado">⬅ Vissza 6. HALADÓ oldalra</a>
+            <a href="../ujitas/osztaly/6a/index.html" class="btn-back" id="back-alap">⬅ <span class="label-long">Vissza </span>6. ALAP<span class="label-long"> oldalra</span></a>
+            <a href="../ujitas/osztaly/6h/index.html" class="btn-back" id="back-halado">⬅ <span class="label-long">Vissza </span>6. HALADÓ<span class="label-long"> oldalra</span></a>
         </div>
     </header>
 
@@ -363,6 +372,18 @@
         // Az a gomb marad kiemelve, amelyik oldalról a látogató érkezett;
         // a másik körvonalas (másodlagos) stílust kap. Ha nem ismert a
         // forrás (pl. közvetlen link), mindkettő egyformán kiemelt marad.
+        // A rögzített fejléc magasságának mérése, hogy a tartalom ne csússzon alá
+        (function () {
+            var header = document.querySelector('header');
+            function setH() {
+                document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+            }
+            setH();
+            window.addEventListener('resize', setH);
+            window.addEventListener('load', setH);
+            if (window.ResizeObserver) new ResizeObserver(setH).observe(header);
+        })();
+
         (function () {
             var ref = document.referrer || '';
             var from = ref.indexOf('/6a/') !== -1 ? 'alap' : (ref.indexOf('/6h/') !== -1 ? 'halado' : '');

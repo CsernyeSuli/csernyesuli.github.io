@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. osztály – Archív: Műveleti sorrend egész számokkal (órai)</title>
+    <link rel="stylesheet" href="../osztalylap_style.css">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --accent-blue: #0284c7;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ===== RÖGZÍTETT FEJLÉC ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #1e293b;
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+            color: #f1f5f9;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-back {
+            background-color: var(--accent-blue);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+
+        .btn-back:hover {
+            background-color: #38bdf8;
+            color: #0f172a;
+        }
+
+        .txt-short { display: none; }
+
+        /* ===== TARTALOM ===== */
+        .page {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px 40px;
+        }
+
+        .page-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .page-card h2 {
+            color: #38bdf8;
+            margin-top: 0;
+        }
+
+        .tablakepek {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tablakepek-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .tablakepek img {
+            max-width: 85%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Megoldás megjelenítése / elrejtése */
+        input[type="checkbox"]:checked + label + .hf-megoldas-doboz {
+            display: block !important;
+        }
+        input[type="checkbox"]:checked + label {
+            background-color: #ef4444 !important;
+        }
+        input[type="checkbox"]:checked + label::after {
+            content: " elrejtése";
+        }
+        input[type="checkbox"]:not(:checked) + label::after {
+            content: " megjelenítése";
+        }
+
+        mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+        /* ===== MOBIL ===== */
+        @media (max-width: 768px) {
+            header {
+                position: fixed;       /* sticky helyett fixed */
+                top: 0;
+                left: 0;
+                right: 0;
+                padding: 8px 10px;
+            }
+
+            header h1 { display: none; }   /* "Matematika" cím eltűnik */
+
+            .header-buttons {
+                width: 100%;
+                gap: 8px;
+            }
+
+            .btn-back {
+                flex: 1 1 0;           /* egyenlő szélesség, egy sorban */
+                padding: 10px 6px;
+                font-size: 14px;
+            }
+
+            .txt-full  { display: none; }
+            .txt-short { display: inline; }
+
+            .page { margin-top: 12px; padding: 0 10px 30px; }
+            .page-card { padding: 14px; }
+            .tablakepek img { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- RÖGZÍTETT FEJLÉC -->
+    <header id="oldal-fejlec">
+        <h1>Matematika</h1>
+        <div class="header-buttons">
+            <a href="../ujitas/osztaly/6a/index.html" class="btn-back">
+                <span class="txt-short">⬅ 6. ALAP</span>
+                <span class="txt-full">⬅ Vissza a 6. ALAP oldalra</span>
+            </a>
+            <a href="../ujitas/osztaly/6h/index.html" class="btn-back">
+                <span class="txt-short">⬅ 6. HALADÓ</span>
+                <span class="txt-full">⬅ Vissza a 6. HALADÓ oldalra</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="page">
+        <div class="page-card">
+            <h2>📘 Órai feladatok</h2>
+            <p><strong>Cím / Téma:</strong> Műveleti sorrend egész számokkal</p>
+
+            <hr style="border-color: var(--border-color); margin: 15px 0;">
+
+            <!-- TÁBLAKÉPEK -->
+            <div class="tablakepek">
+                <p style="text-align: left;"><strong>Táblaképek:</strong></p>
+                <div class="tablakepek-lista">
+                    <img src="img/26_10_16_1_opt.png" alt="Műveletek sorrendje piramis">
+                    <img src="img/26_10_16_2_opt.png" alt="Műveletek feladatsor">
+                </div>
+            </div>
+
+            <hr style="border-color: var(--border-color); margin: 15px 0;">
+
+            <!-- FELADATOK ÉS LEVEZETÉSEK -->
+            <div style="text-align: left; margin-top: 15px; font-family: Arial, sans-serif;">
+                <div style="font-weight: bold; margin-bottom: 15px; color: #f1f5f9; font-size: 18px;">Részletes levezetések:</div>
+
+                <!-- 1. FELADAT -->
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">1) \(200 - 90 \cdot (-3) =\)</div>
+                    <input type="checkbox" id="of-sol-1" style="display:none;">
+                    <label for="of-sol-1" style="display:inline-block; background-color: #0284c7; color: white; padding: 6px 14px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div class="hf-megoldas-doboz" style="display:none; margin-top: 12px; padding: 12px; background-color: rgba(15, 23, 42, 0.9); border-left: 4px solid #22c55e; border-radius: 4px; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                        <strong style="color: #4ade80;">Levezetés és magyarázat:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>1. Lépés (Szorzás):</strong> Először a szorzást végezzük el: \(90 \cdot (-3) = -270\).</li>
+                            <li><strong>Köztes állapot:</strong> Behelyettesítve a műveletbe: \[ 200 - (-270) \]</li>
+                            <li><strong>2. Lépés (Kivonás):</strong> A negatív szám kivonása hozzáadássá alakul: \(200 + 270 = 470\).</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Végeredmény:</strong> \[ 200 - 90 \cdot (-3) = \mathbf{470} \]</p>
+                    </div>
+                </div>
+
+                <!-- 2. FELADAT -->
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">2) \(-4 \cdot (10 - 15) - 7 \cdot (-5) =\)</div>
+                    <input type="checkbox" id="of-sol-2" style="display:none;">
+                    <label for="of-sol-2" style="display:inline-block; background-color: #0284c7; color: white; padding: 6px 14px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div class="hf-megoldas-doboz" style="display:none; margin-top: 12px; padding: 12px; background-color: rgba(15, 23, 42, 0.9); border-left: 4px solid #22c55e; border-radius: 4px; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                        <strong style="color: #4ade80;">Levezetés és magyarázat:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>1. Lépés (Zárójel):</strong> Kiszámoljuk a zárójelet: \(10 - 15 = -5\).</li>
+                            <li><strong>Köztes állapot:</strong> \[ -4 \cdot (-5) - 7 \cdot (-5) \]</li>
+                            <li><strong>2. Lépés (Szorzások):</strong> \(-4 \cdot (-5) = 20\) és \(7 \cdot (-5) = -35\).</li>
+                            <li><strong>Köztes állapot:</strong> \[ 20 - (-35) \]</li>
+                            <li><strong>3. Lépés (Kivonás):</strong> \(20 + 35 = 55\).</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Végeredmény:</strong> \[ -4 \cdot (10 - 15) - 7 \cdot (-5) = \mathbf{55} \]</p>
+                    </div>
+                </div>
+
+                <!-- 3. FELADAT -->
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">3) \(-154 - 77 : 11 =\)</div>
+                    <input type="checkbox" id="of-sol-3" style="display:none;">
+                    <label for="of-sol-3" style="display:inline-block; background-color: #0284c7; color: white; padding: 6px 14px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div class="hf-megoldas-doboz" style="display:none; margin-top: 12px; padding: 12px; background-color: rgba(15, 23, 42, 0.9); border-left: 4px solid #22c55e; border-radius: 4px; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                        <strong style="color: #4ade80;">Levezetés és magyarázat:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>1. Lépés (Osztás):</strong> Az osztás erősebb: \(77 : 11 = 7\).</li>
+                            <li><strong>Köztes állapot:</strong> Beírva a feladatba: \[ -154 - 7 \]</li>
+                            <li><strong>2. Lépés (Kivonás):</strong> \(-154 - 7 = -161\).</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Végeredmény:</strong> \[ -154 - 77 : 11 = \mathbf{-161} \]</p>
+                    </div>
+                </div>
+
+                <!-- 4. FELADAT -->
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">4) \(3 \cdot 0 \cdot 4 - (-6) \cdot 10 =\)</div>
+                    <input type="checkbox" id="of-sol-4" style="display:none;">
+                    <label for="of-sol-4" style="display:inline-block; background-color: #0284c7; color: white; padding: 6px 14px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div class="hf-megoldas-doboz" style="display:none; margin-top: 12px; padding: 12px; background-color: rgba(15, 23, 42, 0.9); border-left: 4px solid #22c55e; border-radius: 4px; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                        <strong style="color: #4ade80;">Levezetés és magyarázat:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>1. Lépés (Bal oldali szorzás):</strong> Mivel nullával szorzunk: \(3 \cdot 0 \cdot 4 = 0\).</li>
+                            <li><strong>2. Lépés (Jobb oldali szorzás):</strong> \((-6) \cdot 10 = -60\).</li>
+                            <li><strong>Köztes állapot:</strong> \[ 0 - (-60) \]</li>
+                            <li><strong>3. Lépés (Kivonás):</strong> \(0 + 60 = 60\).</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Végeredmény:</strong> \[ 3 \cdot 0 \cdot 4 - (-6) \cdot 10 = \mathbf{60} \]</p>
+                    </div>
+                </div>
+
+                <!-- 5. FELADAT -->
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">5) \((-25) + (-19) \cdot 2 =\)</div>
+                    <input type="checkbox" id="of-sol-5" style="display:none;">
+                    <label for="of-sol-5" style="display:inline-block; background-color: #0284c7; color: white; padding: 6px 14px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div class="hf-megoldas-doboz" style="display:none; margin-top: 12px; padding: 12px; background-color: rgba(15, 23, 42, 0.9); border-left: 4px solid #22c55e; border-radius: 4px; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                        <strong style="color: #4ade80;">Levezetés és magyarázat:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>1. Lépés (Szorzás):</strong> Először a szorzást végezzük el: \((-19) \cdot 2 = -38\).</li>
+                            <li><strong>Köztes állapot:</strong> \[ (-25) + (-38) \]</li>
+                            <li><strong>2. Lépés (Összeadás):</strong> Két negatív szám összeadása: \(-25 - 38 = -63\).</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Végeredmény:</strong> \[ (-25) + (-19) \cdot 2 = \mathbf{-63} \]</p>
+                    </div>
+                </div>
+
+                <!-- 6. FELADAT -->
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #e2e8f0;">6) \((45 - 60 : 5) : (-11) =\)</div>
+                    <input type="checkbox" id="of-sol-6" style="display:none;">
+                    <label for="of-sol-6" style="display:inline-block; background-color: #0284c7; color: white; padding: 6px 14px; font-size: 13px; border-radius: 5px; cursor: pointer; user-select: none;">Megoldás</label>
+                    <div class="hf-megoldas-doboz" style="display:none; margin-top: 12px; padding: 12px; background-color: rgba(15, 23, 42, 0.9); border-left: 4px solid #22c55e; border-radius: 4px; font-size: 14px; color: #e2e8f0; line-height: 1.6;">
+                        <strong style="color: #4ade80;">Levezetés és magyarázat:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>1. Lépés (Zárójelen belüli osztás):</strong> \(60 : 5 = 12\).</li>
+                            <li><strong>Köztes állapot (zárójelben):</strong> \(45 - 12 = 33\).</li>
+                            <li><strong>Köztes állapot:</strong> \[ 33 : (-11) \]</li>
+                            <li><strong>2. Lépés (Osztás):</strong> Pozitív szám osztva negatívval: \(33 : (-11) = -3\).</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Végeredmény:</strong> \[ (45 - 60 : 5) : (-11) = \mathbf{-3} \]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        /* A fejléc magasságát megmérjük, és mobilon ugyanennyi helyet
+           hagyunk az oldal tetején, hogy a tartalom ne csússzon alá. */
+        (function () {
+            var fejlec = document.getElementById('oldal-fejlec');
+            var mobil = window.matchMedia('(max-width: 768px)');
+
+            function igazit() {
+                document.body.style.paddingTop = mobil.matches ? fejlec.offsetHeight + 'px' : '0';
+            }
+
+            window.addEventListener('load', igazit);
+            window.addEventListener('resize', igazit);
+            window.addEventListener('orientationchange', igazit);
+            if (window.ResizeObserver) new ResizeObserver(igazit).observe(fejlec);
+            igazit();
+        })();
+    </script>
+
+</body>
+</html>

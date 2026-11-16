@@ -1,0 +1,549 @@
+/**
+ * UJITAS_FELADATLAPOK – KÖZPONTI Google Apps Script (web app: doPost + doGet)
+ * Hibrid verzió: támogatja a kódos és a hagyományos (kód nélküli) beküldéseket is.
+ */
+
+const CONFIG = {
+  ROOT_FOLDER: 'Ujitas_Feladatlapok',
+  MASTER_NAME: 'Torzs',
+  TEACHER_EMAIL: 'csernyei.iskola@gmail.com',
+  SEND_EMAIL: true,
+  SHEET_STUDENTS: 'Diakok',
+  SHEET_CONTENT: 'Tartalom',
+  SHEET_REJECTED: 'Elutasitott',
+  SHEET_LOG: 'Log',
+  SHEET_IDLOG: 'Id_Log',
+  MAX_TASKS: 30,
+  MAX_TEXT: 2000,
+  CONTENT_CACHE_SECONDS: 60,
+  PRACTICE_NOTE: '[GYAKORLÁS - Nem számít]',
+};
+
+/** Engedélyezett osztályazonosítók (beleértve a régi, kód nélküli 6. és 8. osztályos elnevezéseket is). */
+const CLASSES = { 
+  '6a': '6. osztály alap', '6h': '6. osztály haladó', '7': '7. osztály', '8': '8. osztály',
+  '6_alap': '6. osztály alap', '6_halado': '6. osztály haladó', '8_osztaly': '8. osztály'
+};
+
+/** Megjelenítési sorrend. */
+const CLASS_ORDER = ['6a', '6h', '7', '8', '6_alap', '6_halado', '8_osztaly'];
+
+function isTeacherClass_(v) { return /^(tan[aá]r|\*)$/i.test(String(v == null ? '' : v).trim()); }
+const REASONS = { befejezve: 'Befejezve (minden feladat)', lapvaltas: 'Idő előtt lezárva (lapváltás / kilépés)' };
+
+const STUDENT_HEADERS = ['Azonosító', 'Kód', 'Név', 'Osztály', 'Aktív', 'Megjegyzés'];
+const CONTENT_HEADERS = ['Osztály', 'Dátum', 'Típus', 'Cím', 'Leírás', 'Link', 'Állapot'];
+const CONTENT_TYPES = ['orai', 'hazi', 'szorgalmi', 'felmero', 'anyag'];
+const CONTENT_STATES = ['aktív', 'archív', 'rejtett'];
+const REJECT_HEADERS = ['Idő', 'Ok', 'Beírt kód (maszkolva)', 'Osztály', 'Típus', 'submissionId'];
+const LOG_HEADERS = ['Idő', 'Típus', 'submissionId', 'Üzenet'];
+const ID_HEADERS = ['Kulcs (diák|feladatsor|típus)', 'submissionId', 'Fogadás ideje', 'Diák azonosító', 'Diák neve',
+                    'Feladatsor', 'Pontszám', 'Státusz', 'E-mail állapota'];
+const SHEET_HEADERS = ['Fogadás ideje (szerver)', 'Beküldés ideje (kliens)', 'Feladat típusa', 'Cím', 'Feladatsor',
+                       'Pontszám', 'Összesen', 'Minősítés', 'Státusz', 'Lezárás oka', 'submissionId', 'Részletek'];
+
+/* ===================== KÓDOK ===================== */
+
+const CODE_ALPHABET = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+const CODE_BODY_LEN = 7;
+
+function codeCheckChar_(body) {
+  let s = 0;
+  for (let i = 0; i < body.length; i++) {
+    const v = CODE_ALPHABET.indexOf(body.charAt(i));
+    if (v < 0) return '';
+    s += (i + 1) * v;
+  }
+  return CODE_ALPHABET.charAt(s % CODE_ALPHABET.length);
+}
+function normalizeCode_(raw) { return String(raw == null ? '' : raw).toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function codeIsWellFormed_(n) { return n.length === CODE_BODY_LEN + 1 && codeCheckChar_(n.slice(0, CODE_BODY_LEN)) === n.charAt(CODE_BODY_LEN); }
+function formatCode_(n) { return n.slice(0, 4) + '-' + n.slice(4); }
+function maskCode_(raw) {
+  const n = normalizeCode_(raw);
+  return n ? n.slice(0, 2) + '*'.repeat(Math.max(0, n.length - 2)) : '';
+}
+function newCode_() {
+  const hex = Utilities.getUuid().replace(/-/g, '');
+  let body = '';
+  for (let i = 0; i < CODE_BODY_LEN; i++) body += CODE_ALPHABET.charAt(parseInt(hex.substr(i * 2, 2), 16) % CODE_ALPHABET.length);
+  return body + codeCheckChar_(body);
+}
+
+/* ===================== BELÉPÉSI PONTOK ===================== */
+
+function doPost(e) {
+  let p = null, master = null, ss = null, idRow = null, isFirst = false;
+  const lock = LockService.getScriptLock();
+
+  try {
+    p = parsePayload_(e);
+    lock.waitLock(25000);
+    try {
+      master = getMaster_();
+
+      // --- HIBRID AZONOSÍTÁS ---
+      let reject = '';
+      let student = null;
+
+      if (p.codeRaw) {
+        // 1. Eset: Kódos beküldés (pl. 7. osztály)
+        if (!codeIsWellFormed_(p.normCode)) reject = 'hibás kódformátum';
+        else if (!(student = findStudent_(master, p.normCode))) reject = 'ismeretlen kód';
+        else if (!student.active) reject = 'inaktív diák';
+        else if (!student.teacher && student.classId !== p.classId) reject = 'másik osztály kódja';
+        else if (!student.id) throw new Error('A Diakok lapon hiányzik a(z) "' + student.name + '" azonosítója – futtasd a kodokGeneralasa()-t.');
+        
+        if (reject) {
+          writeRow_(ensureSheet_(master, CONFIG.SHEET_REJECTED, REJECT_HEADERS),
+            [new Date(), reject, maskCode_(p.codeRaw), p.classId, p.assignmentType, p.submissionId], [1], []);
+          return json_({ ok: false, error: 'azonosítás' });
+        }
+        p.name = student.name; 
+        p.studentId = student.id; 
+        p.teacher = !!student.teacher;
+      } else {
+        // 2. Eset: Hagyományos név+osztály alapú beküldés (pl. 6. és 8. osztály)
+        if (!p.name) throw new Error('Hiányzó diák név.');
+        p.studentId = 'hagyomanyos';
+        p.teacher = false;
+      }
+
+      // Közös beállítások a szétválasztás után
+      p.sheetName = studentSheetName_(p.name, p.classId);
+      p.key = (p.studentId !== 'hagyomanyos' ? p.studentId : p.name) + '|' + p.setId + '|' + p.assignmentType;
+
+      ss = getClassSpreadsheet_(p.classId);
+      const idSheet = ensureSheet_(ss, CONFIG.SHEET_IDLOG, ID_HEADERS);
+      if (inColumn_(idSheet, 2, p.submissionId)) {
+        log_(ss, 'DUPLIKÁLT', p.submissionId, 'Már feldolgozott beküldés, kihagyva.');
+        return json_({ ok: true, duplicate: true });
+      }
+      isFirst = p.teacher ? true : !inColumn_(idSheet, 1, p.key);
+      const status = p.teacher ? 'TESZT' : (isFirst ? 'ÉLES' : 'GYAKORLÁS');
+
+      appendStudentRow_(ss, p, status);
+      idRow = writeRow_(idSheet,
+        [p.key, p.submissionId, new Date(), p.studentId, p.name, p.setId, p.score,
+         status, isFirst ? 'függőben' : 'nincs (gyakorlás)'],
+        [3], [7]);
+      SpreadsheetApp.flush();
+    } finally {
+      lock.releaseLock();
+    }
+
+    if (isFirst) {
+      let status = 'kikapcsolva';
+      if (CONFIG.SEND_EMAIL) {
+        try { sendEmail_(p); status = 'elküldve'; }
+        catch (err) { status = 'HIBA'; log_(ss, 'E-MAIL HIBA', p.submissionId, String(err)); }
+      }
+      ss.getSheetByName(CONFIG.SHEET_IDLOG).getRange(idRow, 9).setValue(status);
+    }
+    return json_({ ok: true, first: isFirst });
+
+  } catch (err) {
+    let target = ss || master;
+    if (!target) { try { target = getMaster_(); } catch (e2) {} }
+    log_(target, 'HIBA', p ? p.submissionId : '', String(err && err.stack || err));
+    return json_({ ok: false, error: 'szerverhiba' });
+  }
+}
+
+function doGet(e) {
+  try {
+    const q = (e && e.parameter) || {};
+    if (q.akcio === 'tartalom') return json_(getContent_(String(q.osztaly || '')));
+    if (q.akcio === 'kod') return json_(checkCode_(String(q.kod || ''), String(q.osztaly || '')));
+  } catch (err) {
+    log_(null, 'GET HIBA', '', String(err));
+    return json_({ ok: false, error: 'szerverhiba' });
+  }
+  return ContentService.createTextOutput('A szolgáltatás működik.');
+}
+
+/* ===================== BEMENET ===================== */
+
+function clean_(v, max) { return String(v == null ? '' : v).slice(0, max || CONFIG.MAX_TEXT); }
+function cleanArr_(a) { return Array.isArray(a) ? a.slice(0, 20).map(function (x) { return clean_(x, 300); }) : []; }
+
+function parsePayload_(e) {
+  if (!e || !e.postData || !e.postData.contents) throw new Error('Üres kérés.');
+  const p = JSON.parse(e.postData.contents);
+
+  const submissionId = clean_(p.submissionId, 100);
+  if (!submissionId) throw new Error('Hiányzik a submissionId.');
+  const classId = clean_(p.classId || (p.student && p.student.class), 20);
+  if (!Object.prototype.hasOwnProperty.call(CLASSES, classId)) throw new Error('Ismeretlen vagy hiányzó classId: ' + classId);
+  const assignmentType = clean_(p.assignmentType || p.taskType, 60);
+  if (!/^[A-Za-z0-9_-]{1,60}$/.test(assignmentType)) throw new Error('Hiányzó vagy érvénytelen assignmentType.');
+  const setId = clean_(p.setId != null ? p.setId : p.group, 40);
+  if (!/^[A-Za-z0-9_.-]{1,40}$/.test(setId)) throw new Error('Hiányzó vagy érvénytelen setId.');
+
+  const codeRaw = clean_(p.code, 30);
+  const score = Number(p.score) || 0, total = Number(p.total) || 0;
+  const rawTasks = (Array.isArray(p.tasks) ? p.tasks : [])
+    .filter(function (t) { return t && typeof t === 'object'; }).slice(0, CONFIG.MAX_TASKS);
+
+  const studentName = clean_(p.name || p.studentName || (p.student && p.student.name) || '', 100);
+
+  return {
+    submissionId: submissionId, sentAt: clean_(p.sentAt, 40),
+    classId: classId, assignmentType: assignmentType, setId: setId,
+    taskTitle: clean_(p.taskTitle, 60).replace(/[\r\n]+/g, ' ').trim() || 'Feladatlap',
+    codeRaw: codeRaw, normCode: normalizeCode_(codeRaw),
+    name: studentName,
+    studentName: studentName,
+    score: score, total: total,
+    grade: clean_(p.grade, 100).replace(/[\r\n]+/g, ' ').trim() || (score + ' / ' + total),
+    reason: REASONS[p.reason] ? p.reason : 'befejezve',
+    tasks: rawTasks.map(function (t) {
+      return {
+        expression: clean_(t.expression, 200), correct: !!t.correct,
+        finalAnswer: clean_(t.finalAnswer, 50), correctAnswer: clean_(t.correctAnswer, 50),
+        seconds: Number(t.seconds) || 0, stepErrors: clean_(t.stepErrors, 300),
+        studentLines: cleanArr_(t.studentLines || t.studentSteps), correctLines: cleanArr_(t.correctLines), feedback: cleanArr_(t.feedback),
+      };
+    }),
+  };
+}
+
+function studentSheetName_(name, classId) {
+  const c = function (s) { return String(s).trim().replace(/\s+/g, '_').replace(/[^\p{L}\p{N}_-]/gu, ''); };
+  let n = [c(name), c(classId)].filter(Boolean).join('_').slice(0, 90) || 'Ismeretlen';
+  if (n === CONFIG.SHEET_IDLOG || n === CONFIG.SHEET_LOG) n = 'D_' + n;
+  return n;
+}
+
+function findStudent_(master, normCode) {
+  const sh = master.getSheetByName(CONFIG.SHEET_STUDENTS);
+  if (!sh) return null;
+  const v = sh.getDataRange().getValues();
+  for (let i = 1; i < v.length; i++) {
+    if (normalizeCode_(v[i][1]) === normCode) {
+      return {
+        id: String(v[i][0]).trim(), name: String(v[i][2]).trim(), classId: String(v[i][3]).trim(),
+        active: !/^(nem|n|0|false|hamis)$/i.test(String(v[i][4]).trim()),
+        teacher: isTeacherClass_(v[i][3]),
+      };
+    }
+  }
+  return null;
+}
+
+/* ===================== KÓD ELLENŐRZÉSE (GET) ===================== */
+
+function checkCode_(rawCode, classId) {
+  const n = normalizeCode_(rawCode);
+  let ok = false, ok_ = '';
+  const master = getMaster_();
+  if (!Object.prototype.hasOwnProperty.call(CLASSES, classId)) ok_ = 'ismeretlen osztály';
+  else if (!codeIsWellFormed_(n)) ok_ = 'hibás kódformátum';
+  else {
+    const st = findStudent_(master, n);
+    if (!st) ok_ = 'ismeretlen kód';
+    else if (!st.active) ok_ = 'inaktív diák';
+    else if (!st.teacher && st.classId !== classId) ok_ = 'másik osztály kódja';
+    else ok = true;
+  }
+  if (!ok) {
+    const lock = LockService.getScriptLock();
+    try {
+      lock.waitLock(5000);
+      writeRow_(ensureSheet_(master, CONFIG.SHEET_REJECTED, REJECT_HEADERS),
+        [new Date(), 'kódellenőrzés: ' + ok_, maskCode_(rawCode), classId.slice(0, 20), '', ''], [1], []);
+    } catch (e) {}
+    finally { try { lock.releaseLock(); } catch (e2) {} }
+  }
+  return { ok: ok };
+}
+
+/* ===================== TARTALOMJEGYZÉK (GET) ===================== */
+
+function getContent_(classId) {
+  if (!Object.prototype.hasOwnProperty.call(CLASSES, classId)) return { ok: false, error: 'ismeretlen osztály' };
+  const cache = CacheService.getScriptCache(), ckey = 'tartalom_' + classId;
+  const hit = cache.get(ckey);
+  if (hit) return JSON.parse(hit);
+
+  const sh = getMaster_().getSheetByName(CONFIG.SHEET_CONTENT);
+  const rows = sh ? sh.getDataRange().getValues().slice(1) : [];
+  const tz = Session.getScriptTimeZone();
+  const items = rows.filter(function (r) {
+    const st = String(r[6]).trim() || 'aktív';
+    return String(r[0]).trim() === classId && st !== 'rejtett' && String(r[3]).trim();
+  }).map(function (r) {
+    const d = r[1] instanceof Date ? Utilities.formatDate(r[1], tz, 'yyyy-MM-dd') : String(r[1]).trim();
+    return { datum: d, tipus: String(r[2]).trim(), cim: String(r[3]).trim(), leiras: String(r[4]).trim(),
+             link: String(r[5]).trim(), allapot: String(r[6]).trim() || 'aktív' };
+  }).sort(function (a, b) { return a.datum < b.datum ? 1 : (a.datum > b.datum ? -1 : 0); });
+
+  const out = { ok: true, osztaly: classId, items: items };
+  cache.put(ckey, JSON.stringify(out), CONFIG.CONTENT_CACHE_SECONDS);
+  return out;
+}
+
+/* ===================== TÁBLÁZAT ===================== */
+
+function appendStudentRow_(ss, p, status) {
+  const sh = ensureSheet_(ss, p.sheetName, SHEET_HEADERS);
+  const details = p.tasks.map(function (t, i) {
+    return (i + 1) + '. ' + (t.correct ? '✔' : '✘') + ' ' + t.expression + ' | válasz: ' + (t.finalAnswer || '—') +
+           ' | helyes: ' + t.correctAnswer + ' | ' + t.seconds + ' mp' +
+           (t.studentLines.length ? ' | lépések: ' + t.studentLines.join(' ⏎ ') : '') +
+           (t.stepErrors ? ' | hibák: ' + t.stepErrors : '');
+  }).join('\n').slice(0, 20000);
+  writeRow_(sh, [new Date(), safeDate_(p.sentAt), p.assignmentType, p.taskTitle, p.setId, p.score, p.total, p.grade,
+                 status, REASONS[p.reason] + (status === 'GYAKORLÁS' ? ' ' + CONFIG.PRACTICE_NOTE : ''),
+                 p.submissionId, details], [1, 2], [6, 7]);
+}
+
+function writeRow_(sh, values, dateCols, numCols) {
+  const r = sh.getLastRow() + 1;
+  const fm = [values.map(function (_, i) {
+    const c = i + 1;
+    return dateCols.indexOf(c) >= 0 ? 'yyyy-mm-dd hh:mm:ss' : (numCols.indexOf(c) >= 0 ? '0' : '@');
+  })];
+  sh.getRange(r, 1, 1, values.length).setNumberFormats(fm).setValues([values]);
+  return r;
+}
+
+/* ===================== DRIVE ===================== */
+
+function getRootFolder_() {
+  const props = PropertiesService.getScriptProperties();
+  const id = props.getProperty('ROOT_FOLDER_ID');
+  if (id) { try { const f = DriveApp.getFolderById(id); if (!f.isTrashed()) return f; } catch (e) {} }
+  const it = DriveApp.getFoldersByName(CONFIG.ROOT_FOLDER);
+  const folder = it.hasNext() ? it.next() : DriveApp.createFolder(CONFIG.ROOT_FOLDER);
+  props.setProperty('ROOT_FOLDER_ID', folder.getId());
+  return folder;
+}
+
+function getSpreadsheetByName_(name, firstSheet, firstHeaders) {
+  const props = PropertiesService.getScriptProperties(), key = 'SS_ID_' + name;
+  const cached = props.getProperty(key);
+  if (cached) { try { if (!DriveApp.getFileById(cached).isTrashed()) return SpreadsheetApp.openById(cached); } catch (e) {} }
+
+  const root = getRootFolder_();
+  const it = root.getFilesByName(name);
+  while (it.hasNext()) {
+    const f = it.next();
+    if (f.getMimeType() === MimeType.GOOGLE_SHEETS) { props.setProperty(key, f.getId()); return SpreadsheetApp.openById(f.getId()); }
+  }
+  const ss = SpreadsheetApp.create(name);
+  DriveApp.getFileById(ss.getId()).moveTo(root);
+  const first = ss.getSheets()[0];
+  first.setName(firstSheet);
+  first.getRange(1, 1, 1, firstHeaders.length).setValues([firstHeaders]).setFontWeight('bold').setBackground('#e8eaf6');
+  first.setFrozenRows(1);
+  props.setProperty(key, ss.getId());
+  return ss;
+}
+function getMaster_() { return getSpreadsheetByName_(CONFIG.MASTER_NAME, CONFIG.SHEET_STUDENTS, STUDENT_HEADERS); }
+function getClassSpreadsheet_(classId) { return getSpreadsheetByName_('osztaly_' + classId, CONFIG.SHEET_IDLOG, ID_HEADERS); }
+
+function ensureSheet_(ss, name, headers) {
+  let sh = ss.getSheetByName(name);
+  if (!sh) {
+    sh = ss.insertSheet(name);
+    sh.getRange(1, 1, 1, headers.length).setValues([headers]).setFontWeight('bold').setBackground('#e8eaf6');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function inColumn_(sheet, col, value) {
+  const last = sheet.getLastRow();
+  if (last < 2) return false;
+  return !!sheet.getRange(2, col, last - 1, 1).createTextFinder(value).matchEntireCell(true).findNext();
+}
+
+function log_(ss, type, id, message) {
+  try {
+    if (!ss) { Logger.log(type + ' | ' + id + ' | ' + message); return; }
+    writeRow_(ensureSheet_(ss, CONFIG.SHEET_LOG, LOG_HEADERS),
+      [new Date(), type, id || '', String(message).slice(0, 1500)], [1], []);
+  } catch (e) {}
+}
+
+/* ===================== E-MAIL ===================== */
+
+function sendEmail_(p) {
+  MailApp.sendEmail({
+    to: CONFIG.TEACHER_EMAIL,
+    subject: (p.teacher ? '[TESZT] ' : '') + '[' + p.taskTitle + ' – ' + CLASSES[p.classId] + ' – ' + p.assignmentType + '] ' + p.name + ' – ' +
+             p.setId + '. feladatsor: ' + p.score + '/' + p.total,
+    body: p.name + ' – ' + p.setId + '. feladatsor: ' + p.score + '/' + p.total + '. ' + p.grade +
+          ' (a részletekhez HTML-képes levelezőt használj).',
+    htmlBody: buildEmailHtml_(p),
+    name: p.taskTitle,
+  });
+}
+
+function esc_(v) {
+  return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function buildEmailHtml_(p) {
+  const mono = 'font-family:Consolas,Menlo,monospace;font-size:13px;';
+  const pass = p.total > 0 && p.score === p.total;
+  let html = '<div style="font-family:Arial,Helvetica,sans-serif;max-width:760px;margin:0 auto;color:#222">' +
+    (p.teacher ? '<div style="background:#fff3cd;border:1px solid #e0b100;padding:6px 10px;margin-bottom:10px;font-weight:bold">TESZT beküldés (tanári kód) – nem diák eredménye</div>' : '') +
+    '<h2 style="margin:0 0 4px">' + esc_(p.taskTitle) + ' – ' + esc_(p.setId) + '. feladatsor</h2>' +
+    '<p style="margin:0 0 10px;color:#555">' + esc_(p.name) + ' (' + esc_(CLASSES[p.classId]) + ')' +
+    ' · beküldve: ' + esc_(formatDate_(p.sentAt)) + ' · típus: ' + esc_(p.assignmentType) + ' · lap: ' + esc_(p.sheetName) + '</p>' +
+    '<div style="font-size:20px;font-weight:bold;margin-bottom:4px">Eredmény: ' + esc_(p.score) + ' / ' + esc_(p.total) + '</div>' +
+    '<div style="margin-bottom:6px;font-weight:bold;color:' + (pass ? '#2e7d32' : '#b26a00') + '">Minősítés: ' + esc_(p.grade) + '</div>' +
+    '<div style="margin-bottom:16px;color:#555;font-size:13px">Lezárás oka: ' + esc_(REASONS[p.reason]) +
+    ' · megoldott feladat: ' + p.tasks.length + '</div>';
+
+  p.tasks.forEach(function (t, i) {
+    const color = t.correct ? '#2e7d32' : '#c62828', bg = t.correct ? '#e8f5e9' : '#fdecea';
+    const rows = Math.max(t.studentLines.length, t.correctLines.length, 1);
+    html += '<table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;margin-bottom:18px;border:1px solid #ccc">' +
+      '<tr><td colspan="2" style="background:' + bg + ';padding:8px 10px;border-bottom:1px solid #ccc"><b>' + (i + 1) + '. feladat</b> ' +
+      '<span style="' + mono + '">' + esc_(t.expression) + '</span>' +
+      '<span style="float:right;color:' + color + ';font-weight:bold">' + (t.correct ? '✔ helyes' : '✘ hibás') + '</span>' +
+      '<div style="font-size:12px;color:#555;margin-top:3px">Beírt végeredmény: <b>' + esc_(t.finalAnswer || '—') +
+      '</b> · helyes: <b>' + esc_(t.correctAnswer) + '</b> · idő: ' + esc_(t.seconds) + ' mp</div></td></tr>' +
+      '<tr><th align="left" width="50%" style="padding:6px 10px;background:#f5f5f5;font-size:12px;border-right:1px solid #ddd">A diák megoldása</th>' +
+      '<th align="left" width="50%" style="padding:6px 10px;background:#f5f5f5;font-size:12px">Helyes megoldásmenet</th></tr>';
+    for (let k = 0; k < rows; k++) {
+      const s = t.studentLines[k], c = t.correctLines[k];
+      const none = (k === 0 && !t.studentLines.length) ? (t.correctLines.length ? '<i style="color:#888">nem írt lépéseket</i>' : '—') : '&nbsp;';
+      html += '<tr><td valign="top" style="padding:4px 10px;border-top:1px solid #eee;border-right:1px solid #ddd;' + mono + '">' +
+        (s ? esc_(s) : none) + '</td>' +
+        '<td valign="top" style="padding:4px 10px;border-top:1px solid #eee;' + mono + '">' + (c ? esc_(c) : '&nbsp;') + '</td></tr>';
+    }
+    if (t.feedback.length) {
+      html += '<tr><td colspan="2" style="padding:6px 10px;border-top:1px solid #ddd;background:#fffde7;font-size:12px"><b>Lépéselemzés:</b>' +
+        '<ul style="margin:4px 0 0 18px;padding:0">' + t.feedback.map(function (m) { return '<li>' + esc_(m) + '</li>'; }).join('') + '</ul></td></tr>';
+    }
+    html += '</table>';
+  });
+  return html + '</div>';
+}
+
+/* ===================== SEGÉDEK ===================== */
+
+function safeDate_(iso) { const d = new Date(iso); return isNaN(d.getTime()) ? new Date() : d; }
+function formatDate_(iso) { return Utilities.formatDate(safeDate_(iso), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm'); }
+function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+/* ===================== NULLÁZÁS MENÜ ===================== */
+
+/** Menü felépítése (telepíthető trigger hívja a táblázat megnyitásakor). */
+function menuFelepit() {
+  SpreadsheetApp.getUi()
+    .createMenu('Nullázás')
+    .addItem('Próbálkozások nullázása…', 'nullazasMenu')
+    .addToUi();
+}
+
+/** EGYSZER futtasd a szerkesztőből: létrehozza a menüt a Torzs és az osztaly_* táblázatokban. */
+function menuTelepites() {
+  const ids = [getMaster_().getId()];
+  const it = getRootFolder_().getFiles();
+  while (it.hasNext()) {
+    const f = it.next();
+    if (f.getMimeType() === MimeType.GOOGLE_SHEETS && f.getName().indexOf('osztaly_') === 0) ids.push(f.getId());
+  }
+  const have = ScriptApp.getProjectTriggers()
+    .filter(function (t) { return t.getHandlerFunction() === 'menuFelepit'; })
+    .map(function (t) { return t.getTriggerSourceId(); });
+  let added = 0;
+  ids.forEach(function (id) {
+    if (have.indexOf(id) < 0) { ScriptApp.newTrigger('menuFelepit').forSpreadsheet(id).onOpen().create(); added++; }
+  });
+  Logger.log('Új menü-trigger: ' + added + ' | összes táblázat: ' + ids.length);
+}
+
+function ask_(ui, title, text, def) {
+  const r = ui.prompt(title, text, ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return null;
+  const v = r.getResponseText().trim();
+  return v || def || '';
+}
+
+/** A menüpont: párbeszédablakok, próba-összesítés, megerősítés, nullázás. */
+function nullazasMenu() {
+  const ui = SpreadsheetApp.getUi();
+  const name = SpreadsheetApp.getActiveSpreadsheet().getName();
+  const defClass = name.indexOf('osztaly_') === 0 ? name.slice(8) : '';
+
+  const classId = ask_(ui, 'Nullázás (1/4) – Osztály',
+    'Osztályazonosító (' + Object.keys(CLASSES).join(', ') + '):', defClass);
+  if (classId === null) return;
+  if (!Object.prototype.hasOwnProperty.call(CLASSES, classId)) { ui.alert('Ismeretlen osztály: "' + classId + '"'); return; }
+
+  const student = ask_(ui, 'Nullázás (2/4) – Diák',
+    'Diák azonosítója VAGY neve (a kód nélküli osztályoknál a név, pontosan ahogy beírták).\nHagyd üresen, ha az egész osztályt nullázod:', '');
+  if (student === null) return;
+  const setId = ask_(ui, 'Nullázás (3/4) – Feladatsor',
+    'Feladatsor azonosítója (pl. 3). Üresen hagyva: minden feladatsor:', '');
+  if (setId === null) return;
+  const type = ask_(ui, 'Nullázás (4/4) – Típus',
+    'Beküldés típusa (pl. hazi, orai, felmero). Üresen hagyva: minden típus:', '');
+  if (type === null) return;
+
+  const cfg = { classId: classId, student: student, setId: setId, type: type };
+  const probe = nullazasCore_(cfg, true);
+  if (!probe.count) { ui.alert('Nincs a feltételeknek megfelelő, nullázható sor.'); return; }
+
+  const shown = probe.lines.slice(0, 15).join('\n') + (probe.lines.length > 15 ? '\n… és még ' + (probe.lines.length - 15) + ' sor' : '');
+  const ok = ui.alert('Megerősítés',
+    probe.count + ' sor lesz nullázva (' + CLASSES[classId] + '):\n\n' + shown +
+    '\n\nA diákok újra kaphatnak 1. beküldést. Folytatod?', ui.ButtonSet.YES_NO);
+  if (ok !== ui.Button.YES) return;
+
+  const res = nullazasCore_(cfg, false);
+  ui.alert('Kész: ' + res.count + ' sor nullázva.');
+}
+
+/** Maga a nullázás. dryRun=true esetén csak összegyűjti az érintett sorokat. */
+function nullazasCore_(cfg, dryRun) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const ss = getClassSpreadsheet_(cfg.classId);
+    const sh = ss.getSheetByName(CONFIG.SHEET_IDLOG);
+    if (!sh || sh.getLastRow() < 2) return { count: 0, lines: [] };
+
+    const n = sh.getLastRow() - 1;
+    const data = sh.getRange(2, 1, n, 9).getValues();
+    const norm = function (s) { return String(s == null ? '' : s).trim().toLowerCase(); };
+    const stamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd-HHmm');
+    const oldNotes = sh.getRange(2, 10, n, 1).getValues();
+
+    const keys = [], notes = [], lines = [];
+    data.forEach(function (r, i) {
+      const key = String(r[0]);
+      const type = key.slice(key.lastIndexOf('|') + 1);
+      const match =
+        key.indexOf('NULLAZVA_') !== 0 &&
+        (!cfg.student || norm(r[3]) === norm(cfg.student) || norm(r[4]) === norm(cfg.student)) &&
+        (!cfg.setId   || String(r[5]).trim() === String(cfg.setId).trim()) &&
+        (!cfg.type    || type === cfg.type);
+      if (match) {
+        lines.push(r[4] + ' – ' + r[5] + '. feladatsor – ' + type + ' (' + r[7] + ')');
+        keys.push(['NULLAZVA_' + stamp + '|' + key]);
+        notes.push(['Nullázva: ' + stamp]);
+      } else {
+        keys.push([key]);
+        notes.push([oldNotes[i][0]]);
+      }
+    });
+
+    if (!dryRun && lines.length) {
+      sh.getRange(2, 1, n, 1).setValues(keys);
+      sh.getRange(1, 10).setValue('Nullázás');
+      sh.getRange(2, 10, n, 1).setValues(notes);
+      SpreadsheetApp.flush();
+      log_(ss, 'NULLÁZÁS', '', lines.length + ' sor nullázva (' + JSON.stringify(cfg) + ')');
+    }
+    return { count: lines.length, lines: lines };
+  } finally {
+    lock.releaseLock();
+  }
+}

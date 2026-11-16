@@ -69,6 +69,19 @@
 
         .txt-short { display: none; }
 
+        /* Inaktív visszagomb: halvány, nem kattintható */
+        .header-buttons .btn-back { border: 1px solid transparent; min-width: 0; }
+        .btn-back.btn-off,
+        .btn-back.btn-off:hover {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: #64748b;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .hf-megoldas-doboz { max-width: 100%; overflow-x: auto; }
+
         /* ===== TARTALOM ===== */
         .page {
             max-width: 900px;
@@ -133,7 +146,7 @@
                 padding: 8px 10px;
             }
 
-            header h2 { display: none; }   /* "6. osztály - Matematika" cím eltűnik */
+            header h1 { display: none; }   /* "Matematika" cím eltűnik */
 
             .header-buttons {
                 width: 100%;
@@ -159,13 +172,13 @@
 
     <!-- RÖGZÍTETT FEJLÉC -->
     <header id="oldal-fejlec">
-        <h2>6. osztály - Matematika</h2>
+        <h1>Matematika</h1>
         <div class="header-buttons">
-            <a href="../ujitas/osztaly/6a/index.html" class="btn-back">
+            <a href="../ujitas/osztaly/6a/index.html" class="btn-back" id="back-alap">
                 <span class="txt-short">⬅ 6. ALAP</span>
                 <span class="txt-full">⬅ Vissza a 6. ALAP oldalra</span>
             </a>
-            <a href="../ujitas/osztaly/6h/index.html" class="btn-back">
+            <a href="../ujitas/osztaly/6h/index.html" class="btn-back" id="back-halado">
                 <span class="txt-short">⬅ 6. HALADÓ</span>
                 <span class="txt-full">⬅ Vissza a 6. HALADÓ oldalra</span>
             </a>
@@ -183,8 +196,8 @@
             <div class="tablakepek">
                 <p style="text-align: left;"><strong>Táblaképek:</strong></p>
                 <div class="tablakepek-lista">
-                    <img src="img/26_10_16_1_opt.png" alt="Műveletek sorrendje piramis">
-                    <img src="img/26_10_16_2_opt.png" alt="Műveletek feladatsor">
+                    <img src="../26_10_16_1_opt.png" alt="Műveletek sorrendje piramis">
+                    <img src="../26_10_16_2_opt.png" alt="Műveletek feladatsor">
                 </div>
             </div>
 
@@ -313,6 +326,36 @@
             window.addEventListener('orientationchange', igazit);
             if (window.ResizeObserver) new ResizeObserver(igazit).observe(fejlec);
             igazit();
+        })();
+    
+        // Csak az a visszagomb működik, amelyik oldalról a látogató érkezett.
+        // A másik inaktív (halvány, nem kattintható, nincs hivatkozása).
+        // Ha a forrás nem ismert (pl. közvetlen link), mindkettő működik.
+        (function () {
+            var alap = document.getElementById('back-alap');
+            var halado = document.getElementById('back-halado');
+            if (!alap || !halado) return;
+
+            var ref = document.referrer || '';
+            var from = '';
+            if (ref.indexOf('/6a/') !== -1) from = 'alap';
+            else if (ref.indexOf('/6h/') !== -1) from = 'halado';
+
+            // Újratöltéskor a referrer elveszhet: a forrást megjegyezzük a lapon belül.
+            try {
+                if (from) sessionStorage.setItem('archiv-forras', from);
+                else if (ref) sessionStorage.removeItem('archiv-forras');   // más oldalról jött
+                else from = sessionStorage.getItem('archiv-forras') || '';
+            } catch (e) {}
+
+            if (from !== 'alap' && from !== 'halado') return;
+
+            var off = from === 'alap' ? halado : alap;
+            off.classList.add('btn-off');
+            off.removeAttribute('href');
+            off.setAttribute('aria-disabled', 'true');
+            off.setAttribute('tabindex', '-1');
+            off.setAttribute('title', 'Erről az oldalról nem ide érkeztél');
         })();
     </script>
 

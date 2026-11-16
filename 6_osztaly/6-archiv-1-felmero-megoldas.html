@@ -25,12 +25,17 @@
 
         /* Fejléc gombjai */
         .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn-back.btn-alt {
+        /* Inaktív visszagomb: halvány, nem kattintható */
+        .header-buttons .btn-back { border: 1px solid transparent; min-width: 0; }
+        .btn-back.btn-off,
+        .btn-back.btn-off:hover {
             background-color: transparent;
-            border: 1px solid var(--accent-blue);
-            color: #38bdf8;
+            border: 1px solid var(--border-color);
+            color: #64748b;
+            opacity: 0.6;
+            cursor: not-allowed;
         }
-        .btn-back.btn-alt:hover { background-color: #38bdf8; color: #0f172a; }
+        .feladat-container p { max-width: 100%; overflow-x: auto; }
         @media (max-width: 768px) {
             header { padding: 8px 10px; }
             header h2 { display: none; }
@@ -369,9 +374,6 @@
     </div>
 
     <script>
-        // Az a gomb marad kiemelve, amelyik oldalról a látogató érkezett;
-        // a másik körvonalas (másodlagos) stílust kap. Ha nem ismert a
-        // forrás (pl. közvetlen link), mindkettő egyformán kiemelt marad.
         // A rögzített fejléc magasságának mérése, hogy a tartalom ne csússzon alá
         (function () {
             var header = document.querySelector('header');
@@ -384,13 +386,34 @@
             if (window.ResizeObserver) new ResizeObserver(setH).observe(header);
         })();
 
+        // Csak az a visszagomb működik, amelyik oldalról a látogató érkezett.
+        // A másik inaktív (halvány, nem kattintható, nincs hivatkozása).
+        // Ha a forrás nem ismert (pl. közvetlen link), mindkettő működik.
         (function () {
+            var alap = document.getElementById('back-alap');
+            var halado = document.getElementById('back-halado');
+            if (!alap || !halado) return;
+
             var ref = document.referrer || '';
-            var from = ref.indexOf('/6a/') !== -1 ? 'alap' : (ref.indexOf('/6h/') !== -1 ? 'halado' : '');
-            if (!from) return;
-            var other = from === 'alap' ? 'halado' : 'alap';
-            var el = document.getElementById('back-' + other);
-            if (el) el.classList.add('btn-alt');
+            var from = '';
+            if (ref.indexOf('/6a/') !== -1) from = 'alap';
+            else if (ref.indexOf('/6h/') !== -1) from = 'halado';
+
+            // Újratöltéskor a referrer elveszhet: a forrást megjegyezzük a lapon belül.
+            try {
+                if (from) sessionStorage.setItem('archiv-forras', from);
+                else if (ref) sessionStorage.removeItem('archiv-forras');   // más oldalról jött
+                else from = sessionStorage.getItem('archiv-forras') || '';
+            } catch (e) {}
+
+            if (from !== 'alap' && from !== 'halado') return;
+
+            var off = from === 'alap' ? halado : alap;
+            off.classList.add('btn-off');
+            off.removeAttribute('href');
+            off.setAttribute('aria-disabled', 'true');
+            off.setAttribute('tabindex', '-1');
+            off.setAttribute('title', 'Erről az oldalról nem ide érkeztél');
         })();
     </script>
 

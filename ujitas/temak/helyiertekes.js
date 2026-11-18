@@ -405,6 +405,13 @@
     } catch (e) { /* nem kritikus */ }
   }
 
+  /** „Mégsem” a kódbekérőn: vissza az előző oldalra (ha az ugyanerről a webhelyről jött), különben az osztályoldalra. */
+  function visszaMegy() {
+    var ref = document.referrer;
+    try { if (ref && new URL(ref).origin === location.origin && ref !== location.href) { location.replace(ref); return; } } catch (e) { /* tovább */ }
+    location.replace(cfg.visszaHref || 'index.html');
+  }
+
   function esemenyek() {
     document.addEventListener('click', function (e) {
       var t = e.target; if (!t.getAttribute) return;
@@ -424,7 +431,7 @@
   (async function () {
     var app = $('app');
     if (!app) { console.error('Hiányzik a #app elem'); return; }
-    if (!(await U.run('indulas'))) return;           // pl. nem adott meg kódot
+    if (!(await U.run('indulas'))) { visszaMegy(); return; }   // pl. a „Mégsem” gomb: vissza oda, ahonnan nyitották
     app.innerHTML = HTML;
     app.id = 'app';
     $('visszaGomb').href = cfg.visszaHref || 'index.html';

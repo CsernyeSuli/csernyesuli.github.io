@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helyiértékes feladatok – házi feladat</title>
+<link rel="stylesheet" href="../../../osztalylap_style.css">
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+window.UJITAS_CFG = {
+  mod: 'elo',                          // 'elo' = azonosítás + védelem + küldés · 'archiv' = csak a feladat (archíváláskor ezt az egy szót kell átírni)
+  classId: '8',
+  assignmentType: 'hazi',                // az Apps Script csak ASCII betűt/számot fogad el (ékezet nélkül!)
+  setId: 'helyiertekes',               // minden új feladatsornak egyedi legyen (a kulcs: diák|setId|típus – ez dönti el, melyik az 1. beküldés)
+  taskTitle: 'Helyiértékes feladatok',
+  tema: ['helyiertekes'],              // ujitas/temak/helyiertekes.js
+  subtitle: '8. osztály – házi feladat',
+  visszaHref: '/ujitas/osztaly/8/index.html',
+};
+</script>
+<script src="../../kozos/v1/betolto.js"></script>
+</body>
+</html>

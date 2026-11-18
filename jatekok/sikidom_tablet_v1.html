@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Síkidom Párbaj</title>
+<!--<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f0f4f8; color: #1a202c; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+  #beallitas-panel { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); max-width: 440px; width: 100%; margin-top: 25px; text-align: center; }
+  .input-csoport { margin-bottom: 15px; text-align: left; }
+  .input-csoport label { display: block; font-weight: bold; margin-bottom: 5px; }
+  .input-csoport input { width: 100%; padding: 10px; font-size: 16px; border: 2px solid #cbd5e0; border-radius: 8px; }
+  .kezdo-valaszto { display: flex; gap: 10px; }
+  .kezdo-gomb { flex: 1; padding: 12px; font-weight: bold; border: 2px solid #cbd5e0; border-radius: 8px; background: #edf2f7; cursor: pointer; }
+  .kivalasztva-1 { background: #bee3f8; border-color: #3182ce; color: #2b6cb0; }
+  .kivalasztva-2 { background: #fed7d7; border-color: #e53e3e; color: #c53030; }
+  .start-gomb { width: 100%; padding: 15px; font-size: 18px; font-weight: bold; background: #38a169; color: white; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; }
+  #jatek-ter { display: none; width: 100%; max-width: 700px; flex-direction: column; align-items: center; }
+  .sav { display: flex; justify-content: space-between; align-items: center; width: 100%; background: white; padding: 10px 15px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); margin-bottom: 10px; gap: 10px; }
+  .jelzo { padding: 8px 12px; border-radius: 8px; font-weight: bold; opacity: 0.5; }
+  .aktiv-1 { background: #ebf8ff; border: 3px solid #3182ce; color: #2b6cb0; opacity: 1; }
+  .aktiv-2 { background: #fff5f5; border: 3px solid #e53e3e; color: #c53030; opacity: 1; }
+  #dobas-gomb { padding: 12px 22px; font-size: 18px; font-weight: bold; background: #3182ce; color: white; border: none; border-radius: 10px; cursor: pointer; }
+  #dobas-gomb:disabled { background: #a0aec0; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; background: white; }
+  td { border: 2px solid #cbd5e0; height: 60px; text-align: center; vertical-align: middle; padding: 2px; }
+  tr.cel-sor td { background: #fefcbf; border-bottom: 3px dashed #d69e2e; }
+  tr.minta-sor td { background: #edf2f7; }
+  td.aktiv-cella { background: #e6fffa !important; border: 3px solid #319795 !important; }
+  .cella-input { width: 95%; padding: 4px; font-size: 13px; font-weight: bold; text-align: center; border: 2px solid #319795; border-radius: 4px; }
+  .ok-gomb { background: #319795; color: white; border: none; border-radius: 4px; font-size: 11px; font-weight: bold; padding: 3px 8px; margin-top: 2px; cursor: pointer; }
+  #gyoztes-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; }
+  .gyoztes-kartya { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 380px; width: 90%; }
+</style> -->
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f0f4f8; color: #1a202c; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+  #beallitas-panel { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); max-width: 440px; width: 100%; margin-top: 25px; text-align: center; }
+  .input-csoport { margin-bottom: 18px; text-align: left; }
+  .input-csoport label { display: block; font-weight: bold; margin-bottom: 6px; }
+  .input-csoport input { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #cbd5e0; border-radius: 8px; transition: border-color 0.2s, box-shadow 0.2s; }
+  .input-csoport input:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 8px rgba(49, 130, 206, 0.3); }
+
+  /* Kezdőjátékos választó gombok és animációk */
+  .kezdo-valaszto { display: flex; gap: 12px; }
+  .kezdo-gomb {
+    flex: 1;
+    padding: 13px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid #cbd5e0;
+    border-radius: 10px;
+    background: #edf2f7;
+    color: #718096;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .kezdo-gomb:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+    border-color: #a0aec0;
+  }
+
+  /* Kiemelt (kiválasztott) állapot */
+  .kivalasztva-1 {
+    background: #3182ce !important;
+    border-color: #2b6cb0 !important;
+    color: white !important;
+    opacity: 1 !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(49, 130, 206, 0.5) !important;
+  }
+  .kivalasztva-2 {
+    background: #e53e3e !important;
+    border-color: #c53030 !important;
+    color: white !important;
+    opacity: 1 !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(229, 62, 62, 0.5) !important;
+  }
+  .kivalasztva-1::before, .kivalasztva-2::before {
+    content: "✔ ";
+  }
+
+  /* Indítás és Új játék gomb */
+  .start-gomb {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #38a169;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(56, 161, 105, 0.3);
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .start-gomb:hover {
+    background: #2f855a;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 18px rgba(56, 161, 105, 0.45);
+  }
+  .start-gomb:active {
+    transform: translateY(1px) scale(0.99);
+  }
+
+  /* Játéktér és Dobás gomb */
+  #jatek-ter { display: none; width: 100%; max-width: 700px; flex-direction: column; align-items: center; }
+  .sav { display: flex; justify-content: space-between; align-items: center; width: 100%; background: white; padding: 10px 15px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); margin-bottom: 10px; gap: 10px; }
+  .jelzo { padding: 8px 12px; border-radius: 8px; font-weight: bold; opacity: 0.5; transition: all 0.3s ease; }
+  .aktiv-1 { background: #ebf8ff; border: 3px solid #3182ce; color: #2b6cb0; opacity: 1; transform: scale(1.04); }
+  .aktiv-2 { background: #fff5f5; border: 3px solid #e53e3e; color: #c53030; opacity: 1; transform: scale(1.04); }
+
+  #dobas-gomb {
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #3182ce;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(49, 130, 206, 0.3);
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  #dobas-gomb:hover:not(:disabled) {
+    background: #2b6cb0;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 16px rgba(49, 130, 206, 0.45);
+  }
+  #dobas-gomb:active:not(:disabled) {
+    transform: translateY(1px) scale(0.98);
+  }
+  #dobas-gomb:disabled { background: #a0aec0; box-shadow: none; cursor: not-allowed; }
+
+  /* Táblázat és cella gomb */
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; background: white; }
+  td { border: 2px solid #cbd5e0; height: 60px; text-align: center; vertical-align: middle; padding: 2px; }
+  tr.cel-sor td { background: #fefcbf; border-bottom: 3px dashed #d69e2e; }
+  tr.minta-sor td { background: #edf2f7; }
+  td.aktiv-cella { background: #e6fffa !important; border: 3px solid #319795 !important; }
+  .cella-input { width: 95%; padding: 4px; font-size: 13px; font-weight: bold; text-align: center; border: 2px solid #319795; border-radius: 4px; }
+  .ok-gomb {
+    background: #319795;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 10px;
+    margin-top: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .ok-gomb:hover {
+    background: #285e61;
+    transform: scale(1.08);
+  }
+
+  #gyoztes-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; }
+  .gyoztes-kartya { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 380px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+</style>
+
+</head>
+<body>
+  <div style="width: 100%; max-width: 850px; text-align: left; margin-bottom: 10px;">
+  <a href="jatekok.html" style="display: inline-block; background: #0284c7; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 15px;">⬅ Vissza a játékokhoz</a>
+</div>
+
+  <div id="beallitas-panel">
+    <h1 style="color: #2b6cb0; margin-top: 0;">Síkidom Párbaj</h1>
+        <div class="input-csoport">
+      <label style="color: #2b6cb0;">1. Játékos neve (Kék):</label>
+      <input type="text" id="nev1-input" placeholder="1. Játékos">
+    </div>
+    <div class="input-csoport">
+      <label style="color: #c53030;">2. Játékos neve (Piros):</label>
+      <input type="text" id="nev2-input" placeholder="2. Játékos">
+    </div>
+
+    <div class="input-csoport">
+      <label>Ki kezdje a játékot?</label>
+       <div class="kezdo-valaszto">
+        <button type="button" class="kezdo-gomb" id="valaszt-1" onclick="kezdo(1)">1. Játékos kezd</button>
+        <button type="button" class="kezdo-gomb" id="valaszt-2" onclick="kezdo(2)">2. Játékos kezd</button>
+      </div>
+    </div>
+    <button type="button" class="start-gomb" onclick="inditas()">Játék indítása</button>
+  </div>
+
+  <div id="jatek-ter">
+    <div class="sav">
+      <div class="jelzo" id="jelzo-1"><span id="nev1-kijelzo"></span>: <strong id="pont-1">0</strong> pont</div>
+      <div class="jelzo" id="jelzo-2"><span id="nev2-kijelzo"></span>: <strong id="pont-2">0</strong> pont</div>
+    </div>
+    <div class="sav">
+      <div id="kocka-doboz"></div>
+      <div id="uzenet-doboz" style="font-weight: bold; text-align: center; flex: 1;">Kattints a Dobás gombra!</div>
+      <button type="button" id="dobas-gomb" onclick="dobas()">Dobás</button>
+    </div>
+    <table style="width: 100%;"><tbody id="tabla-torzs"></tbody></table>
+  </div>
+
+  <div id="gyoztes-panel">
+    <div class="gyoztes-kartya">
+      <h2 id="gyoztes-szoveg" style="color: #38a169;"></h2>
+      <p id="vegeredmeny-szoveg"></p>
+      <button type="button" class="start-gomb" onclick="location.reload()">Új játék</button>
+    </div>
+  </div>
+<script>
+  const nevekLista = ["", "kör", "négyzet", "téglalap", "trapéz", "paralelogramma", "deltoid"];
+  let nev1 = "1. Játékos", nev2 = "2. Játékos", aktiv = null, pont1 = 0, pont2 = 0, varakozik = false;
+  let magassag = [null, 5, 5, 5, 5, 5, 5];
+
+  document.getElementById("nev1-input").oninput = e => document.getElementById("valaszt-1").innerText = (e.target.value.trim() || "1. Játékos") + " kezd";
+  document.getElementById("nev2-input").oninput = e => document.getElementById("valaszt-2").innerText = (e.target.value.trim() || "2. Játékos") + " kezd";
+
+  function kezdo(szam) {
+    aktiv = szam;
+    document.getElementById("valaszt-1").className = "kezdo-gomb" + (szam === 1 ? " kivalasztva-1" : "");
+    document.getElementById("valaszt-2").className = "kezdo-gomb" + (szam === 2 ? " kivalasztva-2" : "");
+  }
+
+  function rajz(oszlop, szin) {
+    const c = document.createElement("canvas"); c.width = 54; c.height = 44;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = szin === 1 ? "#63b3ed" : (szin === 2 ? "#fc8181" : "#cbd5e0");
+    ctx.strokeStyle = szin === 1 ? "#2b6cb0" : (szin === 2 ? "#c53030" : "#4a5568");
+    ctx.lineWidth = 3; ctx.beginPath();
+    if (oszlop === 1) ctx.arc(27, 22, 17, 0, Math.PI * 2);
+    if (oszlop === 2) ctx.rect(11, 6, 32, 32);
+    if (oszlop === 3) ctx.rect(5, 11, 44, 22);
+    if (oszlop === 4) { ctx.moveTo(14,10); ctx.lineTo(40,10); ctx.lineTo(50,34); ctx.lineTo(4,34); ctx.closePath(); }
+    if (oszlop === 5) { ctx.moveTo(15,10); ctx.lineTo(50,10); ctx.lineTo(39,34); ctx.lineTo(4,34); ctx.closePath(); }
+    if (oszlop === 6) { ctx.moveTo(27,3); ctx.lineTo(42,18); ctx.lineTo(27,41); ctx.lineTo(12,18); ctx.closePath(); }
+    ctx.fill(); ctx.stroke(); return c;
+  }
+
+  function kocka(ertek, m) {
+    const c = document.createElement("canvas"); c.width = m; c.height = m;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.strokeStyle = "#2d3748"; ctx.lineWidth = 3;
+    ctx.fillRect(2, 2, m - 4, m - 4); ctx.strokeRect(2, 2, m - 4, m - 4);
+    ctx.fillStyle = "#1a202c";
+    const p1 = m * 0.27, p2 = m * 0.50, p3 = m * 0.73, r = m * 0.09, pont = [];
+    if (ertek % 2 === 1) pont.push([p2, p2]);
+    if (ertek >= 2) { pont.push([p1, p1], [p3, p3]); }
+    if (ertek >= 4) { pont.push([p3, p1], [p1, p3]); }
+    if (ertek === 6) { pont.push([p1, p2], [p3, p2]); }
+    pont.forEach(pt => { ctx.beginPath(); ctx.arc(pt[0], pt[1], r, 0, Math.PI * 2); ctx.fill(); });
+    return c;
+  }
+
+  function inditas() {
+    if (aktiv === null) {
+      alert("Előbb válasszátok ki, ki kezdje a játékot!");
+      return;
+    }
+    nev1 = document.getElementById("nev1-input").value.trim() || "1. Játékos";
+    nev2 = document.getElementById("nev2-input").value.trim() || "2. Játékos";
+    document.getElementById("nev1-kijelzo").innerText = nev1;
+    document.getElementById("nev2-kijelzo").innerText = nev2;
+    document.getElementById("beallitas-panel").style.display = "none";
+    document.getElementById("jatek-ter").style.display = "flex";
+    const torzs = document.getElementById("tabla-torzs");
+    for (let s = 0; s < 6; s++) {
+      const tr = document.createElement("tr"); if (s === 0) tr.className = "cel-sor";
+      for (let o = 1; o <= 6; o++) { const td = document.createElement("td"); td.id = "c-" + s + "-" + o; tr.appendChild(td); }
+      torzs.appendChild(tr);
+    }
+    const trM = document.createElement("tr"); trM.className = "minta-sor";
+    for (let o = 1; o <= 6; o++) { const td = document.createElement("td"); td.appendChild(rajz(o, 0)); trM.appendChild(td); }
+    torzs.appendChild(trM);
+    const trK = document.createElement("tr"); trK.className = "minta-sor";
+    for (let o = 1; o <= 6; o++) { const td = document.createElement("td"); td.appendChild(kocka(o, 42)); trK.appendChild(td); }
+    torzs.appendChild(trK);
+    document.getElementById("kocka-doboz").appendChild(kocka(6, 56));
+    korFrissites();
+  }
+
+  function korFrissites() {
+    document.getElementById("jelzo-1").className = "jelzo" + (aktiv === 1 ? " aktiv-1" : "");
+    document.getElementById("jelzo-2").className = "jelzo" + (aktiv === 2 ? " aktiv-2" : "");
+    document.getElementById("uzenet-doboz").innerText = (aktiv === 1 ? nev1 : nev2) + " következik!";
+    document.getElementById("dobas-gomb").disabled = false;
+  }
+
+  function dobas() {
+    if (varakozik) return;
+    document.getElementById("dobas-gomb").disabled = true;
+    const dobott = Math.floor(Math.random() * 6) + 1;
+    const kd = document.getElementById("kocka-doboz"); kd.innerHTML = ""; kd.appendChild(kocka(dobott, 56));
+    const sor = magassag[dobott];
+    if (sor < 0) {
+      document.getElementById("uzenet-doboz").innerText = "Ez az oszlop betelt! Másik játékos jön.";
+      setTimeout(kovetkezo, 1400); return;
+    }
+    varakozik = true;
+    document.getElementById("uzenet-doboz").innerText = "Írd be a síkidom nevét!";
+    const cella = document.getElementById("c-" + sor + "-" + dobott);
+    cella.classList.add("aktiv-cella");
+    cella.innerHTML = '<input class="cella-input" id="inp" autocomplete="off"><br><button class="ok-gomb" onclick="ellenoriz(' + sor + ',' + dobott + ')">OK</button>';
+    const inp = document.getElementById("inp"); inp.focus();
+    inp.onkeydown = e => { if (e.key === "Enter") ellenoriz(sor, dobott); };
+  }
+
+  function ellenoriz(sor, oszlop) {
+    if (!varakozik) return; varakozik = false;
+    const valasz = document.getElementById("inp").value.trim().toLowerCase();
+    const cella = document.getElementById("c-" + sor + "-" + oszlop);
+    cella.classList.remove("aktiv-cella"); cella.innerHTML = "";
+    if (valasz === nevekLista[oszlop]) {
+      cella.appendChild(rajz(oszlop, aktiv));
+      magassag[oszlop]--;
+      if (sor === 0) {
+        if (aktiv === 1) { pont1++; document.getElementById("pont-1").innerText = pont1; }
+        else { pont2++; document.getElementById("pont-2").innerText = pont2; }
+        document.getElementById("uzenet-doboz").innerText = "Helyes! +1 pont!";
+      } else { document.getElementById("uzenet-doboz").innerText = "Helyes válasz!"; }
+    } else { document.getElementById("uzenet-doboz").innerText = "Nem jó válasz! Üres marad."; }
+    setTimeout(kovetkezo, 1400);
+  }
+
+  function kovetkezo() {
+    if (!magassag.slice(1).some(s => s >= 0)) {
+      document.getElementById("gyoztes-szoveg").innerText = pont1 > pont2 ? nev1 + " győzött!" : (pont2 > pont1 ? nev2 + " győzött!" : "Döntetlen!");
+      document.getElementById("vegeredmeny-szoveg").innerText = nev1 + ": " + pont1 + " pont | " + nev2 + ": " + pont2 + " pont";
+      document.getElementById("gyoztes-panel").style.display = "flex"; return;
+    }
+    aktiv = aktiv === 1 ? 2 : 1; korFrissites();
+  }
+</script>
+</body>
+</html>

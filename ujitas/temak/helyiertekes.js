@@ -116,11 +116,13 @@
         '<p>A második számjegy <b>4</b>, az első 1,5 · 4 = <b>6</b>.</p>' +
         '<div class="keret">Az eredeti szám: <b>64</b>. Ellenőrzés: 64 − 46 = 18 ✓</div>',
       proba:
-        '<p>Mivel az első számjegy a második 1,5-szerese, a második számjegy páros kell legyen (különben nem egész az első).</p>' +
-        '<table><tr><th>Második (b)</th><th>Első (a = 1,5·b)</th><th>Szám</th><th>Különbség</th><th></th></tr>' +
-        '<tr><td>2</td><td>3</td><td>32</td><td>32 − 23 = 9</td><td>✗</td></tr>' +
-        '<tr class="jo"><td>4</td><td>6</td><td>64</td><td>64 − 46 = 18</td><td>✓</td></tr>' +
-        '<tr><td>6</td><td>9</td><td>96</td><td>96 − 69 = 27</td><td>✗</td></tr></table>' +
+        '<p>Az első számjegy (a tízesek száma) a második számjegy (az egyesek száma) 1,5-szerese, ezért a második számjegy páros kell legyen (különben nem egész az első). A számjegyeket úgy írtam, ahogy a számban állnak: elöl a tízes, utána az egyes.</p>' +
+        '<table>' +
+        '<tr><th colspan="3">EREDETI</th><th colspan="3" style="border-left:3px double #94a3b8">FELCSERÉLT</th><th rowspan="2" style="border-left:3px double #94a3b8">KÜLÖNBSÉG</th></tr>' +
+        '<tr><th>első</th><th>második</th><th>szám</th><th style="border-left:3px double #94a3b8">első</th><th>második</th><th>szám</th></tr>' +
+        '<tr><td>3</td><td>2</td><td><b>32</b></td><td style="border-left:3px double #94a3b8">2</td><td>3</td><td><b>23</b></td><td style="border-left:3px double #94a3b8">32 − 23 = 9</td></tr>' +
+        '<tr class="jo"><td>6</td><td>4</td><td><b>64</b></td><td style="border-left:3px double #94a3b8">4</td><td>6</td><td><b>46</b></td><td style="border-left:3px double #94a3b8"><span style="color:#f87171">64 − 46 = 18</span></td></tr>' +
+        '<tr><td>9</td><td>6</td><td><b>96</b></td><td style="border-left:3px double #94a3b8">6</td><td>9</td><td><b>69</b></td><td style="border-left:3px double #94a3b8">96 − 69 = 27</td></tr></table>' +
         '<div class="keret">Az eredeti szám: <b>64</b></div>' },
 
     { id: 'b', rovid: 'b) kétjegyű szám, számjegyösszeg 15, összeg 165', helyes: [69, 78, 87, 96], tobb: true,
@@ -391,6 +393,18 @@
   }
 
   /* ================= INDÍTÁS ================= */
+  /** A diák neve a fejlécbe (a szerver a kód alapján adja; ha nem érkezik meg, a mező üres marad). */
+  function nevBetolt() {
+    var url = window.UJITAS_URL;
+    if (!url || !U.kod) return;
+    try {
+      fetch(url + '?akcio=kod&kod=' + encodeURIComponent(U.kod) + '&osztaly=' + encodeURIComponent(cfg.classId || ''), { cache: 'no-store' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) { if (d && d.ok === true && d.name) $('felhasznalo').textContent = '👤 ' + d.name; })
+        .catch(function () { /* nem kritikus */ });
+    } catch (e) { /* nem kritikus */ }
+  }
+
   function esemenyek() {
     document.addEventListener('click', function (e) {
       var t = e.target; if (!t.getAttribute) return;
@@ -414,7 +428,7 @@
     app.innerHTML = HTML;
     app.id = 'app';
     $('visszaGomb').href = cfg.visszaHref || 'index.html';
-    if (U.kod) $('felhasznalo').textContent = '🔑 ' + U.kod;
+    nevBetolt();
     if (!U.elo) $('ertekelesGomb').style.display = 'none';
     S.start = Date.now();
     renderFeladatok(); esemenyek();

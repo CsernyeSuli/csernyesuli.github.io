@@ -432,6 +432,10 @@
     if (!U.elo) $('ertekelesGomb').style.display = 'none';
     S.start = Date.now();
     renderFeladatok(); esemenyek();
+    // A lap elhagyásakor a böngésző elfelejti a kódot (sessionStorage), így legközelebb újra kérni fogja
+    var kodTorles = function () { try { sessionStorage.removeItem('ujitas_kod'); sessionStorage.removeItem('ujitas_kod_ok'); } catch (e) { /* nem kritikus */ } };
+    window.addEventListener('pagehide', kodTorles);
+    window.addEventListener('pageshow', function (e) { if (e.persisted) location.reload(); });   // „vissza” gombbal visszatöltött lap: induljon újra
     U.aktiv = function () { return !S.lezarva; };
     // lapváltás: lezárjuk és elküldjük a jelenlegi pontokat; oldal eltűnésekor csendben, szinkron módon
     U.on('lapvaltas', function () { if (U.elo) kuldes('lapvaltas'); else lezar('lapvaltas'); });

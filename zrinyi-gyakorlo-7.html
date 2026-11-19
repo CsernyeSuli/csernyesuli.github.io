@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zrínyi gyakorló – 7. osztály, 1. feladatsor</title>
+<link rel="stylesheet" href="zrinyilap-style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- MathJax a törtekhez (a régi polyfill.io hivatkozás kikerült: az a domain már nem megbízható) -->
+<script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] }, startup: { typeset: false } };</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+window.UJITAS_CFG = {
+  mod: 'elo',                                    // 'elo' = azonosítás + védelem + küldés
+  classId: '7',
+  assignmentType: 'gyakorlo',                    // ASCII
+  setId: '1',                                    // EGYEDI minden új gyakorló sorozatnál (ez dönti el az 1. beküldést)
+  taskTitle: 'Zrínyi gyakorló – 7. osztály, 1. feladatsor',   // max. 60 karakter
+  tema: ['zrinyi-gyakorlo-7'],                   // ujitas/temak/zrinyi-gyakorlo-7.js
+  visszaHref: 'zrinyi-valaszto.html',
+  kodEllenorzes: true,                           // a szerver is megerősíti a kódot (a küldés no-cors, hibát nem jelezne)
+};
+</script>
+<script src="ujitas/kozos/v1/betolto.js"></script>
+</body>
+</html>

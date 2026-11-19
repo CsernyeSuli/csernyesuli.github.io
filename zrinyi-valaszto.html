@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zrínyi Ilona Matematikaverseny - Feladatlap Választó</title>
     <link rel="stylesheet" href="zrinyilap-style.css">
+    <script src="ujitas/kozos/v1/vegpont.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -257,21 +258,22 @@
         .back-home:hover {
             color: #fbbf24;
         }
+
+        .practice-panel { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(251, 191, 36, 0.35); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
+        .practice-panel h2 { color: #fbbf24; font-size: 1.2rem; margin: 0 0 12px 0; }
     </style>
 </head>
 <body>
 
-    <!-- 1. LEBEGŐ ABLAK: NÉV ÉS OSZTÁLY BEKÉRÉSE -->
+    <!-- 1. LEBEGŐ ABLAK: SZEMÉLYES KÓD BEKÉRÉSE -->
     <div id="step1-modal" class="modal-overlay">
         <div class="modal-body" style="padding: 30px; text-align: center; max-width: 450px; width: 90%; border: 2px solid #fbbf24; border-radius: 16px; background: #1e293b; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
-            <i class="fa-solid fa-user-pen" style="font-size: 45px; color: #fbbf24; margin-bottom: 12px;"></i>
+            <i class="fa-solid fa-key" style="font-size: 45px; color: #fbbf24; margin-bottom: 12px;"></i>
             <h2 style="color: #fbbf24; margin: 0 0 8px 0; font-size: 1.8rem;">Azonosítás</h2>
-            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 22px; line-height: 1.4;">Kérjük, add meg a nevedet és az osztályodat a feladatlapok eléréséhez!</p>
-
-            <input type="text" id="student-name" placeholder="Add meg a neved..." style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; outline: none;">
-            <input type="text" id="student-class" placeholder="Add meg az osztályod (pl. 6.A)..." style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; margin-bottom: 22px; box-sizing: border-box; font-size: 1rem; outline: none;">
-            
-            <button onclick="goToStep2()" class="btn-select" style="width: 100%; background: #d97706; color: #ffffff; font-size: 1.1rem; padding: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold;">
+            <p style="font-size: 14px; color: #cbd5e1; margin-bottom: 18px; line-height: 1.4;">Írd be a személyes kódodat! A kódot a tanárodtól kaptad.</p>
+            <input type="text" id="student-code" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX" aria-label="Személyes kód" style="width:100%;padding:14px;border-radius:8px;border:2px solid #475569;background:#0f172a;color:#fff;text-align:center;font:700 24px Consolas,Menlo,monospace;letter-spacing:.15em;text-transform:uppercase;box-sizing:border-box;margin-bottom:8px;">
+            <div id="code-msg" style="min-height: 1.5em; font-size: 14px; margin-bottom: 12px;"></div>
+            <button id="code-btn" onclick="goToStep2()" class="btn-select disabled" disabled style="width: 100%; background: #d97706; color: #ffffff; font-size: 1.1rem; padding: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold;">
                 Tovább <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
             </button>
         </div>
@@ -283,19 +285,11 @@
             <i class="fa-solid fa-graduation-cap" style="font-size: 48px; color: #fbbf24; margin-bottom: 12px;"></i>
             <h2 style="color: #fbbf24; margin: 0 0 6px 0; font-size: 1.85rem;">Zrínyi Ilona Matematikaverseny</h2>
             <p style="font-size: 15px; color: #93c5fd; margin-bottom: 20px; font-weight: 500;">Fontos tudnivalók a feladatok megoldásához</p>
-
             <div style="background: rgba(15, 23, 42, 0.75); padding: 18px; border-radius: 10px; text-align: left; font-size: 14px; color: #e2e8f0; margin-bottom: 24px; border: 1px solid #334155;">
-                <p style="margin: 0 0 14px 0; line-height: 1.5;">
-                    <i class="fa-solid fa-clock-rotate-left" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> <strong>Tájékoztatás:</strong> Nem kell egyszerre minden feladatot megcsinálnod, később is visszajöhetsz és folytathatod!
-                </p>
-                <p style="margin: 0 0 14px 0; line-height: 1.5;">
-                    <i class="fa-solid fa-paper-plane" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> A feladatok ablakának bezárásakor az eddigi eredmények automatikusan elküldésre kerülnek a <strong>csernyei.iskola@gmail.com</strong> címre.
-                </p>
-                <p style="margin: 0; line-height: 1.5;">
-                    <i class="fa-solid fa-rotate-right" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> Helytelen válasz esetén legfeljebb 5 alkalommal próbálkozhatsz.
-                </p>
+                <p style="margin: 0 0 14px 0; line-height: 1.5;"><i class="fa-solid fa-clock-rotate-left" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> <strong>Tájékoztatás:</strong> Az <strong>online gyakorló</strong> feladatsort egy menetben oldd meg: ha elhagyod a lapot vagy másik lapra váltasz, a feladatsor lezárul.</p>
+                <p style="margin: 0 0 14px 0; line-height: 1.5;"><i class="fa-solid fa-paper-plane" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> A feladatsor lezárásakor (befejezés, korai beadás vagy lapelhagyás) az eredményed automatikusan elküldjük a <strong>csernyei.iskola@gmail.com</strong> címre. Az első beküldés számít, a további alkalmak gyakorlásnak minősülnek.</p>
+                <p style="margin: 0; line-height: 1.5;"><i class="fa-solid fa-rotate-right" style="color: #fbbf24; font-size: 16px; margin-right: 8px;"></i> Helytelen válasz esetén feladatonként legfeljebb 5 alkalommal próbálkozhatsz.</p>
             </div>
-
             <button onclick="finishQuizStart()" class="btn-select" style="width: 100%; background: #f59e0b; color: #0f172a; font-size: 1.15rem; padding: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold;">
                 <i class="fa-solid fa-circle-check" style="margin-right: 8px;"></i> Megértettem, indítás
             </button>
@@ -314,6 +308,12 @@
                 Osztály: <strong id="display-class" style="color: #fff;">-</strong> 
                 <button onclick="resetStudentData()" style="background: none; border: none; color: #f87171; cursor: pointer; margin-left: 10px; font-size: 0.85rem;" title="Adatok módosítása"><i class="fa-solid fa-pen-to-square"></i> Módosítás</button>
             </div>
+        </div>
+
+        <!-- ONLINE GYAKORLÓ FELADATSOROK -->
+        <div class="practice-panel">
+            <h2><i class="fa-solid fa-laptop-code"></i> Online gyakorló feladatsorok</h2>
+            <div class="class-grid" id="gyakorlo-lista"></div>
         </div>
 
         <!-- SZŰRŐ PANEL (BUBORÉKOKKAL ÉS SZÍNES STÁTUSZOKKAL) -->
@@ -401,45 +401,107 @@
             '7-2020-megyei'
         ];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const name = sessionStorage.getItem('zrinyi_student_name');
-            const cls = sessionStorage.getItem('zrinyi_student_class');
+        const KOD_KULCS = 'ujitas_kod', OK_KULCS = 'ujitas_kod_ok';
+        // Ezekhez az osztályokhoz fogadunk kódot (jövőre pl. ['5', '7', '8']). Több osztálynál minden próba bekerül az Elutasitott naplóba.
+        const AKTIV_OSZTALYOK = ['7'];
+        const GYAKORLOK = [
+            { href: 'zrinyi-gyakorlo-7.html', cim: '7. osztály – 1. feladatsor (2026/27)', db: 30 }
+        ];
+        const ABC = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+        const $ = id => document.getElementById(id);
+        const normKod = s => String(s == null ? '' : s).toUpperCase().replace(/[^A-Z0-9]/g, '');
+        const ellenorzo = body => { let s = 0; for (let i = 0; i < body.length; i++) { const v = ABC.indexOf(body[i]); if (v < 0) return ''; s += (i + 1) * v; } return ABC[s % ABC.length]; };
+        const kodJo = n => n.length === 8 && ellenorzo(n.slice(0, 7)) === n[7];
+        const formaz = n => n.length > 4 ? n.slice(0, 4) + '-' + n.slice(4) : n;
+        const tar = {
+            get: k => { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } },
+            set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} },
+            del: k => { try { sessionStorage.removeItem(k); } catch (e) {} }
+        };
 
-            if (name && cls) {
-                document.getElementById('display-name').textContent = name;
-                document.getElementById('display-class').textContent = cls;
-                document.getElementById('step1-modal').classList.add('hidden');
-                document.getElementById('step2-modal').classList.add('hidden');
+        async function szerverKod(n, osztaly) {
+            try {
+                const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 15000);
+                const r = await fetch(window.UJITAS_URL + '?akcio=kod&kod=' + encodeURIComponent(n) + '&osztaly=' + encodeURIComponent(osztaly), { cache: 'no-store', signal: ctl.signal });
+                clearTimeout(to);
+                return await r.json();
+            } catch (e) { return null; }
+        }
+        /** 'ok' | 'rossz' | 'hiba'. Siker esetén a kód a gyakorlólap számára is megmarad (azonosito.js ugyanezeket a kulcsokat használja). */
+        async function kodEllenorzes(n) {
+            let hiba = !window.UJITAS_URL;
+            for (const o of AKTIV_OSZTALYOK) {
+                const d = await szerverKod(n, o);
+                if (!d) { hiba = true; continue; }
+                if (d.ok === true) {
+                    tar.set(KOD_KULCS, n); tar.set(OK_KULCS, n + '|' + o);
+                    tar.set('zrinyi_student_name', d.name || 'Tanuló');   // a régi (név alapú) feladatlapok innen olvasnak
+                    tar.set('zrinyi_student_class', o);
+                    return 'ok';
+                }
             }
+            return hiba ? 'hiba' : 'rossz';
+        }
+        function mutatDiak() {
+            $('display-name').textContent = tar.get('zrinyi_student_name');
+            $('display-class').textContent = tar.get('zrinyi_student_class');
+        }
+        function kodBe() {
+            const inp = $('student-code'), msg = $('code-msg'), btn = $('code-btn');
+            const n = normKod(inp.value).slice(0, 8), jo = kodJo(n);
+            inp.value = formaz(n);
+            btn.disabled = !jo; btn.classList.toggle('disabled', !jo);
+            msg.style.color = jo ? '#34d399' : '#f87171';
+            msg.textContent = n.length === 8 ? (jo ? 'Rendben ✔' : 'Elgépelted a kódot, ellenőrizd még egyszer.') : '';
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            $('gyakorlo-lista').innerHTML = GYAKORLOK.map((g, i) => `
+                <div class="class-card"><div><h2>${g.cim}</h2><p>Online gyakorló, ${g.db} feladat, azonnali ellenőrzéssel.</p></div>
+                <div class="btn-container"><button class="btn-select" onclick="goToPractice(${i})">Megnyitás <i class="fa-solid fa-arrow-right"></i></button></div></div>`).join('');
+            $('student-code').addEventListener('input', kodBe);
+            $('student-code').addEventListener('keydown', e => { if (e.key === 'Enter') goToStep2(); });
             updateCardLabels();
+
+            // már megadott kód (pl. a gyakorlólapról érkezett): a nevet a szerver adja
+            const kod = normKod(tar.get(KOD_KULCS));
+            if (kodJo(kod) && (!tar.get('zrinyi_student_name') || !tar.get('zrinyi_student_class'))) await kodEllenorzes(kod);
+            if (kodJo(kod) && tar.get('zrinyi_student_name') && tar.get('zrinyi_student_class')) {
+                mutatDiak();
+                $('step1-modal').classList.add('hidden');
+            }
         });
 
-        function goToStep2() {
-            const name = document.getElementById('student-name').value.trim();
-            const cls = document.getElementById('student-class').value.trim();
-
-            if (!name || !cls) {
-                alert('Kérlek, add meg a nevedet és az osztályodat is!');
+        async function goToStep2() {
+            const n = normKod($('student-code').value), msg = $('code-msg'), btn = $('code-btn');
+            if (!kodJo(n)) return;
+            btn.disabled = true; msg.style.color = '#cbd5e1'; msg.textContent = 'Ellenőrzés…';
+            const v = await kodEllenorzes(n);
+            if (v !== 'ok') {
+                btn.disabled = false; msg.style.color = '#f87171';
+                msg.textContent = v === 'rossz' ? 'Ez a kód nem érvényes.' : 'Nem sikerült ellenőrizni a kódot. Próbáld újra.';
                 return;
             }
-
-            sessionStorage.setItem('zrinyi_student_name', name);
-            sessionStorage.setItem('zrinyi_student_class', cls);
-
-            document.getElementById('display-name').textContent = name;
-            document.getElementById('display-class').textContent = cls;
-
-            document.getElementById('step1-modal').classList.add('hidden');
-            document.getElementById('step2-modal').classList.remove('hidden');
+            mutatDiak();
+            $('step1-modal').classList.add('hidden');
+            $('step2-modal').classList.remove('hidden');
         }
 
         function finishQuizStart() {
-            document.getElementById('step2-modal').classList.add('hidden');
+            $('step2-modal').classList.add('hidden');
         }
 
         function resetStudentData() {
-            document.getElementById('step1-modal').classList.remove('hidden');
-            document.getElementById('step2-modal').classList.add('hidden');
+            [KOD_KULCS, OK_KULCS, 'zrinyi_student_name', 'zrinyi_student_class'].forEach(tar.del);
+            $('student-code').value = ''; kodBe();
+            $('display-name').textContent = '-'; $('display-class').textContent = '-';
+            $('step1-modal').classList.remove('hidden');
+            $('step2-modal').classList.add('hidden');
+        }
+
+        function goToPractice(i) {
+            if (!tar.get('zrinyi_student_name') || !kodJo(normKod(tar.get(KOD_KULCS)))) { $('step1-modal').classList.remove('hidden'); return; }
+            window.location.href = GYAKORLOK[i].href;
         }
 
         // Szűrők, jelvények és buborékok frissítése

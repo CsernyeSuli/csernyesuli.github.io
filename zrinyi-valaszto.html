@@ -402,10 +402,10 @@
         ];
 
         const KOD_KULCS = 'ujitas_kod', OK_KULCS = 'ujitas_kod_ok';
-        // Ezekhez az osztályokhoz fogadunk kódot (jövőre pl. ['5', '7', '8']). Több osztálynál minden próba bekerül az Elutasitott naplóba.
-        const AKTIV_OSZTALYOK = ['7'];
+        // Közös célazonosító: a kódot az Apps Script minden 5–8. évfolyamos diákra elfogadja, az eredmények az osztaly_zrinyi táblázatba mennek.
+        const ZRINYI_ID = 'zrinyi';
         const GYAKORLOK = [
-            { href: 'zrinyi-gyakorlo-7.html', cim: '7. osztály – 1. feladatsor (2026/27)', db: 30 }
+            { evfolyam: '7', href: 'zrinyi-gyakorlo-7.html', cim: '7. osztály – 1. feladatsor (2026/27)', db: 30 }
         ];
         const ABC = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
         const $ = id => document.getElementById(id);
@@ -429,22 +429,28 @@
         }
         /** 'ok' | 'rossz' | 'hiba'. Siker esetén a kód a gyakorlólap számára is megmarad (azonosito.js ugyanezeket a kulcsokat használja). */
         async function kodEllenorzes(n) {
-            let hiba = !window.UJITAS_URL;
-            for (const o of AKTIV_OSZTALYOK) {
-                const d = await szerverKod(n, o);
-                if (!d) { hiba = true; continue; }
-                if (d.ok === true) {
-                    tar.set(KOD_KULCS, n); tar.set(OK_KULCS, n + '|' + o);
-                    tar.set('zrinyi_student_name', d.name || 'Tanuló');   // a régi (név alapú) feladatlapok innen olvasnak
-                    tar.set('zrinyi_student_class', o);
-                    return 'ok';
-                }
-            }
-            return hiba ? 'hiba' : 'rossz';
+            if (!window.UJITAS_URL) return 'hiba';
+            const d = await szerverKod(n, ZRINYI_ID);
+            if (!d) return 'hiba';
+            if (d.ok !== true) return 'rossz';
+            tar.set(KOD_KULCS, n); tar.set(OK_KULCS, n + '|' + ZRINYI_ID);
+            tar.set('zrinyi_student_name', d.name || 'Tanuló');            // a régi (név alapú) feladatlapok innen olvasnak
+            tar.set('zrinyi_student_class', d['class'] || 'tanár');        // a diák valódi osztálya (pl. 6a), tanárnál 'tanár'
+            return 'ok';
         }
         function mutatDiak() {
             $('display-name').textContent = tar.get('zrinyi_student_name');
             $('display-class').textContent = tar.get('zrinyi_student_class');
+            renderGyakorlok();
+        }
+        /** Csak a diák saját évfolyamának gyakorlója látszik (a tanár mindet látja). Az index az eredeti GYAKORLOK-index. */
+        function renderGyakorlok() {
+            const cls = tar.get('zrinyi_student_class');
+            const lathato = g => cls === 'tanár' || (cls && cls.charAt(0) === g.evfolyam);
+            const html = GYAKORLOK.map((g, i) => lathato(g) ? `
+                <div class="class-card"><div><h2>${g.cim}</h2><p>Online gyakorló, ${g.db} feladat, azonnali ellenőrzéssel.</p></div>
+                <div class="btn-container"><button class="btn-select" onclick="goToPractice(${i})">Megnyitás <i class="fa-solid fa-arrow-right"></i></button></div></div>` : '').join('');
+            $('gyakorlo-lista').innerHTML = html || '<p style="color:#cbd5e1;font-size:14px;">Az évfolyamodhoz még nincs online gyakorló.</p>';
         }
         function kodBe() {
             const inp = $('student-code'), msg = $('code-msg'), btn = $('code-btn');
@@ -456,9 +462,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            $('gyakorlo-lista').innerHTML = GYAKORLOK.map((g, i) => `
-                <div class="class-card"><div><h2>${g.cim}</h2><p>Online gyakorló, ${g.db} feladat, azonnali ellenőrzéssel.</p></div>
-                <div class="btn-container"><button class="btn-select" onclick="goToPractice(${i})">Megnyitás <i class="fa-solid fa-arrow-right"></i></button></div></div>`).join('');
+            renderGyakorlok();
             $('student-code').addEventListener('input', kodBe);
             $('student-code').addEventListener('keydown', e => { if (e.key === 'Enter') goToStep2(); });
             updateCardLabels();
@@ -494,7 +498,7 @@
         function resetStudentData() {
             [KOD_KULCS, OK_KULCS, 'zrinyi_student_name', 'zrinyi_student_class'].forEach(tar.del);
             $('student-code').value = ''; kodBe();
-            $('display-name').textContent = '-'; $('display-class').textContent = '-';
+            $('display-name').textContent = '-'; $('display-class').textContent = '-'; renderGyakorlok();
             $('step1-modal').classList.remove('hidden');
             $('step2-modal').classList.add('hidden');
         }

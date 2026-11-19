@@ -338,7 +338,11 @@
     try {
       fetch(url + '?akcio=kod&kod=' + encodeURIComponent(U.kod) + '&osztaly=' + encodeURIComponent(cfg.classId || ''), { cache: 'no-store' })
         .then(function (r) { return r.json(); })
-        .then(function (d) { if (d && d.ok === true && d.name) $('nev').textContent = d.name; })
+        .then(function (d) {
+          if (!d || d.ok !== true) return;
+          if (d.name) $('nev').textContent = d.name;
+          if (d['class']) $('osztaly').textContent = d['class'];   // a diák valódi osztálya (pl. 6a)
+        })
         .catch(function () { /* nem kritikus */ });
     } catch (e) { /* nem kritikus */ }
   }
@@ -369,7 +373,7 @@
     if (!(await U.run('indulas'))) return;           // pl. nem adott meg kódot
     app.innerHTML = HTML;
     $('visszaGomb').href = cfg.visszaHref || 'zrinyi-valaszto.html';
-    $('osztaly').textContent = cfg.classId || '';
+    try { $('osztaly').textContent = sessionStorage.getItem('zrinyi_student_class') || '-'; } catch (e) { $('osztaly').textContent = '-'; }
     if (!KESZ || !U.elo) {
       $('bead-gomb').style.display = 'none';
       var p = $('proba-sav'); p.style.display = 'block';

@@ -48,7 +48,7 @@
   };
 
   U.css('uj-alap',
-    '.uj-ov{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;' +
+    '.uj-ov{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;' +
     'background:rgba(2,6,23,.9);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}' +
     '.uj-ov[hidden]{display:none}' +
     '.uj-box{width:100%;max-width:400px;box-sizing:border-box;padding:24px;border:1px solid #334155;border-radius:16px;' +

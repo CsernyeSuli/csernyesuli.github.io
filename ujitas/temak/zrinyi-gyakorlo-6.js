@@ -20,6 +20,10 @@
 
   var VART_DB = 25, OLDAL = 9, MAXP = 5, IMG = 'img/zrinyi/gyakorlo-2627-6o/', ABC = ['A', 'B', 'C', 'D', 'E'];
   var EGYIK = 'Az előzőek közül egyik sem.';
+  /* HALADÁS MENTÉSE (sessionStorage): true → frissítés / lapváltás után a diák folytathatja ott, ahol abbahagyta; a feladatsor csak
+   *   a befejezéskor vagy a Beadás gombbal zárul le és megy el. A böngészőlap BEZÁRÁSAKOR a haladás elvész (és nem megy el semmi).
+   *   false → a régi viselkedés: a lap elhagyása lezárja a feladatsort és elküldi az addigi eredményt. */
+  var FOLYTATHATO = true;
 
   /* ================= FELADATOK ================= */
   var TASKS = {
@@ -109,6 +113,7 @@
     </header>
     <div class="zr-sav" id="proba-sav" style="display:none;background:rgba(245,158,11,.15);border:1px solid #f59e0b;color:#fbbf24"></div>
     <div class="zr-sav" id="lezart-sav" style="display:none"></div>
+    <div id="ujra-sor" style="display:none;margin:0 0 15px;text-align:center"><button class="btn" data-act="ujrakezd"><i class="fa-solid fa-rotate-right"></i> Új próbálkozás (gyakorlás)</button></div>
     <div class="pagination-bar">
       <button class="btn btn-secondary" id="elozo" data-act="oldal" data-d="-1"><i class="fa-solid fa-chevron-left"></i> Előző oldal</button>
       <span>Oldal: <strong id="oldal-szam" style="color:#fbbf24">1</strong> / <span id="oldal-db"></span></span>
@@ -120,7 +125,7 @@
         Válaszd ki a helyesnek gondolt választ, majd nyomd meg az <strong>Ellenőrzés</strong> gombot! Egy feladatra legfeljebb <strong>5-ször</strong> próbálkozhatsz;
         ha elfogynak a próbák, vagy megnézed a megoldást, a feladat sikertelenként záródik.<br><br>
         Amikor minden feladat lezárult, az eredményed <strong>automatikusan elküldjük a tanárnak</strong>. A <strong>Beadás</strong> gombbal korábban is beadhatod,
-        de akkor a feladatsor lezárul. Ha elhagyod a lapot vagy másik lapra váltasz, az is lezárja a feladatsort. <strong>Az első beküldésed számít</strong>, a további alkalmak gyakorlásnak minősülnek.
+        de akkor a feladatsor lezárul. ${FOLYTATHATO ? 'Ha frissíted az oldalt vagy másik lapra váltasz, a haladásod megmarad, és folytathatod. Ha viszont bezárod a böngészőlapot, a haladás elvész.' : 'Ha elhagyod a lapot vagy másik lapra váltasz, az is lezárja a feladatsort.'} <strong>Az első beküldésed számít</strong>, a további alkalmak gyakorlásnak minősülnek.
       </p>
       <button class="btn" data-act="oldal" data-d="1">Kezdés <i class="fa-solid fa-arrow-right"></i></button>
     </div>
@@ -172,12 +177,13 @@
   </div></div>`;
 
   /* ================= ÁLLAPOT ================= */
-  var D = {}, S = { oldal: 0, akt: null, t0: 0, lezarva: false, befejezes: false, folyik: false, elkuldve: false, reason: '', cb: null };
+  var D = {}, S = { oldal: 0, akt: null, t0: 0, lezarva: false, befejezes: false, folyik: false, elkuldve: false, reason: '', cb: null, torolve: false };
   var OLDALAK = Math.ceil(VART_DB / OLDAL);
   var KESZ = (function () { for (var i = 1; i <= VART_DB; i++) if (!TASKS[i]) return false; return true; })();
   for (var i = 1; i <= VART_DB; i++) D[i] = { st: 'unsolved', sel: null, n: 0, probak: [], mp: 0, megnezte: false };
 
   function mutat(id, be) { $(id).classList.toggle('hidden', !be); }
+  function mutat2(id, be) { $(id).style.display = be ? '' : 'none'; }
   function stopT() { if (S.akt && S.t0) D[S.akt].mp += Math.round((Date.now() - S.t0) / 1000); S.t0 = 0; }
   function mpOf(id) { return D[id].mp + (S.akt === id && S.t0 ? Math.round((Date.now() - S.t0) / 1000) : 0); }
   function mj(el, n) {
@@ -195,6 +201,35 @@
     for (var i = 1; i <= VART_DB; i++) { var s = D[i].st; if (s === 'correct') c++; else if (s === 'failed') f++; else u++; }
     $('st-c').textContent = c; $('st-f').textContent = f;
     return { c: c, f: f, u: u };
+  }
+
+  /* ================= HALADÁS MENTÉSE ================= */
+  function mentKulcs() { return 'zrinyi_gy_' + (cfg.setId || '1') + '_' + (U.kod || 'x'); }
+  function ment() {
+    if (!FOLYTATHATO || !KESZ || S.torolve) return;
+    try {
+      var o = { v: 1, n: VART_DB, oldal: S.oldal, lezarva: S.lezarva, elkuldve: S.elkuldve, reason: S.reason, D: {} };
+      for (var i = 1; i <= VART_DB; i++) { var d = D[i]; o.D[i] = { st: d.st, sel: d.sel, n: d.n, probak: d.probak, mp: mpOf(i), megnezte: d.megnezte }; }
+      sessionStorage.setItem(mentKulcs(), JSON.stringify(o));
+    } catch (e) { /* nem kritikus */ }
+  }
+  /** Visszatölti a mentett haladást; null, ha nincs (vagy nem használható) mentés. */
+  function betolt() {
+    if (!FOLYTATHATO || !KESZ) return null;
+    var o; try { o = JSON.parse(sessionStorage.getItem(mentKulcs()) || 'null'); } catch (e) { return null; }
+    if (!o || o.v !== 1 || o.n !== VART_DB || !o.D) return null;
+    var OKST = { unsolved: 1, correct: 1, failed: 1 };
+    for (var i = 1; i <= VART_DB; i++) {
+      var s = o.D[i]; if (!s || !OKST[s.st]) continue;
+      var d = D[i];
+      d.st = s.st; d.n = Math.max(0, Math.min(MAXP, +s.n || 0));
+      d.probak = Array.isArray(s.probak) ? s.probak.filter(function (x) { return ABC.indexOf(x) >= 0; }).slice(0, MAXP) : [];
+      d.mp = Math.max(0, +s.mp || 0); d.megnezte = !!s.megnezte;
+      d.sel = ABC.indexOf(s.sel) >= 0 ? s.sel : null;
+    }
+    S.oldal = Math.max(0, Math.min(OLDALAK, +o.oldal || 0));
+    S.reason = o.reason ? String(o.reason) : ''; S.elkuldve = !!o.elkuldve;
+    return { lezarva: !!o.lezarva };
   }
 
   /* ================= OLDALAK ÉS RÁCS ================= */
@@ -310,20 +345,36 @@
   /** Az egész feladatsor EGYSZERRE megy el; az e-mailt a szerver csak az első beküldésnél küldi. */
   async function kuldes(reason) {
     if (!KESZ || S.folyik || S.elkuldve) return;
-    S.reason = S.reason || reason; lezar(S.reason);
+    S.reason = S.reason || reason; lezar(S.reason); ment();
     S.folyik = true; mutat('kuldujra', false); allapot('info', 'Küldés…');
     var ok = false;
     try { ok = await U.kuldes(payload(S.reason)); } catch (e) { console.error(e); }
     S.folyik = false;
-    if (ok === true) { S.elkuldve = true; allapot('ok', '✅ Az eredményed elküldtük. Köszönjük!'); }
+    if (ok === true) { S.elkuldve = true; allapot('ok', '✅ Az eredményed elküldtük. Köszönjük!'); mutat2('ujra-sor', true); }
     else if (ok === null) allapot('info', 'Archív módban nincs küldés.');
     else { allapot('rossz', '❌ A küldés nem sikerült. Ne zárd be az oldalt, próbáld újra!'); $('kuldujra').style.display = ''; }
+    ment();
   }
   function bead() {
     if (S.lezarva) { osszesites(); return; }
     var u = statok().u;
     var menj = function () { zarFeladat(); osszesites(); kuldes(u ? 'lapvaltas' : 'befejezve'); };
     if (u) kerdez('Még ' + u + ' feladat nincs lezárva. Ha most beadod, a feladatsor lezárul, és az eddigi eredményedet elküldjük. Beadod?', menj); else menj();
+  }
+
+  /** A mentett haladás visszaállítása után: lezárt sor → csak olvasható (és ha kell, újraküldés); különben folytatás. */
+  function folytat(m) {
+    var s = statok();
+    if (m.lezarva) {
+      lezar(S.reason || 'befejezve'); renderOldalak();
+      if (S.elkuldve) { allapot('ok', '✅ Az eredményed elküldtük. Köszönjük!'); mutat2('ujra-sor', true); }
+      else kuldes(S.reason || 'befejezve');
+    } else if (!s.u) {
+      S.befejezes = true; osszesites(); kuldes('befejezve');     // minden feladat lezárt, de a beküldés még nem történt meg
+    } else if (s.c + s.f > 0) {
+      var p = $('proba-sav'); p.style.display = 'block';
+      p.textContent = 'Folytatod a megkezdett feladatsort (' + (s.c + s.f) + ' / ' + VART_DB + ' feladat lezárva).';
+    }
   }
 
   /* ================= INDÍTÁS ================= */
@@ -358,7 +409,18 @@
       else if (a === 'kuldujra') kuldes(S.reason || 'befejezve');
       else if (a === 'igen') { mutat('kerdes-modal', false); var f = S.cb; S.cb = null; if (f) f(); }
       else if (a === 'nem') { mutat('kerdes-modal', false); S.cb = null; }
+      else if (a === 'ujrakezd') kerdez('Új próbálkozást kezdesz. Ez gyakorlásnak számít, az első beküldésed marad érvényes. Folytatod?', function () {
+        S.torolve = true; try { sessionStorage.removeItem(mentKulcs()); } catch (e) { /* nem kritikus */ } location.reload();
+      });
+      ment();
     });
+    if (FOLYTATHATO) {
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) { stopT(); ment(); }
+        else if (S.akt && !S.lezarva && !$('feladat-modal').classList.contains('hidden')) S.t0 = Date.now();   // az elrejtett idő nem számít
+      });
+      window.addEventListener('pagehide', function () { stopT(); ment(); });
+    }
   }
 
   (async function () {
@@ -366,6 +428,10 @@
     if (!app) { console.error('Hiányzik a #app elem'); return; }
     if (!(await U.run('indulas'))) return;           // pl. nem adott meg kódot
     app.innerHTML = HTML;
+    if (FOLYTATHATO) {   // a keret (vedelem.js) figyelmeztetése még a régi, lezáró viselkedésről szólna – átírjuk
+      var ft = document.getElementById('uj-fig-t'), fp = ft && ft.nextElementSibling;
+      if (fp) fp.textContent = 'Ha másik lapra váltasz vagy frissíted az oldalt, a haladásod megmarad, és folytathatod. Ha viszont bezárod a böngészőlapot, a haladásod elvész.';
+    }
     $('visszaGomb').href = cfg.visszaHref || 'zrinyi-valaszto.html';
     try { $('osztaly').textContent = sessionStorage.getItem('zrinyi_student_class') || '-'; } catch (e) { $('osztaly').textContent = '-'; }
     if (!KESZ || !U.elo) {
@@ -373,9 +439,18 @@
       var p = $('proba-sav'); p.style.display = 'block';
       p.textContent = KESZ ? 'Archív mód: a beküldés nincs bekapcsolva.' : 'Próbaváltozat: még csak ' + Object.keys(TASKS).length + ' / ' + VART_DB + ' feladat van feltöltve, a beküldés ki van kapcsolva.';
     }
+    var mentett = betolt();
     nevBetolt(); statok(); renderOldalak(); esemenyek();
     U.aktiv = function () { return KESZ && U.elo && !S.lezarva; };
-    U.on('lapvaltas', function () { if (KESZ && U.elo) kuldes('lapvaltas'); });
-    U.on('kilepes', function () { if (KESZ && U.elo && !S.elkuldve && !S.folyik) U.kuldes(payload(S.reason || 'lapvaltas'), { csendes: true }); });
+    U.on('lapvaltas', function () {
+      if (!KESZ || !U.elo) return;
+      if (FOLYTATHATO) ment(); else kuldes('lapvaltas');
+    });
+    U.on('kilepes', function () {
+      if (!KESZ || !U.elo) return;
+      if (FOLYTATHATO) { ment(); return; }
+      if (!S.elkuldve && !S.folyik) U.kuldes(payload(S.reason || 'lapvaltas'), { csendes: true });
+    });
+    if (mentett) folytat(mentett);
   })();
 })();

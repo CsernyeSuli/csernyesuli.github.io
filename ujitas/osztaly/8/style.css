@@ -1,0 +1,588 @@
+:root {
+    --primary-burgundy: #7a1c3d;
+    --primary-burgundy-dark: #59112b;
+    --accent-purple: #5b2c6f;
+    --margin-green: #2e7d32;
+    --margin-green-dark: #1b5e20;
+    --margin-green-light: #e8f5e9;
+    --highlight-yellow: #fff8e1;
+    --highlight-border: #ffb300;
+    --alert-red: #c62828;
+    --alert-red-bright: #e53935;
+    --alert-red-dark: #8e0000;
+    --alert-red-bg: #ffebee;
+    --gray-box-bg: #dce7f2;
+    --gray-box-text: #3b4652;
+    --text-dark: #263238;
+    --bg-paper: #fdfcf9;
+    --bg-outer: #eceff1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-outer);
+    color: var(--text-dark);
+    line-height: 1.65;
+    padding: 24px 16px;
+}
+
+/* Tankönyvi oldal keret */
+.page-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    background-color: var(--bg-paper);
+    padding: 40px 48px;
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    border-top: 8px solid var(--primary-burgundy);
+}
+
+/* Fejléc */
+.chapter-tag {
+    color: var(--primary-burgundy);
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+h1 {
+    color: var(--primary-burgundy);
+    font-size: 1.85rem;
+    border-bottom: 2px solid var(--primary-burgundy);
+    padding-bottom: 14px;
+    margin-bottom: 32px;
+    letter-spacing: 0.4px;
+    line-height: 1.25;
+}
+
+/* Tartalmi sorok (Fő tartalom + Zöld margó) */
+.content-row {
+    display: grid;
+    grid-template-columns: 1fr 275px;
+    gap: 32px;
+    margin-bottom: 32px;
+    align-items: start;
+}
+
+.main-col {
+    font-size: 1.04rem;
+}
+
+.main-col p {
+    margin-bottom: 10px;
+}
+
+.main-col p:last-child {
+    margin-bottom: 0;
+}
+
+.main-col ul {
+    margin: 10px 0 14px 22px;
+}
+
+.main-col li {
+    margin-bottom: 6px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+/* Zöld margósáv */
+.margin-col {
+    position: sticky;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 20;
+}
+
+.hint-wrapper {
+    position: relative;
+}
+
+/* Példa dobozok */
+.example-box {
+    background: #ffffff;
+    border-left: 4px solid var(--accent-purple);
+    padding: 20px 24px;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.example-title {
+    color: var(--accent-purple);
+    font-weight: 700;
+    font-size: 1.12rem;
+    margin-bottom: 10px;
+    display: inline-block;
+    background: #f3e5f5;
+    padding: 3px 12px;
+    border-radius: 5px;
+}
+
+.math {
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-burgundy-dark);
+    background: #faf6f8;
+    border: 1px solid #ebd8e0;
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin: 10px 0 12px;
+    display: inline-block;
+}
+
+.math-sub {
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 6px 0 12px;
+}
+
+.solution-highlight {
+    background-color: var(--highlight-yellow);
+    border: 1px solid var(--highlight-border);
+    border-left: 4px solid var(--highlight-border);
+    padding: 9px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: 12px;
+    display: inline-block;
+}
+
+/* Számegyenes képek konténere */
+.number-line {
+    margin: 18px 0 4px;
+    background: #ffffff;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid #dce3e8;
+    text-align: center;
+}
+
+.number-line img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.number-line figcaption {
+    font-size: 0.92rem;
+    color: #455a64;
+    line-height: 1.5;
+}
+
+/* Kékes-szürke kiegészítő doboz */
+.gray-note-box {
+    background-color: var(--gray-box-bg);
+    color: var(--gray-box-text);
+    padding: 22px 26px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    font-size: 0.98rem;
+    line-height: 1.62;
+    border-left: 4px solid #78909c;
+}
+
+.compact-list {
+    margin: 10px 0 12px 22px !important;
+}
+
+/* Fejtörő doboz és fejjel lefelé megoldás */
+.puzzle-box {
+    background: #fff8f6;
+    border: 1.5px dashed var(--alert-red-bright);
+    border-radius: 8px;
+    padding: 18px 20px;
+}
+
+.puzzle-badge {
+    display: inline-block;
+    background: var(--alert-red);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 3px 11px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.puzzle-toggle-btn {
+    margin-top: 10px;
+    background-color: #ffffff;
+    color: var(--alert-red);
+    border: 1.5px solid var(--alert-red);
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.puzzle-toggle-btn:hover,
+.puzzle-toggle-btn[aria-expanded="true"] {
+    background-color: var(--alert-red);
+    color: #ffffff;
+}
+
+.puzzle-solution {
+    margin-top: 12px;
+    background-color: #ffffff;
+    border: 1px solid #ffcdd2;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.upside-down-text {
+    transform: rotate(180deg);
+    transform-origin: center center;
+    color: var(--alert-red-dark);
+    font-size: 0.96rem;
+    line-height: 1.55;
+}
+
+/* Zöld rávezető kérdés / mondat gomb */
+.green-hint-trigger {
+    background-color: var(--margin-green-light);
+    color: var(--margin-green-dark);
+    border: 1.5px solid var(--margin-green);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    width: 100%;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(46, 125, 50, 0.14);
+}
+
+.green-hint-trigger:hover,
+.green-hint-trigger[aria-expanded="true"] {
+    background-color: var(--margin-green);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+}
+
+.hint-icon {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+/* Lebegő lap a megfelelő tartalom mellett */
+.floating-hint-card {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: calc(100% + 14px);
+    width: 320px;
+    max-width: calc(100vw - 40px);
+    background-color: #ffffff;
+    border: 2px solid var(--margin-green);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+    z-index: 150;
+    color: var(--text-dark);
+    font-size: 0.94rem;
+    line-height: 1.55;
+    animation: floatIn 0.2s ease-out;
+}
+
+.floating-hint-card.active {
+    display: block;
+}
+
+.floating-hint-card h4 {
+    color: var(--margin-green-dark);
+    margin-bottom: 8px;
+    font-size: 1rem;
+    border-bottom: 1px solid #c8e6c9;
+    padding-bottom: 5px;
+}
+
+/* Alsó Emlékeztető gomb szekció */
+.footer-action {
+    margin-top: 36px;
+    padding-top: 26px;
+    border-top: 2px dashed #ef9a9a;
+    display: flex;
+    justify-content: center;
+}
+
+.reminder-btn {
+    background: linear-gradient(135deg, var(--alert-red-bright), var(--alert-red-dark));
+    color: #ffffff;
+    border: 2px solid #ff8a80;
+    padding: 15px 30px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    border-radius: 32px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(211, 47, 47, 0.42);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    letter-spacing: 0.2px;
+}
+
+.reminder-btn:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 26px rgba(198, 40, 40, 0.55);
+    filter: brightness(1.05);
+}
+
+.reminder-btn-icon {
+    font-size: 1.15rem;
+}
+
+/* Emlékeztető lebegő lap háttere: lágyabb elhomályosítás + finom pirossas fátyol */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at center, rgba(229, 57, 53, 0.14), rgba(183, 28, 28, 0.26)),
+        rgba(33, 37, 41, 0.42);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.22s ease-out;
+}
+
+/* Lebegő lap: piros keret és piros árnyékszegély a képernyőkép alapján */
+.modal-overlay {
+    overflow-y: auto;
+    padding: 36px 20px;
+}
+.reminder-modal {
+    background-color: #fee7d9;
+    border: 3px solid #e53935;
+    max-width: 670px;
+    width: 100%;
+    /* max-height: 88vh; */
+    overflow-y: visible;
+    margin: auto;
+    border-radius: 16px;
+    padding: 36px 28px 26px;
+    position: relative;
+    box-shadow:
+        0 0 0 4px rgba(229, 57, 53, 0.22),
+        0 18px 42px rgba(198, 40, 40, 0.42);
+    color: #263238;
+}
+
+.reminder-modal p {
+    margin-bottom: 12px;
+    font-size: 1.02rem;
+    line-height: 1.56;
+    color: #dd1313;
+}
+.reminder-modal .muted-line {
+    color: #000000;
+}
+
+.reminder-modal .rel-symbols {
+    color: #e91515;
+    font-weight: 700;
+}
+
+.reminder-modal .red-char {
+    color: #e55b43;
+}
+
+.reminder-pill {
+    position: absolute;
+    top: -17px;
+    left: 24px;
+    background: linear-gradient(135deg, var(--alert-red-bright), var(--alert-red));
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.98rem;
+    padding: 5px 20px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+    border: 1.5px solid #ffcdd2;
+}
+
+.close-modal {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    color: var(--alert-red);
+    cursor: pointer;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.close-modal:hover {
+    color: var(--alert-red-dark);
+}
+
+.reminder-card {
+    background-color: var(--alert-red-bg);
+    border-left: 4px solid var(--alert-red-bright);
+    padding: 11px 15px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    line-height: 1.56;
+}
+
+.reminder-card--soft {
+    background-color: #ffffff;
+    border: 1px solid #f2d7d5;
+    border-left: 4px solid var(--margin-green);
+}
+
+.reminder-card p {
+    margin-bottom: 0;
+}
+
+.red-accent {
+    color: #e55b43;
+    font-weight: 700;
+}
+
+.next-page-btn {
+    display: block;
+    margin-top: 16px;
+    background-color: var(--margin-green);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.98rem;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.next-page-btn:hover {
+    background-color: var(--margin-green-dark);
+}
+
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateX(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Reszponzív nézet kisebb képernyőre */
+@media (max-width: 900px) {
+    .page-container {
+        padding: 26px 20px;
+    }
+
+    h1 {
+        font-size: 1.45rem;
+    }
+
+    .content-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .margin-col {
+        position: static;
+    }
+
+    .floating-hint-card {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 8px;
+        animation: fadeIn 0.2s ease-out;
+    }
+}
+.math-unit {
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .modal-overlay {
+        padding: 28px 12px;
+    }
+
+    .reminder-modal {
+        padding: 36px 16px 20px;
+        border-radius: 14px;
+    }
+
+    .reminder-pill {
+        top: -14px;
+        left: 14px;
+        font-size: 0.84rem;
+        padding: 4px 12px;
+        white-space: nowrap;
+    }
+
+    .close-modal {
+        top: 6px;
+        right: 8px;
+        width: 34px;
+        height: 34px;
+        font-size: 1.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reminder-modal p {
+        font-size: 1.02rem;
+        line-height: 1.5;
+    }
+}

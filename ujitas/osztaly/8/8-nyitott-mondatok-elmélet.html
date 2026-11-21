@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egyenlet, azonosság, egyenlőtlenség, azonos egyenlőtlenség</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-container">
+    <header class="doc-header">
+        <div class="chapter-tag">• ALGEBRA •</div>
+        <h1>EGYENLET, AZONOSSÁG, EGYENLŐTLENSÉG, AZONOS EGYENLŐTLENSÉG</h1>
+    </header>
+
+    <!-- 1. PÉLDA ÉS ZÖLD MARGÓ -->
+    <section class="content-row" id="pelda-1">
+        <div class="main-col">
+            <article class="example-box">
+                <div class="example-title">1. példa</div>
+                <p>Határozzuk meg a nyitott mondat igazsághalmazát, ha az alaphalmaz a <strong>ℤ</strong>.</p>
+                <div class="math">(5 − x)(3 + x)(2x − 1) = 0</div>
+                <p>A nyitott mondatoknak, így az egyenleteknek, egyenlőtlenségeknek általában nincs logikai értékük. Nem mondhatjuk el róluk, hogy igazak vagy hamisak. Így például az adott egyenlet se nem igaz, se nem hamis:</p>
+                <div class="math-sub">(5 − x)(3 + x)(2x − 1) = 0</div>
+                <p>Ha az <em>x</em> helyére beírjuk az alaphalmaz valamelyik elemét, akkor ebből a nyitott mondatból kijelentést kapunk. Például:</p>
+                <ul>
+                    <li>Ha az <em>x</em> helyére 4-et írunk, akkor hamis kijelentést kapunk, mert <strong>(5 − 4)(3 + 4)(2 · 4 − 1) ≠ 0</strong>. Az <em>x</em> = 4 nem megoldása az egyenletnek.</li>
+                    <li>Ha az <em>x</em> helyére 5-öt írunk, akkor igaz kijelentést kapunk: <strong>(5 − 5)(3 + 5)(2 · 5 − 1) = 0</strong>. Az <em>x</em><sub>1</sub> = 5 (és az <em>x</em><sub>2</sub> = −3) kielégíti az egyenletet. Ezek egész számok, az alaphalmaz elemei.</li>
+                    <li>Az <em>x</em><sub>1</sub> = 5 és az <em>x</em><sub>2</sub> = −3 megoldása, más szóval gyöke az egyenletnek.</li>
+                    <li>Az <em>x</em><sub>3</sub> = 1/2 is kielégíti az egyenletet, de nem egész szám, az alaphalmaznak nem eleme, ezért nem megoldása (nem gyöke) az egyenletnek.</li>
+                </ul>
+                <div class="solution-highlight">Az egyenlet igazsághalmaza vagy megoldáshalmaza: <strong>I = {5; −3}</strong></div>
+            </article>
+        </div>
+
+        <aside class="margin-col" aria-label="Rávezető kérdések az 1. példához">
+            <div class="hint-wrapper">
+                <button type="button" class="green-hint-trigger" data-target="hint-1" aria-expanded="false">
+                    <span class="hint-icon" aria-hidden="true">💬</span>
+                    <span>Egy szorzat eredménye mikor lesz 0?</span>
+                </button>
+                <div class="floating-hint-card" id="hint-1" role="dialog" aria-label="Segítő gondolat">
+                    <h4>Segítő gondolat</h4>
+                    <p>Egy szorzat pontosan akkor 0, ha legalább az egyik tényezője 0. Ezért külön-külön megvizsgálhatjuk, mikor lesz <strong>5 − x = 0</strong>, <strong>3 + x = 0</strong> vagy <strong>2x − 1 = 0</strong>.</p>
+                </div>
+            </div>
+
+            <div class="hint-wrapper">
+                <button type="button" class="green-hint-trigger" data-target="hint-2" aria-expanded="false">
+                    <span class="hint-icon" aria-hidden="true">💬</span>
+                    <span>Ez az egyenlet olyan nyitott mondat, amelynek állítmánya „egyenlő”. Az I részhalmaza a ℤ-nek.</span>
+                </button>
+                <div class="floating-hint-card" id="hint-2" role="dialog" aria-label="Alaphalmaz szerepe">
+                    <h4>Alaphalmaz szerepe</h4>
+                    <p>Mivel az alaphalmaz az egész számok halmaza (<strong>ℤ</strong>), az igazsághalmazba (<strong>I</strong>) csak egész számok kerülhetnek be – ezért nem eleme a megoldáshalmaznak az <em>x</em> = 1/2.</p>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <!-- 2. PÉLDA ÉS ZÖLD MARGÓ -->
+    <section class="content-row" id="pelda-2">
+        <div class="main-col">
+            <article class="example-box">
+                <div class="example-title">2. példa</div>
+                <p>Határozzuk meg az egyenlet megoldáshalmazát, ha az alaphalmaz az <strong>ℝ</strong>.</p>
+                <div class="math">3(2 − x) = 6 − 3x</div>
+                <p>Ezt az egyenletet bármely valós szám kielégíti. Ennek az egyenletnek a megoldáshalmaza megegyezik az alaphalmazzal.</p>
+                <div class="solution-highlight">Ez az egyenlet azonosság.</div>
+            </article>
+        </div>
+
+        <aside class="margin-col" aria-label="Rávezető kérdések a 2. példához">
+            <div class="hint-wrapper">
+                <button type="button" class="green-hint-trigger" data-target="hint-3" aria-expanded="false">
+                    <span class="hint-icon" aria-hidden="true">💬</span>
+                    <span>Mikor azonos két algebrai kifejezés?</span>
+                </button>
+                <div class="floating-hint-card" id="hint-3" role="dialog" aria-label="Azonosság">
+                    <h4>Azonosság</h4>
+                    <p>Két algebrai kifejezés akkor azonos, ha a változó helyére az alaphalmaz bármely elemét behelyettesítve mindig ugyanazt a helyettesítési értéket kapjuk.</p>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <!-- 3. PÉLDA ÉS ZÖLD MARGÓ -->
+    <section class="content-row" id="pelda-3">
+        <div class="main-col">
+            <article class="example-box">
+                <div class="example-title">3. példa</div>
+                <p>Adjuk meg az egyenlőtlenség megoldáshalmazát, ha az alaphalmaz az <strong>ℝ</strong>.</p>
+                <div class="math">|2 + x| ≤ 3</div>
+                <p>Ha ebbe az egyenlőtlenségbe −5-nél nem kisebb és 1-nél nem nagyobb valós számot helyettesítünk be, akkor igaz kijelentést kapunk. Az egyenlőtlenség megoldáshalmaza:</p>
+                <div class="solution-highlight">I = {−5-nél nem kisebb és 1-nél nem nagyobb valós számok}</div>
+
+                <figure class="number-line">
+                    <img src="img/szamegyenes-1.png" alt="Számegyenes a 3. példához: tömör karikák -5 és 1 között">
+                    <figcaption>A megoldáshalmaz olyan számköz, amelyhez mindkét végpontja hozzátartozik. Ezt tömör karikával szemléltethetjük, ha számegyenesen ábrázoljuk a megoldáshalmazt.</figcaption>
+                </figure>
+            </article>
+        </div>
+
+        <aside class="margin-col" aria-label="Rávezető kérdések a 3. példához">
+            <div class="hint-wrapper">
+                <button type="button" class="green-hint-trigger" data-target="hint-4" aria-expanded="false">
+                    <span class="hint-icon" aria-hidden="true">💬</span>
+                    <span>Az egyenlőtlenség így írható fel: −3 ≤ 2 + x ≤ 3</span>
+                </button>
+                <div class="floating-hint-card" id="hint-4" role="dialog" aria-label="Kettős egyenlőtlenség">
+                    <h4>Egyenlőtlenség felírása</h4>
+                    <p>A <strong>−3 ≤ 2 + x ≤ 3</strong> összefüggésből mindhárom részből 2-t levonva kapjuk: <strong>−5 ≤ x ≤ 1</strong>, vagyis a −5 és az 1 közötti (és azokkal egyenlő) valós számokat.</p>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <!-- 4. PÉLDA ÉS ZÖLD MARGÓ -->
+    <section class="content-row" id="pelda-4">
+        <div class="main-col">
+            <article class="example-box">
+                <div class="example-title">4. példa</div>
+                <p>Határozzuk meg az egyenlőtlenség megoldáshalmazát, ha az alaphalmaz az <strong>U</strong>.</p>
+                <div class="math">2 + x &gt; 2 &nbsp;&nbsp;|&nbsp;&nbsp; U = {Pozitív valós számok}</div>
+                <p>Ezt az egyenlőtlenséget bármely pozitív valós szám kielégíti. Az egyenlőtlenség megoldáshalmaza: <strong>I = {Pozitív valós számok}</strong>, vagyis <strong>I = U</strong>.</p>
+                <div class="solution-highlight">Ez azonos egyenlőtlenség az adott alaphalmazon.</div>
+                <p class="mt-10">Ha az alaphalmaz például a valós számok halmaza lenne, akkor nem lenne azonos egyenlőtlenség. A megoldáshalmazhoz nem tartozik hozzá a 0, ezt üres karikával szemléltetjük.</p>
+
+                <figure class="number-line">
+                    <img src="img/szamegyenes-2.png" alt="Számegyenes a 4. példához: üres karika a 0-nál és jobbra mutató félegyenes">
+                </figure>
+            </article>
+        </div>
+
+        <aside class="margin-col" aria-label="Rávezető kérdések a 4. példához">
+            <div class="hint-wrapper">
+                <button type="button" class="green-hint-trigger" data-target="hint-5" aria-expanded="false">
+                    <span class="hint-icon" aria-hidden="true">💬</span>
+                    <span>Néhány érték behelyettesítésével keressük a megoldást.</span>
+                </button>
+                <div class="floating-hint-card" id="hint-5" role="dialog" aria-label="Behelyettesítés">
+                    <h4>Próbálgatás és ellenőrzés</h4>
+                    <p>Ha például <em>x</em> = 1, akkor 2 + 1 = 3 &gt; 2 (igaz). Ha <em>x</em> = 0,5, akkor 2,5 &gt; 2 (igaz). Mivel az alaphalmaz a pozitív valós számok halmaza, minden elemére igaz lesz.</p>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <!-- NYITOTT MONDATOK ÉS FOGALMAK (161. OLDAL) -->
+    <section class="content-row" id="fogalmak">
+        <div class="main-col">
+            <div class="gray-note-box">
+                <p>Fontosak azok a vizsgálatok, amelyekben megállapítjuk, hogy egy alaphalmaz mely elemeire igaz, illetve mely elemeire hamis egy adott állítás. Ilyenkor az állításban az alany helyén (kerettel, kipontozással, betűvel stb. jelölt) változó szerepel. Az ilyen állítást nevezzük <strong>nyitott mondatnak</strong>. A nyitott mondatba írt változót <strong>ismeretlennek</strong> nevezzük. Például ezek nyitott mondatok (az alaphalmazt <strong>U</strong> jelöli):</p>
+                <ul class="compact-list">
+                    <li>…… magasabb, mint Feri, &nbsp;<em>U = {Az osztály tanulói}</em></li>
+                    <li><strong>(5 − x)(3 + x)(2x − 1) = 0</strong>, &nbsp;<em>U = {Egész számok}</em></li>
+                    <li>24 és <em>x</em> közös osztója 6, &nbsp;<em>U = {Természetes számok}</em></li>
+                    <li><strong>2 + x &gt; 2</strong>, &nbsp;<em>U = {Valós számok}</em></li>
+                </ul>
+                <p>Az egyenletek és az egyenlőtlenségek speciális nyitott mondatok. Az előző nyitott mondatok közül a második egyenlet, a negyedik egyenlőtlenség.</p>
+            </div>
+
+            <div class="puzzle-box">
+                <span class="puzzle-badge">Fejtörő!</span>
+                <p>Az <strong>=, &lt;, &gt;, ≤, ≥, ≠</strong> jelek között vannak-e olyanok, amelyekkel ugyanazt az összefüggést fejezzük ki? Ha igen, melyek?</p>
+                <button type="button" class="puzzle-toggle-btn" id="togglePuzzleBtn" aria-expanded="false" aria-controls="puzzleSolution">
+                    🔄 Megoldás megtekintése (fejjel lefelé)
+                </button>
+                <div class="puzzle-solution" id="puzzleSolution" hidden>
+                    <div class="upside-down-text">
+                        <p><strong>Ugyanazt jelentik (példa):</strong> a <strong>&lt;</strong> („kisebb”) és a „nem nagyobb egyenlő” (nem <strong>≥</strong>) ugyanazt az összefüggést fejezi ki más jelöléssel. (A többi pár megtalálása a fejtörő feladata!)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="margin-col" aria-label="Rávezető kérdés a fogalmakhoz">
+            <div class="hint-wrapper">
+                <button type="button" class="green-hint-trigger" data-target="hint-6" aria-expanded="false">
+                    <span class="hint-icon" aria-hidden="true">💬</span>
+                    <span>Miben különbözik a nyitott mondat a kijelentéstől?</span>
+                </button>
+                <div class="floating-hint-card" id="hint-6" role="dialog" aria-label="Nyitott mondat és kijelentés">
+                    <h4>Nyitott mondat vs. kijelentés</h4>
+                    <p>A nyitott mondat változót tartalmaz, ezért önmagában nem dönthető el róla, hogy igaz vagy hamis. Ha a változó helyére konkrét elemet írunk, kijelentést kapunk.</p>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <div class="footer-action">
+        <button type="button" class="reminder-btn" id="openReminderBtn">
+            <span class="reminder-btn-icon" aria-hidden="true">❗</span>
+            <span>FONTOS EMLÉKEZTETŐ • Fogalmak és összefüggések</span>
+        </button>
+    </div>
+</div>
+
+<!-- EMLÉKEZTETŐ LEBEGŐ ABLAK -->
+<div class="modal-overlay" id="reminderModal" role="dialog" aria-modal="true" aria-labelledby="reminderTitle">
+    <div class="reminder-modal">
+        <div class="reminder-pill" id="reminderTitle">❗ FONTOS EMLÉKEZTETŐ</div>
+        <button type="button" class="close-modal" id="closeReminderBtn" title="Bezárás" aria-label="Bezárás">&times;</button>
+
+        <p><strong>Ha két kifejezést egyenlőségjellel kapcsolunk össze, akkor <span class="red-char">egyenletről</span> beszélünk. A két kifejezést az egyenlet <span class="red-char">bal</span>, illetve <span class="red-char">jobb oldalának</span> nevezzük.</strong></p>
+
+        <p><strong>Ha két kifejezést a <span class="rel-symbols">&lt;, &gt;, ≦, ≧, ≠, ≮, ≯, ≰, ≱</span> jelek valamelyikével kapcsolunk össze, akkor <span class="red-char">egyenlőtlenséget</span> kapunk.</strong></p>
+
+        <p><span class="red-char"><strong>Egyenletet és egyenlőtlenséget megoldani</strong></span> <strong>annyit jelent, hogy megkeressük az alaphalmaz mindazon elemeit, amelyeket az adott egyenletbe, egyenlőtlenségbe helyettesítve igaz kijelentést kapunk.</strong></p>
+
+        <p class="muted-line">Ha nem adunk meg mást, akkor az alaphalmaz a valós számok (<strong>ℝ</strong>) halmaza.</p>
+
+        <p><span class="red-char"><strong>Azonosságnak (azonos egyenlőtlenségnek)</strong></span> <strong>nevezzük azt az egyenletet (egyenlőtlenséget), amelynek igazsághalmaza az alaphalmaz.</strong></p>
+
+        <a href="merlegelv.html" class="next-page-btn">
+            Tovább: Egyenletek, egyenlőtlenségek mérlegelvvel való megoldása példákkal ➔
+        </a>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

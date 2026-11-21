@@ -100,7 +100,7 @@ ul.rules li{margin:6px 0}
 
 <!-- ============ BELÉPÉS ============ -->
 <section id="view-start">
-  <a id="backLink" class="back" href="#" hidden>⬅ Vissza az osztály oldalára</a>
+  <a id="backLink" class="back" href="#" hidden></a>
   <h1 id="title">Geometriai alapfogalmak</h1>
   <p class="sub" id="subtitle"></p>
   <div id="testBanner" class="banner" hidden><b>Próbaüzem:</b> az oldal még nincs összekötve a küldő szolgáltatással, ezért az eredményt nem küldi el sehová.</div>
@@ -208,7 +208,8 @@ const CFG = {
   TASK_TITLE: 'Órai: Geometriai alapfogalmak',      // legfeljebb 60 karakter
   CIM: 'Geometriai alapfogalmak',
   ALCIM: '6. osztály – órai feladatlap',
-  OSZTALY_OLDAL: '/ujitas/osztaly/{osztaly}/index.html',   // a „Vissza” gomb célja ({osztaly} = 6a / 6h); üresen: nincs gomb
+  VISSZA_HREF: '/6-osztaly.html',          // a „Vissza” gomb célja (a 6. osztályos csoportválasztó); üresen: nincs gomb
+  VISSZA_FELIRAT: '⬅ Vissza a 6. osztály oldalára',
   OSZTALYZAT: [[90, 'Jeles (5)'], [75, 'Jó (4)'], [60, 'Közepes (3)'], [40, 'Elégséges (2)'], [0, 'Még gyakorold!']],  // [min. %, felirat]
 };
 
@@ -335,8 +336,8 @@ const live = () => !!S && !S.ended;
   if (kod && known) $('#kodClsWrap').hidden = true;
   $('#name').value = qs.get('nev') || store.get('geo_nev');
   if (!known && store.get('geo_cls')) { $('#cls').value = store.get('geo_cls'); $('#cls2').value = store.get('geo_cls'); }
-  if (CFG.OSZTALY_OLDAL && known && location.protocol.startsWith('http')) {
-    const b = $('#backLink'); b.href = location.origin + CFG.OSZTALY_OLDAL.replace('{osztaly}', preset); b.hidden = false;
+  if (CFG.VISSZA_HREF && /^https?:$/.test(location.protocol)) {
+    const b = $('#backLink'); b.href = new URL(CFG.VISSZA_HREF, location.origin).href; b.textContent = CFG.VISSZA_FELIRAT; b.hidden = false;
   }
 })();
 

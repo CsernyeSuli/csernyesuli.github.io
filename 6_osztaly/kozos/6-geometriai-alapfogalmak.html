@@ -379,11 +379,10 @@ function normalizeHu(str) {
   return String(str ?? '')
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
-
 const SCORED_TOTAL = TASKS.filter(t => t.scored).length; // 8 pontozott elméleti feladat
 
 function gradeFor(score, total) {

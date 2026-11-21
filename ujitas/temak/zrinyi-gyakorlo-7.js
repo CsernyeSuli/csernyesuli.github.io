@@ -96,6 +96,12 @@
           options: { A: '16', B: '32', C: '48', D: '56', E: '64' }, key: 'C' }
   };
 
+  /* A MathJax-törtek legyenek teljes méretűek (ne a szövegbe simuló, kicsinyített változat). */
+  Object.keys(TASKS).forEach(function (k) {
+    var t = TASKS[k], nagy = function (s) { return typeof s === 'string' ? s.split('\\(').join('\\(\\displaystyle ') : s; };
+    t.text = nagy(t.text); Object.keys(t.options).forEach(function (o) { t.options[o] = nagy(t.options[o]); });
+  });
+
   U.css('zr-css',
     '.task-item.disabled{opacity:.4;cursor:not-allowed}.task-item.disabled:hover{transform:none;border-color:rgba(255,255,255,.1)}' +
     '.fb-info{background:rgba(245,158,11,.15);border:1px solid #f59e0b;color:#fbbf24}' +
@@ -200,6 +206,7 @@
   /** HTML/képlet → egyszerű szöveg (e-mailhez és táblázathoz) */
   function plain(s) {
     return String(s || '').replace(/<img[^>]*alt="([^"]*)"[^>]*>/g, '$1').replace(/<br\s*\/?>/g, ' ').replace(/<[^>]+>/g, '').replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, ' $1/$2')
+      .replace(/\\displaystyle ?/g, '')
       .replace(/\\cdot/g, '·').replace(/\\[()]|\$\$/g, '').replace(/\s+/g, ' ').trim();
   }
   function statok() {

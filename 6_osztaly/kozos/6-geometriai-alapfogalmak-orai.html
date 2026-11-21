@@ -277,7 +277,7 @@ const TASKS = [
       return { ok, final: a.t, note: [ok ? 'Mindkét eset szerepel (illeszkedik / nem illeszkedik).' : 'Mindkét esetet meg kell adni: illeszkedik és nem illeszkedik.'] }; } },
   { id: 8, type: 'text', q: 'Milyen lehet két egyenes kölcsönös helyzete, ha ugyanazon a síkon helyezkednek el?',
     model: ['párhuzamos vagy metsző.'], shortModel: 'párhuzamos vagy metsző',
-    eval(a) { const n = norm(a.t), ok = /parhuzamos/.test(n) && /metsz/.test(n);
+    eval(a) { const n = norm(a.t), ok = /parhuzamos/.test(n) && /(metsz|keresztez)/.test(n);   // a „metsző” szinonimái: ide írhatsz még szót, pl. |egymast
       return { ok, final: a.t, note: [ok ? 'Mindkét eset szerepel (párhuzamos, metsző).' : 'Mindkét esetet meg kell adni: párhuzamos és metsző.'] }; } },
   { id: 9, type: 'book', q: 'Vegyél fel egy pontot a füzetlapon, nevezd el tetszőlegesen!',
     fields: [['n1', 'A pont neve (nagy betű)', 'pl. P']], img: 9,

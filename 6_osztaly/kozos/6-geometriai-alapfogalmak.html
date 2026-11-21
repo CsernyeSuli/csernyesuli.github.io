@@ -199,26 +199,26 @@ const TASKS = [
     question: '1. Sorolj fel 3 geometriai alapfogalmat!',
     placeholder: 'Írd be a 3 alapfogalmat vesszővel elválasztva (pl. négyzet, kör, ...)',
     solutionText: 'pont, szakasz, félegyenes, egyenes és sík közül három.',
-    check(raw) {
-      const norm = normalizeHu(raw);
-      const terms = [
-        { key: 'pont', re: /pont(ot|ok|okat)?/ },
-        { key: 'szakasz', re: /szakasz(t|ok|okat)?/ },
-        { key: 'felegyenes', re: /felegyenes(t|ek|eket)?/ },
-        { key: 'egyenes', re: /(^|[^a-z])egyenes(t|ek|eket)?/ },
-        { key: 'sik', re: /sik(ot|ok|okat)?/ }
-      ];
-      let found = 0;
-      for (const t of terms) {
-        if (t.key === 'egyenes') {
-          const withoutFel = norm.replace(/felegyenes(t|ek|eket)?/g, '');
-          if (/egyenes(t|ek|eket)?/.test(withoutFel)) found++;
-        } else if (t.re.test(norm)) {
-          found++;
-        }
-      }
-      return found >= 3;
+   check(raw) {
+  const norm = normalizeHu(raw);
+  const terms = [
+    { key: 'pont', re: /\bpont(?:ot|ok|okat)?\b/ },
+    { key: 'szakasz', re: /\bszakasz(?:t|ok|okat)?\b/ },
+    { key: 'felegyenes', re: /\bfelegyenes(?:t|ek|eket)?\b/ },
+    { key: 'egyenes', re: /(?:^|[^a-z])egyenes(?:t|ek|eket)?\b/ },
+    { key: 'sik', re: /\bsik(?:ot|ok|okat)?\b/ }
+  ];
+  let found = 0;
+  for (const t of terms) {
+    if (t.key === 'egyenes') {
+      const withoutFel = norm.replace(/\bfelegyenes(?:t|ek|eket)?\b/g, '');
+      if (/\begyenes(?:t|ek|eket)?\b/.test(withoutFel)) found++;
+    } else if (t.re.test(norm)) {
+      found++;
     }
+  }
+  return found >= 3;
+}
   },
   {
     id: 2,

@@ -91,6 +91,11 @@ ul.rules li{margin:6px 0}
 .col b{display:block;margin-bottom:3px;font-size:12px;color:var(--mut);font-weight:600}
 .note{margin:6px 0 0;font-size:13px;color:#fcd34d}
 .solimg{display:block;max-width:100%;max-height:260px;margin-top:8px;padding:6px;border-radius:10px;background:#fff}
+.fields.one{grid-template-columns:1fr}
+.hintbtn{display:block;margin:0 0 10px;padding:8px 14px;font-size:14px}
+.hintbox{margin:0 0 10px;padding:12px;border:1px solid #1e293b;border-radius:12px;background:rgba(2,6,23,.7);text-align:center}
+.hintbox p{margin:0 0 8px;font-size:12px;color:var(--mut)}
+.hintbox img{display:inline-block;max-width:100%;max-height:300px;padding:6px;border-radius:10px;background:#fff}
 .link{background:none;border:0;color:#38bdf8;text-decoration:underline;cursor:pointer;font:inherit;padding:0}
 </style>
 </head>
@@ -248,13 +253,16 @@ const TASKS = [
       const n = norm(a.t), ok = /\b(metsz|kereszt|ikszel)/.test(n) || /(^|\s)x(\s|$)/.test(n) || /[+×]/.test(n);
       return { ok, final: a.t, note: [ok ? 'Felismert: metsző vonalak / x-szel jelölés.' : 'Nem találtam benne metsző vonalakat (x-et).'] };
     } },
-  { id: 3, type: 'text', q: 'Hogy jelöljük a pontot, szakaszt, egyenest?',
-    model: ['pontot nagy betűvel, szakaszt a végpontjainál lévő pontok nagy betűivel vagy egy kis betűvel, egyenest kis betűvel.'],
+  { id: 3, type: 'multi', q: 'Hogy jelöljük a pontot, szakaszt, egyenest?',
+    fields: [['p', 'Hogyan jelöljük a pontot?'], ['s', 'Hogyan jelöljük a szakaszt?'], ['e', 'Hogyan jelöljük az egyenest?']],
+    model: ['pontot nagy betűvel,', 'szakaszt a végpontjainál lévő pontok nagy betűivel vagy egy kis betűvel,', 'egyenest kis betűvel.'],
     shortModel: 'pont: nagy; szakasz: nagy/kis; egyenes: kis betű',
     eval(a) {
-      const n = norm(a.t), has = { pont: /\bpont/.test(n), szakasz: /\bszakasz/.test(n), egyenes: /\begyenes/.test(n.replace(/felegyenes\w*/g, ' ')), nagy: /\bnagy/.test(n), kis: /\bkis/.test(n) };
-      const miss = Object.keys(has).filter(k => !has[k]);
-      return { ok: !miss.length, final: a.t, note: [miss.length ? 'Hiányzó elem(ek) a válaszban: ' + miss.join(', ') + '.' : 'Mindhárom jelölés és a nagy/kis betű is szerepel (a pontos párosítást a tanár nézze át).'] };
+      const p = norm(a.p), s = norm(a.s), e = norm(a.e), nagy = x => /\bnagy/.test(x), kis = x => /\bkis/.test(x), nem = (x, w) => new RegExp('nem\\s+' + w).test(x);
+      const okP = nagy(p) && (!kis(p) || nem(p, 'kis')), okS = nagy(s) || kis(s), okE = kis(e) && (!nagy(e) || nem(e, 'nagy'));
+      const any = [a.p, a.s, a.e].some(x => (x || '').trim());
+      return { ok: okP && okS && okE, final: any ? ['pont: ' + (a.p || '').trim(), 'szakasz: ' + (a.s || '').trim(), 'egyenes: ' + (a.e || '').trim()].join('\n') : '',
+        note: ['Pont: ' + (okP ? '✔ (nagy betű)' : '✘ nagy betűvel kell jelölni') + ' · Szakasz: ' + (okS ? '✔ (nagy vagy kis betű)' : '✘ a végpontok nagy betűivel vagy kis betűvel') + ' · Egyenes: ' + (okE ? '✔ (kis betű)' : '✘ kis betűvel kell jelölni')] };
     } },
   { id: 4, type: 'mc', q: 'Mi két alakzat távolsága?',
     opts: { A: 'Az őket összekötő bármelyik egyenes hossza.', B: 'Az őket összekötő szakaszok közül a legrövidebb szakasz hossza.',
@@ -302,7 +310,7 @@ const TASKS = [
     eval(a) { const t = (a.n1 || '').trim(), ok = !!a.done && t.length > 0 && t.length <= 20;
       return { ok, final: t ? 'félegyenes: ' + t : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült' + (LOW.test(t) ? ', a neve kis betű.' : ' (a név nem egy kis betű, nézd meg a füzetben).') : 'Nincs jelölve az elkészülés, vagy nincs megadva a név.'] }; } },
 ];
-const isAnswered = (t, a) => t.type === 'mc' ? !!a.v : t.type === 'text' ? !!(a.t || '').trim() : !!a.done;
+const isAnswered = (t, a) => t.type === 'mc' ? !!a.v : t.type === 'text' ? !!(a.t || '').trim() : t.type === 'multi' ? t.fields.every(f => (a[f[0]] || '').trim()) : !!a.done;
 
 /* =====================================================================
  *  SEGÉDEK
@@ -383,10 +391,13 @@ function taskHtml(t) {
   } else if (t.type === 'mc') {
     body = '<div class="opts" role="radiogroup">' + Object.keys(t.opts).map(k =>
       `<label class="opt"><input type="radio" name="q${t.id}" data-f="v" value="${k}"><span><b>${k})</b> ${esc(t.opts[k])}</span></label>`).join('') + '</div>';
+  } else if (t.type === 'multi') {
+    body = '<div class="fields one">' + t.fields.map(f => `<div><label class="lbl">${esc(f[1])}</label><input type="text" data-f="${f[0]}" maxlength="200" placeholder="Írd ide a válaszod…" autocomplete="off" spellcheck="false"></div>`).join('') + '</div>';
   } else {
     body = '<div class="book">📓 Füzet-feladat: készítsd el a füzetedbe, majd itt töltsd ki!</div><div class="fields">' +
       t.fields.map(f => `<div><label class="lbl">${esc(f[1])}</label><input type="text" data-f="${f[0]}" maxlength="${f[0] === 'n3' ? 8 : 20}" placeholder="${esc(f[2])}" autocomplete="off" spellcheck="false"${f[0] === 'n3' ? ' inputmode="decimal"' : ''}></div>`).join('') +
-      '</div><label class="check"><input type="checkbox" data-f="done"> Elkészítettem a füzetembe</label>';
+      '</div>' + (t.img ? `<button type="button" class="btn sky hintbtn" data-hint="${t.id}" aria-expanded="false">💡 Súgó ábra megtekintése</button><div class="hintbox" id="hint${t.id}" hidden><p>Mintaábra (súgó a füzetben való szerkesztéshez):</p><img src="${IMG[t.img]}" alt="Mintaábra a ${t.id}. feladathoz"></div>` : '') +
+      '<label class="check"><input type="checkbox" data-f="done"> Elkészítettem a füzetembe</label>';
   }
   return `<article class="task" id="t${t.id}" data-id="${t.id}"><header><span class="num">${t.id}</span><h3>${esc(t.q)}</h3></header>${body}</article>`;
 }
@@ -412,6 +423,11 @@ function onField(e) {
   card.classList.toggle('done', isAnswered(t, a)); updProgress();
 }
 $('#tasks').addEventListener('input', onField); $('#tasks').addEventListener('change', onField);
+$('#tasks').addEventListener('click', e => {          // súgó ábra: gombnyomásra látszik / eltűnik (a használatáról nem küldünk adatot)
+  const b = e.target.closest && e.target.closest('.hintbtn'); if (!b || !live()) return;
+  const box = $('#hint' + b.dataset.hint), open = box.hidden;
+  box.hidden = !open; b.setAttribute('aria-expanded', open); b.textContent = open ? '💡 Súgó ábra elrejtése' : '💡 Súgó ábra megtekintése';
+});
 
 /* feladatonkénti aktív idő (fókusz alapján) */
 function tick() { if (S && S.cur) { S.secs[S.cur.id] = (S.secs[S.cur.id] || 0) + (Date.now() - S.cur.t) / 1000; S.cur = null; } }
@@ -483,7 +499,7 @@ $('#rClose').addEventListener('click', goHome);
 function openSolutions() {
   $('#revList').innerHTML = S.results.map(x => {
     const t = x.t, book = t.type === 'book', cls = x.r.ok ? 'ok' : 'bad';
-    const mine = t.type === 'mc' ? (x.a.v ? x.a.v + ') ' + t.opts[x.a.v] : '—') : t.type === 'text' ? (x.a.t || '').trim() || '—' : (x.r.final || '—') + (x.a.done ? '' : '  (nincs jelölve az elkészülés)');
+    const mine = t.type === 'mc' ? (x.a.v ? x.a.v + ') ' + t.opts[x.a.v] : '—') : t.type === 'text' ? (x.a.t || '').trim() || '—' : (x.r.final || '—') + (t.type === 'book' && !x.a.done ? '  (nincs jelölve az elkészülés)' : '');
     return `<div class="rev"><h4>${t.id}. ${esc(t.q)}</h4>
       <span class="pill ${cls}">${x.r.ok ? '✔ rendben' : '✘ hiányos / hibás'}</span>${book ? '<span class="pill nb">📓 füzetben ellenőrzi a tanár</span>' : ''}
       <div class="cols"><div class="col"><b>A te válaszod</b>${esc(mine)}</div><div class="col"><b>Helyes megoldás</b>${esc(t.model.join('\n'))}</div></div>

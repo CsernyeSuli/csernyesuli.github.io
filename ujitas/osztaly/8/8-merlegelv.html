@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egyenletek, egyenlőtlenségek algebrai megoldása</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="merlegelv.css">
+</head>
+<body>
+    <div class="page-container">
+        <header class="doc-header">
+            <div class="header-top-row">
+                <div class="chapter-tag">• ALGEBRA •</div>
+                <a href="index.html" class="back-btn" aria-label="Vissza az index.html oldalra">
+                    <span aria-hidden="true">←</span>
+                    <span>Vissza</span>
+                </a>
+            </div>
+            <h1>EGYENLETEK, EGYENLŐTLENSÉGEK ALGEBRAI MEGOLDÁSA</h1>
+        </header>
+
+        <!-- BEVEZETŐ ÉS MÉRLEG ILLUSZTRÁCIÓ -->
+        <section class="content-row" id="bevezeto-merlegelv">
+            <div class="main-col">
+                <article class="example-box">
+                    <div class="example-title">MÉRLEGELV</div>
+                    <p>
+                        A két oldal egyenlő változtatását mérleggel tettük szemléletessé: ha a mérleg
+                        mindkét serpenyőjében egyenlően változtatjuk meg az ott lévő dolgokat, akkor
+                        a mérleg egyensúlyi állapota nem változik meg. Ezért az eljárás
+                        gondolatmenetét <span class="red-char"><strong>mérlegelvnek</strong></span> is
+                        nevezzük.
+                    </p>
+                </article>
+            </div>
+
+            <aside class="side-col">
+                <figure class="merleg-figure">
+                    <img src="img/merleg.png" alt="Kétkarú mérleg mandarinokkal és nehezékekkel">
+                </figure>
+            </aside>
+        </section>
+
+        <!-- 4 PÉLDA – KATTINTHATÓ KÁRTYÁK -->
+        <section class="examples-stack">
+            <!-- 1. PÉLDA KÁRTYA -->
+            <article class="task-card" role="button" tabindex="0" data-modal="modal-pelda-1" aria-haspopup="dialog">
+                <span class="task-pill">1. példa</span>
+                <p>Oldjuk meg az egyenlőtlenséget. Az alaphalmaz az <strong>ℝ</strong>.</p>
+                <div class="task-equation">
+                    <span class="math-unit">13 − 3<em>x</em></span> &lt; <span class="math-unit"><em>x</em> + 5</span>
+                </div>
+                <div class="task-hint-bar">Kattints a megoldásért, az ellenőrzésért és a magyarázatért →</div>
+            </article>
+
+            <!-- 2. PÉLDA KÁRTYA -->
+            <article class="task-card" role="button" tabindex="0" data-modal="modal-pelda-2" aria-haspopup="dialog">
+                <span class="task-pill">2. példa</span>
+                <p>Oldjuk meg az egyenletet. Az alaphalmaz a <strong>ℤ</strong>.</p>
+                <div class="task-equation">
+                    <span class="math-unit">3<em>x</em> − {4<em>x</em> − [5<em>x</em> − (6<em>x</em> − 7)]}</span>
+                    <span class="math-unit">= 11</span>
+                </div>
+                <div class="task-hint-bar">Kattints a megoldásért, az ellenőrzésért és a magyarázatért →</div>
+            </article>
+
+            <!-- 3. PÉLDA KÁRTYA -->
+            <article class="task-card" role="button" tabindex="0" data-modal="modal-pelda-3" aria-haspopup="dialog">
+                <span class="task-pill">3. példa</span>
+                <p>Oldjuk meg az egyenletet. Az alaphalmaz a racionális számok halmaza, a <strong>ℚ</strong>.</p>
+                <div class="task-equation">
+                    <span class="math-unit"><span class="frac"><span class="num"><em>x</em></span><span class="den">12</span></span> − <span class="frac"><span class="num">3<em>x</em></span><span class="den">4</span></span> + <span class="frac"><span class="num">5<em>x</em></span><span class="den">6</span></span></span>
+                    =
+                    <span class="math-unit">2 − <span class="frac"><span class="num">2<em>x</em></span><span class="den">3</span></span></span>
+                </div>
+                <div class="task-hint-bar">Kattints a megoldásért, az ellenőrzésért és a magyarázatért →</div>
+            </article>
+
+            <!-- 4. PÉLDA KÁRTYA -->
+            <article class="task-card" role="button" tabindex="0" data-modal="modal-pelda-4" aria-haspopup="dialog">
+                <span class="task-pill">4. példa</span>
+                <p>Oldjuk meg az egyenletet. Az alaphalmaz a <strong>ℤ</strong>.</p>
+                <div class="task-equation">
+                    <span class="math-unit">2<em>x</em> − <span class="frac"><span class="num">3</span><span class="den">5</span></span><em>x</em></span>
+                    =
+                    <span class="math-unit"><span class="frac"><span class="num">3</span><span class="den">2</span></span><em>x</em> − <span class="frac"><span class="num">5 + 4<em>x</em></span><span class="den">10</span></span> + 2</span>
+                </div>
+                <div class="task-hint-bar">Kattints a megoldásért, az ellenőrzésért és a magyarázatért →</div>
+            </article>
+        </section>
+
+        <!-- ALSÓ EMLÉKEZTETŐ GOMB -->
+        <div class="footer-action">
+            <button type="button" class="reminder-btn" data-modal="modal-emlekezteto" aria-haspopup="dialog">
+                <span class="reminder-btn-icon" aria-hidden="true">!</span>
+                <span>FONTOS EMLÉKEZTETŐ • Mérlegelv összefoglalása</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. PÉLDA LEBEGŐ MEGOLDÁS -->
+    <div class="solution-overlay" id="modal-pelda-1" aria-hidden="true">
+        <div class="solution-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-1">
+            <span class="solution-pill" id="modal-title-1">1. példa – Megoldás</span>
+            <button type="button" class="close-solution" aria-label="Ablak bezárása">&times;</button>
+
+            <div class="solution-rows">
+                <div class="paired-row">
+                    <div class="derivation-box">
+                        <div class="box-section-title">Levezetés:</div>
+                        <p class="solution-lead">A két oldal egyenlő változtatásával oldjuk meg.</p>
+
+                        <div class="steps-table">
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">13 − 3<em>x</em></span> &lt; <span class="math-unit"><em>x</em> + 5</span></div>
+                                <div class="step-op">/ −13</div>
+                                <div class="step-desc">Mindkét oldalból elveszünk 13-at.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">−3<em>x</em></span> &lt; <span class="math-unit"><em>x</em> − 8</span></div>
+                                <div class="step-op">/ −<em>x</em></div>
+                                <div class="step-desc">Mindkét oldalból elveszünk <em>x</em>-et.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">−4<em>x</em></span> &lt; <span class="math-unit">8</span></div>
+                                <div class="step-op">/ : (−4)</div>
+                                <div class="step-desc">Mindkét oldalt osztjuk −4-gyel.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit"><em>x</em> &gt; 2</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">Az egyenlőtlenség iránya megváltozik.</div>
+                            </div>
+                        </div>
+
+                        <p class="solution-set">
+                            <strong>Megoldáshalmaz:</strong>
+                            <span><em>I</em> = {2-nél nagyobb valós számok}</span>
+                        </p>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Ha az egyenlőtlenség mindkét oldalát negatív számmal szorozzuk vagy
+                                osztjuk, az egyenlőtlenség iránya ellenkezőjére változik.
+                            </p>
+                            <p class="green-example-label">Például:</p>
+                            <div class="green-example-math">
+                                <div><span class="math-unit">−20 <span class="red-sign">&lt;</span> −8</span> &nbsp; / : (−4)</div>
+                                <div class="indent-eq"><span class="math-unit">5 <span class="red-sign">&gt;</span> 2</span></div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="paired-row">
+                    <div class="check-box">
+                        <div class="check-title">Ellenőrzés:</div>
+                        <p>
+                            Ha 2-nél kisebb számot vagy 2-t írunk az <em>x</em> helyére, akkor az
+                            egyenlőtlenség bal oldala nem kisebb, mint a jobb oldala, hamis
+                            állítást kapunk.
+                        </p>
+                        <p>
+                            Ha 2-nél nagyobb számot írunk az <em>x</em> helyére, akkor az
+                            egyenlőtlenség bal oldala kisebb, mint a jobb oldala, igaz állítást kapunk.
+                        </p>
+                        <figure class="numberline-box">
+                            <img src="img/szamegyenes-3.png" alt="Számegyenesen ábrázolt megoldáshalmaz: x > 2">
+                        </figure>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                A megoldás ellenőrzése sohasem maradhat el. Ezzel bizonyítjuk, hogy
+                                helyes a megoldásunk.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. PÉLDA LEBEGŐ MEGOLDÁS -->
+    <div class="solution-overlay" id="modal-pelda-2" aria-hidden="true">
+        <div class="solution-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-2">
+            <span class="solution-pill" id="modal-title-2">2. példa – Megoldás</span>
+            <button type="button" class="close-solution" aria-label="Ablak bezárása">&times;</button>
+
+            <div class="solution-rows">
+                <div class="paired-row">
+                    <div class="derivation-box">
+                        <div class="box-section-title">Levezetés:</div>
+                        <p class="solution-lead">
+                            Bontsuk fel a belső (kerek) zárójelet. Mivel a zárójel előtt negatív előjel
+                            van, olyan, mint ha (−1)-gyel szoroznánk.
+                        </p>
+
+                        <div class="steps-table">
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">3<em>x</em> − {4<em>x</em> − [5<em>x</em> − (6<em>x</em> − 7)]} = 11</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc"></div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">3<em>x</em> − {4<em>x</em> − [5<em>x</em> − 6<em>x</em> + 7]} = 11</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">A zárójelben lévő tagok előjele megváltozik: −(6<em>x</em> − 7) = −6<em>x</em> + 7</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">3<em>x</em> − {4<em>x</em> − 5<em>x</em> + 6<em>x</em> − 7} = 11</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">Felbontjuk ismét a belső zárójelet.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">3<em>x</em> − 4<em>x</em> + 5<em>x</em> − 6<em>x</em> + 7 = 11</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">Felbontjuk az utolsó zárójelet.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">−2<em>x</em> + 7 = 11</span></div>
+                                <div class="step-op">/ −7</div>
+                                <div class="step-desc">Összevonjuk az egynemű tagokat. Mindkét oldalból kivonunk 7-et.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">−2<em>x</em> = 4</span></div>
+                                <div class="step-op">/ : (−2)</div>
+                                <div class="step-desc">Mindkét oldalt osztjuk (−2)-vel.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit"><em>x</em> = −2</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">Leolvassuk a megoldást.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Azonos átalakításokkal, például a zárójelek felbontásával, majd az
+                                összevonások elvégzésével egyszerűbb alakra hozzuk az egyenletet.
+                            </p>
+                            <p>
+                                Alkalmazzuk a mérlegelvet.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="paired-row">
+                    <div class="check-box">
+                        <div class="check-title">Ellenőrzés:</div>
+                        <p>A −2 egész szám, tehát eleme az alaphalmaznak.</p>
+                        <p>
+                            <strong>Bal oldal</strong> (az <em>x</em> helyére beírjuk a −2-t):<br>
+                            <span class="math-unit">−6 − {−8 − [−10 − (−12 − 7)]}</span>
+                            = <span class="math-unit">−6 − {−8 − [−10 − (−19)]}</span> =<br>
+                            = <span class="math-unit">−6 − {−8 − [−10 + 19]}</span>
+                            = <span class="math-unit">−6 − {−8 − 9}</span>
+                            = <span class="math-unit">−6 − {−17}</span>
+                            = <span class="math-unit">−6 + 17 = 11</span>
+                        </p>
+                        <p>
+                            Mivel a jobb oldalon álló szám is 11, így az <em>x</em> = −2 valóban megoldás.
+                        </p>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Az eredeti egyenletbe helyettesítünk be.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. PÉLDA LEBEGŐ MEGOLDÁS -->
+    <div class="solution-overlay" id="modal-pelda-3" aria-hidden="true">
+        <div class="solution-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-3">
+            <span class="solution-pill" id="modal-title-3">3. példa – Megoldás</span>
+            <button type="button" class="close-solution" aria-label="Ablak bezárása">&times;</button>
+
+            <div class="solution-rows">
+                <div class="paired-row">
+                    <div class="derivation-box">
+                        <div class="box-section-title">Levezetés:</div>
+                        <div class="steps-table">
+                            <div class="step-row">
+                                <div class="step-eq">
+                                    <span class="math-unit"><span class="frac"><span class="num"><em>x</em></span><span class="den">12</span></span> − <span class="frac"><span class="num">3<em>x</em></span><span class="den">4</span></span> + <span class="frac"><span class="num">5<em>x</em></span><span class="den">6</span></span></span>
+                                    = <span class="math-unit">2 − <span class="frac"><span class="num">2<em>x</em></span><span class="den">3</span></span></span>
+                                </div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">A törteket egyenlő nevezőjű törtekké alakítjuk.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq">
+                                    <span class="math-unit"><span class="frac"><span class="num"><em>x</em></span><span class="den">12</span></span> − <span class="frac"><span class="num">9<em>x</em></span><span class="den">12</span></span> + <span class="frac"><span class="num">10<em>x</em></span><span class="den">12</span></span></span>
+                                    = <span class="math-unit"><span class="frac"><span class="num">24</span><span class="den">12</span></span> − <span class="frac"><span class="num">8<em>x</em></span><span class="den">12</span></span></span>
+                                </div>
+                                <div class="step-op">/ · 12</div>
+                                <div class="step-desc">Szorozzuk az egyenlet mindkét oldalát a közös nevezővel.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit"><em>x</em> − 9<em>x</em> + 10<em>x</em> = 24 − 8<em>x</em></span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">Összevonjuk az egynemű tagokat.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">2<em>x</em> = 24 − 8<em>x</em></span></div>
+                                <div class="step-op">/ + 8<em>x</em></div>
+                                <div class="step-desc">Mindkét oldalhoz 8<em>x</em>-et adunk.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">10<em>x</em> = 24</span></div>
+                                <div class="step-op">/ : 10</div>
+                                <div class="step-desc">Mindkét oldalt osztjuk 10-zel.</div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit"><em>x</em> = 2,4</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Alkalmazzuk a törtekre tanult műveleti eljárásokat.
+                            </p>
+                        </div>
+
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Ha már begyakoroltuk a törtegyütthatós egyenletek megoldását, akkor a
+                                lépések összevonásával lerövidíthetjük a megoldást.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="paired-row">
+                    <div class="check-box">
+                        <div class="check-title">Ellenőrzés:</div>
+                        <p>A 2,4 racionális szám, tehát eleme az alaphalmaznak.</p>
+                        <p>
+                            <strong>Bal oldal:</strong>
+                            <span class="math-unit"><span class="frac"><span class="num">2,4</span><span class="den">12</span></span> − <span class="frac"><span class="num">7,2</span><span class="den">4</span></span> + <span class="frac"><span class="num">12</span><span class="den">6</span></span></span>
+                            = <span class="math-unit">0,2 − 1,8 + 2</span> = <span class="math-unit">0,4</span>
+                        </p>
+                        <p>
+                            <strong>Jobb oldal:</strong>
+                            <span class="math-unit">2 − <span class="frac"><span class="num">4,8</span><span class="den">3</span></span></span>
+                            = <span class="math-unit">2 − 1,6</span> = <span class="math-unit">0,4</span>
+                        </p>
+                        <p>
+                            Mivel a jobb oldal helyettesítési értéke egyenlő a bal oldal helyettesítési
+                            értékével, ezért az <em>x</em> = 2,4 megoldása az egyenletnek.
+                        </p>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Az eredeti egyenletbe helyettesítünk be.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. PÉLDA LEBEGŐ MEGOLDÁS -->
+    <div class="solution-overlay" id="modal-pelda-4" aria-hidden="true">
+        <div class="solution-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-4">
+            <span class="solution-pill" id="modal-title-4">4. példa – Megoldás</span>
+            <button type="button" class="close-solution" aria-label="Ablak bezárása">&times;</button>
+
+            <div class="solution-rows">
+                <div class="paired-row">
+                    <div class="derivation-box">
+                        <div class="box-section-title">Levezetés:</div>
+                        <div class="steps-table">
+                            <div class="step-row">
+                                <div class="step-eq">
+                                    <span class="math-unit">2<em>x</em> − <span class="frac"><span class="num">3</span><span class="den">5</span></span><em>x</em></span>
+                                    =
+                                    <span class="math-unit"><span class="frac"><span class="num">3</span><span class="den">2</span></span><em>x</em> − <span class="frac"><span class="num">5 + 4<em>x</em></span><span class="den">10</span></span> + 2</span>
+                                </div>
+                                <div class="step-op">/ · 10</div>
+                                <div class="step-desc">
+                                    Megkeressük a nevezők legkisebb közös többszörösét (a közös nevezőt)
+                                    és ezzel megszorozzuk az egyenlet mindkét oldalát.
+                                </div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">20<em>x</em> − 6<em>x</em> = 15<em>x</em> − (5 + 4<em>x</em>) + 20</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc">
+                                    Figyelembe vesszük, hogy a törtvonal zárójelet helyettesít. Felbontjuk
+                                    a zárójelet, összevonjuk az egynemű tagokat, majd a két oldal egyenlő
+                                    változtatásával megkeressük a megoldást.
+                                </div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">14<em>x</em> = 11<em>x</em> + 15</span></div>
+                                <div class="step-op">/ −11<em>x</em></div>
+                                <div class="step-desc"></div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit">3<em>x</em> = 15</span></div>
+                                <div class="step-op">/ : 3</div>
+                                <div class="step-desc"></div>
+                            </div>
+                            <div class="step-row">
+                                <div class="step-eq"><span class="math-unit"><em>x</em> = 5</span></div>
+                                <div class="step-op"></div>
+                                <div class="step-desc"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Ügyeljünk a zárójel felbontására:<br>
+                                <span class="math-unit">−(5 + 4<em>x</em>) = −5 − 4<em>x</em></span>
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="paired-row">
+                    <div class="check-box">
+                        <div class="check-title">Ellenőrzés:</div>
+                        <p>Az 5 eleme az egész számok halmazának.</p>
+                        <p>
+                            <strong>Bal oldal:</strong>
+                            <span class="math-unit">2 · 5 − <span class="frac"><span class="num">3</span><span class="den">5</span></span> · 5</span>
+                            = <span class="math-unit">10 − 3 = 7</span>
+                        </p>
+                        <p>
+                            <strong>Jobb oldal:</strong>
+                            <span class="math-unit"><span class="frac"><span class="num">3</span><span class="den">2</span></span> · 5 − <span class="frac"><span class="num">5 + 4 · 5</span><span class="den">10</span></span> + 2</span>
+                            = <span class="math-unit"><span class="frac"><span class="num">15</span><span class="den">2</span></span> − <span class="frac"><span class="num">25</span><span class="den">10</span></span> + 2</span>
+                            = <span class="math-unit"><span class="frac"><span class="num">75 − 25</span><span class="den">10</span></span> + 2</span>
+                            = <span class="math-unit">5 + 2 = 7</span>
+                        </p>
+                        <p>
+                            Az <em>x</em> = 5 valóban megoldása az egyenletnek, <strong><em>I</em> = {5}</strong>.
+                        </p>
+                    </div>
+
+                    <aside class="paired-side">
+                        <div class="green-note">
+                            <p>
+                                <span class="note-icon" aria-hidden="true">◎</span>
+                                Az eredeti egyenletbe helyettesítünk be.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMLÉKEZTETŐ LEBEGŐ LAP -->
+    <div class="solution-overlay" id="modal-emlekezteto" aria-hidden="true">
+        <div class="solution-modal reminder-popup" role="dialog" aria-modal="true" aria-labelledby="modal-title-emlekezteto">
+            <span class="reminder-popup-pill" id="modal-title-emlekezteto">
+                <span aria-hidden="true">!</span> FONTOS EMLÉKEZTETŐ
+            </span>
+            <button type="button" class="close-solution" aria-label="Ablak bezárása">&times;</button>
+
+            <div class="reminder-popup-body">
+                <p class="reminder-lead">Az egyenlet vagy egyenlőtlenség igazsághalmaza nem változik, ha</p>
+
+                <ol class="reminder-popup-list">
+                    <li>
+                        az egyenlet vagy az egyenlőtlenség bármelyik oldalán azonos átalakításokat
+                        hajtunk végre (összevonjuk az egynemű tagokat, elvégezzük a kijelölt
+                        szorzásokat, közös nevezőre hozunk stb.);
+                    </li>
+                    <li>
+                        az egyenlet vagy az egyenlőtlenség mindkét oldalához ugyanazt a számot
+                        vagy algebrai egész kifejezést hozzáadjuk, vagy mindkét oldalából kivonjuk;
+                    </li>
+                    <li>
+                        az egyenlet mindkét oldalát ugyanazzal a nem nulla számmal szorozzuk
+                        vagy osztjuk;
+                        <div class="sub-rule">
+                            az egyenlőtlenség mindkét oldalát ugyanazzal a pozitív számmal
+                            szorozzuk vagy osztjuk, vagy <strong class="red-text">az egyenlőtlenség
+                            mindkét oldalát ugyanazzal a negatív számmal szorozzuk vagy osztjuk,
+                            és az egyenlőtlenség irányát megváltoztatjuk.</strong>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="reminder-green-callout">
+                    <p>
+                        <span class="note-icon" aria-hidden="true">◎</span>
+                        Ha olyan kifejezést adunk hozzá az egyenlet mindkét oldalához (vagy vonunk ki
+                        az egyenlet mindkét oldalából), amely az alaphalmaz valamely értékére nincs
+                        értelmezve, akkor az így kapott új egyenletnek más lehet az igazsághalmaza,
+                        mint az eredetinek. Ez vonatkozik arra az esetre is, ha az egyenlet mindkét
+                        oldalát szorozzuk vagy osztjuk egy olyan kifejezéssel, amely nulla is lehet,
+                        vagy az alaphalmaz nem minden értékére van értelmezve.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="merlegelv.js"></script>
+</body>
+</html>

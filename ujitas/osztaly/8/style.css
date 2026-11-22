@@ -586,3 +586,68 @@ h1 {
         line-height: 1.5;
     }
 }
+/* Fix felső sáv: egy sorban a fejezetjelölő és a Vissza gomb */
+body {
+    padding-top: 68px;
+}
+
+.header-top-row {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background-color: #fdfcf9;
+    border-bottom: 1.5px solid #e2d5da;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    z-index: 100;
+}
+
+.header-top-row .chapter-tag {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1.5px solid #800020;
+    background-color: #ffffff;
+    color: #800020;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #800020;
+    color: #ffffff;
+    transform: translateX(-2px);
+}
+
+.modal-overlay {
+    z-index: 1000;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding-top: 64px;
+    }
+
+    .header-top-row {
+        padding: 0 14px;
+        height: 46px;
+    }
+}

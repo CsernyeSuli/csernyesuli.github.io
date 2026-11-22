@@ -255,14 +255,14 @@ const TASKS = [
     } },
   { id: 3, type: 'multi', q: 'Hogy jelöljük a pontot, szakaszt, egyenest?',
     fields: [['p', 'Hogyan jelöljük a pontot?'], ['s', 'Hogyan jelöljük a szakaszt?'], ['e', 'Hogyan jelöljük az egyenest?']],
-    model: ['pontot nagy betűvel,', 'szakaszt a végpontjainál lévő pontok nagy betűivel vagy egy kis betűvel,', 'egyenest kis betűvel.'],
-    shortModel: 'pont: nagy; szakasz: nagy/kis; egyenes: kis betű',
+    model: ['pontot nagybetűvel,', 'szakaszt a végpontjainál lévő pontok nagybetűivel vagy egy kisbetűvel,', 'egyenest kisbetűvel.'],
+    shortModel: 'pont: nagy; szakasz: nagy/kis; egyenes: kisbetű',
     eval(a) {
       const p = norm(a.p), s = norm(a.s), e = norm(a.e), nagy = x => /\bnagy/.test(x), kis = x => /\bkis/.test(x), nem = (x, w) => new RegExp('nem\\s+' + w).test(x);
       const okP = nagy(p) && (!kis(p) || nem(p, 'kis')), okS = nagy(s) || kis(s), okE = kis(e) && (!nagy(e) || nem(e, 'nagy'));
       const any = [a.p, a.s, a.e].some(x => (x || '').trim());
       return { ok: okP && okS && okE, final: any ? ['pont: ' + (a.p || '').trim(), 'szakasz: ' + (a.s || '').trim(), 'egyenes: ' + (a.e || '').trim()].join('\n') : '',
-        note: ['Pont: ' + (okP ? '✔ (nagy betű)' : '✘ nagy betűvel kell jelölni') + ' · Szakasz: ' + (okS ? '✔ (nagy vagy kis betű)' : '✘ a végpontok nagy betűivel vagy kis betűvel') + ' · Egyenes: ' + (okE ? '✔ (kis betű)' : '✘ kis betűvel kell jelölni')] };
+        note: ['Pont: ' + (okP ? '✔ (nagybetű)' : '✘ nagybetűvel kell jelölni') + ' · Szakasz: ' + (okS ? '✔ (nagy vagy kisbetű)' : '✘ a végpontok nagybetűivel vagy kisbetűvel') + ' · Egyenes: ' + (okE ? '✔ (kisbetű)' : '✘ kisbetűvel kell jelölni')] };
     } },
   { id: 4, type: 'mc', q: 'Mi két alakzat távolsága?',
     opts: { A: 'Az őket összekötő bármelyik egyenes hossza.', B: 'Az őket összekötő szakaszok közül a legrövidebb szakasz hossza.',
@@ -288,27 +288,27 @@ const TASKS = [
     eval(a) { const n = norm(a.t), ok = /parhuzamos/.test(n) && /(metsz|keresztez)/.test(n);   // a „metsző” szinonimái: ide írhatsz még szót, pl. |egymast
       return { ok, final: a.t, note: [ok ? 'Mindkét eset szerepel (párhuzamos, metsző).' : 'Mindkét esetet meg kell adni: párhuzamos és metsző.'] }; } },
   { id: 9, type: 'book', q: 'Vegyél fel egy pontot a füzetlapon, nevezd el tetszőlegesen!',
-    fields: [['n1', 'A pont neve (nagy betű)', 'pl. P']], img: 9,
-    model: ['Egy kis x-szel jelölt pont, nagy betűvel elnevezve (pl. P).'], shortModel: 'x-szel jelölt pont, nagy betűvel elnevezve',
+    fields: [['n1', 'A pont neve (nagybetű)', 'pl. P']], img: 9,
+    model: ['Egy kis x-szel jelölt pont, nagybetűvel elnevezve (pl. P).'], shortModel: 'x-szel jelölt pont, nagybetűvel elnevezve',
     eval(a) { const ok = !!a.done && CAP.test((a.n1 || '').trim());
-      return { ok, final: a.n1 ? 'pont: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, a pont neve nagy betű.' : 'Nincs jelölve az elkészülés, vagy a pont neve nem egy nagy betű.'] }; } },
+      return { ok, final: a.n1 ? 'pont: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, a pont neve nagybetű.' : 'Nincs jelölve az elkészülés, vagy a pont neve nem egy nagybetű.'] }; } },
   { id: 10, type: 'book', q: 'Vegyél fel egy második tőle 2 cm-re és egy harmadik pontot tőle 3 cm-re. Nevezd el őket! Milyen hosszú a két pont által meghatározott szakasz hossza?',
     fields: [['n1', 'A 2 cm-re lévő pont neve', 'pl. A'], ['n2', 'A 3 cm-re lévő pont neve', 'pl. B'], ['n3', 'A szakasz hossza (cm)', 'pl. 4,5']], img: 10,
     model: ['A két felvett pont távolsága 1 cm és 5 cm között lehet, attól függően, hová vetted fel őket (az ábrán egy lehetséges megoldás).'], shortModel: 'a távolság 1 és 5 cm közé esik',
     eval(a) { const n1 = (a.n1 || '').trim(), n2 = (a.n2 || '').trim(), len = num(a.n3 || ''), lenOk = len !== null && len >= 1 && len <= 5;
       const ok = !!a.done && CAP.test(n1) && CAP.test(n2) && n1 !== n2 && lenOk;
       return { ok, final: [n1, n2].filter(Boolean).join(', ') + (a.n3 ? '; ' + a.n3 + ' cm' : ''),
-        note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'Két különböző nagy betű, a megadott hossz 1 és 5 cm közé esik.' : (lenOk ? '' : 'A szakasz hossza nem esik 1 és 5 cm közé.') + (!!a.done ? '' : ' Nincs jelölve az elkészülés.') + (CAP.test(n1) && CAP.test(n2) && n1 !== n2 ? '' : ' A pontok nevei nem két különböző nagy betű.')] }; } },
+        note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'Két különböző nagybetű, a megadott hossz 1 és 5 cm közé esik.' : (lenOk ? '' : 'A szakasz hossza nem esik 1 és 5 cm közé.') + (!!a.done ? '' : ' Nincs jelölve az elkészülés.') + (CAP.test(n1) && CAP.test(n2) && n1 !== n2 ? '' : ' A pontok nevei nem két különböző nagybetű.')] }; } },
   { id: 11, type: 'book', q: 'Húzd meg az utóbbi két pont által meghatározott egyenest és nevezd el!',
-    fields: [['n1', 'Az egyenes neve (kis betű)', 'pl. e']], img: 11,
-    model: ['A két ponton átmenő egyenes, mindkét irányban folytatódik; kis betűvel nevezzük el (pl. e).'], shortModel: 'egyenes, kis betűvel elnevezve',
+    fields: [['n1', 'Az egyenes neve (kisbetű)', 'pl. e']], img: 11,
+    model: ['A két ponton átmenő egyenes, mindkét irányban folytatódik; kisbetűvel nevezzük el (pl. e).'], shortModel: 'egyenes, kisbetűvel elnevezve',
     eval(a) { const ok = !!a.done && LOW.test((a.n1 || '').trim());
-      return { ok, final: a.n1 ? 'egyenes: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, az egyenes neve kis betű.' : 'Nincs jelölve az elkészülés, vagy az egyenes neve nem egy kis betű.'] }; } },
+      return { ok, final: a.n1 ? 'egyenes: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, az egyenes neve kisbetű.' : 'Nincs jelölve az elkészülés, vagy az egyenes neve nem egy kisbetű.'] }; } },
   { id: 12, type: 'book', q: 'Rajzolj bármelyik pontból kiinduló félegyenest és nevezd el!',
-    fields: [['n1', 'A félegyenes neve (kis betű)', 'pl. f']], img: 12,
-    model: ['Egy pontból kiinduló félegyenes (egyik irányban végtelen); kis betűvel nevezzük el (pl. f).'], shortModel: 'félegyenes, kis betűvel elnevezve',
+    fields: [['n1', 'A félegyenes neve (kisbetű)', 'pl. f']], img: 12,
+    model: ['Egy pontból kiinduló félegyenes (egyik irányban végtelen); kisbetűvel nevezzük el (pl. f).'], shortModel: 'félegyenes, kisbetűvel elnevezve',
     eval(a) { const t = (a.n1 || '').trim(), ok = !!a.done && t.length > 0 && t.length <= 20;
-      return { ok, final: t ? 'félegyenes: ' + t : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült' + (LOW.test(t) ? ', a neve kis betű.' : ' (a név nem egy kis betű, nézd meg a füzetben).') : 'Nincs jelölve az elkészülés, vagy nincs megadva a név.'] }; } },
+      return { ok, final: t ? 'félegyenes: ' + t : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült' + (LOW.test(t) ? ', a neve kisbetű.' : ' (a név nem egy kisbetű, nézd meg a füzetben).') : 'Nincs jelölve az elkészülés, vagy nincs megadva a név.'] }; } },
 ];
 const isAnswered = (t, a) => t.type === 'mc' ? !!a.v : t.type === 'text' ? !!(a.t || '').trim() : t.type === 'multi' ? t.fields.every(f => (a[f[0]] || '').trim()) : !!a.done;
 

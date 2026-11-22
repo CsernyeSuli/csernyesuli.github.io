@@ -23,6 +23,7 @@ h2{margin:0 0 10px;font-size:18px;color:var(--am)}
 .banner{margin-bottom:14px;padding:10px 14px;border:1px solid #d97706;border-radius:12px;background:rgba(120,53,15,.4);color:#fde68a;font-size:14px}
 label.lbl{display:block;margin-bottom:5px;font-size:13px;color:var(--mut)}
 .grid2{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.grid2.one{grid-template-columns:1fr}
 @media(max-width:560px){.grid2{grid-template-columns:1fr}h1{font-size:23px}}
 input[type=text],input[type=number],select,textarea{width:100%;padding:9px 12px;border:1px solid #475569;border-radius:12px;background:rgba(15,23,42,.85);color:var(--tx);font:inherit;outline:none;transition:border-color .15s,box-shadow .15s}
 input:focus,textarea:focus,select:focus{border-color:var(--em);box-shadow:0 0 0 3px rgba(52,211,153,.2)}
@@ -205,7 +206,7 @@ ul.rules li{margin:6px 0}
  * ===================================================================== */
 const CFG = {
   ENDPOINT: 'https://script.google.com/macros/s/AKfycbxb4EbcSLAaTU9xSx2AYPiCJCEh07uXtv52RPrHZiuUD21KInhONF7u-JZkoUxBKYNgBQ/exec',   // az Apps Script web app /exec URL-je (a kozos/v1/vegpont.js-ből). Üresre állítva: PRÓBAÜZEM (nem küld semmit)
-  BELEPES: 'nev',                          // 'nev' = név + osztály  |  'kod' = személyes kód (később erre állítjuk át)
+  BELEPES: 'kod',                          // 'nev' = név + osztály  |  'kod' = személyes kód (később erre állítjuk át)
   OSZTALYOK: [['6h', '6. osztály haladó'], ['6a', '6. osztály alap']],
   ALAP_OSZTALY: '',                        // rögzített osztály ('6h' / '6a'); a linkben is megadható: ...html?osztaly=6h
   ASSIGNMENT_TYPE: 'Orai_GeometriaiAlapfogalmak',   // ASCII; az „Orai_” előtagú típusokról minden beadás után megy e-mail
@@ -265,10 +266,10 @@ const TASKS = [
         note: ['Pont: ' + (okP ? '✔ (nagybetű)' : '✘ nagybetűvel kell jelölni') + ' · Szakasz: ' + (okS ? '✔ (nagy vagy kisbetű)' : '✘ a végpontok nagybetűivel vagy kisbetűvel') + ' · Egyenes: ' + (okE ? '✔ (kisbetű)' : '✘ kisbetűvel kell jelölni')] };
     } },
   { id: 4, type: 'mc', q: 'Mi két alakzat távolsága?',
-    opts: { A: 'Az őket összekötő bármelyik egyenes hossza.', B: 'Az őket összekötő szakaszok közül a legrövidebb szakasz hossza.',
-            C: 'Az őket összekötő szakaszok közül a leghosszabb szakasz hossza.', D: 'A két alakzat kerületének összege.' },
-    key: 'B', model: ['B) Az őket összekötő szakaszok közül a legrövidebb szakasz hossza.'], shortModel: 'B',
-    eval(a) { return { ok: a.v === 'B', final: a.v || '', note: [a.v ? 'Választott: ' + a.v + ', helyes: B.' : 'Nem választott.'] }; } },
+    opts: { A: 'Az őket összekötő bármelyik egyenes hossza.', B: 'A két alakzat kerületének összege.',
+            C: 'Az őket összekötő szakaszok közül a leghosszabb szakasz hossza.', D: 'Az őket összekötő szakaszok közül a legrövidebb szakasz hossza.' },
+    key: 'D', model: ['D) Az őket összekötő szakaszok közül a legrövidebb szakasz hossza.'], shortModel: 'D',
+    eval(a) { return { ok: a.v === 'D', final: a.v || '', note: [a.v ? 'Választott: ' + a.v + ', helyes: D.' : 'Nem választott.'] }; } },
   { id: 5, type: 'text', q: 'Írd le két pont távolságának a meghatározását!', prefix: 'Két pont távolsága a …',
     model: ['… pontokat összekötő szakasz hossza.'], shortModel: '… pontokat összekötő szakasz hossza',
     eval(a) {
@@ -284,28 +285,28 @@ const TASKS = [
     eval(a) { const p = pozicio(a.t), ok = p.pos && p.neg;
       return { ok, final: a.t, note: [ok ? 'Mindkét eset szerepel (illeszkedik / nem illeszkedik).' : 'Mindkét esetet meg kell adni: illeszkedik és nem illeszkedik.'] }; } },
   { id: 8, type: 'text', q: 'Milyen lehet két egyenes kölcsönös helyzete, ha ugyanazon a síkon helyezkednek el?',
-    model: ['párhuzamos vagy metsző.'], shortModel: 'párhuzamos vagy metsző',
+    model: ['párhuzamos vagy metsző vagy keresztez vagy keresztező vagy keresztezik.'], shortModel: 'párhuzamos vagy metsző',
     eval(a) { const n = norm(a.t), ok = /parhuzamos/.test(n) && /(metsz|keresztez)/.test(n);   // a „metsző” szinonimái: ide írhatsz még szót, pl. |egymast
       return { ok, final: a.t, note: [ok ? 'Mindkét eset szerepel (párhuzamos, metsző).' : 'Mindkét esetet meg kell adni: párhuzamos és metsző.'] }; } },
   { id: 9, type: 'book', q: 'Vegyél fel egy pontot a füzetlapon, nevezd el tetszőlegesen!',
-    fields: [['n1', 'A pont neve (nagybetű)', 'pl. P']], img: 9,
+    fields: [['n1', 'A pont neve:', 'Írd ide:']], <!-- img: 9, -->
     model: ['Egy kis x-szel jelölt pont, nagybetűvel elnevezve (pl. P).'], shortModel: 'x-szel jelölt pont, nagybetűvel elnevezve',
     eval(a) { const ok = !!a.done && CAP.test((a.n1 || '').trim());
       return { ok, final: a.n1 ? 'pont: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, a pont neve nagybetű.' : 'Nincs jelölve az elkészülés, vagy a pont neve nem egy nagybetű.'] }; } },
   { id: 10, type: 'book', q: 'Vegyél fel egy második tőle 2 cm-re és egy harmadik pontot tőle 3 cm-re. Nevezd el őket! Milyen hosszú a két pont által meghatározott szakasz hossza?',
-    fields: [['n1', 'A 2 cm-re lévő pont neve', 'pl. A'], ['n2', 'A 3 cm-re lévő pont neve', 'pl. B'], ['n3', 'A szakasz hossza (cm)', 'pl. 4,5']], img: 10,
+    fields: [['n1', 'A 2 cm-re lévő pont neve:', 'Írd ide:'], ['n2', 'A 3 cm-re lévő pont neve', 'pl. B'], ['n3', 'A szakasz hossza (cm)', 'pl. 4,5']], <!-- img: 10, -->
     model: ['A két felvett pont távolsága 1 cm és 5 cm között lehet, attól függően, hová vetted fel őket (az ábrán egy lehetséges megoldás).'], shortModel: 'a távolság 1 és 5 cm közé esik',
     eval(a) { const n1 = (a.n1 || '').trim(), n2 = (a.n2 || '').trim(), len = num(a.n3 || ''), lenOk = len !== null && len >= 1 && len <= 5;
       const ok = !!a.done && CAP.test(n1) && CAP.test(n2) && n1 !== n2 && lenOk;
       return { ok, final: [n1, n2].filter(Boolean).join(', ') + (a.n3 ? '; ' + a.n3 + ' cm' : ''),
         note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'Két különböző nagybetű, a megadott hossz 1 és 5 cm közé esik.' : (lenOk ? '' : 'A szakasz hossza nem esik 1 és 5 cm közé.') + (!!a.done ? '' : ' Nincs jelölve az elkészülés.') + (CAP.test(n1) && CAP.test(n2) && n1 !== n2 ? '' : ' A pontok nevei nem két különböző nagybetű.')] }; } },
   { id: 11, type: 'book', q: 'Húzd meg az utóbbi két pont által meghatározott egyenest és nevezd el!',
-    fields: [['n1', 'Az egyenes neve (kisbetű)', 'pl. e']], img: 11,
+    fields: [['n1', 'Az egyenes neve:', 'Írd ide:']], <!-- img: 11, -->
     model: ['A két ponton átmenő egyenes, mindkét irányban folytatódik; kisbetűvel nevezzük el (pl. e).'], shortModel: 'egyenes, kisbetűvel elnevezve',
     eval(a) { const ok = !!a.done && LOW.test((a.n1 || '').trim());
       return { ok, final: a.n1 ? 'egyenes: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, az egyenes neve kisbetű.' : 'Nincs jelölve az elkészülés, vagy az egyenes neve nem egy kisbetű.'] }; } },
   { id: 12, type: 'book', q: 'Rajzolj bármelyik pontból kiinduló félegyenest és nevezd el!',
-    fields: [['n1', 'A félegyenes neve (kisbetű)', 'pl. f']], img: 12,
+    fields: [['n1', 'A félegyenes neve.', 'Írd ide:']], <!-- img: 12, -->
     model: ['Egy pontból kiinduló félegyenes (egyik irányban végtelen); kisbetűvel nevezzük el (pl. f).'], shortModel: 'félegyenes, kisbetűvel elnevezve',
     eval(a) { const t = (a.n1 || '').trim(), ok = !!a.done && t.length > 0 && t.length <= 20;
       return { ok, final: t ? 'félegyenes: ' + t : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült' + (LOW.test(t) ? ', a neve kisbetű.' : ' (a név nem egy kisbetű, nézd meg a füzetben).') : 'Nincs jelölve az elkészülés, vagy nincs megadva a név.'] }; } },
@@ -341,7 +342,7 @@ const live = () => !!S && !S.ended;
   ['#cls', '#cls2'].forEach(id => { $(id).innerHTML = (known ? '' : '<option value="">– válassz –</option>') + opts; if (known) { $(id).value = preset; $(id).disabled = true; } });
   const kod = CFG.BELEPES === 'kod';
   $('#nevMod').hidden = kod; $('#kodMod').hidden = !kod;
-  if (kod && known) $('#kodClsWrap').hidden = true;
+  if (kod) { $('#kodClsWrap').hidden = true; $('#kodMod').classList.add('one'); }   // a kódból derül ki, melyik csoport
   $('#name').value = qs.get('nev') || store.get('geo_nev');
   if (!known && store.get('geo_cls')) { $('#cls').value = store.get('geo_cls'); $('#cls2').value = store.get('geo_cls'); }
   if (CFG.VISSZA_HREF && /^https?:$/.test(location.protocol)) {
@@ -349,6 +350,12 @@ const live = () => !!S && !S.ended;
   }
 })();
 
+/* A személyes kód: ugyanaz a formátum és ellenőrző karakter, mint a kozos/v1/azonosito.js-ben */
+const KOD_ABC = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+const kodNorm = s => String(s == null ? '' : s).toUpperCase().replace(/[^A-Z0-9]/g, '');
+function kodEllenorzo(body) { let s = 0; for (let i = 0; i < body.length; i++) { const v = KOD_ABC.indexOf(body.charAt(i)); if (v < 0) return ''; s += (i + 1) * v; } return KOD_ABC.charAt(s % KOD_ABC.length); }
+const kodErvenyes = n => n.length === 8 && kodEllenorzo(n.slice(0, 7)) === n.charAt(7);
+$('#code').addEventListener('input', () => { const n = kodNorm($('#code').value).slice(0, 8); $('#code').value = n.length > 4 ? n.slice(0, 4) + '-' + n.slice(4) : n; });
 function startErr(msg) { const e = $('#startErr'); e.textContent = msg; e.hidden = !msg; }
 async function ellenorizKod(code, cls) {
   if (TESZT) return { ok: true, name: 'Próba Diák', 'class': cls };
@@ -359,14 +366,13 @@ $('#startBtn').addEventListener('click', async () => {
   startErr('');
   let name = '', cls = '', code = '';
   if (CFG.BELEPES === 'kod') {
-    code = $('#code').value.trim();
-    if (code.replace(/[^A-Za-z0-9]/g, '').length < 8) { startErr('Add meg a személyes kódodat (XXXX-XXXX).'); $('#code').focus(); return; }
+    code = kodNorm($('#code').value);
+    if (!kodErvenyes(code)) { startErr('Add meg a személyes kódodat (XXXX-XXXX). Elgépelhetted, ellenőrizd még egyszer.'); $('#code').focus(); return; }
     const btn = $('#startBtn'); btn.disabled = true; btn.textContent = 'Kód ellenőrzése…';
     try {
-      const tries = $('#cls2').disabled || $('#cls2').value ? [$('#cls2').value] : CFG.OSZTALYOK.map(o => o[0]);
-      const order = $('#cls2').value ? [$('#cls2').value].concat(CFG.OSZTALYOK.map(o => o[0]).filter(c => c !== $('#cls2').value)) : tries;
+      const preset = $('#cls2').disabled ? [$('#cls2').value] : null;          // ?osztaly=6h … a linkben rögzített osztály
       let res = null;
-      for (const c of $('#cls2').disabled ? [$('#cls2').value] : order) { res = await ellenorizKod(code, c); if (res && res.ok) { cls = c; break; } }
+      for (const c of preset || CFG.OSZTALYOK.map(o => o[0])) { res = await ellenorizKod(code, c); if (res && res.ok) { cls = c; break; } }
       if (!res || !res.ok) { startErr('A kód nem érvényes ehhez a feladatlaphoz. Ellenőrizd, és próbáld újra!'); return; }
       name = res.name || '';
     } catch (e) { startErr('Nem sikerült ellenőrizni a kódot. Ellenőrizd a hálózatot, és próbáld újra!'); return; }
@@ -456,7 +462,7 @@ function buildPayload() {
     submissionId: S.submissionId, sentAt: S.sentAt, classId: S.cls, assignmentType: CFG.ASSIGNMENT_TYPE, setId: CFG.SET_ID,
     taskTitle: CFG.TASK_TITLE, score, total, grade: gradeFor(score, total) + ' – ' + score + '/' + total, reason: S.reason,
     tasks: res.map(x => ({
-      expression: x.t.q.slice(0, 200),     // az e-mail a sorszámot maga írja ki correct: !!x.r.ok,
+      expression: x.t.q.slice(0, 200), correct: !!x.r.ok,     // az e-mail a sorszámot maga írja ki
       finalAnswer: String(x.r.final || '').replace(/\s+/g, ' ').slice(0, 50), correctAnswer: x.t.shortModel.slice(0, 50),
       seconds: x.secs, stepErrors: '', studentLines: lines(x.r.final), correctLines: lines(x.t.model.join('\n')), feedback: x.r.note.filter(Boolean),
     })),

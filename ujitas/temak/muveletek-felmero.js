@@ -179,6 +179,50 @@
         },
       ]
     },
+    {
+      id: 'V',
+      title: 'V. Hatványozás',
+      blocks: [
+        {
+          code: 'A',
+          label: 'A) Hatványok összege, különbsége és előjelei',
+          tasks: [
+            { id: 'V_A_1', num: '1.', expr: '3^2+4^2', dispHtml: '3<sup>2</sup> + 4<sup>2</sup>' },
+            { id: 'V_A_2', num: '2.', expr: '(3+4)^2', dispHtml: '(3 + 4)<sup>2</sup>' },
+            { id: 'V_A_3', num: '3.', expr: '-5^2', dispHtml: '−5<sup>2</sup>' },
+            { id: 'V_A_4', num: '4.', expr: '(-5)^2', dispHtml: '(−5)<sup>2</sup>' },
+            { id: 'V_A_5', num: '5.', expr: '-2^3', dispHtml: '−2<sup>3</sup>' },
+            { id: 'V_A_6', num: '6.', expr: '(-2)^3', dispHtml: '(−2)<sup>3</sup>' },
+            { id: 'V_A_7', num: '7.', expr: '-2^3-(-3)^2', dispHtml: '−2<sup>3</sup> − (−3)<sup>2</sup>' },
+            { id: 'V_A_8', num: '8.', expr: '4·(-3)^2-5·(-2)^3', dispHtml: '4 · (−3)<sup>2</sup> − 5 · (−2)<sup>3</sup>' },
+          ]
+        },
+        {
+          code: 'B',
+          label: 'B) Hatványok szorzása, osztása és zárójelek',
+          tasks: [
+            { id: 'V_B_1', num: '1.', expr: '2·3^2', dispHtml: '2 · 3<sup>2</sup>' },
+            { id: 'V_B_2', num: '2.', expr: '(2·3)^2', dispHtml: '(2 · 3)<sup>2</sup>' },
+            { id: 'V_B_3', num: '3.', expr: '-2·(-3)^2', dispHtml: '−2 · (−3)<sup>2</sup>' },
+            { id: 'V_B_4', num: '4.', expr: '[-2·(-3)]^2', evalExpr: '(-2*(-3))^2', dispHtml: '[−2 · (−3)]<sup>2</sup>' },
+            { id: 'V_B_5', num: '5.', expr: '18:3^2', dispHtml: '18 : 3<sup>2</sup>' },
+            { id: 'V_B_6', num: '6.', expr: '(18:3)^2', dispHtml: '(18 : 3)<sup>2</sup>' },
+          ]
+        },
+        {
+          code: 'C',
+          label: 'C) Azonos kitevőjű hatványok és hatványértékek',
+          tasks: [
+            { id: 'V_C_1', num: '1.', expr: '2^5·5^5', dispHtml: '2<sup>5</sup> · 5<sup>5</sup>' },
+            { id: 'V_C_2', num: '2.', expr: '(-2)^5·5^5', dispHtml: '(−2)<sup>5</sup> · 5<sup>5</sup>' },
+            { id: 'V_C_3', num: '3.', expr: '20^6', dispHtml: '20<sup>6</sup>' },
+            { id: 'V_C_4', num: '4.', expr: '(-20)^3', dispHtml: '(−20)<sup>3</sup>' },
+            { id: 'V_C_5', num: '5.', expr: '12^4:6^4', dispHtml: '12<sup>4</sup> : 6<sup>4</sup>' },
+            { id: 'V_C_6', num: '6.', expr: '(-15)^3:5^3', dispHtml: '(−15)<sup>3</sup> : 5<sup>3</sup>' },
+          ]
+        },
+      ]
+    },
   ];
 
   // Saját BigInt racionális kiértékelő tartalékként (ha a TORTEK_MOTOR egy kifejezést nem tudna elemezni)
@@ -199,31 +243,42 @@
   function mulQ(a, b) { return makeQ(a.n * b.n, a.d * b.d); }
   function divQ(a, b) { return makeQ(a.n * b.d, a.d * b.n); }
 
+  function powQ(base, expBig) {
+    if (expBig < 0n) {
+      return powQ(makeQ(base.d, base.n), -expBig);
+    }
+    let res = makeQ(1n, 1n);
+    let b = base;
+    let e = expBig;
+    while (e > 0n) {
+      if ((e & 1n) === 1n) res = mulQ(res, b);
+      e = e >> 1n;
+      if (e > 0n) b = mulQ(b, b);
+    }
+    return res;
+  }
+
   function evalFallbackExpr(exprStr) {
     const s = String(exprStr || '').replace(/\s+/g, ' ').trim();
-    // Vegyes számok (pl. 2 2/5 -> (2 + 2/5)) és tizedestörtek (pl. 1,4 -> (14/10)) és középpont (· -> *)
-    let norm = s.replace(/·/g, '*');
-    // Vegyes szám: egész + tört (pl. 2 2/5)
+    let norm = s.replace(/\[/g, '(').replace(/\]/g, ')').replace(/·/g, '*');
     norm = norm.replace(/\b(-?\d+)\s+(\d+)\/(\d+)\b/g, function (_, w, a, b) {
       const sign = BigInt(w) < 0n ? -1n : 1n;
       const absW = BigInt(w) < 0n ? -BigInt(w) : BigInt(w);
       const num = sign * (absW * BigInt(b) + BigInt(a));
       return '(' + num.toString() + '/' + b + ')';
     });
-    // Tizedestört vesszővel: pl. 1,4 vagy 0,75
     norm = norm.replace(/(\d+),(\d+)/g, function (_, intP, decP) {
       const den = 10n ** BigInt(decP.length);
       const num = BigInt(intP + decP);
       return '(' + num.toString() + '/' + den.toString() + ')';
     });
 
-    // Tokenizálás
     const tokens = [];
     let i = 0;
     while (i < norm.length) {
       const ch = norm[i];
       if (ch === ' ') { i++; continue; }
-      if ('+-:*/()'.indexOf(ch) >= 0) {
+      if ('+-:*/^()'.indexOf(ch) >= 0) {
         tokens.push({ type: 'op', val: ch });
         i++;
       } else if (/\d/.test(ch)) {
@@ -235,7 +290,6 @@
       }
     }
 
-    // Rekurzív leszálló értelmező: expr -> term (('+'|'-') term)*; term -> factor (('*'|':'|'/') factor)*; factor -> '(' expr ')' | ('+'|'-') factor | num
     let pos = 0;
     function peek() { return tokens[pos]; }
     function consume() { return tokens[pos++]; }
@@ -251,16 +305,37 @@
     }
 
     function parseTerm() {
-      let left = parseFactor();
+      let left = parsePower();
       while (peek() && peek().type === 'op' && (peek().val === '*' || peek().val === ':' || peek().val === '/')) {
         const op = consume().val;
-        const right = parseFactor();
+        const right = parsePower();
         left = op === '*' ? mulQ(left, right) : divQ(left, right);
       }
       return left;
     }
 
-    function parseFactor() {
+    function parsePower() {
+      let base = parseUnary();
+      while (peek() && peek().type === 'op' && peek().val === '^') {
+        consume();
+        const expVal = parsePower();
+        if (expVal.d !== 1n) throw new Error('Nem egész kitevő');
+        base = powQ(base, expVal.n);
+      }
+      return base;
+    }
+
+    function parseUnary() {
+      const t = peek();
+      if (t && t.type === 'op' && (t.val === '-' || t.val === '+')) {
+        const op = consume().val;
+        const val = parseUnary();
+        return op === '-' ? makeQ(-val.n, val.d) : val;
+      }
+      return parsePrimary();
+    }
+
+    function parsePrimary() {
       const t = peek();
       if (!t) return makeQ(0n, 1n);
       if (t.type === 'op' && t.val === '(') {
@@ -268,11 +343,6 @@
         const val = parseExpr();
         if (peek() && peek().type === 'op' && peek().val === ')') consume();
         return val;
-      }
-      if (t.type === 'op' && (t.val === '-' || t.val === '+')) {
-        const op = consume().val;
-        const val = parseFactor();
-        return op === '-' ? makeQ(-val.n, val.d) : val;
       }
       if (t.type === 'num') {
         consume();
@@ -299,6 +369,9 @@
   }
 
   function safeSolveReference(expr) {
+    if (String(expr).indexOf('^') >= 0) {
+      return evalFallbackExpr(expr);
+    }
     try {
       const r = M.solveReference(expr);
       if (r && r.result) return r;
@@ -306,7 +379,17 @@
     return evalFallbackExpr(expr);
   }
 
-  function safeTaskHtml(expr, taskId) {
+  function formatPowerFallback(expr) {
+    const withSup = String(expr || '').replace(/\^\(([^)]+)\)|\^([+-]?\d+)/g, function (_, p1, p2) {
+      return '<sup>' + esc(p1 || p2) + '</sup>';
+    });
+    return withSup.replace(/-/g, '−');
+  }
+
+  function safeTaskHtml(expr, taskId, dispHtml) {
+    if (dispHtml) {
+      return '<span>' + dispHtml + '</span>';
+    }
     if (taskId === 'IV_A_4') {
       try {
         return '<span class="inline-flex items-center gap-1">' +
@@ -317,6 +400,9 @@
           FX.task('2/10') +
           '</span>';
       } catch (e) {}
+    }
+    if (String(expr).indexOf('^') >= 0) {
+      return formatPowerFallback(expr);
     }
     try {
       return FX.task(expr);
@@ -350,6 +436,7 @@
           num: t.num,
           fullLabel: sec.id + '. ' + blk.code + t.num,
           expr: dispExpr,
+          dispHtml: t.dispHtml || '',
           evalExpr: evalExpr,
           refQ: ref.result,
           correctAnswer: ref.answerText
@@ -439,7 +526,7 @@
     <div class="mb-5 rounded-2xl border border-amber-600/70 bg-slate-900/70 p-4 shadow-lg shadow-black/30 md:p-5">
       <h2 class="mb-2 flex items-center gap-2 text-lg font-bold text-amber-400"><span>ℹ️</span>Tájékoztató és Szabályzat</h2>
       <p class="mb-3 text-sm leading-relaxed text-slate-200">
-        A felmérő <b>${TOTAL_TASKS} feladatot</b> tartalmaz négy témakörben (I. Egész számok, II. Tizedestörtek, III. Törtek, IV. Vegyes műveletek). Csak a végeredményeket kell beírnod a mezőkbe.
+        A felmérő <b>${TOTAL_TASKS} feladatot</b> tartalmaz öt témakörben (I. Egész számok, II. Tizedestörtek, III. Törtek, IV. Vegyes műveletek, V. Hatványozás). Csak a végeredményeket kell beírnod a mezőkbe.
       </p>
       <div class="rounded-xl border border-slate-800 bg-slate-950/80 p-3.5">
         <h3 class="mb-2 text-xs font-bold uppercase tracking-wider text-amber-300">Fontos szabályok:</h3>
@@ -464,7 +551,7 @@
           <div class="mf-card" data-card="${esc(t.id)}">
             <div class="mb-2 flex items-center justify-between gap-2">
               <span class="rounded-md bg-slate-800 px-2 py-0.5 text-xs font-bold text-sky-400">${esc(blk.code + t.num)}</span>
-              <div class="mf-expr text-right font-semibold">${safeTaskHtml(t.expr, t.id)} <span class="text-slate-400">=</span></div>
+              <div class="mf-expr text-right font-semibold">${safeTaskHtml(t.expr, t.id, t.dispHtml)} <span class="text-slate-400">=</span></div>
             </div>
             <div class="flex items-center gap-2">
               <input type="text" class="mf-inp" data-tid="${esc(t.id)}" aria-label="${esc(taskObj.fullLabel)} végeredmény"
@@ -827,6 +914,7 @@
         id: t.id,
         fullLabel: t.fullLabel,
         expr: t.expr,
+        dispHtml: t.dispHtml,
         answered: chk.answered,
         correct: chk.correct,
         studentRaw: raw,
@@ -981,7 +1069,7 @@
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="text-sm font-bold text-slate-100">
               <span class="mr-1.5 text-sky-400">${esc(item.fullLabel)})</span>
-              <span>${FX.task(item.expr)} =</span>
+              <span>${safeTaskHtml(item.expr, item.id, item.dispHtml)} =</span>
             </div>
             ${badgeHtml}
           </div>

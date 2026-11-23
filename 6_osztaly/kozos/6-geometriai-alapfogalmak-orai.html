@@ -93,6 +93,11 @@ ul.rules li{margin:6px 0}
 .note{margin:6px 0 0;font-size:13px;color:#fcd34d}
 .solimg{display:block;max-width:100%;max-height:260px;margin-top:8px;padding:6px;border-radius:10px;background:#fff}
 .fields.one{grid-template-columns:1fr}
+.kodbox{max-width:400px;text-align:center}
+.kodbox h2{margin-bottom:8px}
+.kodinp{width:100%;margin-top:12px;padding:12px;border:2px solid #475569;border-radius:12px;background:#020617;color:#f8fafc;text-align:center;text-transform:uppercase;font:700 24px Consolas,Menlo,monospace;letter-spacing:.15em}
+.kodinp:focus{outline:none;border-color:#38bdf8;box-shadow:none}
+.kodmsg{min-height:1.5em;margin-top:8px;font-size:14px}.kodmsg.bad{color:#f87171}.kodmsg.good{color:#34d399}
 .hintbtn{display:block;margin:0 0 10px;padding:8px 14px;font-size:14px}
 .hintbox{margin:0 0 10px;padding:12px;border:1px solid #1e293b;border-radius:12px;background:rgba(2,6,23,.7);text-align:center}
 .hintbox p{margin:0 0 8px;font-size:12px;color:var(--mut)}
@@ -111,18 +116,12 @@ ul.rules li{margin:6px 0}
   <p class="sub" id="subtitle"></p>
   <div id="testBanner" class="banner" hidden><b>Próbaüzem:</b> az oldal még nincs összekötve a küldő szolgáltatással, ezért az eredményt nem küldi el sehová.</div>
 
-  <div class="card">
+  <div class="card" id="loginCard">
     <div id="nevMod" class="grid2">
       <div><label class="lbl" for="name">Neved (vezetéknév keresztnév)</label>
         <input id="name" type="text" autocomplete="name" maxlength="80"></div>
       <div><label class="lbl" for="cls">Osztályod</label>
         <select id="cls"></select></div>
-    </div>
-    <div id="kodMod" class="grid2" hidden>
-      <div><label class="lbl" for="code">Személyes kódod</label>
-        <input id="code" type="text" autocomplete="off" maxlength="12" placeholder="XXXX-XXXX" style="text-transform:uppercase;letter-spacing:.1em"></div>
-      <div id="kodClsWrap"><label class="lbl" for="cls2">Osztályod</label>
-        <select id="cls2"></select></div>
     </div>
     <p id="startErr" class="err" hidden></p>
   </div>
@@ -191,6 +190,15 @@ ul.rules li{margin:6px 0}
   <div class="row"><button id="revClose2" type="button" class="btn sky">Bezárás</button></div>
 </div></div>
 
+<!-- ============ KÓDBEKÉRŐ (lebegő ablak) ============ -->
+<div id="kodModal" class="ov" style="z-index:70"><div class="dlg kodbox" role="dialog" aria-modal="true" aria-labelledby="kodT">
+  <h2 id="kodT">🔑 Azonosítás</h2>
+  <p>Írd be a személyes kódodat. A kódot a tanárodtól kaptad.</p>
+  <input id="code" class="kodinp" type="text" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" placeholder="XXXX-XXXX" aria-label="Személyes kód">
+  <div id="kodMsg" class="kodmsg" aria-live="polite"></div>
+  <div class="row" style="margin-top:12px"><button id="kodOk" type="button" class="btn primary" disabled>Tovább</button><button id="kodNo" type="button" class="link" style="color:#94a3b8">Mégsem</button></div>
+</div></div>
+
 <!-- ============ FIGYELMEZTETÉS ============ -->
 <div id="warn" class="ov" style="z-index:60"><div class="dlg warn" role="alertdialog" aria-modal="true">
   <div style="font-size:40px">⚠️</div>
@@ -214,6 +222,8 @@ const CFG = {
   TASK_TITLE: 'Órai: Geometriai alapfogalmak',      // legfeljebb 60 karakter
   CIM: 'Geometriai alapfogalmak',
   ALCIM: '6. osztály – órai feladatlap',
+  SUGO_ABRA: false,                        // a 9–12. feladatnál a „Súgó ábra megtekintése” gomb; true = van gomb, false = nincs (most KI van kapcsolva)
+  MEGOLDAS_ABRA: false,                    // a beadás utáni megoldás-nézetben az ábrák; true = látszanak, false = nem (most KI van kapcsolva)
   VISSZA_HREF: '/6-osztaly.html',          // a „Vissza” gomb célja (a 6. osztályos csoportválasztó); üresen: nincs gomb
   VISSZA_FELIRAT: '⬅ Vissza a 6. osztály oldalára',
   OSZTALYZAT: [[90, 'Jeles (5)'], [75, 'Jó (4)'], [60, 'Közepes (3)'], [40, 'Elégséges (2)'], [0, 'Még gyakorold!']],  // [min. %, felirat]
@@ -289,24 +299,24 @@ const TASKS = [
     eval(a) { const n = norm(a.t), ok = /parhuzamos/.test(n) && /(metsz|keresztez)/.test(n);   // a „metsző” szinonimái: ide írhatsz még szót, pl. |egymast
       return { ok, final: a.t, note: [ok ? 'Mindkét eset szerepel (párhuzamos, metsző).' : 'Mindkét esetet meg kell adni: párhuzamos és metsző.'] }; } },
   { id: 9, type: 'book', q: 'Vegyél fel egy pontot a füzetlapon, nevezd el tetszőlegesen!',
-    fields: [['n1', 'A pont neve:', 'Írd ide:']], <!-- img: 9, -->
+    fields: [['n1', 'A pont neve:', 'Írd ide:']], img: 9,
     model: ['Egy kis x-szel jelölt pont, nagybetűvel elnevezve (pl. P).'], shortModel: 'x-szel jelölt pont, nagybetűvel elnevezve',
     eval(a) { const ok = !!a.done && CAP.test((a.n1 || '').trim());
       return { ok, final: a.n1 ? 'pont: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, a pont neve nagybetű.' : 'Nincs jelölve az elkészülés, vagy a pont neve nem egy nagybetű.'] }; } },
   { id: 10, type: 'book', q: 'Vegyél fel egy második tőle 2 cm-re és egy harmadik pontot tőle 3 cm-re. Nevezd el őket! Milyen hosszú a két pont által meghatározott szakasz hossza?',
-    fields: [['n1', 'A 2 cm-re lévő pont neve:', 'Írd ide:'], ['n2', 'A 3 cm-re lévő pont neve', 'pl. B'], ['n3', 'A szakasz hossza (cm)', 'pl. 4,5']], <!-- img: 10, -->
+    fields: [['n1', 'A 2 cm-re lévő pont neve:', 'Írd ide:'], ['n2', 'A 3 cm-re lévő pont neve:', 'Írd ide:'], ['n3', 'A szakasz hossza (cm):', 'Írd ide:']], img: 10,
     model: ['A két felvett pont távolsága 1 cm és 5 cm között lehet, attól függően, hová vetted fel őket (az ábrán egy lehetséges megoldás).'], shortModel: 'a távolság 1 és 5 cm közé esik',
     eval(a) { const n1 = (a.n1 || '').trim(), n2 = (a.n2 || '').trim(), len = num(a.n3 || ''), lenOk = len !== null && len >= 1 && len <= 5;
       const ok = !!a.done && CAP.test(n1) && CAP.test(n2) && n1 !== n2 && lenOk;
       return { ok, final: [n1, n2].filter(Boolean).join(', ') + (a.n3 ? '; ' + a.n3 + ' cm' : ''),
         note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'Két különböző nagybetű, a megadott hossz 1 és 5 cm közé esik.' : (lenOk ? '' : 'A szakasz hossza nem esik 1 és 5 cm közé.') + (!!a.done ? '' : ' Nincs jelölve az elkészülés.') + (CAP.test(n1) && CAP.test(n2) && n1 !== n2 ? '' : ' A pontok nevei nem két különböző nagybetű.')] }; } },
   { id: 11, type: 'book', q: 'Húzd meg az utóbbi két pont által meghatározott egyenest és nevezd el!',
-    fields: [['n1', 'Az egyenes neve:', 'Írd ide:']], <!-- img: 11, -->
+    fields: [['n1', 'Az egyenes neve:', 'Írd ide:']], img: 11,
     model: ['A két ponton átmenő egyenes, mindkét irányban folytatódik; kisbetűvel nevezzük el (pl. e).'], shortModel: 'egyenes, kisbetűvel elnevezve',
     eval(a) { const ok = !!a.done && LOW.test((a.n1 || '').trim());
       return { ok, final: a.n1 ? 'egyenes: ' + a.n1 : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült, az egyenes neve kisbetű.' : 'Nincs jelölve az elkészülés, vagy az egyenes neve nem egy kisbetű.'] }; } },
   { id: 12, type: 'book', q: 'Rajzolj bármelyik pontból kiinduló félegyenest és nevezd el!',
-    fields: [['n1', 'A félegyenes neve.', 'Írd ide:']], <!-- img: 12, -->
+    fields: [['n1', 'A félegyenes neve:', 'Írd ide:']], img: 12,
     model: ['Egy pontból kiinduló félegyenes (egyik irányban végtelen); kisbetűvel nevezzük el (pl. f).'], shortModel: 'félegyenes, kisbetűvel elnevezve',
     eval(a) { const t = (a.n1 || '').trim(), ok = !!a.done && t.length > 0 && t.length <= 20;
       return { ok, final: t ? 'félegyenes: ' + t : '', note: ['Füzet-feladat: a füzetben ellenőrizd.', ok ? 'A diák szerint elkészült' + (LOW.test(t) ? ', a neve kisbetű.' : ' (a név nem egy kisbetű, nézd meg a füzetben).') : 'Nincs jelölve az elkészülés, vagy nincs megadva a név.'] }; } },
@@ -327,6 +337,7 @@ const show = v => { $('#view-start').hidden = v !== 'start'; $('#view-sheet').hi
 const TESZT = !CFG.ENDPOINT;
 
 let S = null;                                   // a futó kitöltés állapota
+let PRESET = '';                                // a linkben rögzített osztály (?osztaly=6h), különben üres
 const live = () => !!S && !S.ended;
 
 /* =====================================================================
@@ -339,12 +350,12 @@ const live = () => !!S && !S.ended;
   const opts = CFG.OSZTALYOK.map(o => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join('');
   const qs = new URLSearchParams(location.search), preset = qs.get('osztaly') || CFG.ALAP_OSZTALY;
   const known = CFG.OSZTALYOK.some(o => o[0] === preset);
-  ['#cls', '#cls2'].forEach(id => { $(id).innerHTML = (known ? '' : '<option value="">– válassz –</option>') + opts; if (known) { $(id).value = preset; $(id).disabled = true; } });
+  ['#cls'].forEach(id => { $(id).innerHTML = (known ? '' : '<option value="">– válassz –</option>') + opts; if (known) { $(id).value = preset; $(id).disabled = true; } });
   const kod = CFG.BELEPES === 'kod';
-  $('#nevMod').hidden = kod; $('#kodMod').hidden = !kod;
-  if (kod) { $('#kodClsWrap').hidden = true; $('#kodMod').classList.add('one'); }   // a kódból derül ki, melyik csoport
+  PRESET = known ? preset : '';
+  $('#loginCard').hidden = kod;          // kódos belépésnél a kódot lebegő ablak kéri be (nem marad a képernyőn)
   $('#name').value = qs.get('nev') || store.get('geo_nev');
-  if (!known && store.get('geo_cls')) { $('#cls').value = store.get('geo_cls'); $('#cls2').value = store.get('geo_cls'); }
+  if (!known && store.get('geo_cls')) $('#cls').value = store.get('geo_cls');
   if (CFG.VISSZA_HREF && /^https?:$/.test(location.protocol)) {
     const b = $('#backLink'); b.href = new URL(CFG.VISSZA_HREF, location.origin).href; b.textContent = CFG.VISSZA_FELIRAT; b.hidden = false;
   }
@@ -355,28 +366,45 @@ const KOD_ABC = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 const kodNorm = s => String(s == null ? '' : s).toUpperCase().replace(/[^A-Z0-9]/g, '');
 function kodEllenorzo(body) { let s = 0; for (let i = 0; i < body.length; i++) { const v = KOD_ABC.indexOf(body.charAt(i)); if (v < 0) return ''; s += (i + 1) * v; } return KOD_ABC.charAt(s % KOD_ABC.length); }
 const kodErvenyes = n => n.length === 8 && kodEllenorzo(n.slice(0, 7)) === n.charAt(7);
-$('#code').addEventListener('input', () => { const n = kodNorm($('#code').value).slice(0, 8); $('#code').value = n.length > 4 ? n.slice(0, 4) + '-' + n.slice(4) : n; });
 function startErr(msg) { const e = $('#startErr'); e.textContent = msg; e.hidden = !msg; }
 async function ellenorizKod(code, cls) {
   if (TESZT) return { ok: true, name: 'Próba Diák', 'class': cls };
   const r = await fetch(CFG.ENDPOINT + '?' + new URLSearchParams({ akcio: 'kod', kod: code, osztaly: cls }));
   return r.json();
 }
+/** Lebegő kódbekérő ablak (mint a keretrendszer „Azonosítás” ablaka). Eredmény: { name, cls, code } vagy null (Mégsem). A kód nem marad a képernyőn. */
+function askCode() {
+  return new Promise(done => {
+    const inp = $('#code'), msg = $('#kodMsg'), ok = $('#kodOk'), no = $('#kodNo');
+    const say = (t, c) => { msg.className = 'kodmsg' + (c ? ' ' + c : ''); msg.textContent = t; };
+    inp.value = ''; say('', ''); ok.disabled = true; openOv('kodModal'); inp.focus();
+    const close = v => { inp.value = ''; closeOv('kodModal'); inp.removeEventListener('input', onInput); inp.removeEventListener('keydown', onKey); ok.removeEventListener('click', go); no.removeEventListener('click', onNo); done(v); };
+    const onInput = () => {
+      const n = kodNorm(inp.value).slice(0, 8); inp.value = n.length > 4 ? n.slice(0, 4) + '-' + n.slice(4) : n;
+      const j = kodErvenyes(n); ok.disabled = !j;
+      say(n.length === 8 ? (j ? 'Rendben ✔' : 'Elgépelted a kódot, ellenőrizd még egyszer.') : '', n.length === 8 ? (j ? 'good' : 'bad') : '');
+    };
+    const go = async () => {
+      const n = kodNorm(inp.value); if (!kodErvenyes(n)) return;
+      ok.disabled = true; say('Ellenőrzés…', '');
+      try {
+        let res = null, cls = '';
+        for (const c of PRESET ? [PRESET] : CFG.OSZTALYOK.map(o => o[0])) { res = await ellenorizKod(n, c); if (res && res.ok) { cls = c; break; } }
+        if (!res || !res.ok) { ok.disabled = false; say('Ez a kód nem érvényes ehhez a feladatlaphoz.', 'bad'); return; }
+        close({ name: res.name || '', cls, code: n });
+      } catch (e) { ok.disabled = false; say('Nem sikerült ellenőrizni a kódot. Próbáld újra.', 'bad'); }
+    };
+    const onNo = () => close(null);
+    const onKey = e => { if (e.key === 'Enter') go(); else if (e.key === 'Escape') onNo(); };
+    inp.addEventListener('input', onInput); inp.addEventListener('keydown', onKey); ok.addEventListener('click', go); no.addEventListener('click', onNo);
+  });
+}
 $('#startBtn').addEventListener('click', async () => {
   startErr('');
   let name = '', cls = '', code = '';
   if (CFG.BELEPES === 'kod') {
-    code = kodNorm($('#code').value);
-    if (!kodErvenyes(code)) { startErr('Add meg a személyes kódodat (XXXX-XXXX). Elgépelhetted, ellenőrizd még egyszer.'); $('#code').focus(); return; }
-    const btn = $('#startBtn'); btn.disabled = true; btn.textContent = 'Kód ellenőrzése…';
-    try {
-      const preset = $('#cls2').disabled ? [$('#cls2').value] : null;          // ?osztaly=6h … a linkben rögzített osztály
-      let res = null;
-      for (const c of preset || CFG.OSZTALYOK.map(o => o[0])) { res = await ellenorizKod(code, c); if (res && res.ok) { cls = c; break; } }
-      if (!res || !res.ok) { startErr('A kód nem érvényes ehhez a feladatlaphoz. Ellenőrizd, és próbáld újra!'); return; }
-      name = res.name || '';
-    } catch (e) { startErr('Nem sikerült ellenőrizni a kódot. Ellenőrizd a hálózatot, és próbáld újra!'); return; }
-    finally { btn.disabled = false; btn.textContent = 'Feladatlap indítása'; }
+    const r = await askCode(); if (!r) return;
+    name = r.name; cls = r.cls; code = r.code;
   } else {
     name = titleCase($('#name').value); cls = $('#cls').value;
     if (name.length < 3) { startErr('Add meg a teljes neved (vezetéknév keresztnév).'); $('#name').focus(); return; }
@@ -401,8 +429,8 @@ function taskHtml(t) {
     body = '<div class="fields one">' + t.fields.map(f => `<div><label class="lbl">${esc(f[1])}</label><input type="text" data-f="${f[0]}" maxlength="200" placeholder="Írd ide a válaszod…" autocomplete="off" spellcheck="false"></div>`).join('') + '</div>';
   } else {
     body = '<div class="book">📓 Füzet-feladat: készítsd el a füzetedbe, majd itt töltsd ki!</div><div class="fields">' +
-      t.fields.map(f => `<div><label class="lbl">${esc(f[1])}</label><input type="text" data-f="${f[0]}" maxlength="${f[0] === 'n3' ? 8 : 20}" placeholder="${esc(f[2])}" autocomplete="off" spellcheck="false"${f[0] === 'n3' ? ' inputmode="decimal"' : ''}></div>`).join('') +
-      '</div>' + (t.img ? `<button type="button" class="btn sky hintbtn" data-hint="${t.id}" aria-expanded="false">💡 Súgó ábra megtekintése</button><div class="hintbox" id="hint${t.id}" hidden><p>Mintaábra (súgó a füzetben való szerkesztéshez):</p><img src="${IMG[t.img]}" alt="Mintaábra a ${t.id}. feladathoz"></div>` : '') +
+      t.fields.map(f => `<div><label class="lbl">${esc(f[1])}</label><input type="text" data-f="${f[0]}" maxlength="${f[0] === 'n3' ? 8 : 20}"${f[2] ? ` placeholder="${esc(f[2])}"` : ''} autocomplete="off" spellcheck="false"${f[0] === 'n3' ? ' inputmode="decimal"' : ''}></div>`).join('') +
+      '</div>' + (t.img && CFG.SUGO_ABRA ? `<button type="button" class="btn sky hintbtn" data-hint="${t.id}" aria-expanded="false">💡 Súgó ábra megtekintése</button><div class="hintbox" id="hint${t.id}" hidden><p>Mintaábra (súgó a füzetben való szerkesztéshez):</p><img src="${IMG[t.img]}" alt="Mintaábra a ${t.id}. feladathoz"></div>` : '') +
       '<label class="check"><input type="checkbox" data-f="done"> Elkészítettem a füzetembe</label>';
   }
   return `<article class="task" id="t${t.id}" data-id="${t.id}"><header><span class="num">${t.id}</span><h3>${esc(t.q)}</h3></header>${body}</article>`;
@@ -498,7 +526,7 @@ async function deliver() {
     : 'Az eredményt nem sikerült elküldeni. <button type="button" id="retry" class="link">Újrapróbálom</button>';
 }
 $('#sendMsg').addEventListener('click', e => { if (e.target.id === 'retry') deliver(); });
-function goHome() { ['confirmModal', 'resultModal', 'solModal', 'warn'].forEach(closeOv); S = null; show('start'); }
+function goHome() { ['confirmModal', 'resultModal', 'solModal', 'warn', 'kodModal'].forEach(closeOv); S = null; $('#code').value = ''; show('start'); }
 $('#rClose').addEventListener('click', goHome);
 
 /* ---------- megoldások ---------- */
@@ -509,7 +537,7 @@ function openSolutions() {
     return `<div class="rev"><h4>${t.id}. ${esc(t.q)}</h4>
       <span class="pill ${cls}">${x.r.ok ? '✔ rendben' : '✘ hiányos / hibás'}</span>${book ? '<span class="pill nb">📓 füzetben ellenőrzi a tanár</span>' : ''}
       <div class="cols"><div class="col"><b>A te válaszod</b>${esc(mine)}</div><div class="col"><b>Helyes megoldás</b>${esc(t.model.join('\n'))}</div></div>
-      ${t.img ? `<img class="solimg" src="${IMG[t.img]}" alt="A ${t.id}. feladat megoldásának ábrája">` : ''}
+      ${t.img && CFG.MEGOLDAS_ABRA ? `<img class="solimg" src="${IMG[t.img]}" alt="A ${t.id}. feladat megoldásának ábrája">` : ''}
       ${x.r.note.filter(Boolean).map(m => `<p class="note">${esc(m)}</p>`).join('')}</div>`;
   }).join('');
   closeOv('resultModal'); openOv('solModal'); $('#solModal').scrollTop = 0;

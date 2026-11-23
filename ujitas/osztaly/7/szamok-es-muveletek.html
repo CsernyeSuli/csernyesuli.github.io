@@ -3,19 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Számok és műveletek</title>
+<title>Számok és műveletek – házi dolgozat</title>
 </head>
 <body>
 <script>
 window.UJITAS_CFG = {
-  mod: 'elo',                          // 'elo' = kódbekérés + védelem · 'archiv' = csak a feladatok (archíváláskor ezt az egy szót kell átírni)
+  mod: 'elo',                          // 'elo' = kódbekérés + védelem + beküldés · 'archiv' = csak a feladatok (archíváláskor ezt az egy szót kell átírni)
   classId: '7',
-  kodEllenorzes: true,                 // a szerver ellenőrzi, hogy a kód létezik-e (nincs beküldés, ezért itt kell)
+  kodEllenorzes: true,                 // a szerver már a belépéskor ellenőrzi, hogy a kód létezik-e és az osztályé-e
+  assignmentType: 'Hazi',              // a beküldés típusa (betű, szám, _ és -)
+  taskTitle: 'Számok és műveletek – házi dolgozat',
+  setId: 'szamok',                     // a feladatsor azonosítója; a beküldésnél a feladat id-ja kerül mögé (pl. szamok-halmazabra)
   tema: ['tortek-motor', 'szamok/felmero'],
   cim: 'Számok és műveletek',
-  alcim: '7. osztály – gyakorló felmérő',
+  alcim: '7. osztály – házi dolgozat',
   visszaHref: '/ujitas/osztaly/7/index.html',
-  feladatok: [                         // fajl: a temak/szamok/ mappa feladat-fájlja (az id egyezzen a fájl regisztrált nevével); max: a feladat pontja (az összesítéshez)
+  feladatok: [
     { id: 'halmazabra',     fajl: 'halmazabra',     cim: 'Halmazábra',                          max: 10 },
     { id: 'szamkartya',     fajl: 'szamkartya',     cim: 'Számok csoportosítása',               max: 10 },
     { id: 'igazhamis',      fajl: 'igazhamis',      cim: 'Igaz vagy hamis',                     max: 10 },

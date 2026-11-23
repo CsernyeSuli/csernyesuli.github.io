@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Számok és műveletek</title>
+</head>
+<body>
+<script>
+window.UJITAS_CFG = {
+  mod: 'elo',                          // 'elo' = kódbekérés + védelem + beküldés · 'archiv' = csak a feladatok (archíváláskor ezt az egy szót kell átírni)
+  classId: '7',
+  kodEllenorzes: true,                 // a szerver már a belépéskor ellenőrzi, hogy a kód létezik-e és az osztályé-e
+  assignmentType: 'Felmero',           // a beküldés típusa (betű, szám, _ és -)
+  taskTitle: 'Számok és műveletek',    // az e-mail tárgyának eleje (legfeljebb 60 karakter)
+  setId: 'szamok',                     // a feladatsor azonosítója; a beküldésnél a feladat id-ja kerül mögé (pl. szamok-halmazabra)
+  tema: ['tortek-motor', 'szamok/felmero'],
+  cim: 'Számok és műveletek',
+  alcim: '7. osztály – felmérő',
+  visszaHref: '/ujitas/osztaly/7/index.html',
+  feladatok: [                         // fajl: a temak/szamok/ mappa feladat-fájlja (az id egyezzen a fájl regisztrált nevével); max: a feladat pontja (az összesítéshez)
+    { id: 'halmazabra',     fajl: 'halmazabra',     cim: 'Halmazábra',                          max: 10 },
+    { id: 'szamkartya',     fajl: 'szamkartya',     cim: 'Számok csoportosítása',               max: 10 },
+    { id: 'igazhamis',      fajl: 'igazhamis',      cim: 'Igaz vagy hamis',                     max: 10 },
+    { id: 'muveletsorrend', fajl: 'muveletsorrend', cim: 'Műveleti sorrend',                    max: 12 },
+    { id: 'tervszamitas',   fajl: 'tervszamitas',   cim: 'Megoldási terv és számítás',          max: 21 },
+    { id: 'szamolas',       fajl: 'szamolas',       cim: 'Műveletek törtekkel, tizedes törtekkel', max: 19 },
+  ],
+};
+</script>
+<script src="../../kozos/v1/betolto.js"></script>
+</body>
+</html>

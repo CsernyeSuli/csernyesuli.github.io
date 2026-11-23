@@ -1,14 +1,6 @@
 /**
- * temak/szamok/bevitel.js – a „Számok és műveletek” felmérő 3–6. feladatának KÖZÖS eszközei (a felmero.js tölti be az első
+ * temak/szamok/bevitel.js – a „Számok és műveletek” házi dolgozat 3–6. feladatának KÖZÖS eszközei (a felmero.js tölti be az első
  * feladat megnyitásakor; a tortek-motor.js-re épül). Globális neve: SZAMOK_BEVITEL.
- *
- *  1. Kifejezések beolvasása és pontos kiszámítása (BigInt-tört, nincs kerekítés). A motorhoz képest ismeri:
- *       hatvány: 4^2, 4², (−1)³ · abszolútérték: |−9/4| · vegyes szám: 2 1/3 (egész, szóköz, tört) · százalék: 45%
- *     A törtvonal (/) csak két egész szám között áll és egyetlen számnak számít (2/3 · 27). Az előjel gyengébb a hatványnál: −3² = −9.
- *  2. Emeletes megjelenítés HTML/CSS-sel (MathML nélkül, ezért a régi, pl. Android 8-as tableten is jó).
- *  3. A lépéslánc (a = b = c) elemzése: műveleti sorrend, egyenértékű terv, részeredmények keresése.
- *  4. A közös feladat-keret (S.urlap): tételek bevitellel, gombsor, Ellenőrzés / Újra / Értékelés, értékelő nézet.
- * A feladat-fájlok (igazhamis.js, muveletsorrend.js, tervszamitas.js, szamolas.js) csak az adatokat és a pontozást adják meg.
  */
 (function (g) {
   'use strict';
@@ -21,11 +13,10 @@
   const babs = function (x) { return x < 0n ? -x : x; };
   const esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   const PERR = function (m) { return new M.ParseError(m); };
-  const frQ = function (n, d) { return new Q(BigInt(n), BigInt(d === undefined ? 1 : d)); };    // gyors tört: frQ(9, 4) = 9/4
+  const frQ = function (n, d) { return new Q(BigInt(n), BigInt(d === undefined ? 1 : d)); };
 
   /* ===================== BEOLVASÁS ===================== */
   const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹';
-  /** A beírt szöveg egységesítése: mínusz, szorzás, osztás, törtvonal, zárójelek, felső indexű számjegyek (² → ^2). */
   function norm(s) {
     return String(s == null ? '' : s)
       .replace(/[\u2212\u2012\u2013\u2014]/g, '-')
@@ -44,7 +35,7 @@
       const c = s.charAt(i), rest = s.slice(i);
       if (c === ' ') { i++; continue; }
       if (/\d/.test(c)) {
-        if ((m = /^(\d+) +(\d+) ?\/ ?(\d+)/.exec(rest))) { out.push({ t: 'mix', w: m[1], a: m[2], b: m[3] }); i += m[0].length; continue; }   // vegyes szám: 2 1/3
+        if ((m = /^(\d+) +(\d+) ?\/ ?(\d+)/.exec(rest))) { out.push({ t: 'mix', w: m[1], a: m[2], b: m[3] }); i += m[0].length; continue; }
         m = /^\d+(?:[.,]\d+)?/.exec(rest);
         out.push({ t: 'num', v: m[0] }); i += m[0].length; continue;
       }
@@ -55,7 +46,6 @@
     return out;
   }
 
-  /* számlevelek: a leírt alakjukat megőrzik (0,45 ≠ 0,450 ≠ 9/20 a megjelenítésben és az elemzésben) */
   const intLeaf = function (txt) { return { type: 'num', q: new Q(BigInt(txt)), form: 'int', txt: txt }; };
   function decLeaf(txt) {
     const p = txt.replace(',', '.').split('.');
@@ -72,8 +62,6 @@
   const pctLeaf = function (l) { return { type: 'num', q: l.q.div(new Q(100n)), form: 'pct', txt: l.txt }; };
   const negLeaf = function (l) { return Object.assign({}, l, { q: l.q.neg() }); };
 
-  /** Rekurzív leszállás: kifejezés (+,−) > tag (·,:) > előjel > hatvány (^) > tört (a/b) > elem (szám, zárójel, |abszolútérték|).
-      Csomópontok: num | neg | abs | pow {b, e} | bin {op, l, r}. A zárójelben állt kifejezés p:true jelölést kap (csak a megjelenítéshez). */
   function parse(src) {
     const tk = tokenize(src);
     let pos = 0;
@@ -175,7 +163,7 @@
     }
     throw new Error('Ismeretlen csomópont');
   }
-  const val = function (n) { try { return evaluate(n); } catch (e) { return null; } };      // hibánál (pl. nullával osztás) null
+  const val = function (n) { try { return evaluate(n); } catch (e) { return null; } };
 
   function walk(n, fn) {
     fn(n);
@@ -229,7 +217,6 @@
     return '';
   }
   const html = function (tree) { return '<span class="sz-m">' + go(tree) + '</span>'; };
-  /** Kifejezés emeletes alakban (a = b = c is lehet). Értelmezhetetlen részt a beírt szöveggel jelez. */
   function htmlSzoveg(text) {
     return String(text).split('=').map(function (s) {
       try { return html(parse(s)); } catch (e) { return '<span class="sz-hiba">' + esc(s.trim()) + '</span>'; }
@@ -237,7 +224,6 @@
   }
 
   /* ===================== LÉPÉSLÁNC ===================== */
-  /** „a = b = c” → részek (mindegyik külön értelmezve). ok: minden rész értelmezhető. */
   function chain(text) {
     const parts = norm(text).split('=').map(function (s) { return s.trim(); }).map(function (s) {
       if (!s) return { src: s, tree: null, err: 'Üres tag' };
@@ -246,11 +232,9 @@
     return { parts: parts, ok: parts.every(function (p) { return !!p.tree; }), ures: !String(text == null ? '' : text).trim() };
   }
   const utolso = function (ch) { const p = ch.parts[ch.parts.length - 1]; return p ? p.tree : null; };
-  /** A lánc utolsó tagja egyetlen szám-e, és egyenlő-e a várt értékkel (bármilyen egyenértékű alakban). */
   function vegJo(ch, q) { const t = utolso(ch); return !!t && t.type === 'num' && t.q.eq(q); }
   const vanResz = function (ch, pred) { return ch.parts.some(function (p) { return !!p.tree && pred(p.tree); }); };
 
-  /** Pontos szerkezet (az értékekkel): két ugyanolyan felépítésű kifejezés azonos szövege. */
   function exact(n) {
     switch (n.type) {
       case 'num': return n.q.toString();
@@ -261,17 +245,13 @@
     }
     return '?';
   }
-  /** Műveleti sorrend: T az S-ből úgy áll elő, hogy egy vagy több, a sorrend szerint elvégezhető műveletet számmal helyettesítünk
-      (a helyettesítő szám értéke nem számít: a számolási hibát az eredmény pontozza, nem a sorrend). */
   function reduces(S, T) {
     if (T.type === 'num') return S.type === 'num' ? S.q.eq(T.q) : true;
     if (S.type === 'num' || S.type !== T.type) return false;
     if (S.type === 'bin') return S.op === T.op && reduces(S.l, T.l) && reduces(S.r, T.r);
     if (S.type === 'pow') return reduces(S.b, T.b) && reduces(S.e, T.e);
-    return reduces(S.e, T.e);                                    // neg, abs
+    return reduces(S.e, T.e);
   }
-  /** Helyes-e a műveleti sorrend a láncban? Minden tag a megelőzőből sorrendhelyesen áll elő, és legalább egy közbülső (még nem
-      szám) alak is látszik. A feladat kifejezésének újragépelése nem számít lépésnek. */
   function sorrendJo(start, ch) {
     if (!ch.ok) return false;
     let prev = start, volt = false;
@@ -285,8 +265,6 @@
     return volt;
   }
 
-  /** Kanonikus alak az egyenértékű tervek összehasonlításához: az összeadás/szorzás tagjainak sorrendje és csoportosítása nem számít,
-      a számok érték szerint egyeznek (0,6 = 3/5 = 6/10), a szorzás/osztás „· 1/2” és „: 2” különbözik (azt külön tervként kell felvenni). */
   function canon(n) {
     if (n.type === 'num') return n.q.toString();
     if (n.type === 'abs') return 'A(' + canon(n.e) + ')';
@@ -305,7 +283,6 @@
     if (n.type === 'num') return [(inv && !n.q.isZero() ? n.q.recip() : n.q).toString()];
     return [(inv ? '/' : '*') + canon(n)];
   }
-  /** Az első tag (a „megoldási terv”) egyezik-e valamelyik elfogadott alakkal? */
   function tervJo(ch, elfogadott) {
     const t = ch.parts[0] && ch.parts[0].tree;
     if (!t || t.type === 'num') return false;
@@ -313,7 +290,6 @@
     return elfogadott.some(function (a) { return canon(parse(a)) === c; });
   }
 
-  /** |q| = n · 10^k valamilyen egész k-ra? (részletszorzatok keresése, a tizedesvessző helyétől függetlenül) */
   function tizHatv(q, n) {
     const a = qabs(q);
     for (let k = -9; k <= 9; k++) {
@@ -321,7 +297,6 @@
     }
     return false;
   }
-  /** Nagyságrend: 10^k ≤ |q| < 10^(k+1) → k (nullánál null). A tizedesvessző helyének ellenőrzéséhez. */
   function nagysag(q) {
     if (q.isZero()) return null;
     const ten = new Q(10n), one = new Q(1n);
@@ -336,7 +311,6 @@
     '.sz{position:relative;color:#e2e8f0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}' +
     '.sz h2{margin:0 0 8px;font-size:22px;color:#34d399}.sz p{margin:0 0 10px;line-height:1.5}' +
     '.sz-felad{padding:10px 14px;border:1px solid #0e7490;border-radius:12px;background:rgba(8,47,73,.5);font-size:16px;color:#bae6fd}' +
-    // emeletes tört, hatvány, zárójel (HTML/CSS: minden böngészőben, MathML nélkül is működik)
     '.sz-m{white-space:nowrap}' +
     '.sz-f{display:inline-block;vertical-align:middle;text-align:center;line-height:1.25;margin:0 .1em}' +
     '.sz-f>span{display:block;padding:0 .2em}.sz-f>.sz-n{border-bottom:.09em solid currentColor}' +
@@ -346,26 +320,20 @@
     '.sz-e{font-size:.72em;line-height:0;position:relative;top:-.5em;margin-left:.06em}' +
     '.sz-pt{position:relative;display:inline-block}.sz-pt:after{content:"";position:absolute;left:50%;top:-.02em;width:.15em;height:.15em;margin-left:-.075em;border-radius:50%;background:currentColor}' +
     '.sz-hiba{color:#fca5a5;text-decoration:underline;text-decoration-style:dotted}' +
-    // tételek
     '.sz-tetel{margin:0 0 12px;padding:12px 14px;border:1px solid #334155;border-radius:12px;background:rgba(15,23,42,.6)}' +
-    '.sz-tetel.ok{border-color:#34d399;background:rgba(16,185,129,.1)}.sz-tetel.rossz{border-color:#f87171;background:rgba(248,113,113,.08)}' +
     '.sz-fej{font-size:20px;color:#e0f2fe;line-height:1.5}.sz-kod{margin-right:10px;font-style:italic;font-weight:700;color:#94a3b8}' +
     '.sz-max{float:right;margin-left:10px;font-size:13px;color:#94a3b8}' +
     '.sz-in{box-sizing:border-box;display:block;width:100%;margin-top:8px;padding:10px 12px;border:1px solid #475569;border-radius:10px;background:#0f172a;color:#f1f5f9;font:inherit;font-size:18px}' +
     '.sz-in:focus{outline:none;border-color:#34d399;box-shadow:0 0 0 2px rgba(52,211,153,.3)}.sz-in:disabled{opacity:.75}' +
     '.sz-pv{min-height:1.5em;margin-top:2px;padding-top:.55em;padding-bottom:.15em;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:19px;color:#a5f3fc}' +
-    '.sz-pv:empty{min-height:0;padding:0;margin:0}.sz-jel{min-height:1.2em;margin-top:4px;font-size:14px;font-weight:700}.sz-tetel.ok .sz-jel{color:#34d399}.sz-tetel.rossz .sz-jel{color:#f87171}' +
-    // billentyűk
+    '.sz-pv:empty{min-height:0;padding:0;margin:0}' +
     '.sz-bill{margin:6px 0 2px}.sz-bt{min-width:42px;height:40px;margin:0 6px 6px 0;padding:0 10px;border:1px solid #475569;border-radius:10px;background:#1e293b;color:#f1f5f9;' +
     'font:600 18px/1 system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}.sz-bt:active{background:#334155}.sz-bt:disabled{opacity:.35}.sz-bt.txt{font-size:14px}' +
     '.sz-sugo{margin:2px 0 6px;font-size:13px;line-height:1.5;color:#94a3b8}' +
-    // pontozási táblázat, gombok, üzenet
     '.sz-tabla{width:100%;margin:12px 0 4px;border-collapse:collapse;font-size:14px}.sz-tabla td{padding:7px 10px;border:1px solid #475569;background:#1e293b;color:#cbd5e1}' +
     '.sz-tabla td:first-child{white-space:nowrap}.sz-tabla td:last-child{text-align:right;white-space:nowrap;font-weight:700}' +
-    '.sz-msg{min-height:1.6em;margin:10px 0 2px;font-weight:600}.sz-msg.ok{color:#34d399}.sz-msg.nem{color:#fbbf24}' +
-    '.sz-gombok{margin-top:8px}.sz-gomb{margin:0 10px 8px 0;padding:10px 18px;border:0;border-radius:12px;background:#34d399;color:#0f172a;font-size:15px;font-weight:700;cursor:pointer}' +
-    '.sz-gomb.kek{background:#38bdf8}.sz-gomb.szurke{background:transparent;color:#cbd5e1;border:1px solid #64748b}.sz-gomb:disabled{opacity:.4;cursor:not-allowed}' +
-    // értékelő nézet
+    '.sz-gombok{margin-top:12px}.sz-gomb{margin:0 10px 8px 0;padding:10px 18px;border:0;border-radius:12px;background:#34d399;color:#0f172a;font-size:15px;font-weight:700;cursor:pointer}' +
+    '.sz-gomb:disabled{opacity:.4;cursor:not-allowed}' +
     '.sz-pontnagy{margin:6px 0 14px;font-size:40px;font-weight:800;color:#34d399;text-align:center}' +
     '.sz-ert{margin:0 0 10px;padding:10px 14px;border:1px solid #334155;border-left-width:6px;border-radius:12px;background:rgba(15,23,42,.6)}' +
     '.sz-ert.ok{border-color:#34d399}.sz-ert.rossz{border-color:#f87171}' +
@@ -378,11 +346,9 @@
     cssKesz = true; g.UJITAS.css('sz-stilus', CSS);
   }
 
-  /** Pontozási táblázat a feladatlap alján (a nyomtatott lap szürke téglalapja): sorok: [jelölés, szöveg, pont]. */
   function tabla(sorok) {
     return '<table class="sz-tabla">' + sorok.map(function (s) { return '<tr><td>' + esc(s[0]) + '</td><td>' + esc(s[1]) + '</td><td>' + esc(s[2]) + '</td></tr>'; }).join('') + '</table>';
   }
-  /** Értékelő nézet kerete: nagy pontszám + sorok + Bezárás. Visszaadja a Bezárás gombot. */
   function ertekeloNezet(host, e, sorokHtml, jegyzet) {
     host.innerHTML = '<div class="sz"><h2>Értékelés</h2><div class="sz-pontnagy">Elért pontszám: ' + e.pont + ' / ' + e.max + '</div>' + sorokHtml +
       (jegyzet ? '<p style="text-align:center;font-size:14px;color:#94a3b8">' + jegyzet + '</p>' : '') +
@@ -397,7 +363,6 @@
   };
 
   /* ===================== BILLENTYŰK ===================== */
-  // [kiírt jel, beszúrt szöveg, súgó, osztály]
   const KEYS = [
     ['+', '+', 'összeadás'], ['−', '−', 'kivonás'], ['·', '·', 'szorzás'], [':', ':', 'osztás'], ['=', '=', 'egyenlőségjel'],
     ['(', '(', 'nyitó zárójel'], [')', ')', 'záró zárójel'], ['/', '/', 'törtvonal'], [',', ',', 'tizedesvessző'],
@@ -411,7 +376,6 @@
       '<p class="sz-sugo">Tört: <b>/</b> jellel (pl. 3/4) · vegyes szám: egész, <b>szóköz</b>, tört (pl. 2 1/3) · hatvány: <b>²</b> <b>³</b> gombbal vagy <b>^</b> jellel (pl. 4^5) · ' +
       'abszolútérték: <b>|</b> jel a szám előtt és után (pl. |−3|) · a lépéseket egyenlőségjellel kapcsold össze, az utolsó tag a végeredmény.</p>';
   };
-  /** Szöveg beírása a kurzor helyére (a kijelölést felülírja), majd input esemény. */
   function beir(t, ch) {
     const s = t.selectionStart == null ? t.value.length : t.selectionStart, en = t.selectionEnd == null ? s : t.selectionEnd;
     t.value = t.value.slice(0, s) + ch + t.value.slice(en);
@@ -428,40 +392,28 @@
   }
 
   /* ===================== KÖZÖS FELADAT-KERET ===================== */
-  /** Tételes feladatlap: minden tételhez egy beviteli mező. cfg:
-        id, cim            a feladat azonosítója (= a gyűjtő lap beállításának id-je) és rövid neve
-        felad              a feladat szövege (HTML)
-        mod                'lanc' (alapértelmezett: gombsor + emeletes előnézet, a = b = c lánc) | 'szoveg' (egyszerű szöveges válasz)
-        tabla              pontozási táblázat sorai: [[jelölés, szöveg, pont], ...]
-        tetelek            [{ kod, max, elo (HTML), ertekel(szoveg, lanc) → { pont, tagok: [{nev, pont, max}] } }]
-      Az Ellenőrzés tételenként zöld/piros jelet ad (a pontot nem mutatja; a teljesen jó tételt lezárja), az Értékelés mutatja a pontokat. */
   function urlap(cfg) {
-    const lanc = cfg.mod !== 'szoveg', egyenlo = lanc && cfg.egyenlo !== false;     // egyenlo:false: a tétel szövege után nem áll „=” jel
+    const lanc = cfg.mod !== 'szoveg', egyenlo = lanc && cfg.egyenlo !== false;
     const max = cfg.tetelek.reduce(function (a, t) { return a + t.max; }, 0);
 
     function indit(host, api) {
       css();
-      const st = { valasz: {}, zarolt: {}, vege: false, ellenorzesek: 0, ujra: 0, start: Date.now() };
-      cfg.tetelek.forEach(function (t) { st.valasz[t.kod] = ''; st.zarolt[t.kod] = false; });
+      const st = { valasz: {}, vege: false, start: Date.now() };
+      cfg.tetelek.forEach(function (t) { st.valasz[t.kod] = ''; });
 
       host.innerHTML = '<div class="sz"><h2>' + esc(cfg.cim) + '</h2><p class="sz-felad">' + cfg.felad + '</p>' +
         cfg.tetelek.map(function (t) {
           return '<div class="sz-tetel" data-t="' + t.kod + '"><div class="sz-fej"><span class="sz-max">' + t.max + ' pont</span><span class="sz-kod">' + t.kod + ')</span>' +
             t.elo + (egyenlo ? '<span class="sz-o">=</span>' : '') + '</div>' +
             '<input class="sz-in" data-in="' + t.kod + '" type="text" inputmode="' + (lanc ? 'decimal' : 'text') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="' + t.kod + ') megoldás">' +
-            (lanc ? '<div class="sz-pv" data-pv="' + t.kod + '"></div>' : '') + '<div class="sz-jel" data-jel="' + t.kod + '"></div></div>';
+            (lanc ? '<div class="sz-pv" data-pv="' + t.kod + '"></div>' : '') + '</div>';
         }).join('') +
         (lanc ? billentyuHtml() : '') + tabla(cfg.tabla) +
-        '<div class="sz-msg" data-sz="msg" role="status" aria-live="polite"></div>' +
-        '<div class="sz-gombok"><button type="button" class="sz-gomb kek" data-sz="ellenorzes">Ellenőrzés</button>' +
-        '<button type="button" class="sz-gomb szurke" data-sz="ujra">Újra</button><button type="button" class="sz-gomb" data-sz="ertekeles">Értékelés</button></div></div>';
+        '<div class="sz-gombok"><button type="button" class="sz-gomb" data-sz="ertekeles">Értékelés</button></div></div>';
 
-      const gyoker = host.querySelector('.sz');            // az eseménykezelők ezen vannak (a host a következő feladatnál is ugyanaz az elem)
+      const gyoker = host.querySelector('.sz');
       const $ = function (n) { return host.querySelector('[data-sz="' + n + '"]'); };
-      const tetelEl = function (k) { return host.querySelector('[data-t="' + k + '"]'); };
       const inEl = function (k) { return host.querySelector('[data-in="' + k + '"]'); };
-      const msg = $('msg');
-      const uzenet = function (s, o) { msg.textContent = s; msg.className = 'sz-msg' + (o ? ' ' + o : ''); };
       let utolsoMezo = null;
 
       /* ----- gépelés ----- */
@@ -472,27 +424,25 @@
         const k = t.getAttribute('data-in');
         st.valasz[k] = t.value;
         if (lanc) host.querySelector('[data-pv="' + k + '"]').innerHTML = t.value.trim() ? '<span class="sz-m">' + htmlSzoveg(t.value) + '</span>' : '';
-        if (!st.zarolt[k]) { tetelEl(k).className = 'sz-tetel'; host.querySelector('[data-jel="' + k + '"]').textContent = ''; }
-        uzenet('', '');
       });
       const bill = gyoker.querySelector('.sz-bill');
       gyoker.addEventListener('focusin', function (e) {
         if (!e.target.classList || !e.target.classList.contains('sz-in')) return;
         utolsoMezo = e.target;
-        if (bill) {                                                  // a gombsor közvetlenül a kiválasztott mező (és előnézete) alatt jelenik meg
+        if (bill) {
           const tet = e.target.closest('.sz-tetel');
-          if (bill.parentNode !== tet) tet.insertBefore(bill, tet.querySelector('.sz-jel'));
+          if (bill.parentNode !== tet) tet.appendChild(bill);
           bill.hidden = false;
         }
       });
-      gyoker.addEventListener('keydown', function (e) {                // Enter: következő mező
+      gyoker.addEventListener('keydown', function (e) {
         if (e.key !== 'Enter' || !e.target.classList || !e.target.classList.contains('sz-in')) return;
         e.preventDefault();
         const all = [].slice.call(host.querySelectorAll('.sz-in')), nx = all[all.indexOf(e.target) + 1];
         if (nx && !nx.disabled) nx.focus(); else e.target.blur();
       });
-      /* ----- billentyűsor: a jel a kurzor helyére kerül ----- */
-      gyoker.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('.sz-bt')) e.preventDefault(); });   // a fókusz maradjon a mezőn
+      /* ----- billentyűsor ----- */
+      gyoker.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('.sz-bt')) e.preventDefault(); });
       gyoker.addEventListener('click', function (e) {
         const b = e.target.closest ? e.target.closest('.sz-bt') : null;
         if (!b || b.disabled || st.vege) return;
@@ -513,41 +463,19 @@
         return { reszek: reszek, pont: reszek.reduce(function (a, r) { return a + r.pont; }, 0), max: max };
       }
       function zar(be) {
-        Object.keys(st.zarolt).forEach(function (k) { inEl(k).disabled = be || st.zarolt[k]; });
-        $('ellenorzes').disabled = be || cfg.tetelek.every(function (t) { return st.zarolt[t.kod]; });
+        cfg.tetelek.forEach(function (t) { inEl(t.kod).disabled = be; });
         [].slice.call(host.querySelectorAll('.sz-bt')).forEach(function (b) { b.disabled = be; });
+        $('ertekeles').disabled = be;
       }
 
-      $('ellenorzes').addEventListener('click', function () {
-        if (st.vege) return;
-        st.ellenorzesek++;
-        const r = szamol();
-        let osszes = true;
-        r.reszek.forEach(function (x) {
-          const jo = x.pont === x.max;
-          if (!jo) osszes = false;
-          tetelEl(x.kod).className = 'sz-tetel ' + (jo ? 'ok' : 'rossz');
-          host.querySelector('[data-jel="' + x.kod + '"]').textContent = jo ? '✔ helyes' : '✘ még nem helyes';
-          if (jo) { st.zarolt[x.kod] = true; inEl(x.kod).disabled = true; }
-        });
-        zar(false);
-        uzenet(osszes ? '✔ Minden megoldásod helyes. Az elért pontszámot az Értékelés gombbal nézheted meg.'
-          : '✘ A pirossal jelölt megoldások még nem helyesek. Javíthatod őket, majd újra ellenőrizheted.', osszes ? 'ok' : 'nem');
-      });
-      $('ujra').addEventListener('click', function () {
-        if (st.vege) return;
-        st.ujra++;
-        cfg.tetelek.forEach(function (t) {
-          st.valasz[t.kod] = ''; st.zarolt[t.kod] = false;
-          const i = inEl(t.kod); i.value = ''; i.disabled = false;
-          tetelEl(t.kod).className = 'sz-tetel'; host.querySelector('[data-jel="' + t.kod + '"]').textContent = '';
-          if (lanc) host.querySelector('[data-pv="' + t.kod + '"]').innerHTML = '';
-        });
-        zar(false); uzenet('', '');
-      });
       $('ertekeles').addEventListener('click', async function () {
         if (st.vege) return;
-        const igen = await api.megerosit({ cim: 'Értékelés', uzenet: 'Biztosan befejezed a feladatot? Az értékelés után a lap bezárul.', igen: 'Igen, értékelem', nem: 'Még nem' });
+        const igen = await api.megerosit({
+          cim: 'Értékelés',
+          uzenet: 'Biztosan befejezed és lezárod ezt a feladatot? Az értékelés után már nem módosíthatod a válaszaidat.',
+          igen: 'Igen, értékelem',
+          nem: 'Még nem',
+        });
         if (!igen || st.vege) return;
         eredmenyNezet(lezarEredmeny('ertekeles'));
       });
@@ -558,7 +486,7 @@
         const r = szamol();
         return {
           feladat: cfg.id, cim: cfg.cim, pont: r.pont, max: r.max, helyes: r.pont === r.max,
-          ellenorzesek: st.ellenorzesek, ujra: st.ujra, lezaras: ok, mp: Math.round((Date.now() - st.start) / 1000),
+          lezaras: ok, mp: Math.round((Date.now() - st.start) / 1000),
           reszek: r.reszek.map(function (x) { return { kod: x.kod, nev: x.nev, pont: x.pont, max: x.max }; }),
           valaszok: Object.assign({}, st.valasz), tagok: r.reszek.reduce(function (o, x) { o[x.kod] = x.tagok; return o; }, {}),
         };
@@ -578,7 +506,6 @@
     return { cim: cfg.cim, max: max, indit: indit };
   }
 
-  /** Feladat regisztrálása a gyűjtő lapnál: window.UJITAS_FELADATOK[id]. */
   function regisztral(id, feladat, teszt) {
     g.UJITAS_FELADATOK = g.UJITAS_FELADATOK || {};
     g.UJITAS_FELADATOK[id] = Object.assign({ _teszt: teszt }, feladat);

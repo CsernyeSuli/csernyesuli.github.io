@@ -192,9 +192,6 @@
             { id: 'V_A_3', num: '3.', expr: '-5^2', dispHtml: '−5<sup>2</sup>' },
             { id: 'V_A_4', num: '4.', expr: '(-5)^2', dispHtml: '(−5)<sup>2</sup>' },
             { id: 'V_A_5', num: '5.', expr: '-2^3', dispHtml: '−2<sup>3</sup>' },
-            { id: 'V_A_6', num: '6.', expr: '(-2)^3', dispHtml: '(−2)<sup>3</sup>' },
-            { id: 'V_A_7', num: '7.', expr: '-2^3-(-3)^2', dispHtml: '−2<sup>3</sup> − (−3)<sup>2</sup>' },
-            { id: 'V_A_8', num: '8.', expr: '4·(-3)^2-5·(-2)^3', dispHtml: '4 · (−3)<sup>2</sup> − 5 · (−2)<sup>3</sup>' },
           ]
         },
         {
@@ -203,8 +200,6 @@
           tasks: [
             { id: 'V_B_1', num: '1.', expr: '2·3^2', dispHtml: '2 · 3<sup>2</sup>' },
             { id: 'V_B_2', num: '2.', expr: '(2·3)^2', dispHtml: '(2 · 3)<sup>2</sup>' },
-            { id: 'V_B_3', num: '3.', expr: '-2·(-3)^2', dispHtml: '−2 · (−3)<sup>2</sup>' },
-            { id: 'V_B_4', num: '4.', expr: '[-2·(-3)]^2', evalExpr: '(-2*(-3))^2', dispHtml: '[−2 · (−3)]<sup>2</sup>' },
             { id: 'V_B_5', num: '5.', expr: '18:3^2', dispHtml: '18 : 3<sup>2</sup>' },
             { id: 'V_B_6', num: '6.', expr: '(18:3)^2', dispHtml: '(18 : 3)<sup>2</sup>' },
           ]
@@ -216,9 +211,6 @@
             { id: 'V_C_1', num: '1.', expr: '2^5·5^5', dispHtml: '2<sup>5</sup> · 5<sup>5</sup>' },
             { id: 'V_C_2', num: '2.', expr: '(-2)^5·5^5', dispHtml: '(−2)<sup>5</sup> · 5<sup>5</sup>' },
             { id: 'V_C_3', num: '3.', expr: '20^6', dispHtml: '20<sup>6</sup>' },
-            { id: 'V_C_4', num: '4.', expr: '(-20)^3', dispHtml: '(−20)<sup>3</sup>' },
-            { id: 'V_C_5', num: '5.', expr: '12^4:6^4', dispHtml: '12<sup>4</sup> : 6<sup>4</sup>' },
-            { id: 'V_C_6', num: '6.', expr: '(-15)^3:5^3', dispHtml: '(−15)<sup>3</sup> : 5<sup>3</sup>' },
           ]
         },
       ]
@@ -411,7 +403,24 @@
     }
   }
 
+  function formatPowerPreview(rawStr) {
+    const cleaned = String(rawStr || '').trim().replace(/[\u2212\u2013\u2014]/g, '-');
+    const supHtml = cleaned.replace(/\^\(([^)]+)\)|\^([+-]?\d+)/g, function (_, p1, p2) {
+      return '<sup>' + esc((p1 || p2).replace(/-/g, '−')) + '</sup>';
+    }).replace(/-/g, '−');
+    try {
+      const ev = evalFallbackExpr(cleaned);
+      if (ev && ev.result && ev.answerText) {
+        return '<span class="inline-flex items-center gap-1.5"><span>' + supHtml + '</span><span class="text-slate-400">=</span><b class="text-emerald-300">' + esc(ev.answerText.replace(/-/g, '−')) + '</b></span>';
+      }
+    } catch (e) {}
+    return '<span>' + supHtml + '</span>';
+  }
+
   function safeAnswerHtml(ans) {
+    if (String(ans || '').indexOf('^') >= 0) {
+      return formatPowerPreview(ans);
+    }
     try {
       return FX.answer(ans);
     } catch (e) {
@@ -477,6 +486,30 @@
       cleaned = cleaned.replace(/\s+/g, '');
     } else {
       cleaned = cleaned.replace(/\s+/g, ' ');
+    }
+
+    if (cleaned.indexOf('^') >= 0) {
+      try {
+        const ev = evalFallbackExpr(cleaned);
+        if (ev && ev.result) {
+          const ok = (ev.result.n === refQ.n && ev.result.d === refQ.d);
+          return { answered: true, correct: ok, parsedText: raw };
+        }
+      } catch (e) {
+        return { answered: true, correct: false, parsedText: raw };
+      }
+    }
+
+    if (cleaned.indexOf('^') >= 0) {
+      try {
+        const ev = evalFallbackExpr(cleaned);
+        if (ev && ev.result) {
+          const ok = (ev.result.n === refQ.n && ev.result.d === refQ.d);
+          return { answered: true, correct: ok, parsedText: raw };
+        }
+      } catch (e) {
+        return { answered: true, correct: false, parsedText: raw };
+      }
     }
 
     const res = M.gradeAnswer(cleaned, refQ);
@@ -753,7 +786,8 @@
   const PAD_KEYS = [
     ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9'],
     ['0'], [','], ['−', '−', 'sym', 'mínusz'], ['/', '/', 'sym', 'törtvonal'],
-    ['(', '(', 'sym'], [')', ')', 'sym'], ['szóköz', 'space', 'sym txt', 'szóköz'],
+    ['^', '^', 'sym', 'hatványkitevő'], ['(', '(', 'sym'], [')', ')', 'sym'],
+    ['szóköz', 'space', 'sym txt', 'szóköz'],
     ['⌫', 'back', 'act', 'törlés'], ['⏎', 'next', 'act', 'következő mező']
   ];
 
@@ -956,7 +990,7 @@
       grade: detailedGrade,
       tasks: ev.taskResults.map(function (r) {
         return {
-          expression: (function(){ try { return r.fullLabel + ' ' + M.toText(M.parse(r.evalExpr || r.expr)); } catch (e) { return r.fullLabel + ' ' + r.expr; } })(),
+          expression: (function(){ const rawE = r.evalExpr || r.expr; if (String(rawE).indexOf('^') >= 0) return r.fullLabel + ' ' + r.expr; try { return r.fullLabel + ' ' + M.toText(M.parse(rawE)); } catch (e) { return r.fullLabel + ' ' + r.expr; } })(),
           correct: r.correct,
           finalAnswer: r.studentRaw || '—',
           correctAnswer: r.correctAnswer,

@@ -51,7 +51,7 @@
     '<div class="fm-fo">' +
     '<a class="fm-vissza" href="' + esc(cfg.visszaHref || '../../../7-osztaly.html') + '">⬅ Vissza a 7. osztály oldalára</a>' +
     '<h1>' + esc(cfg.cim || 'Felmérő') + '</h1><p class="fm-alcim">' + esc(cfg.alcim || '') + '</p>' +
-    '<section id="fm-start" class="fm-kartya"><p>Ez a lap gyakorlásra szolgál, az éles felmérő papíron lesz az órán. A feladatok egyenként, külön ablakban nyílnak meg.</p>' + KOD_SZOVEG +
+    '<section id="fm-start" class="fm-kartya"><p>Ez a lap a felmérő javítására szolgál. A feladatok egyenként, külön ablakban nyílnak meg.</p>' + KOD_SZOVEG +
     '<button type="button" id="fm-inditas" class="fm-gomb">Felmérő indítása</button></section>' +
     '<section id="fm-lista" hidden><p id="fm-megjegyzes" class="fm-kicsi" role="status"></p><div id="fm-grid" class="fm-grid"></div></section>' +
     '</div>' +

@@ -355,14 +355,14 @@
   let FX = null;
   /** Automatikus választás: MathML, ha a böngésző érti, különben HTML/CSS. Kipróbáláshoz az oldal címéhez fűzhető:
       ?tort=html (kényszerített HTML/CSS) vagy ?tort=mathml. Eredmény: { mathml, task(kif), preview(szöveg), answer(szöveg) }. */
-  function fx() {
+ function fx() {
+    installCss();
     if (FX) return FX;
     let mml = detectMathML();
     try { const m = /[?&]tort=(html|mathml)\b/.exec(location.search); if (m) mml = m[1] === 'mathml'; } catch (e) { /* nincs böngésző */ }
     FX = mml
       ? { mathml: true, task: function (k) { return toMathML(parse(k)); }, preview: previewMathML, answer: answerMathML }
       : { mathml: false, task: function (k) { return toHTML(parse(k)); }, preview: previewHTML, answer: answerHTML };
-    installCss();
     return FX;
   }
 

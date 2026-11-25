@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. osztály – Betűs kifejezések, műveleti tulajdonságok</title>
+    <link rel="stylesheet" href="/osztalylap_style.css">
+    <style>
+        /* Rögzített felső sáv Vissza gombbal azonos mappában lévő index.html-re */
+        .sticky-top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            background-color: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid var(--border-color, #334155);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .sticky-top-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .sticky-chapter-tag {
+            color: #38bdf8;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+        }
+
+        .sticky-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--accent-blue, #0284c7);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 7px 14px;
+            border-radius: 999px;
+            transition: background-color 0.2s ease, transform 0.15s ease;
+        }
+
+        .sticky-back-btn:hover,
+        .sticky-back-btn:focus-visible {
+            background-color: #38bdf8;
+            color: #0f172a;
+            transform: translateX(-2px);
+            outline: none;
+        }
+
+        /* Középre zárt, mobilbarát tartalom */
+        .ora-page {
+            max-width: 960px;
+            margin: 24px auto 40px;
+            padding: 0 18px;
+            box-sizing: border-box;
+        }
+
+        .ora-wrapper {
+            background-color: var(--card-bg, #1e293b);
+            border: 1px solid var(--border-color, #334155);
+            border-radius: 14px;
+            padding: 22px;
+            color: var(--text-color, #e2e8f0);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .ora-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color, #334155);
+        }
+
+        .ora-badge {
+            display: inline-block;
+            background: rgba(2, 132, 199, 0.18);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .ora-intro {
+            margin: 0 0 20px;
+            color: #94a3b8;
+            font-size: 0.96rem;
+            line-height: 1.55;
+        }
+
+        .topic-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .topic-card {
+            background-color: var(--bg-color, #0f172a);
+            border: 1px solid var(--border-color, #334155);
+            border-left: 4px solid #38bdf8;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .topic-card.card-green {
+            border-left-color: var(--accent-green, #10b981);
+        }
+
+        .topic-card.card-orange {
+            border-left-color: var(--accent-orange, #f59e0b);
+        }
+
+        .topic-pill {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 2px 10px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+        }
+
+        .card-green .topic-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.35);
+        }
+
+        .card-orange .topic-pill {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.35);
+        }
+
+        .topic-card h4 {
+            margin: 0 0 10px;
+            font-size: 1.12rem;
+            color: #f8fafc;
+        }
+
+        .topic-card p {
+            margin: 0 0 10px;
+            line-height: 1.55;
+            font-size: 0.96rem;
+            color: #cbd5e1;
+        }
+
+        .topic-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .formula-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border-color, #334155);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 10px 0;
+            color: #f8fafc;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .figures-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .figure-box {
+            background: #1e293b;
+            border: 1px solid var(--border-color, #334155);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .figure-caption {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+
+        .rule-list {
+            margin: 8px 0 12px;
+            padding-left: 20px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .rule-list li {
+            margin-bottom: 8px;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .compare-box {
+            background: #1e293b;
+            border: 1px solid var(--border-color, #334155);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+
+        .compare-title {
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .note-callout {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-left: 4px solid var(--accent-green, #10b981);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: 12px;
+            color: #a7f3d0;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 720px) {
+            .figures-grid,
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .ora-page {
+                margin: 14px auto 28px;
+                padding: 0 12px;
+            }
+
+            .ora-wrapper {
+                padding: 16px 14px;
+                border-radius: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- RÖGZÍTETT FELSŐ SÁV VISSZA GOMBBAL -->
+    <div class="sticky-top-bar">
+        <div class="sticky-top-inner">
+            <span class="sticky-chapter-tag">• 7. OSZTÁLY • ALGEBRA •</span>
+            <a href="index.html" class="sticky-back-btn" aria-label="Vissza a 7. osztályos kezdőoldalra">
+                <span aria-hidden="true">←</span>
+                <span>Vissza</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- KÖZÉPRE ZÁRT ÓRAI ANYAG -->
+    <main class="ora-page">
+        <div class="ora-wrapper" id="orai-anyag-algebra">
+            <div class="ora-header">
+                <h3 class="date-title" style="margin: 0;">Betűs kifejezések és műveleti tulajdonságok</h3>
+                <span class="ora-badge">Órai anyag • OpenBoard összefoglaló</span>
+            </div>
+
+            <p class="ora-intro">
+                Az órán megbeszélt algebrai alapok összefoglalása: betűs kifejezések, változók, síkidomok területképletei és a műveleti tulajdonságok.
+            </p>
+
+            <section class="topic-stack">
+                <!-- 1. BETŰS KIFEJEZÉSEK ÉS VÁLTOZÓK -->
+                <article class="topic-card">
+                    <span class="topic-pill">1. rész • Alapfogalmak</span>
+                    <h4>Betűs kifejezések (számoljunk betűkkel)</h4>
+                    <p>
+                        A betűs kifejezésekben (műveletekben) számok, betűk, műveleti jelek és zárójelek szerepelhetnek. A kifejezésekben szereplő betűket <strong>változóknak</strong> nevezzük.
+                    </p>
+                    <div class="formula-box">
+                        Téglalap területének képlete: <strong><em>T</em> = <em>a</em> · <em>b</em></strong><br>
+                        • <em>a</em> változó: a téglalap egyik oldala &nbsp;|&nbsp; • <em>b</em> változó: a téglalap másik oldala<br>
+                        Változók, mert az oldalak hossza változhat attól függően, mekkorára adják meg.<br>
+                        Például ha <em>a</em> = 12 és <em>b</em> = 8, akkor <em>T</em> = <em>a</em> · <em>b</em> = 12 · 8 = 96 (területegység).
+                    </div>
+                </article>
+
+                <!-- 2. TERÜLETKÉPLETEK ÉS SVG ÁBRÁK -->
+                <article class="topic-card card-green">
+                    <span class="topic-pill">2. rész • Képletek és ábrák</span>
+                    <h4>Téglalap és tengelyesen szimmetrikus háromszög területe</h4>
+                    <p>
+                        A tengelyesen szimmetrikus háromszög területe az alap és az alaphoz tartozó magasság szorzatának fele.
+                    </p>
+                    <div class="formula-box">
+                        Képlettel: <strong><em>T</em> = <em>a</em> · <em>m</em> : 2</strong> &nbsp; (ahol <em>a</em> az alap, <em>m</em> az alaphoz tartozó magasság, <em>b</em> a szár; a változók: <strong><em>a</em>, <em>m</em></strong>).
+                    </div>
+
+                    <div class="figures-grid">
+                        <!-- Téglalap SVG -->
+                        <div class="figure-box">
+                            <svg width="100%" height="145" viewBox="0 0 260 145" role="img" aria-label="Téglalap a és b oldalakkal">
+                                <rect x="55" y="30" width="150" height="75" fill="rgba(56, 189, 248, 0.16)" stroke="#38bdf8" stroke-width="2.5" />
+                                <text x="130" y="20" fill="#38bdf8" font-size="15" font-weight="bold" text-anchor="middle">a</text>
+                                <text x="218" y="72" fill="#fbbf24" font-size="15" font-weight="bold" text-anchor="middle">b</text>
+                                <text x="130" y="73" fill="#e2e8f0" font-size="13" text-anchor="middle">T = a · b</text>
+                            </svg>
+                            <div class="figure-caption">
+                                Téglalap: oldalaival <em>a</em> és <em>b</em>, területe <strong><em>T</em> = <em>a</em> · <em>b</em></strong>.
+                            </div>
+                        </div>
+
+                        <!-- Tengelyesen szimmetrikus háromszög SVG -->
+                        <div class="figure-box">
+                            <svg width="100%" height="145" viewBox="0 0 260 145" role="img" aria-label="Tengelyesen szimmetrikus háromszög a alappal, b szárral és m magassággal">
+                                <!-- Tengelyvonal -->
+                                <line x1="130" y1="14" x2="130" y2="128" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4 3" />
+                                <!-- Háromszög (a = 140px, alap y=112, csúcs y=26) -->
+                                <polygon points="60,112 200,112 130,26" fill="rgba(16, 185, 129, 0.16)" stroke="#10b981" stroke-width="2.5" />
+                                <!-- Magasság m -->
+                                <line x1="130" y1="26" x2="130" y2="112" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3 2" />
+                                <polyline points="130,104 138,104 138,112" fill="none" stroke="#fbbf24" stroke-width="1.5" />
+                                <!-- Feliratok -->
+                                <text x="130" y="130" fill="#38bdf8" font-size="15" font-weight="bold" text-anchor="middle">a</text>
+                                <text x="143" y="74" fill="#fbbf24" font-size="14" font-weight="bold">m</text>
+                                <text x="83" y="64" fill="#34d399" font-size="14" font-weight="bold">b</text>
+                                <text x="177" y="64" fill="#34d399" font-size="14" font-weight="bold">b</text>
+                            </svg>
+                            <div class="figure-caption">
+                                Szimmetrikus háromszög: alap <strong><em>a</em></strong>, szár <strong><em>b</em></strong>, magasság <strong><em>m</em></strong>; <strong><em>T</em> = <em>a</em> · <em>m</em> : 2</strong>.
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 3. MŰVELETI TULAJDONSÁGOK -->
+                <article class="topic-card card-orange">
+                    <span class="topic-pill">3. rész • Emlékeztető</span>
+                    <h4>Műveleti tulajdonságok</h4>
+                    <ol class="rule-list">
+                        <li>
+                            Az összeg tagjai, illetve a szorzat tényezői <strong>fölcserélhetők</strong>:<br>
+                            <strong><em>a</em> + <em>b</em> = <em>b</em> + <em>a</em></strong> &nbsp; (pl. 2 + 5 = 5 + 2; 3 + (−4) = (−4) + 3; <em>x</em> + 2 = 2 + <em>x</em>)<br>
+                            <strong><em>a</em> · <em>b</em> = <em>b</em> · <em>a</em></strong> &nbsp; (pl. 2 · 5 = 5 · 2; 3 · (−4) = (−4) · 3; <em>x</em> · 2 = 2 · <em>x</em>)
+                        </li>
+                        <li>
+                            Az összeg tagjai, illetve a szorzat tényezői tetszőlegesen <strong>csoportosíthatók (zárójelezhetők)</strong>:<br>
+                            <strong><em>a</em> + <em>b</em> + <em>c</em> = (<em>a</em> + <em>b</em>) + <em>c</em> = <em>a</em> + (<em>b</em> + <em>c</em>)</strong> &nbsp; (pl. 5 + 2 + 8; 2 + <em>x</em> + 2<em>x</em>)<br>
+                            <strong><em>a</em> · <em>b</em> · <em>c</em> = (<em>a</em> · <em>b</em>) · <em>c</em> = <em>a</em> · (<em>b</em> · <em>c</em>)</strong> &nbsp; (pl. 5 · 2 · 8; 2 · <em>x</em> · <em>x</em><sup>2</sup>)
+                        </li>
+                    </ol>
+                </article>
+
+                <!-- 4. ÖSSZEG, KÜLÖNBSÉG SZORZÁSA -->
+                <article class="topic-card">
+                    <span class="topic-pill">4. rész • Zárójeles szorzás</span>
+                    <h4>Összeg, különbség szorzása</h4>
+                    <p>
+                        Összeget vagy különbséget kétféleképpen szorozhatunk egy számmal:
+                    </p>
+                    <div class="formula-box">
+                        <strong><em>a</em> · (<em>b</em> + <em>c</em>) = <em>a</em> · <em>b</em> + <em>a</em> · <em>c</em></strong> &nbsp;&nbsp;|&nbsp;&nbsp; <strong><em>a</em> · (<em>b</em> − <em>c</em>) = <em>a</em> · <em>b</em> − <em>a</em> · <em>c</em></strong>
+                    </div>
+
+                    <div class="compare-grid">
+                        <div class="compare-box">
+                            <div class="compare-title">1. mód: előbb a zárójelben lévő művelet</div>
+                            4 · (9 + 6) = 4 · 15 = <strong>60</strong><br>
+                            5 · (8 − 2) = 5 · 6 = <strong>30</strong><br>
+                            <em>x</em> · (2 + 5) = <em>x</em> · 7 = <strong>7<em>x</em></strong>
+                        </div>
+                        <div class="compare-box">
+                            <div class="compare-title">2. mód: tagonkénti szorzás</div>
+                            4 · (9 + 6) = 4 · 9 + 4 · 6 = 36 + 24 = <strong>60</strong><br>
+                            5 · (8 − 2) = 5 · 8 − 5 · 2 = 40 − 10 = <strong>30</strong><br>
+                            <em>x</em> · (2 + 5) = <em>x</em> · 2 + <em>x</em> · 5 = 2<em>x</em> + 5<em>x</em> = <strong>7<em>x</em></strong>
+                        </div>
+                    </div>
+
+                    <div class="note-callout">
+                        Figyeljük meg, hogy az összefüggéseket nemcsak szavakkal, hanem betűket tartalmazó egyenletek segítségével is leírhatjuk. Ezekben az egyenletekben a betűk tetszőleges számokat, azaz egy alaphalmaz tetszőleges elemeit jelentik.
+                    </div>
+                </article>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

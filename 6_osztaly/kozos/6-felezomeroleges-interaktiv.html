@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6h GEOMETRIA – Szerkesztések és tengelyes tükrözés</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --surface: #0f172a;
+      --surface-2: #1e293b;
+      --border: #334155;
+      --border-strong: #475569;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --emerald: #34d399;
+      --sky: #38bdf8;
+      --amber: #fbbf24;
+      --red: #f87171;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding-top: 74px;
+      padding-bottom: 48px;
+      background: radial-gradient(circle at top, #0f172a 0%, var(--bg) 70%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    header.top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      background: rgba(2, 6, 23, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    header.top-bar h1 {
+      margin: 0;
+      font-size: clamp(0.96rem, 2.2vw, 1.22rem);
+      font-weight: 800;
+      color: var(--emerald);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .student-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #6ee7b7;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 14px 16px;
+    }
+
+    .start-card {
+      text-align: center;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .start-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      color: var(--emerald);
+    }
+
+    .topic-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      padding: 9px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--sky);
+    }
+
+    .tab-btn.active {
+      background: rgba(52, 211, 153, 0.16);
+      border-color: var(--emerald);
+      color: var(--emerald);
+      box-shadow: 0 0 16px rgba(52, 211, 153, 0.2);
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 1.16rem;
+      color: var(--emerald);
+    }
+
+    .rule-callout {
+      background: rgba(56, 189, 248, 0.09);
+      border-left: 4px solid var(--sky);
+      border-radius: 0 10px 10px 0;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+      color: #e2e8f0;
+    }
+
+    .method-switch {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      margin-bottom: 14px;
+    }
+
+    .method-btn {
+      flex: 1 1 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .method-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--sky);
+      color: #7dd3fc;
+    }
+
+    .sim-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .canvas-wrap {
+      background: #060d1f;
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      background: #081229;
+      touch-action: none;
+    }
+
+    .controls-box {
+      background: rgba(2, 6, 23, 0.72);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .step-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--sky);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      color: #e2e8f0;
+      font-size: 0.93rem;
+      min-height: 72px;
+      margin-bottom: 12px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--sky);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--emerald);
+      color: #0f172a;
+      border: 0;
+      box-shadow: 0 0 18px rgba(52, 211, 153, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #6ee7b7;
+    }
+
+    .btn-finish-back {
+      background: rgba(251, 191, 36, 0.16);
+      border-color: var(--amber);
+      color: #fde68a;
+    }
+
+    .btn-finish-back:hover:not(:disabled) {
+      background: rgba(251, 191, 36, 0.28);
+      border-color: var(--amber);
+      color: #fff;
+    }
+
+    .slider-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .slider-row label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--emerald);
+      margin-bottom: 6px;
+    }
+
+    .prop-readout {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      font-size: 0.86rem;
+      color: #cbd5e1;
+    }
+
+    .warn-inline {
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    .ok-inline {
+      color: var(--emerald);
+      font-weight: 700;
+    }
+
+    .quiz-item {
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .quiz-q {
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #f8fafc;
+    }
+
+    .opt-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .opt-btn {
+      text-align: left;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .opt-btn:hover {
+      border-color: var(--sky);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .opt-btn.selected {
+      border-color: var(--sky);
+      background: rgba(56, 189, 248, 0.18);
+    }
+
+    .fb-box {
+      margin-top: 9px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .fb-box.ok {
+      display: block;
+      background: rgba(52, 211, 153, 0.15);
+      color: #6ee7b7;
+      border: 1px solid rgba(52, 211, 153, 0.45);
+    }
+
+    .fb-box.err {
+      display: block;
+      background: rgba(248, 113, 113, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(248, 113, 113, 0.45);
+    }
+
+    .confirm-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483005;
+      background: rgba(2, 6, 23, 0.86);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .confirm-backdrop.open {
+      display: flex;
+    }
+
+    .confirm-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      padding: 22px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+    }
+
+    .confirm-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      color: var(--emerald);
+    }
+
+    .confirm-card p {
+      margin: 0 0 18px;
+      color: #cbd5e1;
+      font-size: 0.94rem;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 820px) {
+      .topic-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .method-switch {
+        flex-wrap: wrap;
+      }
+      .method-btn {
+        flex: 1 1 100%;
+      }
+      .sim-grid {
+        grid-template-columns: 1fr;
+      }
+      .student-pill {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <h1>6h GEOMETRIA – Szerkesztések és tengelyes tükrözés</h1>
+    <div class="header-actions">
+      <span class="student-pill" id="studentBadge" hidden><strong id="studentNameDisplay"></strong></span>
+      <button type="button" class="btn btn-finish-back" id="finishBackBtn">⬅ Befejezés / Vissza</button>
+    </div>
+  </header>
+
+  <div class="confirm-backdrop" id="finishModal" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
+    <div class="confirm-card">
+      <h3 id="finishTitle">Biztosan befejezed?</h3>
+      <p id="finishText">Ha az <strong>Igen</strong> gombra kattintasz, rögzítjük a befejezést, és visszatérsz a 6. osztály oldalára.</p>
+      <div class="confirm-actions">
+        <button type="button" class="btn" id="cancelFinishBtn">Mégsem</button>
+        <button type="button" class="btn btn-primary" id="confirmFinishBtn">Igen</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="start-card" id="startCard">
+      <h2>✏️ Interaktív szerkesztések indítása</h2>
+      <p style="color: #cbd5e1; margin: 0 0 16px;">
+        A gyakorlás indításához add meg a személyes kódodat. A belépésedet rögzítjük, és a <strong>Befejezés / Vissza</strong> gombbal tudsz kilépni a 6. osztály oldalára.
+      </p>
+      <button type="button" class="btn btn-primary" id="btnStart">Kód megadása és indítás</button>
+    </section>
+
+    <div id="workArea" hidden>
+      <nav class="topic-tabs" aria-label="Témaválasztó">
+        <button type="button" class="tab-btn active" data-topic="bisector">1. Szakaszfelező merőleges</button>
+        <button type="button" class="tab-btn" data-topic="onLine">2. Merőleges adott pontban</button>
+        <button type="button" class="tab-btn" data-topic="offLine">3. Merőleges külső pontból</button>
+        <button type="button" class="tab-btn" data-topic="reflect">4. Tengelyes tükrözés</button>
+        <button type="button" class="tab-btn" data-topic="triangle">5. Háromszög (a, b, c)</button>
+      </nav>
+
+      <section class="card">
+        <h2 id="topicTitle"></h2>
+        <p id="topicGoal" style="color: var(--muted); margin-top: 0;"></p>
+
+        <div id="reflectExtras" hidden>
+          <div class="rule-callout">
+            <strong>📏 A tengelyes tükrözés szabálya:</strong> Menj a legrövidebb úton a tengelyhez (merőleges szakasz), és haladj tovább azon túl ugyanannyit! Válaszd ki, melyik szerkesztési módszerrel dolgozol szívesebben:
+          </div>
+          <div class="method-switch" role="group" aria-label="Tükrözési szerkesztés módja">
+            <button type="button" class="method-btn active" data-rmethod="twoArcs">1. módszer: Tengelypontokból P távolsággal</button>
+            <button type="button" class="method-btn" data-rmethod="perp">2. módszer: Tengelymetszésből AP és BP sugárral</button>
+          </div>
+        </div>
+
+        <div class="sim-grid">
+          <div class="canvas-wrap">
+            <canvas id="geoCanvas" width="520" height="360"></canvas>
+            <div id="canvasHint" style="font-size: 0.8rem; color: var(--muted); margin-top: 6px;"></div>
+          </div>
+
+          <div class="controls-box">
+            <div class="step-badge" id="stepBadge">1. lépés</div>
+            <div class="step-desc" id="stepDesc"></div>
+
+            <div class="btn-row">
+              <button type="button" class="btn" id="prevStep">← Előző lépés</button>
+              <button type="button" class="btn btn-primary" id="nextStep">Következő lépés →</button>
+              <button type="button" class="btn" id="resetStep">Újrakezd</button>
+            </div>
+
+            <div class="slider-row" id="radiusBox">
+              <label for="radiusSlider">
+                <span>Körzőnyílás (távolság):</span>
+                <strong id="radiusVal"></strong>
+              </label>
+              <input type="range" id="radiusSlider" min="40" max="240" value="145">
+            </div>
+
+            <div class="slider-row" id="triSliders" hidden>
+              <label for="sideASlider"><span><i>a</i> oldal (BC szakasz):</span><strong id="sideAVal"></strong></label>
+              <input type="range" id="sideASlider" min="3.0" max="7.5" step="0.5" value="6.0">
+
+              <label for="sideBSlider"><span><i>b</i> oldal (AC távolság):</span><strong id="sideBVal"></strong></label>
+              <input type="range" id="sideBSlider" min="2.0" max="6.5" step="0.5" value="4.5">
+
+              <label for="sideCSlider"><span><i>c</i> oldal (AB távolság):</span><strong id="sideCSliderVal"></strong></label>
+              <input type="range" id="sideCSlider" min="2.0" max="6.5" step="0.5" value="5.0">
+            </div>
+
+            <div class="prop-readout" id="propReadout"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>🧠 Tulajdonságok és szerkesztési összefüggések (gyakorló ellenőrzés)</h2>
+        <p style="color: var(--muted); margin-top: 0; font-size: 0.92rem;">Válassz egy választ, és kattints az <strong>Ellenőrzés</strong> gombra! Hibás válasz esetén újra próbálkozhatsz.</p>
+        <div id="quizContainer"></div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    window.UJITAS_CFG = {
+      mod: 'elo',
+      classId: '6h',
+      assignmentType: 'Orai',
+      taskTitle: 'Szerkesztések és tengelyes tükrözés',
+      setId: '6-felezomeroleges',
+      kodEllenorzes: true
+    };
+  </script>
+  <script src="https://csernyesuli.github.io/ujitas/kozos/v1/betolto.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const RETURN_URL = 'https://csernyesuli.github.io/6-osztaly.html';
+      const SCALE = 40;
+
+      const TOPICS = {
+        bisector: {
+          title: '1. Szakaszfelező merőleges szerkesztése',
+          goal: 'Felezzük meg az AB szakaszt, és állítsunk rá merőlegest a felezőpontjában körzővel és vonalzóval.',
+          showRadius: true,
+          showTri: false,
+          hasDraggableYellow: true,
+          defaultRadius: 145,
+          steps: [
+            'Kiindulás: adott az AB szakasz (6,0 cm). A felezőmerőleges minden pontja egyenlő távol van A-tól és B-től.',
+            'Nyisd ki a körzőt láthatóan az AB szakasz felénél (3,0 cm) nagyobbra, és húzz körívet A középponttal!',
+            'Ugyanezzel a körzőnyílással húzz körívet B középponttal is, hogy a két ív az M₁ és M₂ pontokban metssze egymást!',
+            'Kössük össze az M₁ és M₂ metszéspontokat! Húzd el a P pontot, és figyeld a PA és PB szakaszok hosszát!'
+          ],
+          questions: [
+            {
+              q: 'Miért kell a körzőnyílásnak hosszabbnak lennie az AB szakasz felénél?',
+              opts: [
+                'Hogy a két körív metssze egymást az AB egyenes mindkét oldalán.',
+                'Hogy a szakaszfelező merőleges 45°-os szöget zárjon be.',
+                'Hogy az M₁ és M₂ pontok ráessenek az AB szakaszra.'
+              ],
+              correct: 0,
+              ok: '✔ Helyes! Ha a körzőn beállított távolság kisebb vagy egyenlő AB felénél, a két ív nem metszi egymást két pontban.',
+              err: '✘ Még nem jó. Csökkentsd a körzőnyílást 3,0 cm alá a rajzon, és figyeld meg, mi történik!'
+            },
+            {
+              q: 'Ha a P pont rajta van az AB szakaszfelező merőlegesén, mit tapasztalsz a PA és PB szakaszok hosszánál?',
+              opts: [
+                'PA = PB',
+                'PA + PB = AB',
+                'PA mindig kétszerese PB-nek.'
+              ],
+              correct: 0,
+              ok: '✔ Pontosan! A szakaszfelező merőleges pontjai egyenlő távolságra vannak a két végponttól.',
+              err: '✘ Húzd a P pontot a zöld felezőmerőleges vonalra, és olvasd le a két szakasz hosszát!'
+            }
+          ]
+        },
+        onLine: {
+          title: '2. Merőleges szerkesztése az egyenes adott pontjában (C)',
+          goal: 'A C pont körül kimérünk két egyenlő távol lévő pontot (A és B), így visszavezetjük a feladatot a szakaszfelező merőlegesre.',
+          showRadius: true,
+          showTri: false,
+          hasDraggableYellow: false,
+          defaultRadius: 115,
+          steps: [
+            'Adott az e egyenes és a rajta fekvő C pont, amelyben a merőlegest szerkesztjük.',
+            'Körzővel mérjünk fel C-ből az e egyenes két irányába egyenlő távolságra két pontot (A és B). Így C az AB szakasz felezőpontja!',
+            'Állíts be a körzőn az AB szakasz felénél nagyobb távolságot, és A, illetve B pontokból húzzunk egymást metsző köríveket!',
+            'Az M₁ és M₂ metszéspontokat összekötve megkapjuk az e egyenesre C-ben állított merőlegest.'
+          ],
+          questions: [
+            {
+              q: 'Miért biztos, hogy a szerkesztett egyenes átmegy a C ponton és merőleges e-re?',
+              opts: [
+                'Mert C az AB szakasz felezőpontja, így az AB szakaszfelező merőlegese átmegy C-n.',
+                'Mert a körzőnyílás mindig megegyezik az AC távolsággal.',
+                'Mert az A és B pontok nem az e egyenesen vannak.'
+              ],
+              correct: 0,
+              ok: '✔ Így van! Mivel CA = CB, C rajta van az AB szakaszfelező merőlegesén.',
+              err: '✘ Gondold végig, milyen kapcsolatban áll a C pont az A és B pontokkal!'
+            }
+          ]
+        },
+        offLine: {
+          title: '3. Merőleges szerkesztése külső pontból (K)',
+          goal: 'A külső K pontból körívvel két pontban (A és B) metsszük az e egyenest, majd megszerkesztjük AB felezőmerőlegesét.',
+          showRadius: true,
+          showTri: false,
+          hasDraggableYellow: true,
+          defaultRadius: 140,
+          steps: [
+            'Adott az e egyenes és a rajta kívül fekvő K pont.',
+            'K középponttal húzzunk olyan körívet, amely az e egyenest két pontban (A és B) metszi. Ekkor KA = KB!',
+            'Nyisd ki a körzőt láthatóan az AB szakasz felénél nagyobbra, és A, illetve B pontokból húzz köríveket az e egyenes túloldalán!',
+            'Kössük össze K-t az M metszésponttal! Ez az egyenes merőleges e-re és átmegy K-n.'
+          ],
+          questions: [
+            {
+              q: 'Miért határozza meg K és az ívmetszéspont (M) egyértelműen az e egyenesre bocsátott merőlegest?',
+              opts: [
+                'Mivel KA = KB és MA = MB, mindkét pont rajta van az AB szakaszfelező merőlegesén.',
+                'Mert K és M azonos oldalon van az e egyeneshez képest.',
+                'Mert az AB szakasz merőleges az e egyenesre.'
+              ],
+              correct: 0,
+              ok: '✔ Nagyszerű! Két különböző pont (K és M) egyértelműen kijelöli az AB szakaszfelező merőlegesét.',
+              err: '✘ Nézd meg: A-tól és B-től K is egyenlő távol van, és M is egyenlő távol van!'
+            }
+          ]
+        },
+        reflect: {
+          title: '4. Tengelyes tükrözés szerkesztése (két választható módszer)',
+          goal: 'A t tengelyre tükrözzük a P pontot. Válaszd ki, számodra melyik szerkesztés átláthatóbb és gyorsabb!',
+          showRadius: false,
+          showTri: false,
+          hasDraggableYellow: true,
+          defaultRadius: 120,
+          stepsTwoArcs: [
+            '1. módszer: adott a t tükörtengely és a tükrözendő P pont.',
+            'Vegyünk fel a t tengelyen két pontot (T₁ és T₂), majd T₁ középponttal a P pont távolságával (T₁P) rajzoljunk körívet a tengely másik oldalára!',
+            'T₂ középponttal szintén a P pont távolságával (T₂P) rajzoljunk körívet a tengely másik oldalára — a két ív metszéspontja adja a P′ tükörképet!',
+            'A PP′ szakasz merőleges a t tengelyre (90°), és a tengely felezi azt (PT = TP′).'
+          ],
+          stepsPerp: [
+            '2. módszer: adott a t tükörtengely és a tükrözendő P pont.',
+            'P középponttal húzzunk körívet, amely a t tengelyt két pontban (A és B) metszi.',
+            'Vegyük körzőnyílásba az AP távolságot, és húzzunk körívet A középponttal a tengely másik oldalára!',
+            'Vegyük körzőnyílásba a BP távolságot, és húzzunk körívet B középponttal a tengely másik oldalára — a két körív metszéspontja egyből kijelöli a P′ pontot!',
+            'A PP′ szakasz merőleges a t tengelyre (90°), és a tengely felezi azt (PT = TP′).'
+          ],
+          questions: [
+            {
+              q: 'Miért igaz mindkét szerkesztési módszernél, hogy a t tengely merőleges a PP′ szakaszra és felezi azt?',
+              opts: [
+                'Mert tengelyes tükrözésnél a tükörtengely mindig a pont és tükörképe összekötő szakaszának felezőmerőlegese.',
+                'Mert a t tengely mindig vízszintes.',
+                'Mert csak így lesz egyenlő a T₁ és T₂ pontok távolsága.'
+              ],
+              correct: 0,
+              ok: '✔ Helyes! Akár a tengely pontjaiból körívekkel, akár A és B pontokból AP és BP sugárral dolgozol, a t tengely a PP′ szakasz felezőmerőlegese.',
+              err: '✘ Gondold végig: milyen geometriai alakzat a t tengely a P és P′ pontokhoz képest?'
+            }
+          ]
+        },
+        triangle: {
+          title: '5. Háromszög szerkesztése három oldalából (a, b, c)',
+          goal: 'Adott az a, b és c szakasz. Felveszünk egy egyenest, rámérjük az egyik oldalt (a), majd a két végpontjából a másik két oldal hosszával (b és c) köríveket rajzolunk; a körívek metszéspontja adja a harmadik csúcsot.',
+          showRadius: false,
+          showTri: true,
+          hasDraggableYellow: false,
+          defaultRadius: 120,
+          steps: [
+            'Vegyünk fel egy egyenest, és körzővel mérjük fel rá az a = BC oldalt (a B és C csúcsokat)!',
+            'Vegyük körzőnyílásba a b szakasz hosszát, és C középponttal húzzunk körívet (ezen az íven lesz az A csúcs, mert AC = b).',
+            'Vegyük körzőnyílásba a c szakasz hosszát, és B középponttal húzzunk körívet (ezen is rajta van az A csúcs, mert AB = c).',
+            'A két körív metszéspontja adja a harmadik csúcsot (A)! Kössük össze A-t B-vel és C-vel!'
+          ],
+          questions: [
+            {
+              q: 'Mikor metszi egymást a C körüli b sugarú és a B körüli c sugarú körív (mikor szerkeszthető a háromszög)?',
+              opts: [
+                'Ha bármely két oldal összege nagyobb a harmadiknál (pl. b + c > a és |b − c| < a).',
+                'Csak akkor, ha mindhárom oldal egyenlő hosszú.',
+                'Mindig, bármilyen három szakaszból szerkeszthető háromszög.'
+              ],
+              correct: 0,
+              ok: '✔ Pontosan! Ez a háromszög-egyenlőtlenség: ha b + c ≤ a, a két körív nem metszi egymást.',
+              err: '✘ Állítsd a csúszkákkal b = 2,5 cm-re, c = 2,5 cm-re és a = 6,0 cm-re, és nézd meg a köríveket!'
+            }
+          ]
+        }
+      };
+
+      const canvas = document.getElementById('geoCanvas');
+      const ctx = canvas.getContext('2d');
+      let currentTopic = 'bisector';
+      let currentStep = 0;
+      let reflectMethod = 'twoArcs';
+      let radius = 145;
+      let triA = 6.0, triB = 4.5, triC = 5.0;
+      let freePoint = { x: 165, y: 180 };
+      let dragging = false;
+
+      const lineY = 210;
+      const A = { x: 140, y: lineY };
+      const B = { x: 380, y: lineY };
+      const C = { x: 260, y: lineY };
+
+      function fmtCm(px) {
+        return (px / SCALE).toFixed(1).replace('.', ',') + ' cm';
+      }
+
+      function dist(p1, p2) {
+        return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+      }
+
+      function circleIntersections(p1, r1, p2, r2) {
+        const d = dist(p1, p2);
+        if (d === 0 || d > r1 + r2 || d < Math.abs(r1 - r2)) return [];
+        const a = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+        const hSq = r1 * r1 - a * a;
+        if (hSq < 0) return [];
+        const h = Math.sqrt(hSq);
+        const xm = p1.x + (a * (p2.x - p1.x)) / d;
+        const ym = p1.y + (a * (p2.y - p1.y)) / d;
+        const rx = (-h * (p2.y - p1.y)) / d;
+        const ry = (h * (p2.x - p1.x)) / d;
+        return [
+          { x: xm + rx, y: ym + ry },
+          { x: xm - rx, y: ym - ry }
+        ];
+      }
+
+      function drawCrossPoint(p, label, color, draggableRing) {
+        const arm = 5;
+        ctx.save();
+        if (draggableRing) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(251, 191, 36, 0.14)';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(251, 191, 36, 0.5)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.moveTo(p.x - arm, p.y - arm);
+        ctx.lineTo(p.x + arm, p.y + arm);
+        ctx.moveTo(p.x - arm, p.y + arm);
+        ctx.lineTo(p.x + arm, p.y - arm);
+        ctx.strokeStyle = color || '#38bdf8';
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        ctx.font = '700 14px system-ui, sans-serif';
+        ctx.fillStyle = color || '#f8fafc';
+        ctx.fillText(label, p.x + 9, p.y - 8);
+        ctx.restore();
+      }
+
+      function drawLabeledSegment(p1, p2, labelText, color, dashed, offsetY) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = dashed ? 1.8 : 2.6;
+        if (dashed) ctx.setLineDash([2, 5]);
+        ctx.stroke();
+        ctx.restore();
+
+        const mx = (p1.x + p2.x) / 2;
+        const my = (p1.y + p2.y) / 2 + (offsetY || -8);
+        ctx.save();
+        ctx.font = '700 12px system-ui, sans-serif';
+        const w = ctx.measureText(labelText).width + 10;
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.86)';
+        ctx.fillRect(mx - w / 2, my - 12, w, 17);
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.fillText(labelText, mx, my);
+        ctx.restore();
+      }
+
+      function drawRightAngleMark(vertex, dirX, dirY) {
+        const s = 9;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(vertex.x + dirX * s, vertex.y);
+        ctx.lineTo(vertex.x + dirX * s, vertex.y + dirY * s);
+        ctx.lineTo(vertex.x, vertex.y + dirY * s);
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawArc(center, r, color, dotted) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, r, 0, Math.PI * 2);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.7;
+        if (dotted) ctx.setLineDash([2, 5]);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function renderCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+        ctx.lineWidth = 1;
+        for (let x = 20; x < canvas.width; x += 40) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+        }
+        for (let y = 20; y < canvas.height; y += 40) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+        }
+
+        const readout = document.getElementById('propReadout');
+
+        if (currentTopic === 'bisector') {
+          drawLabeledSegment(A, B, 'AB = 6,0 cm', '#38bdf8', false, 18);
+          drawCrossPoint(A, 'A', '#38bdf8', false);
+          drawCrossPoint(B, 'B', '#38bdf8', false);
+
+          const pts = circleIntersections(A, radius, B, radius);
+          if (currentStep >= 1) drawArc(A, radius, 'rgba(52, 211, 153, 0.6)', true);
+          if (currentStep >= 2) drawArc(B, radius, 'rgba(56, 189, 248, 0.6)', true);
+          if (currentStep >= 2 && pts.length === 2) {
+            drawCrossPoint(pts[0], 'M₁', '#34d399', false);
+            drawCrossPoint(pts[1], 'M₂', '#34d399', false);
+          }
+          if (currentStep >= 3) {
+            ctx.beginPath();
+            ctx.moveTo(260, 20); ctx.lineTo(260, 340);
+            ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2.4; ctx.stroke();
+          }
+
+          const dA = dist(freePoint, A);
+          const dB = dist(freePoint, B);
+          const onBisector = Math.abs(dA - dB) <= 3;
+          const segColor = onBisector ? '#34d399' : '#fbbf24';
+
+          drawLabeledSegment(freePoint, A, 'PA = ' + fmtCm(dA), segColor, true, -8);
+          drawLabeledSegment(freePoint, B, 'PB = ' + fmtCm(dB), segColor, true, -8);
+          drawCrossPoint(freePoint, 'P', '#fbbf24', true);
+
+          readout.innerHTML =
+            `<div>Körzőn beállított távolság: <b>${fmtCm(radius)}</b> (AB fele: <b>3,0 cm</b>) — ` +
+            (radius > (B.x - A.x) / 2
+              ? `<span class="ok-inline">metszik egymást ✔</span>`
+              : `<span class="warn-inline">túl kicsi, nem metszik egymást!</span>`) +
+            `</div><div style="margin-top:4px;"><b>PA = ${fmtCm(dA)}</b> | <b>PB = ${fmtCm(dB)}</b>` +
+            (onBisector ? ` → <span class="ok-inline">PA = PB (P a felezőmerőlegesen van!)</span>` : '') + `</div>`;
+
+        } else if (currentTopic === 'onLine') {
+          ctx.beginPath();
+          ctx.moveTo(30, lineY); ctx.lineTo(490, lineY);
+          ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.4; ctx.stroke();
+          ctx.fillStyle = '#94a3b8'; ctx.font = '700 14px system-ui'; ctx.fillText('e', 475, lineY - 8);
+
+          drawCrossPoint(C, 'C', '#38bdf8', false);
+
+          const pA = { x: C.x - 90, y: lineY };
+          const pB = { x: C.x + 90, y: lineY };
+          if (currentStep >= 1) {
+            drawCrossPoint(pA, 'A', '#94a3b8', false);
+            drawCrossPoint(pB, 'B', '#94a3b8', false);
+          }
+          const pts = circleIntersections(pA, radius, pB, radius);
+          if (currentStep >= 2) {
+            drawArc(pA, radius, 'rgba(52, 211, 153, 0.6)', true);
+            drawArc(pB, radius, 'rgba(56, 189, 248, 0.6)', true);
+          }
+          if (currentStep >= 3) {
+            ctx.beginPath();
+            ctx.moveTo(C.x, 30); ctx.lineTo(C.x, 330);
+            ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2.4; ctx.stroke();
+            if (pts.length === 2) {
+              drawCrossPoint(pts[0], 'M₁', '#34d399', false);
+              drawCrossPoint(pts[1], 'M₂', '#34d399', false);
+            }
+          }
+          readout.innerHTML = `C pont az <i>e</i> egyenesre illeszkedik, tőle A és B egyenlő távol van (<b>2,25 cm</b>). A merőleges egyenes C-ben <b>90°-os</b> szöget zár be az <i>e</i> egyenessel.`;
+
+        } else if (currentTopic === 'offLine') {
+          ctx.beginPath();
+          ctx.moveTo(30, lineY); ctx.lineTo(490, lineY);
+          ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.4; ctx.stroke();
+          ctx.fillStyle = '#94a3b8'; ctx.font = '700 14px system-ui'; ctx.fillText('e', 475, lineY - 8);
+
+          const kPt = { x: freePoint.x, y: Math.min(freePoint.y, lineY - 35) };
+          drawCrossPoint(kPt, 'K', '#fbbf24', true);
+
+          const distToLine = lineY - kPt.y;
+          const rArc = Math.max(radius, distToLine + 25);
+          const halfSpan = Math.sqrt(Math.max(0, rArc * rArc - distToLine * distToLine));
+          const pA = { x: kPt.x - halfSpan, y: lineY };
+          const pB = { x: kPt.x + halfSpan, y: lineY };
+
+          if (currentStep >= 1) {
+            drawArc(kPt, rArc, 'rgba(251, 191, 36, 0.5)', true);
+            drawCrossPoint(pA, 'A', '#38bdf8', false);
+            drawCrossPoint(pB, 'B', '#38bdf8', false);
+          }
+          const lowerPts = circleIntersections(pA, 130, pB, 130).filter(p => p.y > lineY);
+          if (currentStep >= 2) {
+            drawArc(pA, 130, 'rgba(52, 211, 153, 0.55)', true);
+            drawArc(pB, 130, 'rgba(56, 189, 248, 0.55)', true);
+          }
+          if (currentStep >= 3) {
+            ctx.beginPath();
+            ctx.moveTo(kPt.x, kPt.y); ctx.lineTo(kPt.x, lineY + 115);
+            ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2.4; ctx.stroke();
+            if (lowerPts.length) drawCrossPoint(lowerPts[0], 'M', '#34d399', false);
+          }
+          readout.innerHTML = `K pontból húzott ív az <i>e</i> egyenesen kijelöli A-t és B-t (<b>KA = KB = ${fmtCm(rArc)}</b>), majd K és M összekötése adja a merőlegest.`;
+
+        } else if (currentTopic === 'reflect') {
+          const axisX = 275;
+          ctx.beginPath();
+          ctx.moveTo(axisX, 20); ctx.lineTo(axisX, 340);
+          ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2.6; ctx.stroke();
+          ctx.fillStyle = '#e2e8f0'; ctx.font = '700 14px system-ui';
+          ctx.fillText('t', axisX + 9, 38);
+
+          const pSrc = { x: Math.min(freePoint.x, axisX - 30), y: Math.max(70, Math.min(290, freePoint.y)) };
+          const foot = { x: axisX, y: pSrc.y };
+          const pImg = { x: axisX + (axisX - pSrc.x), y: pSrc.y };
+          const dT = axisX - pSrc.x;
+
+          drawCrossPoint(pSrc, 'P', '#38bdf8', true);
+
+          if (reflectMethod === 'twoArcs') {
+            const T1 = { x: axisX, y: 105 };
+            const T2 = { x: axisX, y: 275 };
+            const r1 = dist(T1, pSrc);
+            const r2 = dist(T2, pSrc);
+
+            drawCrossPoint(T1, 'T₁', '#cbd5e1', false);
+            drawCrossPoint(T2, 'T₂', '#cbd5e1', false);
+
+            if (currentStep >= 1) {
+              drawArc(T1, r1, 'rgba(148, 163, 184, 0.7)', true);
+              drawLabeledSegment(T1, pSrc, 'T₁P = ' + fmtCm(r1), '#94a3b8', true, -8);
+            }
+            if (currentStep >= 2) {
+              drawArc(T2, r2, 'rgba(148, 163, 184, 0.7)', true);
+              drawLabeledSegment(T2, pSrc, 'T₂P = ' + fmtCm(r2), '#94a3b8', true, 14);
+              drawCrossPoint(pImg, "P'", '#38bdf8', false);
+              drawLabeledSegment(T1, pImg, fmtCm(r1), '#34d399', true, -8);
+              drawLabeledSegment(T2, pImg, fmtCm(r2), '#34d399', true, 14);
+            }
+            if (currentStep >= 3) {
+              drawLabeledSegment(pSrc, pImg, 'PT = ' + fmtCm(dT) + '   |   TP\' = ' + fmtCm(dT), '#f87171', true, -12);
+              drawCrossPoint(foot, 'T', '#f87171', false);
+              drawRightAngleMark(foot, -1, -1);
+              ctx.fillStyle = '#34d399';
+              ctx.font = '700 12px system-ui';
+              ctx.fillText('90°', foot.x - 28, foot.y - 10);
+            }
+
+            readout.innerHTML =
+              `<div>1. módszer: <b>T₁P = T₁P' = ${fmtCm(r1)}</b> és <b>T₂P = T₂P' = ${fmtCm(r2)}</b></div>` +
+              `<div style="margin-top:4px;"><b>PT = ${fmtCm(dT)}</b>, <b>TP' = ${fmtCm(dT)}</b> → <span class="ok-inline">PP' merőleges t-re és felezi azt t!</span></div>`;
+
+          } else {
+            const rP = dT + 38;
+            const halfSpan = Math.sqrt(rP * rP - dT * dT);
+            const pA = { x: axisX, y: pSrc.y - halfSpan };
+            const pB = { x: axisX, y: pSrc.y + halfSpan };
+            const rAP = dist(pA, pSrc);
+            const rBP = dist(pB, pSrc);
+
+            if (currentStep >= 1) {
+              drawArc(pSrc, rP, 'rgba(148, 163, 184, 0.65)', true);
+              drawCrossPoint(pA, 'A', '#cbd5e1', false);
+              drawCrossPoint(pB, 'B', '#cbd5e1', false);
+            }
+            if (currentStep >= 2) {
+              drawArc(pA, rAP, 'rgba(56, 189, 248, 0.7)', true);
+              drawLabeledSegment(pA, pSrc, 'AP = ' + fmtCm(rAP), '#7dd3fc', true, -8);
+            }
+            if (currentStep >= 3) {
+              drawArc(pB, rBP, 'rgba(52, 211, 153, 0.7)', true);
+              drawLabeledSegment(pB, pSrc, 'BP = ' + fmtCm(rBP), '#6ee7b7', true, 14);
+              drawCrossPoint(pImg, "P'", '#38bdf8', false);
+              drawLabeledSegment(pA, pImg, fmtCm(rAP), '#34d399', true, -8);
+              drawLabeledSegment(pB, pImg, fmtCm(rBP), '#34d399', true, 14);
+            }
+            if (currentStep >= 4) {
+              drawLabeledSegment(pSrc, pImg, 'PT = ' + fmtCm(dT) + '   |   TP\' = ' + fmtCm(dT), '#f87171', true, -12);
+              drawCrossPoint(foot, 'T', '#f87171', false);
+              drawRightAngleMark(foot, -1, -1);
+              ctx.fillStyle = '#34d399';
+              ctx.font = '700 12px system-ui';
+              ctx.fillText('90°', foot.x - 28, foot.y - 10);
+            }
+
+            readout.innerHTML =
+              `<div>2. módszer: <b>AP = AP' = ${fmtCm(rAP)}</b> és <b>BP = BP' = ${fmtCm(rBP)}</b></div>` +
+              `<div style="margin-top:4px;"><b>PT = ${fmtCm(dT)}</b>, <b>TP' = ${fmtCm(dT)}</b> → <span class="ok-inline">A két ív metszéspontja a túloldalon egyből P'!</span></div>`;
+          }
+
+        } else if (currentTopic === 'triangle') {
+          const pxA = triA * SCALE;
+          const pxB = triB * SCALE;
+          const pxC = triC * SCALE;
+
+          const pB = { x: 260 - pxA / 2, y: 270 };
+          const pC = { x: 260 + pxA / 2, y: 270 };
+
+          ctx.beginPath();
+          ctx.moveTo(30, 270); ctx.lineTo(490, 270);
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+          drawLabeledSegment(pB, pC, 'a = ' + triA.toFixed(1).replace('.', ',') + ' cm', '#38bdf8', false, 18);
+          drawCrossPoint(pB, 'B', '#38bdf8', false);
+          drawCrossPoint(pC, 'C', '#38bdf8', false);
+
+          if (currentStep >= 1) {
+            drawArc(pC, pxB, 'rgba(52, 211, 153, 0.6)', true);
+          }
+          if (currentStep >= 2) {
+            drawArc(pB, pxC, 'rgba(251, 191, 36, 0.6)', true);
+          }
+
+          const inter = circleIntersections(pC, pxB, pB, pxC).filter(p => p.y < 270);
+          const valid = (triB + triC > triA) && (Math.abs(triB - triC) < triA);
+
+          if (currentStep >= 3 && valid && inter.length) {
+            const pA = inter[0];
+            drawLabeledSegment(pC, pA, 'b = ' + triB.toFixed(1).replace('.', ',') + ' cm', '#34d399', false, -8);
+            drawLabeledSegment(pB, pA, 'c = ' + triC.toFixed(1).replace('.', ',') + ' cm', '#fbbf24', false, -8);
+            drawCrossPoint(pA, 'A', '#34d399', false);
+          }
+
+          readout.innerHTML = valid
+            ? `<span class="ok-inline">Szerkeszthető ✔</span> (b + c = ${(triB + triC).toFixed(1).replace('.', ',')} cm > a = ${triA.toFixed(1).replace('.', ',')} cm)`
+            : `<span class="warn-inline">Nem szerkeszthető!</span> A két körív nem metszi egymást (nem teljesül a háromszög-egyenlőtlenség).`;
+        }
+      }
+
+      function getCurrentSteps() {
+        const t = TOPICS[currentTopic];
+        if (currentTopic === 'reflect') {
+          return reflectMethod === 'twoArcs' ? t.stepsTwoArcs : t.stepsPerp;
+        }
+        return t.steps;
+      }
+
+      function renderStepInfo() {
+        const t = TOPICS[currentTopic];
+        const steps = getCurrentSteps();
+        document.getElementById('topicTitle').textContent = t.title;
+        document.getElementById('topicGoal').textContent = t.goal;
+        document.getElementById('reflectExtras').hidden = currentTopic !== 'reflect';
+        document.getElementById('stepBadge').textContent = `${currentStep + 1}. / ${steps.length}. lépés`;
+        document.getElementById('stepDesc').textContent = steps[currentStep];
+        document.getElementById('prevStep').disabled = currentStep === 0;
+        document.getElementById('nextStep').disabled = currentStep >= steps.length - 1;
+        document.getElementById('radiusBox').style.display = t.showRadius ? 'block' : 'none';
+        document.getElementById('triSliders').hidden = !t.showTri;
+        document.getElementById('radiusVal').textContent = fmtCm(radius);
+        document.getElementById('sideAVal').textContent = triA.toFixed(1).replace('.', ',') + ' cm';
+        document.getElementById('sideBVal').textContent = triB.toFixed(1).replace('.', ',') + ' cm';
+        document.getElementById('sideCSliderVal').textContent = triC.toFixed(1).replace('.', ',') + ' cm';
+
+        document.getElementById('canvasHint').innerHTML = t.hasDraggableYellow
+          ? `A síkbeli pontokat két kis egymást metsző vonallal (<strong style="color:#f8fafc;">×</strong>) jelöljük. A <span style="color: var(--amber); font-weight: 700;">sárga célkereszttel jelölt P pontot</span> elhúzhatod!`
+          : `A síkbeli pontokat két kis egymást metsző vonallal (<strong style="color:#f8fafc;">×</strong>) jelöljük.`;
+
+        renderCanvas();
+      }
+
+      function renderQuiz() {
+        const box = document.getElementById('quizContainer');
+        const qs = TOPICS[currentTopic].questions;
+        box.innerHTML = '';
+
+        qs.forEach((item, idx) => {
+          const wrap = document.createElement('div');
+          wrap.className = 'quiz-item';
+          let chosen = null;
+
+          const qEl = document.createElement('div');
+          qEl.className = 'quiz-q';
+          qEl.textContent = `${idx + 1}. ${item.q}`;
+
+          const optList = document.createElement('div');
+          optList.className = 'opt-list';
+
+          const btns = item.opts.map((txt, oIdx) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'opt-btn';
+            b.textContent = txt;
+            b.addEventListener('click', () => {
+              chosen = oIdx;
+              btns.forEach(x => x.classList.remove('selected'));
+              b.classList.add('selected');
+            });
+            optList.appendChild(b);
+            return b;
+          });
+
+          const checkBtn = document.createElement('button');
+          checkBtn.type = 'button';
+          checkBtn.className = 'btn btn-primary';
+          checkBtn.style.marginTop = '10px';
+          checkBtn.textContent = 'Ellenőrzés';
+
+          const fb = document.createElement('div');
+          fb.className = 'fb-box';
+
+          checkBtn.addEventListener('click', () => {
+            if (chosen === null) {
+              fb.className = 'fb-box err';
+              fb.textContent = 'Előbb válassz ki egy lehetőséget!';
+              return;
+            }
+            if (chosen === item.correct) {
+              fb.className = 'fb-box ok';
+              fb.textContent = item.ok;
+            } else {
+              fb.className = 'fb-box err';
+              fb.textContent = item.err;
+            }
+          });
+
+          wrap.append(qEl, optList, checkBtn, fb);
+          box.appendChild(wrap);
+        });
+      }
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentTopic = btn.dataset.topic;
+          currentStep = 0;
+          radius = TOPICS[currentTopic].defaultRadius;
+          document.getElementById('radiusSlider').value = radius;
+          renderStepInfo();
+          renderQuiz();
+        });
+      });
+
+      document.querySelectorAll('.method-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          reflectMethod = btn.dataset.rmethod;
+          currentStep = 0;
+          renderStepInfo();
+        });
+      });
+
+      document.getElementById('prevStep').addEventListener('click', () => {
+        if (currentStep > 0) { currentStep--; renderStepInfo(); }
+      });
+      document.getElementById('nextStep').addEventListener('click', () => {
+        const steps = getCurrentSteps();
+        if (currentStep < steps.length - 1) { currentStep++; renderStepInfo(); }
+      });
+      document.getElementById('resetStep').addEventListener('click', () => {
+        currentStep = 0;
+        freePoint = { x: 165, y: 180 };
+        renderStepInfo();
+      });
+
+      document.getElementById('radiusSlider').addEventListener('input', (e) => {
+        radius = parseInt(e.target.value, 10);
+        document.getElementById('radiusVal').textContent = fmtCm(radius);
+        renderCanvas();
+      });
+
+      document.getElementById('sideASlider').addEventListener('input', (e) => {
+        triA = parseFloat(e.target.value);
+        renderStepInfo();
+      });
+      document.getElementById('sideBSlider').addEventListener('input', (e) => {
+        triB = parseFloat(e.target.value);
+        renderStepInfo();
+      });
+      document.getElementById('sideCSlider').addEventListener('input', (e) => {
+        triC = parseFloat(e.target.value);
+        renderStepInfo();
+      });
+
+      function toCanvasCoords(clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        return {
+          x: Math.max(25, Math.min(canvas.width - 25, (clientX - rect.left) * scaleX)),
+          y: Math.max(25, Math.min(canvas.height - 25, (clientY - rect.top) * scaleY))
+        };
+      }
+
+      canvas.addEventListener('pointerdown', (e) => {
+        if (!TOPICS[currentTopic].hasDraggableYellow) return;
+        dragging = true;
+        freePoint = toCanvasCoords(e.clientX, e.clientY);
+        renderCanvas();
+      });
+      window.addEventListener('pointermove', (e) => {
+        if (!dragging || !TOPICS[currentTopic].hasDraggableYellow) return;
+        freePoint = toCanvasCoords(e.clientX, e.clientY);
+        renderCanvas();
+      });
+      window.addEventListener('pointerup', () => {
+        dragging = false;
+      });
+
+      // =========================================================================
+      // EGYBEFONÓDOTT BEFEJEZÉS / VISSZA GOMB ÉS RÁKÉRDEZŐ ABLAK
+      // =========================================================================
+      const btnStart = document.getElementById('btnStart');
+      const startCard = document.getElementById('startCard');
+      const workArea = document.getElementById('workArea');
+      const finishModal = document.getElementById('finishModal');
+      const finishText = document.getElementById('finishText');
+      const cancelFinishBtn = document.getElementById('cancelFinishBtn');
+      const confirmFinishBtn = document.getElementById('confirmFinishBtn');
+      const finishBackBtn = document.getElementById('finishBackBtn');
+      const studentBadge = document.getElementById('studentBadge');
+      const studentNameDisplay = document.getElementById('studentNameDisplay');
+
+      const belepesIdopont = new Date().toISOString();
+      let aktivanBent = false;
+      let ertesitve = false;
+      let visszalepesFolyamatban = false;
+
+      function kinyerDiakNevet() {
+        const U = window.UJITAS;
+        if (!U) return '';
+        const jeloltek = [
+          U.nev,
+          U.diakNev,
+          U.tanuloNev,
+          U.name,
+          U.diak && (U.diak.nev || U.diak.name),
+          U.tanulo && (U.tanulo.nev || U.tanulo.name),
+          U.user && (U.user.nev || U.user.name),
+          U.adatok && (U.adatok.nev || U.adatok.diakNev || U.adatok.name)
+        ];
+        for (const v of jeloltek) {
+          if (typeof v === 'string' && v.trim()) return v.trim();
+        }
+        return '';
+      }
+
+      function frissitNevJelvenyt() {
+        const nev = kinyerDiakNevet();
+        if (nev) {
+          studentNameDisplay.textContent = nev;
+          studentBadge.hidden = false;
+        } else {
+          studentBadge.hidden = true;
+        }
+        return nev;
+      }
+
+      async function kuldBelepesErtesitest(ok, csendes) {
+        const U = window.UJITAS;
+        if (!aktivanBent || ertesitve || !U || !U.kod || typeof U.kuldes !== 'function') return;
+        ertesitve = true;
+        try {
+          await U.kuldes({
+            event: 'belepes',
+            belepesIdopont: belepesIdopont,
+            ok: ok
+          }, { csendes: !!csendes });
+        } catch (_) {
+          // Küldési hiba esetén is engedjük a visszalépést
+        }
+      }
+
+      function visszaterOsztalyOldalra() {
+        visszalepesFolyamatban = true;
+        window.location.href = RETURN_URL;
+      }
+
+      function nyitBefejezesModal() {
+        if (visszalepesFolyamatban) return;
+        const nev = frissitNevJelvenyt();
+        const fejlecSor = nev ? `Tanuló: <strong>${nev}</strong> — ` : '';
+        finishText.innerHTML =
+          `${fejlecSor}Biztosan befejezed?<br>` +
+          `Az <strong>Igen</strong> gombra kattintva visszatérsz a 6. osztály oldalára.`;
+        finishModal.classList.add('open');
+      }
+
+      finishBackBtn.addEventListener('click', () => {
+        nyitBefejezesModal();
+      });
+
+      cancelFinishBtn.addEventListener('click', () => {
+        finishModal.classList.remove('open');
+      });
+
+      confirmFinishBtn.addEventListener('click', async () => {
+        confirmFinishBtn.disabled = true;
+        cancelFinishBtn.disabled = true;
+        try {
+          await kuldBelepesErtesitest('igen_befejezve', false);
+        } finally {
+          finishModal.classList.remove('open');
+          visszaterOsztalyOldalra();
+        }
+      });
+
+      function bindKeret() {
+        const U = window.UJITAS;
+        if (!U) return;
+
+        U.aktiv = function () {
+          return aktivanBent && !ertesitve && !visszalepesFolyamatban;
+        };
+
+        U.on('lapvaltas', function () {
+          kuldBelepesErtesitest('figyelmen_kivul_hagyva_lapvaltas', true);
+        });
+
+        U.on('kilepes', function () {
+          kuldBelepesErtesitest('figyelmen_kivul_hagyva_kilepes', true);
+        });
+      }
+
+      if (window.UJITAS) {
+        bindKeret();
+      } else {
+        window.addEventListener('DOMContentLoaded', bindKeret);
+      }
+
+      btnStart.addEventListener('click', async () => {
+        btnStart.disabled = true;
+        bindKeret();
+
+        if (window.UJITAS && typeof window.UJITAS.run === 'function') {
+          const engedelyezve = await window.UJITAS.run('indulas');
+          if (!engedelyezve || !window.UJITAS.kod) {
+            btnStart.disabled = false;
+            return;
+          }
+        }
+
+        aktivanBent = true;
+        frissitNevJelvenyt();
+        startCard.hidden = true;
+        workArea.hidden = false;
+
+        renderStepInfo();
+        renderQuiz();
+
+        window.addEventListener('beforeunload', function () {
+          if (visszalepesFolyamatban || !aktivanBent || ertesitve) return;
+          kuldBelepesErtesitest('figyelmen_kivul_hagyva_lapelhagyas', true);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

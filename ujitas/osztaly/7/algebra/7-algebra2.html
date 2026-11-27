@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Algebrai kifejezések – 7. osztály</title>
+<style>
+:root{
+  --paper:#f8faf6; --grid:#dbe6ef; --card:#ffffff; --ink:#1d2433; --muted:#5b6578;
+  --blue:#1f4fa8; --blue-soft:#e6eefb; --red:#c0312b; --red-soft:#fdeceb;
+  --green:#1d7a46; --green-soft:#e5f5ec; --line:#cfd8e3;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151a23; --grid:#202938; --card:#1d2431; --ink:#e8ecf3; --muted:#9aa5b8;
+    --blue:#8fb4ff; --blue-soft:#222e47; --red:#ff8d86; --red-soft:#3a2224;
+    --green:#6fd19a; --green-soft:#1c3328; --line:#323c4f; color-scheme:dark;
+  }
+}
+html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box}
+body{
+  margin:0; font:17px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif; color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+header{
+  position:fixed; top:0; left:0; right:0; z-index:20; background:var(--blue); color:#fff;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;
+  display:flex; align-items:center; gap:12px; box-shadow:0 2px 0 rgba(0,0,0,.15);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header{background:#16264a;color:#e8ecf3}}
+header a{
+  flex:none; color:inherit; text-decoration:none; font-weight:600; font-size:.9rem;
+  border:1.5px solid currentColor; border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+header a:hover,header a:focus-visible{background:rgba(255,255,255,.18)}
+header h1{margin:0; font-size:1.1rem; line-height:1.25; font-weight:700}
+main{max-width:780px; margin:0 auto; padding:calc(84px + env(safe-area-inset-top,0px)) 16px 56px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+section{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px 22px; margin:0 0 22px}
+h2{margin:0 0 .6em; font-size:1.3rem; color:var(--blue); line-height:1.3}
+h3{margin:1.2em 0 .4em; font-size:1.05rem}
+p{margin:.6em 0}
+.def{background:var(--blue-soft); border-left:5px solid var(--blue); border-radius:6px; padding:12px 16px; margin:.8em 0}
+.def b,.term{color:var(--red); font-weight:700}
+.m{font-family:"Cambria Math","Latin Modern Math",Cambria,Georgia,serif; font-style:italic; font-size:1.08em; white-space:nowrap}
+.m sup{font-size:.7em}
+.tablewrap{overflow-x:auto; max-width:100%}
+table{border-collapse:collapse; width:100%; table-layout:fixed; margin:.6em 0}
+td .m{white-space:normal; overflow-wrap:anywhere}
+th,td{border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top}
+th{background:var(--blue-soft); font-weight:600}
+.reveal{margin-top:10px}
+button{
+  font:inherit; font-size:.95rem; font-weight:600; cursor:pointer; border-radius:8px; padding:8px 16px;
+  border:1.5px solid var(--blue); background:var(--blue); color:#fff;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) button{color:#101725}}
+button.ghost{background:transparent; color:var(--blue)}
+button:hover{filter:brightness(1.1)}
+.task{border-top:1px dashed var(--line); padding-top:16px; margin-top:16px}
+.task:first-of-type{border-top:0; margin-top:0; padding-top:0}
+.task .q{margin:0 0 10px}
+.task .lbl{font-weight:700; color:var(--red); margin-right:6px}
+.row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.row label{font-weight:600}
+input[type=text]{
+  font:inherit; font-size:1.05rem; width:min(100%,220px); padding:8px 12px; border-radius:8px;
+  border:1.5px solid var(--line); background:var(--paper); color:var(--ink);
+}
+.fb{margin-top:10px; padding:10px 14px; border-radius:8px; display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--green-soft); border-left:5px solid var(--green)}
+.fb.no{background:var(--red-soft); border-left:5px solid var(--red)}
+.expl{margin-top:10px; padding:12px 16px; border-radius:8px; background:var(--blue-soft); border-left:5px solid var(--blue); display:none}
+.expl.show{display:block}
+.expl .ans{font-weight:700}
+.score{font-weight:600; color:var(--muted); margin-top:14px}
+footer{text-align:center; color:var(--muted); font-size:.85rem; margin-top:8px}
+@media (max-width:480px){
+  body{font-size:16px} section{padding:16px} header h1{font-size:1rem}
+  main{padding-left:10px; padding-right:10px}
+  section{padding:16px 12px}
+  th,td{padding:6px 6px; font-size:.9rem}
+  th:nth-child(1){width:40%} th:nth-child(2){width:32%} th:nth-child(3){width:28%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" aria-label="Vissza a 7. osztály oldalára">← Vissza</a>
+  <h1>Algebrai kifejezések</h1>
+</header>
+
+<main>
+
+<section id="elmelet">
+  <div class="def">
+    Ha a négy alapműveletet számokra, betűkre (illetve ezek hatványaira) véges sokszor alkalmazzuk, <b>algebrai kifejezést</b> kapunk.
+  </div>
+  <p>Az algebrai kifejezésekben a betűk valamilyen <span class="term">alaphalmaz</span> elemeit jelölik.</p>
+
+  <h3>Elnevezések:</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Kifejezés</th><th>Együttható</th><th>Változó</th></tr></thead>
+      <tbody>
+        <tr><td><span class="m">3·a</span></td><td>3</td><td><span class="m">a</span></td></tr>
+        <tr><td><span class="m">x<sup>2</sup>·5</span></td><td>5</td><td><span class="m">x</span></td></tr>
+        <tr><td><span class="m">2,8·a + 3,4·x·y<sup>2</sup></span></td><td>2,8 és 3,4</td><td><span class="m">a</span>; <span class="m">x</span> és <span class="m">y</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Mely műveleteket nevezzük alapműveleteknek?</h3>
+  <p>
+    <span class="m">4·a</span>; &nbsp;
+    <span class="m">b<sup>2</sup></span>; &nbsp;
+    <span class="m">2·(a + b)</span>; &nbsp;
+    <span class="m">3·x + 5</span>; &nbsp;
+    <span class="m">4·x − 6</span>
+  </p>
+  <p>Mindegyikben számok, betűk vagy ezek hatványai vannak, amelyeket alapműveletekkel kapcsoltunk össze.</p>
+</section>
+
+<section id="jeloles">
+  <h2>A szorzás jelének elhagyása</h2>
+  <div class="def">
+    Ha nem érthető félre, akkor a szorzás jelét nem kell kitenni az együttható és a betűkifejezés közé (két betűkifejezés közé, zárójelbe írt számok, kifejezések közé stb.).
+  </div>
+  <p>Például:</p>
+  <p>
+    <span class="m">2·a = a·2 = 2a</span>;<br>
+    <span class="m">5·(x − 4) = (x − 4)·5 = 5(x − 4)</span>
+  </p>
+  <p>Ha <b>1</b> az együttható, azt nem szoktuk betű elé leírni. Ha <b>−1</b> az együttható, akkor csak a „−” előjelet írjuk ki.</p>
+  <p>Például:</p>
+  <p>
+    <span class="m">x = 1·x</span>; &nbsp;
+    <span class="m">y<sup>2</sup> = 1·y<sup>2</sup></span>; &nbsp;
+    <span class="m">−a<sup>3</sup> = (−1)·a<sup>3</sup></span>; &nbsp;
+    <span class="m">ab<sup>2</sup> = 1·ab<sup>2</sup></span>
+  </p>
+</section>
+
+<section id="feladatok">
+  <h2>3.02. feladat</h2>
+  <p>Írd fel algebrai kifejezéssel a kérdezett pénzösszeget (forintban)! Kisbetűvel, szóköz nélkül is jó, a szorzás jelét nem kell kitenni. Az összeadás sorrendje tetszőleges (pl. <span class="m">a + 45</span> és <span class="m">45 + a</span> egyaránt helyes).</p>
+  <div id="tasks"></div>
+  <p class="score" id="score" aria-live="polite"></p>
+</section>
+
+<footer>7. osztály · Algebra · órai anyag</footer>
+</main>
+
+<script>
+(function(){
+  // Feladatok: v = változó, exp = helyes kifejezés (JS), show = megjelenített megoldás
+  var TASKS = [
+    {id:"a", v:"a", q:"Albertnek <i>a</i> Ft-ja van, Nórának 45 Ft-tal több. Hány forintja van Nórának?",
+     exp:"a+45", show:"a + 45",
+     hint:"Nórának <b>több</b> pénze van, mint Albertnek, ezért Albert pénzéhez hozzá kell adni 45-öt.",
+     expl:"Albertnek <i>a</i> forintja van. Nórának 45 Ft-tal több, vagyis Albert pénzéhez hozzáadjuk a 45-öt. Nóra pénze: <b>a + 45</b> Ft."},
+    {id:"b", v:"b", q:"Beának 420 Ft-ja van, <i>b</i> Ft-tal több, mint Miklósnak. Hány forintja van Miklósnak?",
+     exp:"420-b", show:"420 − b",
+     hint:"Bea pénze a <b>nagyobb</b>, mert neki van több. Miklós pénzét úgy kapod, hogy Bea pénzéből elveszed a különbséget.",
+     expl:"Bea pénze <i>b</i> forinttal több Miklósénál, tehát Miklósnak <i>b</i> forinttal kevesebb van, mint Beának. Miklós pénze: <b>420 − b</b> Ft."},
+    {id:"c", v:"c", q:"Csabának <i>c</i> Ft-ja van, Lilinek 25 Ft-tal kevesebb. Hány forintja van Lilinek?",
+     exp:"c-25", show:"c − 25",
+     hint:"Lilinek <b>kevesebb</b> pénze van, mint Csabának, ezért Csaba pénzéből el kell venni 25-öt.",
+     expl:"Csabának <i>c</i> forintja van. Lilinek 25 Ft-tal kevesebb, vagyis kivonjuk a 25-öt. Lili pénze: <b>c − 25</b> Ft."},
+    {id:"d", v:"d", q:"Dórának <i>d</i> Ft-ja van, 47 Ft-tal kevesebb, mint Péternek. Hány forintja van Péternek?",
+     exp:"d+47", show:"d + 47",
+     hint:"Dórának van <b>kevesebb</b>, tehát Péternek több van: Dóra pénzéhez hozzá kell adni a különbséget.",
+     expl:"Dóra pénze 47 Ft-tal kevesebb Péterénél, tehát Péternek 47 Ft-tal több van, mint Dórának. Péter pénze: <b>d + 47</b> Ft."}
+  ];
+  var done = {};
+
+  function evalExpr(src, v, val){
+    var s = src.toLowerCase().replace(/[\s\u00a0]/g,"").replace(/[·×⋅]/g,"*").replace(/[−–—]/g,"-").replace(/,/g,".");
+    if(!s) return {err:"empty"};
+    if(!/^[0-9a-z+\-*()\.]+$/.test(s)) return {err:"chars"};
+    var letters = s.match(/[a-z]/g) || [];
+    for(var i=0;i<letters.length;i++){ if(letters[i]!==v) return {err:"letter"}; }
+    // hallgatólagos szorzás: 2a, a(…), )(, )a, 2(
+    s = s.replace(/([0-9\.])([a(])/g,"$1*$2").replace(/(a|b|c|d)([0-9(])/g,"$1*$2").replace(/\)([0-9a(])/g,")*$1");
+    s = s.replace(new RegExp(v,"g"),"("+val+")");
+    try{
+      var r = Function('"use strict";return ('+s+')')();
+      return (typeof r==="number" && isFinite(r)) ? {val:r} : {err:"syntax"};
+    }catch(e){ return {err:"syntax"}; }
+  }
+
+  function equivalent(t, input){
+    var vals=[2,7,13,-5];
+    for(var i=0;i<vals.length;i++){
+      var u = evalExpr(input,t.v,vals[i]);
+      if(u.err) return u;
+      var e = evalExpr(t.exp,t.v,vals[i]);
+      if(Math.abs(u.val-e.val)>1e-9) return {val:false};
+    }
+    return {val:true};
+  }
+
+  var box = document.getElementById("tasks");
+  TASKS.forEach(function(t){
+    var d = document.createElement("div");
+    d.className="task";
+    d.innerHTML =
+      '<p class="q"><span class="lbl">'+t.id+')</span>'+t.q+'</p>'+
+      '<div class="row">'+
+        '<label for="in-'+t.id+'">Megoldás:</label>'+
+        '<input type="text" id="in-'+t.id+'" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text">'+
+        '<button type="button" data-check="'+t.id+'">Ellenőrzés</button>'+
+        '<button type="button" class="ghost" data-show="'+t.id+'">Megoldás magyarázattal</button>'+
+      '</div>'+
+      '<div class="fb" id="fb-'+t.id+'" role="status" aria-live="polite"></div>'+
+      '<div class="expl" id="ex-'+t.id+'"><span class="ans">Megoldás: <span class="m">'+t.show+'</span> Ft</span><br>'+t.expl+'</div>';
+    box.appendChild(d);
+  });
+
+  function setFb(id, cls, html){
+    var f=document.getElementById("fb-"+id);
+    f.className="fb show "+cls; f.innerHTML=html;
+  }
+  function updScore(){
+    var n=Object.keys(done).length;
+    document.getElementById("score").textContent = n ? ("Helyes megoldás: "+n+" / "+TASKS.length) : "";
+  }
+  function check(id){
+    var t = TASKS.filter(function(x){return x.id===id;})[0];
+    var val = document.getElementById("in-"+id).value;
+    var r = equivalent(t,val);
+    if(r.err==="empty") return setFb(id,"no","Írd be a kifejezést, mielőtt ellenőriznél.");
+    if(r.err==="chars") return setFb(id,"no","Csak számokat, a(z) <i>"+t.v+"</i> betűt, műveleti jeleket (+ − ·) és zárójelet használj.");
+    if(r.err==="letter") return setFb(id,"no","A feladatban a változó neve <i>"+t.v+"</i>. Ezt a betűt használd!");
+    if(r.err) return setFb(id,"no","Ezt a kifejezést nem tudtam értelmezni. Ellenőrizd a műveleti jeleket és a zárójeleket.");
+    if(r.val){ done[id]=1; setFb(id,"ok","Helyes! ✔ A megoldás: <span class='m'>"+t.show+"</span>"); updScore(); }
+    else setFb(id,"no","Még nem jó. "+t.hint);
+  }
+
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.check) check(b.dataset.check);
+    if(b.dataset.show){ document.getElementById("ex-"+b.dataset.show).classList.toggle("show"); }
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Enter" && e.target.id && e.target.id.indexOf("in-")===0) check(e.target.id.slice(3));
+  });
+})();
+</script>
+</body>
+</html>

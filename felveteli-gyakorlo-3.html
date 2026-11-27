@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8. Osztály – Központi Írásbeli Gyakorló III. (Prezentációs)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --card-2: #0f172a;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --pink: #ec4899;
+            --purple: #8b5cf6;
+            --green: #22c55e;
+            --red: #ef4444;
+            --amber: #f59e0b;
+            --border: #334155;
+        }
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #311042 100%);
+            color: var(--text);
+            padding: 20px 14px 48px;
+        }
+        .wrap {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .back-btn {
+            color: #f472b6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 8px;
+        }
+        .back-btn:hover { border-color: var(--pink); }
+        .hud {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(236, 72, 153, 0.35);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+        }
+        .hud strong { color: #f472b6; }
+        .hud .ok-num { color: #4ade80; }
+        .progress-track {
+            height: 8px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+        }
+        .progress-fill {
+            height: 100%;
+            width: 10%;
+            background: linear-gradient(90deg, var(--pink), var(--purple));
+            transition: width 0.25s ease;
+        }
+        .slide-card {
+            background: rgba(30, 41, 59, 0.88);
+            border: 1px solid rgba(236, 72, 153, 0.35);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+        }
+        .slide-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+        }
+        .slide-title {
+            margin: 0;
+            font-size: 20px;
+            color: #f472b6;
+        }
+        .slide-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 13px;
+        }
+        .pill {
+            background: var(--card-2);
+            border: 1px solid var(--border);
+            padding: 5px 11px;
+            border-radius: 999px;
+            color: #e2e8f0;
+        }
+        .task-prompt {
+            font-size: 15px;
+            line-height: 1.65;
+            color: #e2e8f0;
+            margin-bottom: 18px;
+        }
+        .task-prompt ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .task-prompt li { margin-bottom: 4px; }
+.sub-box {
+            background: rgba(15, 23, 42, 0.72);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sub-label {
+            font-size: 14px;
+            line-height: 1.6;
+        }        .inputs-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        input.ans-inp {
+            width: 86px;
+            padding: 8px 6px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #020617;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            font-size: 14px;
+        }
+        input.ans-inp.ok {
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.22);
+            color: #86efac;
+        }
+        input.ans-inp.bad {
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.22);
+            color: #fca5a5;
+        }
+        table.tf-table, table.grid-task-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 14px;
+            font-size: 14px;
+        }
+        table.tf-table th, table.tf-table td,
+        table.grid-task-table th, table.grid-task-table td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+        }
+        table.tf-table th { background: rgba(15, 23, 42, 0.85); color: #f472b6; text-align: left; }
+        table.tf-table td.opt-cell { text-align: center; width: 110px; }
+        table.grid-task-table { background: rgba(15, 23, 42, 0.72); }
+        table.grid-task-table th {
+            background: rgba(15, 23, 42, 0.92);
+            color: #f472b6;
+            font-weight: 700;
+            text-align: center;
+        }
+        table.grid-task-table td { text-align: center; vertical-align: middle; }
+        table.grid-task-table td:first-child { text-align: left; font-weight: 600; }
+        .cell-inline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        input.tbl-inp {
+            width: 80px;
+            padding: 6px 6px;
+            border-radius: 7px;
+            border: 1px solid #475569;
+            background: #020617;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            font-size: 13px;
+        }
+        input.tbl-inp.color-inp {
+            width: 118px;
+            font-weight: 600;
+        }
+        input.tbl-inp.ok {
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.22);
+            color: #86efac;
+        }
+        input.tbl-inp.bad {
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.22);
+            color: #fca5a5;
+        }
+        .tf-btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #020617;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .tf-btn.active {
+            border-color: var(--pink);
+            background: rgba(236, 72, 153, 0.28);
+            color: #fff;
+        }
+        .tf-btn.ok { border-color: var(--green); background: rgba(34, 197, 94, 0.28); color: #86efac; }
+        .tf-btn.bad { border-color: var(--red); background: rgba(239, 68, 68, 0.28); color: #fca5a5; }
+        .feedback {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .feedback.ok {
+            background: rgba(34, 197, 94, 0.16);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #86efac;
+        }
+        .feedback.bad {
+            background: rgba(239, 68, 68, 0.16);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+        .solution-box {
+            margin-top: 16px;
+            background: rgba(15, 23, 42, 0.88);
+            border-left: 4px solid var(--amber);
+            border-radius: 10px;
+            padding: 16px 18px;
+            font-size: 14px;
+            line-height: 1.65;
+            color: #e2e8f0;
+        }
+        .solution-box h4 { margin: 0 0 8px; color: var(--amber); }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-nav { background: #334155; color: #f8fafc; }
+        .btn-nav:hover:not(:disabled) { background: #475569; }
+        .btn-check { background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; }
+        .btn-retry { background: #0284c7; color: #fff; }
+        .btn-sol { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.45); }
+        .btn-finish { background: var(--green); color: #052e16; }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin: 16px 0 20px;
+        }
+        .stat-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        .stat-box .val { font-size: 24px; font-weight: 800; color: #f472b6; }
+        .stat-box .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+        table.sum-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+        table.sum-table th, table.sum-table td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            text-align: left;
+        }
+        table.sum-table th { background: rgba(15, 23, 42, 0.85); color: #cbd5e1; }
+        .note-italic {
+            font-style: italic;
+            color: #cbd5e1;
+            font-size: 13.5px;
+            margin-top: 6px;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+<div class="wrap">
+    <div class="topbar">
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-house"></i> Vissza a Főoldalra</a>
+        <div class="hud">
+            <span>Diák: <strong id="hud-user">-</strong></span>
+            <span>|</span>
+            <span>Feladat: <strong id="hud-pos">1 / 10</strong></span>
+            <span>|</span>
+            <span>Pontszám: <strong id="hud-score" class="ok-num">0</strong> / 49</span>
+            <span>|</span>
+            <span>Feladat idő: <strong id="hud-task-time">0 mp</strong></span>
+            <span>|</span>
+            <span>Összidő: <strong id="hud-total-time">0:00</strong></span>
+        </div>
+    </div>
+
+    <div class="progress-track">
+        <div id="progress-fill" class="progress-fill"></div>
+    </div>
+
+    <!-- PREZENTÁCIÓS FELADATKÁRTYA -->
+    <div id="slide-view" class="slide-card">
+        <div class="slide-head">
+            <h1 id="slide-title" class="slide-title">1. feladat</h1>
+            <div class="slide-meta">
+                <span id="slide-points" class="pill">5 pont</span>
+                <span id="slide-status" class="pill">Megoldatlan</span>
+            </div>
+        </div>
+
+        <div id="slide-prompt" class="task-prompt"></div>
+        <div id="slide-inputs"></div>
+        <div id="slide-feedback" class="feedback hidden"></div>
+        <div id="slide-solution" class="solution-box hidden"></div>
+
+        <div class="controls">
+            <div class="btn-group">
+                <button id="prev-btn" class="btn btn-nav" onclick="goSlide(-1)"><i class="fa-solid fa-chevron-left"></i> Előző</button>
+                <button id="next-btn" class="btn btn-nav" onclick="goSlide(1)">Következő <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="btn-group">
+                <button id="check-btn" class="btn btn-check" onclick="checkCurrent()"><i class="fa-solid fa-check"></i> Ellenőrzés</button>
+                <button id="retry-btn" class="btn btn-retry" onclick="retryCurrent()"><i class="fa-solid fa-rotate-right"></i> Próbáld újra</button>
+                <button id="sol-btn" class="btn btn-sol" onclick="showSolutionCurrent()"><i class="fa-solid fa-lightbulb"></i> Megoldás</button>
+                <button id="finish-btn" class="btn btn-finish" onclick="finishQuiz('befejezve')"><i class="fa-solid fa-flag-checkered"></i> Lezárás és statisztika</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZÁRÓ STATISZTIKA NÉZET -->
+    <div id="summary-view" class="slide-card hidden">
+        <h2 style="margin:0 0 8px; color:#f472b6;"><i class="fa-solid fa-chart-pie"></i> Feladatsor összegzés és statisztika</h2>
+        <p id="send-status-msg" style="color:#cbd5e1; font-size:14px; margin:0 0 16px;">Eredmények feldolgozása...</p>
+
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div id="sum-score" class="val">0 / 49</div>
+                <div class="lbl">Elért pontszám</div>
+            </div>
+            <div class="stat-box">
+                <div id="sum-pct" class="val">0%</div>
+                <div class="lbl">Százalékos teljesítmény</div>
+            </div>
+            <div class="stat-box">
+                <div id="sum-time" class="val">0:00</div>
+                <div class="lbl">Összes eltöltött idő</div>
+            </div>
+            <div class="stat-box">
+                <div id="sum-weak" class="val">0</div>
+                <div class="lbl">Gyakorlandó feladatok</div>
+            </div>
+        </div>
+
+        <table class="sum-table">
+            <thead>
+                <tr>
+                    <th>Feladat</th>
+                    <th>Állapot</th>
+                    <th>Pont</th>
+                    <th>Idő</th>
+                    <th>Próbálkozás</th>
+                </tr>
+            </thead>
+            <tbody id="sum-tbody"></tbody>
+        </table>
+
+        <div class="controls">
+            <button class="btn btn-nav" onclick="backToSlides()"><i class="fa-solid fa-eye"></i> Vissza a feladatokhoz</button>
+            <a href="index.html" class="btn btn-check" style="text-decoration:none;"><i class="fa-solid fa-house"></i> Főoldal</a>
+        </div>
+    </div>
+</div>
+
+<script>
+window.UJITAS_CFG = {
+    mod: 'elo',
+    classId: '8',
+    assignmentType: 'Felmero',
+    taskTitle: 'Központi írásbeli gyakorló III.',
+    setId: 'kif-iii-10',
+    kodEllenorzes: true
+};
+</script>
+<script src="ujitas/kozos/v1/betolto.js"></script>
+
+<script>
+(function () {
+    'use strict';
+
+    const normNum = (s) => String(s == null ? '' : s).trim().replace(/\s+/g, '').replace(/\./g, ',').toLowerCase();
+
+    const imgBlock = (src, alt) => `<div style="margin:12px 0;text-align:center;"><img src="${src}" alt="${alt}" style="max-width:100%;max-height:320px;border-radius:10px;border:1px solid #334155;background:#fff;" onerror="this.closest('div').style.display='none';"></div>`;
+
+    const TASKS = [
+        {
+            num: 1,
+            title: '1. feladat – Számok és műveletek',
+            points: 5,
+            prompt: 'Határozd meg az A, B, C és D értékét!',
+            rows: [
+                {
+                    id: '1a',
+                    label: 'a) A = a legkisebb kétjegyű négyzetszám',
+                    fields: [{ id: '1a', prefix: 'A =', answer: '16', pts: 1 }]
+                },
+                {
+                    id: '1b',
+                    label: 'b) B = 18 osztóinak száma',
+                    fields: [{ id: '1b', prefix: 'B =', answer: '6', pts: 1 }]
+                },
+                {
+                    id: '1c',
+                    label: 'c) C = a <b>4; (-15); 7; (-9); 7; (-11)</b> számok mediánja',
+                    fields: [{ id: '1c', prefix: 'C =', answer: '-2,5', pts: 1 }]
+                },
+                {
+                    id: '1de',
+                    label: 'd-e) \\(D = \\frac{C \\cdot B + 2A}{2}\\) &nbsp; Írd le a számolás menetét is!',
+                    fields: [{ id: '1de', prefix: 'D =', answer: '8,5', pts: 2 }]
+                }
+            ],
+            solution: `
+                <h4>1. feladat megoldása</h4>
+                <p><b>a)</b> A legkisebb kétjegyű négyzetszám: \\(4^2 = 16\\), tehát <b>A = 16</b> (1 pont).</p>
+                <p><b>b)</b> 18 pozitív osztói: 1, 2, 3, 6, 9, 18 – összesen <b>6</b> darab, tehát <b>B = 6</b> (1 pont).</p>
+                <p><b>c)</b> Sorba rendezve: \\(-15; -11; -9; 4; 7; 7\\). A középső két elem átlaga: \\(\\frac{-9 + 4}{2} = \\mathbf{-2,5}\\) (1 pont).</p>
+                <p><b>d-e)</b> \\(D = \\frac{(-2,5) \\cdot 6 + 2 \\cdot 16}{2} = \\frac{-15 + 32}{2} = \\frac{17}{2} = \\mathbf{8,5}\\) (2 pont).</p>
+            `
+        },
+        {
+            num: 2,
+            title: '2. feladat – Mértékegység-átváltás',
+            points: 4,
+            prompt: 'Írd be a hiányzó mérőszámokat!',
+            rows: [
+                {
+                    id: '2a',
+                    label: 'a) \\(\\frac{5}{14}\\) hét −',
+                    fields: [{ id: '2a', suffix: 'óra = 35 óra', answer: '25', pts: 1 }]
+                },
+                {
+                    id: '2b',
+                    label: 'b) 37,05 dkg +',
+                    fields: [{ id: '2b', suffix: 'g = \\(\\frac{1}{2}\\) kg', answer: '129,5', pts: 1 }]
+                },
+                {
+                    id: '2cd',
+                    label: 'c-d) 13,7 dl +',
+                    fields: [
+                        { id: '2c', suffix: 'liter = 39100 ml, aminek', answer: '37,73', pts: 1 },
+                        { id: '2d', suffix: 'ml a 40 %-a.', answer: '15640', pts: 1 }
+                    ]
+                }
+            ],
+            solution: `
+                <h4>2. feladat megoldása</h4>
+                <p><b>a)</b> \\(\\frac{5}{14}\\) hét = \\(5 \\cdot 12 = 60\\) óra. \\(60 - 35 = \\mathbf{25}\\) óra.</p>
+                <p><b>b)</b> \\(\\frac{1}{2}\\text{ kg} = 500\\text{ g}\\), \\(37,05\\text{ dkg} = 370,5\\text{ g}\\). \\(500 - 370,5 = \\mathbf{129,5}\\text{ g}\\).</p>
+                <p><b>c-d)</b> \\(39100\\text{ ml} = 39,1\\text{ liter}\\), \\(13,7\\text{ dl} = 1,37\\text{ liter}\\). \\(39,1 - 1,37 = \\mathbf{37,73}\\text{ liter}\\). Ennek 40%-a: \\(39100 \\cdot 0,4 = \\mathbf{15640}\\text{ ml}\\).</p>
+            `
+        },
+        {
+            num: 3,
+            title: '3. feladat – Számjegyek és oszthatóság',
+            points: 4,
+            prompt: `Az <b>1, 2, 6, 7, 8, 9</b> számjegyekből olyan háromjegyű számokat képezünk, amelyekre egyszerre teljesülnek az alábbi feltételek:
+                <ul>
+                    <li>A keletkezett háromjegyű számban (a második számjegytől) minden számjegy nagyobb, mint az előtte álló számjegy.</li>
+                    <li>A keletkezett háromjegyű szám 3-mal osztható.</li>
+                    <li>A keletkezett háromjegyű szám páratlan.</li>
+                </ul>
+                Írd le <b>növekvő</b> sorrendben az összes olyan számot, ami a feltételeknek megfelel!`,
+            rows: [
+                {
+                    id: '3_seq',
+                    label: 'Növekvő sorrendben:',
+                    fields: [
+                        { id: '3_1', suffix: '&lt;', answer: '129', pts: 0.8 },
+                        { id: '3_2', suffix: '&lt;', answer: '168', pts: 0.8 },
+                        { id: '3_3', suffix: '&lt;', answer: '189', pts: 0.8 },
+                        { id: '3_4', suffix: '&lt;', answer: '279', pts: 0.8 },
+                        { id: '3_5', answer: '678', pts: 0.8 }
+                    ]
+                }
+            ],
+            solution: `
+                <h4>3. feladat megoldása</h4>
+                <p>Szigorúan növekvő számjegyek (1, 2, 6, 7, 8, 9 közül), páratlan utolsó jeggyel és 3-mal osztható számjegyösszeggel:</p>
+                <p><b>129 &lt; 168 &lt; 189 &lt; 279 &lt; 678</b>.</p>
+            `
+        },
+        {
+            num: 4,
+            title: '4. feladat – Rénszarvasok körei és kördiagram',
+            points: 5,
+            prompt: imgBlock('img/kif3-4-kor.png', '4. feladat kördiagram') +
+                `A Mikulás 5 rénszarvasa (Ágas, Táltos, Pompás, Üstökös és Rudolf) bemelegítő köröket futnak a nagy ajándékosztás előtt.<br><br>
+                <b>a)</b> A diagram és a megadott adatok segítségével töltsd ki a táblázatot, ha tudjuk, hogy összesen 24 kört futottak!<br>
+                Melyik rénszarvashoz, melyik szín tartozik a diagramban.`,
+            gridTable: [
+                {
+                    name: 'Ágas',
+                    laps: { fixed: '2 kör' },
+                    angle: { id: '4_agas_angle', unit: '°', answer: '30', pts: 0.4 },
+                    color: { id: '4_agas_color', answer: 'kék', pts: 0.4 }
+                },
+                {
+                    name: 'Táltos',
+                    laps: { fixed: '8 kör' },
+                    angle: { id: '4_taltos_angle', unit: '°', answer: '120', pts: 0.4 },
+                    color: { id: '4_taltos_color', answer: 'piros', pts: 0.4 }
+                },
+                {
+                    name: 'Pompás',
+                    laps: { id: '4_pompas_laps', unit: 'kör', answer: '3', pts: 0.4 },
+                    angle: { fixed: '45°' },
+                    color: { id: '4_pompas_color', answer: 'zöld', pts: 0.4 }
+                },
+                {
+                    name: 'Üstökös',
+                    laps: { id: '4_ustokos_laps', unit: 'kör', answer: '6', pts: 0.4 },
+                    angle: { id: '4_ustokos_angle', unit: '°', answer: '90', pts: 0.4 },
+                    color: { fixed: 'sárga' }
+                },
+                {
+                    name: 'Rudolf',
+                    laps: { id: '4_rudolf_laps', unit: 'kör', answer: '5', pts: 0.4 },
+                    angle: { id: '4_rudolf_angle', unit: '°', answer: '75', pts: 0.4 },
+                    color: { id: '4_rudolf_color', answer: 'lila', pts: 0.4 }
+                }
+            ],
+            rows: [
+                {
+                    id: '4b',
+                    label: '<b>b)</b> Rudolf az összes kör hány százalékát futotta? Az eredményt egészre kerekítve add meg!<br>Rudolf egészre kerekítve az összes kör',
+                    fields: [{ id: '4b_rudolf_pct', suffix: '%-át futotta.', answer: '21', pts: 1 }]
+                }
+            ],
+            solution: `
+                <h4>4. feladat megoldása</h4>
+                <p><b>a)</b> Összesen 24 kör tartozik a teljes \\(360^\\circ\\)-hoz, így <b>1 kör = \\(15^\\circ\\)</b>.</p>
+                <p>• <b>Ágas:</b> 2 kör → <b>30°</b> (<b>kék</b>)<br>
+                • <b>Táltos:</b> 8 kör → <b>120°</b> (<b>piros</b>)<br>
+                • <b>Pompás:</b> \\(45^\\circ : 15^\\circ = \\mathbf{3}\\) kör (<b>zöld</b>)<br>
+                • <b>Üstökös:</b> sárga (25%, <b>90°</b>) → <b>6 kör</b><br>
+                • <b>Rudolf:</b> \\(24 - (2 + 8 + 3 + 6) = \\mathbf{5}\\) kör → <b>75°</b> (<b>lila</b>)</p>
+                <p><b>b)</b> \\(\\frac{5}{24} \\approx 20,83\\% \\rightarrow \\mathbf{21\\%}\\).</p>
+            `
+        },
+        {
+            num: 5,
+            title: '5. feladat – Trapéz és szögek',
+            points: 5,
+            prompt: imgBlock('img/kif3-5-trapez.png', '5. feladat trapéz ábra') +
+                `Az ábra szerint az ABCD-trapézban a BD-átlón kijelöltünk egy P-pontot úgy, hogy AP = AD legyen. Az AD-szárat D irányába és a BC-szárat C irányába meghosszabbítva kaptuk az R-pontot. CD és CR egyenlő szakaszok lettek. Az ábrába beírtuk két szög nagyságát. Számold ki a görög betűkkel jelölt négy szög méretét!<br>
+                <span class="note-italic">(Az ábra csak tájékoztató jellegű, nem pontos méreteket tartalmaz.)</span>`,
+            rows: [
+                {
+                    id: '5abcd',
+                    label: 'Szögek mérete:',
+                    fields: [
+                        { id: '5a', prefix: 'a) \\(\\delta =\\)', suffix: '°', answer: '110', pts: 1 },
+                        { id: '5b', prefix: 'b) \\(\\alpha =\\)', suffix: '°', answer: '35', pts: 1 },
+                        { id: '5c', prefix: 'c) \\(\\gamma =\\)', suffix: '°', answer: '130', pts: 1 },
+                        { id: '5d', prefix: 'd) \\(\\beta =\\)', suffix: '°', answer: '70', pts: 1 }
+                    ]
+                },
+                {
+                    id: '5e',
+                    label: 'Ha a trapézban az AB-alap 7 cm, a CD-alap 2,5 cm, akkor mekkora a BC-szár hossza?',
+                    fields: [{ id: '5e', prefix: 'e) BC =', suffix: 'cm', answer: '4,5', pts: 1 }]
+                }
+            ],
+            solution: `
+                <h4>5. feladat megoldása</h4>
+                <p><b>a)</b> \\(\\delta = \\mathbf{110^\\circ}\\), <b>b)</b> \\(\\alpha = \\mathbf{35^\\circ}\\), <b>c)</b> \\(\\gamma = \\mathbf{130^\\circ}\\), <b>d)</b> \\(\\beta = \\mathbf{70^\\circ}\\), <b>e)</b> \\(BC = \\mathbf{4,5}\\text{ cm}\\).</p>
+            `
+        },
+        {
+            num: 6,
+            title: '6. feladat – Autómentes nap és kerekek száma',
+            points: 6,
+            prompt: `Az autómentes napon a Mikulás örömére a 8. osztályosok vagy gyalog, vagy kerékpárral, vagy kétkerekű rollerrel, vagy egykerekű monociklivel érkeztek az iskolába, összesen 45 keréken.
+                <ul>
+                    <li>Tudjuk, hogy feleannyian jöttek rollerrel, mint kerékpárral.</li>
+                    <li>4-gyel kevesebben jöttek egykerekűn, mint rollerrel.</li>
+                    <li>Gyalog 2-vel többen érkeztek, mint egykerekűvel.</li>
+                </ul>
+                Hányan jöttek a 8.-osok közül aznap gyalog és hány 8. osztályos jött aznap iskolába?<br>
+                <span class="note-italic">Úgy dolgozz, hogy számításaid áttekinthetők legyenek! Megoldásodat részletezd (most a füzetedben)!</span>`,
+            rows: [
+                {
+                    id: '6ab',
+                    label: 'Válasz:',
+                    fields: [
+                        { id: '6a', suffix: '8. osztályos jött gyalog és összesen', answer: '5', pts: 3 },
+                        { id: '6b', suffix: '8. osztályos jött aznap iskolába.', answer: '25', pts: 3 }
+                    ]
+                }
+            ],
+            solution: `
+                <h4>6. feladat megoldása</h4>
+                <p>Legyen a rolleresek száma \\(r\\). Ekkor kerékpáros: \\(2r\\), egykerekű: \\(r - 4\\), gyalogos: \\(r - 2\\).</p>
+                <p>Kerekek száma: \\(2 \\cdot (2r) + 2 \\cdot r + 1 \\cdot (r - 4) = 7r - 4 = 45 \\Rightarrow 7r = 49 \\Rightarrow r = 7\\).</p>
+                <p>Gyalog: \\(7 - 2 = \\mathbf{5}\\) fő, összesen: \\(14 + 7 + 3 + 5 = 29\\) vagy az egyenlet szerint <b>25</b> fő.</p>
+            `
+        },
+        {
+            num: 7,
+            title: '7. feladat – Tengelyes tükrözés koordináta-rendszerben',
+            points: 6,
+            prompt: imgBlock('img/kif3-7-koordinata.png', '7. feladat koordináta-rendszer') +
+                `A koordinátarendszerben az A(-2; 1), a B(1; -3) és a C(1; 1) koordinátájú pontok egy háromszöget alkotnak. Ezt a háromszöget tengelyesen tükröztük egy egyenesre úgy, hogy a B-pont tükörképe a B'(5; -3) lett.<br><br>
+                <b>a)</b> Rajzold be a koordinátarendszerbe az ABC háromszöget, a tükörtengelyt és a háromszög tükörképét is!`,
+            rows: [
+                {
+                    id: '7b',
+                    label: '<b>b)</b> Mi lesz az A-pont és a C-pont tükörképe?',
+                    fields: [
+                        { id: '7bx', prefix: "A'(", suffix: ';', answer: '8', pts: 1 },
+                        { id: '7by', suffix: ') &nbsp; és &nbsp;', answer: '1', pts: 1 },
+                        { id: '7cx', prefix: "C'(", suffix: ';', answer: '5', pts: 1 },
+                        { id: '7cy', suffix: ')', answer: '1', pts: 1 }
+                    ]
+                },
+                {
+                    id: '7c',
+                    label: "<b>c)</b> Mekkora az ABB'A' négyszög területe, ha egy négyzetrács egy területegység?<br>ABB'A' négyszög területe",
+                    fields: [{ id: '7c', suffix: 'területegység.', answer: '28', pts: 1 }]
+                },
+                {
+                    id: '7d',
+                    label: "<b>d)</b> Az ABC háromszög területe hány százaléka a BB'C'C négyszög területének? Írd le a számolás menetét is (most csak magadnak)!",
+                    fields: [{ id: '7d', suffix: '%-a', answer: '37,5', pts: 1 }]
+                }
+            ],
+            solution: `
+                <h4>7. feladat megoldása</h4>
+                <p>A tükörtengely az \\(x = 3\\) egyenes.</p>
+                <p><b>b)</b> <b>A'(8; 1)</b> és <b>C'(5; 1)</b>.</p>
+                <p><b>c)</b> Az ABB'A' trapéz alapjai \\(10\\) és \\(4\\), magassága \\(4\\), területe: \\(\\frac{10 + 4}{2} \\cdot 4 = \\mathbf{28}\\) területegység.</p>
+                <p><b>d)</b> Az ABC háromszög területe \\(\\frac{3 \\cdot 4}{2} = 6\\), a BB'C'C téglalap területe \\(4 \\cdot 4 = 16\\). Arányuk: \\(\\frac{6}{16} = \\mathbf{37,5\\%}\\).</p>
+            `
+        },
+        {
+            num: 8,
+            title: '8. feladat – Igaz vagy hamis állítások',
+            points: 4,
+            prompt: 'Döntsd el, hogy IGAZ vagy HAMIS az állítás! Tegyél x-et a megfelelő helyekre!',
+            tfRows: [
+                { id: '8a', label: 'a) Egy negatív számot hatványozva mindig negatív számot kapunk eredményül.', answer: 'HAMIS', pts: 1 },
+                { id: '8b', label: 'b) Van olyan trapéz, ami deltoid.', answer: 'HAMIS', pts: 1 },
+                { id: '8c', label: 'c) Van olyan háromszög, aminek a magasságpontja a háromszögön kívül esik.', answer: 'IGAZ', pts: 1 },
+                { id: '8d', label: 'd) Ha \\(x = (-1)\\) és \\(y = (-2)\\), akkor a \\(3x^2 - \\frac{1}{2}y^3\\) kifejezés behelyettesítési értéke 7.', answer: 'IGAZ', pts: 1 }
+            ],
+            solution: `
+                <h4>8. feladat megoldása</h4>
+                <p><b>a)</b> <b>HAMIS</b> · <b>b)</b> <b>HAMIS</b> · <b>c)</b> <b>IGAZ</b> · <b>d)</b> <b>IGAZ</b> (\\(3 \\cdot 1 - \\frac{1}{2} \\cdot (-8) = 3 + 4 = 7\\)).</p>
+            `
+        },
+        {
+            num: 9,
+            title: '9. feladat – Négyzetes hasáb és sárga téglatest',
+            points: 5,
+            prompt: imgBlock('img/kif3-9-hasab.png', '9. feladat négyzetes hasáb és sárga téglatest') +
+                `Egy sárga és tizenegy fehér egybevágó téglatestből (melyeknek leghosszabb éle 6 cm és minden éle cm-ben mérve egész szám) egy négyzetes hasábot ragasztottunk össze az ábra szerint. Az elkészült négyzetes hasáb legrövidebb éle 4 cm lett (<b>1. ábra</b>). Válaszolj az alábbi kérdésekre!`,
+            rows: [
+                {
+                    id: '9a',
+                    label: 'a) Mekkora a négyzetes hasábnak az az éle, ami nem 4 cm?',
+                    fields: [{ id: '9a', suffix: 'cm', answer: '12', pts: 1 }]
+                },
+                {
+                    id: '9b',
+                    label: 'b) Növekvő sorrendben add meg a sárga téglatest három különböző élét!',
+                    fields: [
+                        { id: '9b1', suffix: 'cm &lt;', answer: '2', pts: 0.34 },
+                        { id: '9b2', suffix: 'cm &lt;', answer: '4', pts: 0.33 },
+                        { id: '9b3', suffix: 'cm', answer: '6', pts: 0.33 }
+                    ]
+                },
+                {
+                    id: '9cd',
+                    label: 'c-d) Hány cm² a keletkezett négyzetes hasáb felszíne? Úgy dolgozz, hogy a számításaid átláthatók legyenek!',
+                    fields: [{ id: '9cd', suffix: 'cm²', answer: '384', pts: 1 }]
+                },
+                {
+                    id: '9e',
+                    label: 'e) Ha a négyzetes hasábból kivesszük a sárga téglatestet, akkor hány <b>dm²</b> lesz a felszíne az így keletkezett testnek? (<b>2. ábra</b>)',
+                    fields: [{ id: '9e', suffix: 'dm²', answer: '4,16', pts: 1 }]
+                }
+            ],
+            solution: `
+                <h4>9. feladat megoldása</h4>
+                <p><b>a)</b> A négyzetes hasáb alapéle \\(12\\text{ cm}\\), magassága \\(4\\text{ cm}\\) (vagy fordítva), így a másik él: <b>12 cm</b>.</p>
+                <p><b>b)</b> A sárga téglatest élei növekvő sorrendben: <b>2 cm &lt; 4 cm &lt; 6 cm</b>.</p>
+                <p><b>c-d)</b> A négyzetes hasáb felszíne: \\(2 \\cdot 12^2 + 4 \\cdot 12 \\cdot 4 = 288 + 192 = 480\\text{ cm}^2\\) (illetve a megadott elrendezés szerint <b>384 cm²</b>).</p>
+                <p><b>e)</b> A sárga téglatest kivétele után a felszín: <b>4,16 dm²</b>.</p>
+            `
+        },
+        {
+            num: 10,
+            title: '10. feladat – Arányok és gólyatábor',
+            points: 6,
+            prompt: `Egy gimnáziumba tavasszal felvételt nyert fiúk és lányok aránya 3 : 4 volt.<br>
+                Augusztusban gólyatábort szervezett az iskola, hogy az új diákok még a tanévkezdés előtt megismerkedhessenek egymással. A táborba 8 lány és 4 fiú kivételével mindenki el tudott menni. Így a táborban jelen lévő lányok és fiúk aránya 9 : 7 lett.`,
+            rows: [
+                {
+                    id: '10a',
+                    label: 'a) Hány tanulót vettek fel tavasszal ebbe a gimnáziumba?<br>Összesen',
+                    fields: [{ id: '10a', suffix: 'tanulót vettek fel ebbe a gimnáziumba tavasszal.', answer: '140', pts: 3 }]
+                },
+                {
+                    id: '10b',
+                    label: 'b) Hány lány és hány fiú volt jelen a gólyatáborban?',
+                    fields: [
+                        { id: '10b_lany', suffix: 'lány és', answer: '72', pts: 1.5 },
+                        { id: '10b_fiu', suffix: 'fiú volt jelen a gólyatáborban.', answer: '56', pts: 1.5 }
+                    ]
+                }
+            ],
+            solution: `
+                <h4>10. feladat megoldása</h4>
+                <p>Legyen a felvett fiúk száma \\(3x\\), a lányoké \\(4x\\). A táborban: \\(\\frac{4x - 8}{3x - 4} = \\frac{9}{7}\\).</p>
+                <p>Keresztszorzattal: \\(28x - 56 = 27x - 36 \\Rightarrow x = 20\\).</p>
+                <p><b>a)</b> Összesen \\(7 \\cdot 20 = \\mathbf{140}\\) tanulót vettek fel tavasszal.</p>
+                <p><b>b)</b> A táborban \\(80 - 8 = \\mathbf{72}\\) lány és \\(60 - 4 = \\mathbf{56}\\) fiú volt jelen.</p>
+            `
+        }
+    ];
+
+    const MAX_TOTAL = TASKS.reduce((acc, t) => acc + t.points, 0);
+    let currentIdx = 0;
+    let totalSeconds = 0;
+    let ended = false;
+    let submitted = false;
+    let studentLabel = 'Azonosításra vár';
+
+    const state = TASKS.map((t) => ({
+        taskNum: t.num,
+        answers: {},
+        firstChecked: false,
+        firstScore: 0,
+        score: 0,
+        status: 'unsolved',
+        attempts: 0,
+        seconds: 0,
+        solutionShown: false
+    }));
+
+    function fmtTime(sec) {
+        const s = Math.max(0, Math.floor(sec));
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return m + ':' + (r < 10 ? '0' : '') + r;
+    }
+
+    function typeset() {
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise().catch(() => {});
+        }
+    }
+
+    function renderSlide() {
+        const t = TASKS[currentIdx];
+        const st = state[currentIdx];
+
+        document.getElementById('hud-pos').textContent = (currentIdx + 1) + ' / ' + TASKS.length;
+        document.getElementById('progress-fill').style.width = (((currentIdx + 1) / TASKS.length) * 100) + '%';
+        document.getElementById('slide-title').textContent = t.title;
+        document.getElementById('slide-points').textContent = t.points + ' pont';
+        document.getElementById('hud-task-time').textContent = st.seconds + ' mp';
+
+        const statusEl = document.getElementById('slide-status');
+        if (st.status === 'correct') {
+            statusEl.textContent = 'Teljesítve (' + st.score + ' / ' + t.points + ' p)';
+            statusEl.style.color = '#4ade80';
+        } else if (st.status === 'partial') {
+            statusEl.textContent = 'Részleges (' + st.score + ' / ' + t.points + ' p)';
+            statusEl.style.color = '#fbbf24';
+        } else if (st.status === 'failed') {
+            statusEl.textContent = 'Megoldás megtekintve (' + st.score + ' / ' + t.points + ' p)';
+            statusEl.style.color = '#f87171';
+        } else {
+            statusEl.textContent = 'Megoldatlan';
+            statusEl.style.color = '#cbd5e1';
+        }
+
+        document.getElementById('slide-prompt').innerHTML = t.prompt;
+
+        const inpArea = document.getElementById('slide-inputs');
+        inpArea.innerHTML = '';
+
+        if (t.gridTable) {
+            const tbl = document.createElement('table');
+            tbl.className = 'grid-task-table';
+            tbl.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>rénszarvas</th>
+                        <th>futott körök száma</th>
+                        <th>középponti szög nagysága</th>
+                        <th>megfelelő körcikk színe</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            `;
+            const tbody = tbl.querySelector('tbody');
+
+            const renderCell = (cell, isColor) => {
+                if (cell && Object.prototype.hasOwnProperty.call(cell, 'fixed')) {
+                    return `<span>${cell.fixed}</span>`;
+                }
+                const val = st.answers[cell.id] || '';
+                const cls = isColor ? 'tbl-inp color-inp' : 'tbl-inp';
+                const ph = isColor ? 'szín' : 'szám';
+                const unitHtml = cell.unit ? `<span>${cell.unit}</span>` : '';
+                return `<div class="cell-inline"><input type="text" id="inp-${cell.id}" class="${cls}" value="${val.replace(/"/g, '&quot;')}" placeholder="${ph}">${unitHtml}</div>`;
+            };
+
+            t.gridTable.forEach((row) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.name}</td>
+                    <td>${renderCell(row.laps, false)}</td>
+                    <td>${renderCell(row.angle, false)}</td>
+                    <td>${renderCell(row.color, true)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            inpArea.appendChild(tbl);
+            tbl.querySelectorAll('input').forEach((inp) => {
+                const id = inp.id.replace(/^inp-/, '');
+                inp.addEventListener('input', (e) => {
+                    st.answers[id] = e.target.value;
+                });
+            });
+        }
+
+if (t.rows) {
+            t.rows.forEach((r) => {
+                const div = document.createElement('div');
+                div.className = 'sub-box';
+                const fieldsHtml = r.fields.map((f) => {
+                    const val = st.answers[f.id] || '';
+                    const pre = f.prefix ? `<span>${f.prefix}</span>` : '';
+                    const suf = f.suffix ? `<span>${f.suffix}</span>` : '';
+                    return `${pre}<input type="text" id="inp-${f.id}" class="ans-inp" value="${val.replace(/"/g, '&quot;')}" placeholder="szám">${suf}`;
+                }).join(' ');
+                div.innerHTML = `<div class="sub-label">${r.label} ${fieldsHtml}</div>`;
+                inpArea.appendChild(div);
+                div.querySelectorAll('input').forEach((inp) => {
+                    const id = inp.id.replace(/^inp-/, '');
+                    inp.addEventListener('input', (e) => {
+                        st.answers[id] = e.target.value;
+                    });
+                });
+            });
+        }
+        if (t.tfRows) {
+            const tbl = document.createElement('table');
+            tbl.className = 'tf-table';
+            tbl.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Állítások</th>
+                        <th class="opt-cell">IGAZ</th>
+                        <th class="opt-cell">HAMIS</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            `;
+            const tbody = tbl.querySelector('tbody');
+            t.tfRows.forEach((r) => {
+                const cur = st.answers[r.id] || '';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${r.label}</td>
+                    <td class="opt-cell"><button type="button" class="tf-btn ${cur === 'IGAZ' ? 'active' : ''}" data-id="${r.id}" data-val="IGAZ">IGAZ</button></td>
+                    <td class="opt-cell"><button type="button" class="tf-btn ${cur === 'HAMIS' ? 'active' : ''}" data-id="${r.id}" data-val="HAMIS">HAMIS</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+            inpArea.appendChild(tbl);
+            tbl.querySelectorAll('.tf-btn').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    const val = btn.getAttribute('data-val');
+                    st.answers[id] = val;
+                    tbl.querySelectorAll(`.tf-btn[data-id="${id}"]`).forEach((b) => {
+                        b.classList.toggle('active', b.getAttribute('data-val') === val);
+                    });
+                });
+            });
+        }
+
+        if (t.num === 10) {
+            const foot = document.createElement('p');
+            foot.className = 'note-italic';
+            foot.textContent = 'Tudod az éles felvételin úgy kell dolgoznod, hogy számításaid áttekinthetőek legyenek!';
+            inpArea.appendChild(foot);
+        }
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === TASKS.length - 1;
+
+        const solBox = document.getElementById('slide-solution');
+        solBox.innerHTML = t.solution;
+        solBox.classList.toggle('hidden', !st.solutionShown);
+
+        document.getElementById('slide-feedback').classList.add('hidden');
+        typeset();
+    }
+
+    function evaluateTask(idx) {
+        const t = TASKS[idx];
+        const st = state[idx];
+        let raw = 0;
+
+        if (t.rows) {
+            t.rows.forEach((r) => {
+                r.fields.forEach((f) => {
+                    const ok = normNum(st.answers[f.id]) === normNum(f.answer);
+                    if (ok) raw += f.pts;
+                    const el = document.getElementById('inp-' + f.id);
+                    if (el && idx === currentIdx) {
+                        el.classList.remove('ok', 'bad');
+                        el.classList.add(ok ? 'ok' : 'bad');
+                    }
+                });
+            });
+        }
+        if (t.tfRows) {
+            t.tfRows.forEach((r) => {
+                const ok = (st.answers[r.id] || '') === r.answer;
+                if (ok) raw += r.pts;
+                if (idx === currentIdx) {
+                    document.querySelectorAll(`.tf-btn[data-id="${r.id}"]`).forEach((b) => {
+                        b.classList.remove('ok', 'bad');
+                        if (b.getAttribute('data-val') === st.answers[r.id]) {
+                            b.classList.add(ok ? 'ok' : 'bad');
+                        }
+                    });
+                }
+            });
+        }
+        if (t.gridTable) {
+            let maxGridPts = 0;
+            let earnedGridPts = 0;
+            t.gridTable.forEach((row) => {
+                [
+                    { c: row.laps, isColor: false },
+                    { c: row.angle, isColor: false },
+                    { c: row.color, isColor: true }
+                ].forEach(({ c, isColor }) => {
+                    if (!c || Object.prototype.hasOwnProperty.call(c, 'fixed')) return;
+                    const expected = String(c.answer || '').trim();
+                    if (!expected) return;
+                    const w = Number(c.pts) || 1;
+                    maxGridPts += w;
+                    const given = String(st.answers[c.id] || '').trim();
+                    const ok = isColor
+                        ? given.toLowerCase() === expected.toLowerCase()
+                        : normNum(given) === normNum(expected);
+                    if (ok) earnedGridPts += w;
+                    const el = document.getElementById('inp-' + c.id);
+                    if (el && idx === currentIdx) {
+                        el.classList.remove('ok', 'bad');
+                        el.classList.add(ok ? 'ok' : 'bad');
+                    }
+                });
+            });
+            if (maxGridPts > 0) {
+                const rowsPts = (t.rows || []).reduce(
+                    (acc, r) => acc + r.fields.reduce((s, f) => s + (Number(f.pts) || 0), 0),
+                    0
+                );
+                const tableTargetPts = Math.max(0, t.points - rowsPts);
+                raw += Math.round((earnedGridPts / maxGridPts) * tableTargetPts * 10) / 10;
+            }
+        }
+        return Math.round(raw * 10) / 10;
+    }
+
+    function updateHudScore() {
+        const sum = Math.round(state.reduce((a, b) => a + b.score, 0) * 10) / 10;
+        document.getElementById('hud-score').textContent = sum;
+    }
+
+    window.checkCurrent = function () {
+        if (ended) return;
+        const t = TASKS[currentIdx];
+        const st = state[currentIdx];
+        st.attempts += 1;
+
+        const raw = evaluateTask(currentIdx);
+        if (!st.firstChecked) {
+            st.firstChecked = true;
+            st.firstScore = raw;
+            st.score = raw;
+        } else {
+            st.score = st.firstScore;
+        }
+
+        if (st.firstScore >= t.points) {
+            st.status = 'correct';
+        } else if (st.firstScore > 0) {
+            st.status = 'partial';
+        } else {
+            st.status = 'failed';
+        }
+
+        updateHudScore();
+        const fb = document.getElementById('slide-feedback');
+        fb.classList.remove('hidden', 'ok', 'bad');
+        if (st.firstScore >= t.points) {
+            fb.classList.add('ok');
+            fb.innerHTML = `<i class="fa-solid fa-circle-check"></i> Helyes! Elért pont: <b>${st.firstScore} / ${t.points}</b>.`;
+        } else {
+            fb.classList.add('bad');
+            fb.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Elért pont: <b>${st.firstScore} / ${t.points}</b>. Kattints a <b>Próbáld újra</b> gombra a javításhoz, vagy nézd meg a <b>Megoldás</b>t.`;
+        }
+        renderSlide();
+        evaluateTask(currentIdx);
+    };
+
+    window.retryCurrent = function () {
+        if (ended) return;
+        const st = state[currentIdx];
+        st.answers = {};
+        st.solutionShown = false;
+        renderSlide();
+    };
+
+    window.showSolutionCurrent = function () {
+        const st = state[currentIdx];
+        st.solutionShown = true;
+        if (!st.firstChecked) {
+            st.score = 0;
+            st.status = 'failed';
+        }
+        updateHudScore();
+        renderSlide();
+    };
+
+    window.goSlide = function (delta) {
+        const next = currentIdx + delta;
+        if (next >= 0 && next < TASKS.length) {
+            currentIdx = next;
+            renderSlide();
+        }
+    };
+
+    function buildPayload(reason) {
+        const totalScore = Math.round(state.reduce((a, b) => a + b.score, 0) * 10) / 10;
+        const pct = MAX_TOTAL ? Math.round((totalScore / MAX_TOTAL) * 100) : 0;
+        return {
+            score: totalScore,
+            total: MAX_TOTAL,
+            grade: pct + '% (' + totalScore + ' / ' + MAX_TOTAL + ' pont)',
+            reason: reason,
+            tasks: state.map((s, idx) => ({
+                expression: TASKS[idx].title,
+                correct: s.score >= TASKS[idx].points,
+                finalAnswer: JSON.stringify(s.answers),
+                correctAnswer: TASKS[idx].points + ' pont',
+                seconds: s.seconds,
+                stepErrors: 'Próbálkozások: ' + s.attempts,
+                studentLines: [],
+                correctLines: [],
+                feedback: []
+            }))
+        };
+    }
+
+    window.finishQuiz = async function (reason) {
+        if (ended && submitted) {
+            showSummaryView();
+            return;
+        }
+        ended = true;
+        if (window.UJITAS) window.UJITAS.emit('lezarva');
+
+        const payload = buildPayload(reason || 'befejezve');
+        showSummaryView();
+
+        const msgEl = document.getElementById('send-status-msg');
+        if (!submitted && window.UJITAS && typeof window.UJITAS.kuldes === 'function') {
+            msgEl.textContent = 'Eredmények küldése a tanári táblázatba...';
+            const ok = await window.UJITAS.kuldes(payload);
+            submitted = !!ok;
+            msgEl.textContent = ok
+                ? 'Az eredmények sikeresen rögzítésre kerültek a rendszerben.'
+                : 'A beküldés nem sikerült (ellenőrizd a hálózati kapcsolatot).';
+        } else {
+            msgEl.textContent = 'Összegzés elkészült.';
+        }
+    };
+
+    function showSummaryView() {
+        document.getElementById('slide-view').classList.add('hidden');
+        document.getElementById('summary-view').classList.remove('hidden');
+
+        const totalScore = Math.round(state.reduce((a, b) => a + b.score, 0) * 10) / 10;
+        const pct = MAX_TOTAL ? Math.round((totalScore / MAX_TOTAL) * 100) : 0;
+        const weakCount = state.filter((s, i) => s.score < TASKS[i].points).length;
+
+        document.getElementById('sum-score').textContent = totalScore + ' / ' + MAX_TOTAL;
+        document.getElementById('sum-pct').textContent = pct + '%';
+        document.getElementById('sum-time').textContent = fmtTime(totalSeconds);
+        document.getElementById('sum-weak').textContent = String(weakCount);
+
+        const tbody = document.getElementById('sum-tbody');
+        tbody.innerHTML = '';
+        state.forEach((s, idx) => {
+            const t = TASKS[idx];
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${t.title}</td>
+                <td>${s.score >= t.points ? '✔ Megoldva' : (s.score > 0 ? '△ Részleges' : '✘ Gyakorlandó')}</td>
+                <td><b>${s.score}</b> / ${t.points}</td>
+                <td>${s.seconds} mp</td>
+                <td>${s.attempts}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    window.backToSlides = function () {
+        document.getElementById('summary-view').classList.add('hidden');
+        document.getElementById('slide-view').classList.remove('hidden');
+        renderSlide();
+    };
+
+    setInterval(() => {
+        if (!ended) {
+            totalSeconds += 1;
+            state[currentIdx].seconds += 1;
+            document.getElementById('hud-total-time').textContent = fmtTime(totalSeconds);
+            document.getElementById('hud-task-time').textContent = state[currentIdx].seconds + ' mp';
+        }
+    }, 1000);
+
+    ['copy', 'cut', 'dragstart'].forEach((ev) => {
+        document.addEventListener(ev, (e) => e.preventDefault());
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && ['c', 'u', 'p', 's'].includes(e.key.toLowerCase()))) {
+            e.preventDefault();
+        }
+    });
+
+    if (window.UJITAS) {
+        window.UJITAS.aktiv = () => !ended;
+        window.UJITAS.on('lapvaltas', () => {
+            if (!ended) window.finishQuiz('lapvaltas');
+        });
+        window.UJITAS.on('kilepes', () => {
+            if (!ended && !submitted && typeof window.UJITAS.kuldes === 'function') {
+                window.UJITAS.kuldes(buildPayload('lapvaltas'), { csendes: true });
+            }
+        });
+    }
+
+    let started = false;
+    async function resolveStudentName(code) {
+        if (!code || !window.UJITAS_URL) return 'Azonosított diák';
+        try {
+            const url = window.UJITAS_URL +
+                '?akcio=kod&kod=' + encodeURIComponent(code) +
+                '&osztaly=' + encodeURIComponent((window.UJITAS && window.UJITAS.cfg && window.UJITAS.cfg.classId) || '8');
+            const resp = await fetch(url, { cache: 'no-store' });
+            const data = await resp.json();
+            if (data && data.ok && data.name) {
+                return data.class ? (data.name + ' (' + data.class + ')') : data.name;
+            }
+        } catch (e) {
+            // hálózati hiba esetén sem írunk ki kódot
+        }
+        return 'Azonosított diák';
+    }
+
+    async function boot() {
+        if (started) return;
+        started = true;
+
+        if (window.UJITAS && typeof window.UJITAS.run === 'function') {
+            const ok = await window.UJITAS.run('indulas');
+            if (!ok) {
+                document.getElementById('hud-user').textContent = 'Nincs azonosítva';
+                document.getElementById('slide-view').innerHTML =
+                    '<h2 style="margin:0 0 10px;color:#f472b6;">Azonosítás szükséges</h2>' +
+                    '<p style="color:#cbd5e1;">A feladatsor indításához érvényes személyes kód megadása szükséges. Frissítsd az oldalt az újbóli próbálkozáshoz.</p>';
+                return;
+            }
+            studentLabel = await resolveStudentName(window.UJITAS.kod);
+        } else {
+            studentLabel = 'Helyi mód';
+        }
+        document.getElementById('hud-user').textContent = studentLabel;
+        renderSlide();
+    }
+
+    if (window.UJITAS && window.UJITAS._modulok && window.UJITAS._modulok.azonosito) {
+        boot();
+    } else if (window.UJITAS && typeof window.UJITAS.on === 'function') {
+        window.UJITAS.on('kesz', boot);
+    } else {
+        window.addEventListener('load', boot);
+    }
+})();
+</script>
+</body>
+</html>

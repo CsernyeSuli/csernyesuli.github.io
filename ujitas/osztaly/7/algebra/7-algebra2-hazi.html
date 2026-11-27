@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALGEBRA - behelyettesítési érték</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --surface: #0f172a;
+      --surface-2: #1e293b;
+      --border: #334155;
+      --border-strong: #475569;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --emerald: #34d399;
+      --sky: #38bdf8;
+      --amber: #fbbf24;
+      --red: #f87171;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding-top: 76px;
+      padding-bottom: 56px;
+      background: radial-gradient(circle at top, #0f172a 0%, var(--bg) 65%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Rögzített fejléc */
+    header.top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      background: rgba(2, 6, 23, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    header.top-bar h1 {
+      margin: 0;
+      font-size: clamp(1rem, 2.4vw, 1.3rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: var(--emerald);
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--surface-2);
+      color: #e2e8f0;
+      text-decoration: none;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .btn-back:hover {
+      background: #0284c7;
+      border-color: var(--sky);
+      color: #ffffff;
+    }
+
+    /* Tartalmi sáv – nem tölti ki a teljes szélességet, reszponzív */
+    .container {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 14px 16px 24px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--emerald);
+    }
+
+    .card h3 {
+      margin: 18px 0 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .definition-box {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 4px solid var(--sky);
+      border-radius: 0 12px 12px 0;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      color: #e2e8f0;
+    }
+
+    .rule-box {
+      background: rgba(2, 6, 23, 0.75);
+      border: 1px solid rgba(251, 191, 36, 0.45);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+
+    .rule-box-title {
+      color: var(--amber);
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .rule-box ol {
+      margin: 0;
+      padding-left: 20px;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .policy-box {
+      background: rgba(2, 6, 23, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 14px 0 18px;
+      text-align: left;
+    }
+
+    .policy-box h3 {
+      margin: 0 0 8px;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      color: #fcd34d;
+    }
+
+    .policy-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #cbd5e1;
+      font-size: 0.88rem;
+    }
+
+    .policy-box li + li {
+      margin-top: 5px;
+    }
+
+    /* Törtek és matematikai kifejezések */
+    .math {
+      font-family: "Cambria Math", "Times New Roman", Georgia, serif;
+      font-size: 1.15rem;
+    }
+
+    .frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 3px;
+      font-size: 0.92em;
+      line-height: 1.15;
+    }
+
+    .frac > span:first-child {
+      border-bottom: 1.5px solid currentColor;
+      padding: 0 4px 2px;
+    }
+
+    .frac > span:last-child {
+      padding: 2px 4px 0;
+    }
+
+    .example-box {
+      background: rgba(2, 6, 23, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+
+    .example-sub + .example-sub {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.25);
+    }
+
+    .example-line {
+      margin-top: 6px;
+      padding-left: 12px;
+      border-left: 2px solid var(--border-strong);
+      color: #cbd5e1;
+      overflow-x: auto;
+    }
+
+    .res-ok {
+      color: var(--emerald);
+      font-weight: 700;
+    }
+
+    /* Indítási blokk */
+    .start-card {
+      text-align: center;
+    }
+
+    .btn-emerald {
+      border: 0;
+      border-radius: 12px;
+      background: var(--emerald);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 11px 22px;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(52, 211, 153, 0.4);
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-emerald:hover:not(:disabled) {
+      background: #6ee7b7;
+    }
+
+    .btn-emerald:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn-emerald:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Feladatok */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .task-item.solved {
+      border-color: rgba(52, 211, 153, 0.75);
+      background: rgba(6, 78, 59, 0.22);
+    }
+
+    .task-prompt {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      flex: 1 1 250px;
+    }
+
+    .task-label {
+      font-weight: 800;
+      color: var(--sky);
+      min-width: 22px;
+    }
+
+    .task-param {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+      margin-left: 6px;
+    }
+
+    .task-input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ans-field {
+      width: 116px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 1.02rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .ans-field:focus {
+      border-color: var(--emerald);
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
+    }
+
+    .ans-field:disabled {
+      opacity: 0.7;
+    }
+
+    .btn-check {
+      padding: 9px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--sky);
+      background: rgba(14, 165, 233, 0.14);
+      color: #7dd3fc;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-check:hover:not(:disabled) {
+      background: #0ea5e9;
+      color: #ffffff;
+    }
+
+    .btn-check:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .task-msg {
+      width: 100%;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .task-msg.ok {
+      display: block;
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      color: #6ee7b7;
+    }
+
+    .task-msg.err {
+      display: block;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(248, 113, 113, 0.45);
+      color: #fca5a5;
+    }
+
+    .footer-submit {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .progress-text {
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .submit-status {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(2, 6, 23, 0.85);
+      border: 1px solid var(--sky);
+      display: none;
+    }
+
+    /* Érintőképernyős számbillentyűzet (tortek.js mintájára) */
+    #algPad {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 25;
+      padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+      background: rgba(2, 6, 23, 0.97);
+      border-top: 1px solid var(--border-strong);
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    #algPad.hidden {
+      display: none;
+    }
+
+    .alg-padgrid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .alg-key {
+      height: 44px;
+      padding: 0;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      font: 600 19px/1 system-ui, sans-serif;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .alg-key.txt {
+      font-size: 13px;
+    }
+
+    .alg-key.sym {
+      background: #0b1220;
+      color: #7dd3fc;
+    }
+
+    .alg-key.act {
+      background: #0f766e;
+      color: #ecfeff;
+    }
+
+    .alg-key:active {
+      background: #334155;
+    }
+
+    .alg-key[disabled] {
+      opacity: 0.3;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 16px;
+      }
+      .task-input-group {
+        width: 100%;
+      }
+      .ans-field {
+        flex: 1;
+      }
+      .alg-padgrid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <h1>ALGEBRA - behelyettesítési érték</h1>
+    <a href="../index.html" class="btn-back">⬅ Vissza az osztályhoz</a>
+  </header>
+
+  <main class="container">
+
+    <!-- TANANYAG-KIVONAT ÉS PÉLDÁK -->
+    <section class="card">
+      <h2>📘 Algebrai kifejezések helyettesítési értékének meghatározása</h2>
+      <div class="definition-box">
+        A betűk (változók) helyére az alaphalmazból különböző elemeket írhatunk, amelyekkel a kijelölt műveleteket elvégezve megkapjuk az algebrai kifejezés <strong>helyettesítési értékét</strong>.
+      </div>
+
+      <h3>1. példa</h3>
+      <p>Határozzuk meg a <span class="math">4<i>x</i></span> kifejezés helyettesítési értékét, ha:</p>
+      <div class="example-box">
+        <div class="example-sub">
+          <div><strong>a)</strong> <span class="math"><i>x</i> = 2</span></div>
+          <div class="example-line math">
+            <i>x</i> = 2 esetén: 4<i>x</i> = 4 &middot; <i>x</i> = 4 &middot; 2 = <span class="res-ok">8</span>
+          </div>
+        </div>
+        <div class="example-sub">
+          <div><strong>b)</strong> <span class="math"><i>x</i> = &minus;3</span></div>
+          <div class="example-line math">
+            <i>x</i> = &minus;3 esetén: 4<i>x</i> = 4 &middot; <i>x</i> = 4 &middot; (&minus;3) = <span class="res-ok">&minus;12</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>2. példa</h3>
+      <p>Határozzuk meg a kifejezések helyettesítési értékét, ha <span class="math"><i>a</i> = 5</span> és <span class="math"><i>b</i> = &minus;2</span>.</p>
+
+      <div class="rule-box">
+        <span class="rule-box-title">⚠️ A műveletek elvégzésének sorrendje, ha nincs zárójel:</span>
+        <ol>
+          <li>hatványozás</li>
+          <li>szorzás, osztás</li>
+          <li>összeadás, kivonás</li>
+        </ol>
+      </div>
+
+      <div class="example-box">
+        <div class="example-sub">
+          <div><strong>a)</strong> <span class="math">0,5<i>a</i> &minus; 2<i>b</i><sup>2</sup></span></div>
+          <div class="example-line math">
+            0,5 &middot; <i>a</i> &minus; 2 &middot; <i>b</i><sup>2</sup> = 0,5 &middot; 5 &minus; 2 &middot; (&minus;2)<sup>2</sup> = 2,5 &minus; 2 &middot; 4 = 2,5 &minus; 8 = <span class="res-ok">&minus;5,5</span>
+          </div>
+        </div>
+        <div class="example-sub">
+          <div><strong>b)</strong> <span class="math">0,5<i>a</i> &minus; (2<i>b</i>)<sup>2</sup></span></div>
+          <div class="example-line math">
+            0,5 &middot; <i>a</i> &minus; (2 &middot; <i>b</i>)<sup>2</sup> = 0,5 &middot; 5 &minus; [2 &middot; (&minus;2)]<sup>2</sup> = 2,5 &minus; (&minus;4)<sup>2</sup> = 2,5 &minus; 16 = <span class="res-ok">&minus;13,5</span>
+          </div>
+        </div>
+        <div class="example-sub">
+          <div><strong>c)</strong> <span class="math">0,5<i>a</i> + (&minus;2<i>b</i>)<sup>2</sup></span></div>
+          <div class="example-line math">
+            0,5 &middot; <i>a</i> + (&minus;2 &middot; <i>b</i>)<sup>2</sup> = 0,5 &middot; 5 + [&minus;2 &middot; (&minus;2)]<sup>2</sup> = 2,5 + 4<sup>2</sup> = 2,5 + 16 = <span class="res-ok">18,5</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDÍTÓ BLOKK -->
+    <section class="card start-card" id="start-section">
+      <h2>✏️ 3.09. Feladatok indítása</h2>
+      <p style="color: #cbd5e1; margin-top: 0;">A feladatok megnyitásához add meg a személyes kódodat. A feladatok közben többször is próbálkozhatsz az ellenőrzéssel, a helyes megoldást a rendszer nem mutatja meg.</p>
+
+      <div class="policy-box">
+        <h3>FONTOS SZABÁLYOK ÉS FIGYELMEZTETÉSEK:</h3>
+        <ul>
+          <li>A beküldéskor az eredményed automatikusan elküldésre kerül a tanárodnak.</li>
+          <li>Többszöri beküldés esetén a legkorábban beérkezett megoldás az érvényes, a későbbi gyakorlásnak számít.</li>
+          <li>Ha a feladatok közben elhagyod az oldalt (másik lapra váltasz), a feladatsor lezárul és az addigi eredmények kerülnek elküldésre.</li>
+          <li>A személyes kódod csak a tiéd: ne add oda másnak!</li>
+        </ul>
+      </div>
+
+      <button type="button" class="btn-emerald" id="btn-start">Feladatok megnyitása</button>
+    </section>
+
+    <!-- FELADATSOR -->
+    <section class="card" id="tasks-section" hidden>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+        <h2 style="margin: 0; border: 0; padding: 0;">📝 3.09. Határozd meg a kifejezések helyettesítési értékét!</h2>
+        <button type="button" id="kb-toggle" hidden style="padding: 6px 12px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer;"></button>
+      </div>
+      <hr style="border: 0; border-top: 1px solid var(--border); margin: 10px 0 14px;">
+      <p style="color: var(--text-muted); margin-top: 0; font-size: 0.94rem;">
+        Írd be a számított értéket (tizedesvesszővel, tizedesponttal vagy törtként, pl. <code>6,5</code>, <code>5/3</code> vagy <code>1 2/3</code>), majd kattints az <strong>Ellenőrzés</strong> gombra!
+      </p>
+
+      <div class="task-list" id="task-list"></div>
+
+      <div class="footer-submit">
+        <div class="progress-text" id="progress-text">Helyes megoldások: 0 / 7</div>
+        <button type="button" class="btn-emerald" id="btn-submit">Házi feladat beküldése</button>
+      </div>
+
+      <div class="submit-status" id="submit-status" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <div id="algPad" class="hidden" role="group" aria-label="Számbillentyűzet">
+    <div id="algPadGrid" class="alg-padgrid"></div>
+  </div>
+
+  <!-- UJITAS KERETRENDSZER -->
+  <script>
+    window.UJITAS_CFG = {
+      mod: 'elo',
+      classId: '7',
+      assignmentType: 'Hazi',
+      taskTitle: 'ALGEBRA - behelyettesítési érték',
+      setId: 'algebra-2'
+    };
+  </script>
+  <script src="../../../kozos/v1/betolto.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const TASKS = [
+        {
+          id: 'a',
+          exprHtml: '<i>a</i> + 2,5',
+          paramHtml: 'ha <i>a</i> = 4',
+          exprPlain: 'a + 2,5 (ha a = 4)',
+          expected: 6.5,
+          correctText: '6,5'
+        },
+        {
+          id: 'b',
+          exprHtml: '<span class="frac"><span>3</span><span>4</span></span><i>x</i> + <span class="frac"><span>1</span><span>2</span></span>',
+          paramHtml: 'ha <i>x</i> = 2',
+          exprPlain: '(3/4)x + 1/2 (ha x = 2)',
+          expected: 2,
+          correctText: '2'
+        },
+        {
+          id: 'c',
+          exprHtml: '<span class="frac"><span>2<i>y</i> &minus; 1</span><span>3</span></span>',
+          paramHtml: 'ha <i>y</i> = 3',
+          exprPlain: '(2y - 1) / 3 (ha y = 3)',
+          expected: 5 / 3,
+          correctText: '5/3 (1 2/3)'
+        },
+        {
+          id: 'd',
+          exprHtml: '2(<i>x</i> &minus; 3,5)',
+          paramHtml: 'ha <i>x</i> = 0,5',
+          exprPlain: '2(x - 3,5) (ha x = 0,5)',
+          expected: -6,
+          correctText: '-6'
+        },
+        {
+          id: 'e',
+          exprHtml: '(<i>b</i> + 3,6) &middot; <span class="frac"><span>1</span><span>2</span></span>',
+          paramHtml: 'ha <i>b</i> = &minus;1',
+          exprPlain: '(b + 3,6) * 1/2 (ha b = -1)',
+          expected: 1.3,
+          correctText: '1,3'
+        },
+        {
+          id: 'f',
+          exprHtml: '&minus;<span class="frac"><span>2<i>c</i> + 3,5</span><span>4</span></span>',
+          paramHtml: 'ha <i>c</i> = 1',
+          exprPlain: '-(2c + 3,5) / 4 (ha c = 1)',
+          expected: -1.375,
+          correctText: '-1,375 (-11/8)'
+        },
+        {
+          id: 'g',
+          exprHtml: '<span class="frac"><span><i>d</i> &middot; (&minus;2) + 1</span><span>3</span></span>',
+          paramHtml: 'ha <i>d</i> = &minus;2',
+          exprPlain: '(d * (-2) + 1) / 3 (ha d = -2)',
+          expected: 5 / 3,
+          correctText: '5/3 (1 2/3)'
+        }
+      ];
+
+      const state = {
+        active: false,
+        ended: false,
+        lastFocusedInput: null,
+        items: TASKS.map(t => ({
+          task: t,
+          solved: false,
+          attempts: 0,
+          history: [],
+          lastCheckAt: 0,
+          seconds: 0
+        }))
+      };
+
+      function parseNumberValue(raw) {
+        if (!raw) return NaN;
+        const normalized = String(raw)
+          .trim()
+          .replace(/[\u2212\u2013\u2014]/g, '-')
+          .replace(/\s+/g, ' ')
+          .replace(/,/g, '.');
+
+        // Vegyes szám: pl. "1 2/3" vagy "-1 2/3"
+        const mixed = /^([+-]?\d+)\s+(\d+)\/(\d+)$/.exec(normalized);
+        if (mixed) {
+          const whole = parseInt(mixed[1], 10);
+          const num = parseInt(mixed[2], 10);
+          const den = parseInt(mixed[3], 10);
+          if (den === 0) return NaN;
+          const sign = whole < 0 || normalized.startsWith('-') ? -1 : 1;
+          return sign * (Math.abs(whole) + num / den);
+        }
+
+        const compact = normalized.replace(/\s+/g, '');
+        // Tört: pl. "5/3" vagy "-11/8"
+        const frac = /^([+-]?\d+(?:\.\d+)?)\/([+-]?\d+(?:\.\d+)?)$/.exec(compact);
+        if (frac) {
+          const num = parseFloat(frac[1]);
+          const den = parseFloat(frac[2]);
+          if (den === 0) return NaN;
+          return num / den;
+        }
+
+        // Egész vagy tizedes szám
+        if (/^[+-]?\d+(?:\.\d+)?$/.test(compact)) {
+          return parseFloat(compact);
+        }
+
+        return NaN;
+      }
+
+      function renderTaskRows() {
+        const list = document.getElementById('task-list');
+        list.innerHTML = '';
+
+        state.items.forEach((item, idx) => {
+          const el = document.createElement('div');
+          el.className = 'task-item';
+          el.id = 'task-item-' + idx;
+          el.innerHTML = `
+            <div class="task-prompt">
+              <span class="task-label">${item.task.id})</span>
+              <span class="math">${item.task.exprHtml}</span>
+              <span class="task-param math">${item.task.paramHtml}</span>
+            </div>
+            <div class="task-input-group">
+              <input type="text" class="ans-field" id="ans-${idx}" inputmode="${padOn ? 'none' : 'decimal'}"
+                     autocomplete="off" spellcheck="false" placeholder="= ?" aria-label="${item.task.id} feladat értéke">
+              <button type="button" class="btn-check" id="chk-${idx}">Ellenőrzés</button>
+            </div>
+            <div class="task-msg" id="msg-${idx}" aria-live="polite"></div>
+          `;
+          list.appendChild(el);
+
+          const inp = el.querySelector('#ans-' + idx);
+          const btn = el.querySelector('#chk-' + idx);
+
+          inp.addEventListener('focusin', () => {
+            state.lastFocusedInput = inp;
+          });
+          inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !inp.disabled) {
+              e.preventDefault();
+              verifyTask(idx);
+            }
+          });
+          btn.addEventListener('click', () => verifyTask(idx));
+        });
+      }
+
+      function verifyTask(idx) {
+        if (state.ended) return;
+        const item = state.items[idx];
+        if (item.solved) return;
+
+        const inp = document.getElementById('ans-' + idx);
+        const btn = document.getElementById('chk-' + idx);
+        const msg = document.getElementById('msg-' + idx);
+        const row = document.getElementById('task-item-' + idx);
+
+        const raw = inp.value.trim();
+        if (!raw) {
+          msg.className = 'task-msg err';
+          msg.textContent = 'Írj be egy számértéket az ellenőrzéshez!';
+          inp.focus();
+          return;
+        }
+
+        const now = Date.now();
+        item.seconds += Math.max(1, Math.round((now - item.lastCheckAt) / 1000));
+        item.lastCheckAt = now;
+        item.attempts += 1;
+        item.history.push(raw);
+
+        const val = parseNumberValue(raw);
+        const ok = !isNaN(val) && Math.abs(val - item.task.expected) < 1e-4;
+
+        if (ok) {
+          item.solved = true;
+          inp.disabled = true;
+          btn.disabled = true;
+          row.classList.add('solved');
+          msg.className = 'task-msg ok';
+          msg.textContent = '✔ Helyes érték!';
+        } else {
+          msg.className = 'task-msg err';
+          msg.textContent = '✘ Még nem jó. Ellenőrizd a behelyettesítést és a műveleti sorrendet, majd próbáld újra!';
+          inp.focus();
+          inp.select();
+        }
+
+        const solvedCount = state.items.filter(x => x.solved).length;
+        document.getElementById('progress-text').textContent = `Helyes megoldások: ${solvedCount} / ${TASKS.length}`;
+      }
+
+      function buildPayload(reason) {
+        const score = state.items.filter(x => x.solved).length;
+        const total = TASKS.length;
+        const pct = Math.round((score / total) * 100);
+        let label = 'Elégtelen (1)';
+        if (pct >= 85) label = 'Jeles (5)';
+        else if (pct >= 70) label = 'Jó (4)';
+        else if (pct >= 55) label = 'Közepes (3)';
+        else if (pct >= 40) label = 'Elégséges (2)';
+
+        return {
+          score: score,
+          total: total,
+          grade: `${label} (${pct}%)`,
+          reason: reason,
+          tasks: state.items.map((item, idx) => {
+            const currentInput = document.getElementById('ans-' + idx)?.value.trim() || '';
+            const lastAns = currentInput || (item.history.length ? item.history[item.history.length - 1] : '—');
+            return {
+              expression: item.task.exprPlain,
+              correct: item.solved,
+              finalAnswer: lastAns,
+              correctAnswer: item.task.correctText,
+              seconds: item.seconds,
+              stepErrors: item.solved ? '' : `Próbálkozások: ${item.attempts}`,
+              studentLines: item.history.length ? ['Beírt értékek: ' + item.history.join(' → ')] : [],
+              correctLines: [],
+              feedback: []
+            };
+          })
+        };
+      }
+
+      async function finalize(reason) {
+        if (state.ended) return;
+        state.ended = true;
+        state.active = false;
+
+        if (window.UJITAS) {
+          window.UJITAS.emit('lezarva');
+        }
+
+        state.items.forEach((_, idx) => {
+          const inp = document.getElementById('ans-' + idx);
+          const btn = document.getElementById('chk-' + idx);
+          if (inp) inp.disabled = true;
+          if (btn) btn.disabled = true;
+        });
+
+        const submitBtn = document.getElementById('btn-submit');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Beküldés...';
+
+        updatePadVisibility();
+
+        const payload = buildPayload(reason);
+        let sent = null;
+        if (window.UJITAS && typeof window.UJITAS.kuldes === 'function') {
+          sent = await window.UJITAS.kuldes(payload);
+        }
+
+        const statusBox = document.getElementById('submit-status');
+        statusBox.style.display = 'block';
+
+        if (sent === true) {
+          submitBtn.textContent = 'Beküldve ✔';
+          statusBox.innerHTML = `<strong style="color: var(--emerald);">✅ A házi feladatod sikeresen elküldve!</strong><br>Eredményed: <strong>${payload.score} / ${payload.total}</strong> (${payload.grade}).`;
+        } else if (sent === null) {
+          submitBtn.textContent = 'Lezárva';
+          statusBox.innerHTML = `<strong>ℹ️ Archív mód:</strong> A feladatsor lezárult (${payload.score} / ${payload.total}).`;
+        } else {
+          submitBtn.textContent = 'Küldési hiba';
+          statusBox.innerHTML = `<strong style="color: var(--red);">⚠️ Nem sikerült elküldeni az eredményt.</strong> Ellenőrizd a kapcsolatot, és frissítsd az oldalt.`;
+        }
+      }
+
+      /* Érintőképernyős billentyűzet */
+      const TOUCH = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+      let padOn = TOUCH;
+      const PAD_KEYS = [
+        ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'],
+        ['8'], ['9'], ['0'], [','], ['/'], ['−'], ['⌫', 'back', 'act', 'törlés'],
+        ['szóköz', 'space', 'sym txt', 'szóköz'], ['⏎', 'next', 'act', 'ellenőrzés'], ['⌨', 'sys', 'sym', 'rendszerbillentyűzet']
+      ];
+
+      const padGrid = document.getElementById('algPadGrid');
+      padGrid.innerHTML = PAD_KEYS.map(k =>
+        `<button type="button" class="alg-key${k[2] ? ' ' + k[2] : ''}" data-k="${k[1] || k[0]}"${k[3] ? ` aria-label="${k[3]}" title="${k[3]}"` : ''}>${k[0]}</button>`
+      ).join('');
+
+      function updatePadVisibility() {
+        const pad = document.getElementById('algPad');
+        const toggle = document.getElementById('kb-toggle');
+        const visible = padOn && state.active && !state.ended;
+        pad.classList.toggle('hidden', !visible);
+        toggle.hidden = !TOUCH || !state.active || state.ended;
+        toggle.textContent = padOn ? '⌨ Rendszerbillentyűzet' : '▦ Beépített billentyűzet';
+        document.querySelectorAll('.ans-field').forEach(inp => {
+          inp.setAttribute('inputmode', padOn ? 'none' : 'decimal');
+        });
+        document.body.style.paddingBottom = visible ? (pad.offsetHeight + 16) + 'px' : '56px';
+      }
+
+      document.getElementById('kb-toggle').addEventListener('click', () => {
+        padOn = !padOn;
+        updatePadVisibility();
+        if (state.lastFocusedInput && !state.lastFocusedInput.disabled) {
+          state.lastFocusedInput.blur();
+          state.lastFocusedInput.focus();
+        }
+      });
+
+      window.addEventListener('resize', updatePadVisibility);
+      document.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.alg-key')) e.preventDefault();
+      });
+
+      padGrid.addEventListener('click', (e) => {
+        const btn = e.target.closest('.alg-key');
+        if (!btn || !state.active || state.ended) return;
+        const key = btn.dataset.k;
+        if (key === 'sys') {
+          padOn = false;
+          updatePadVisibility();
+          return;
+        }
+        const target = state.lastFocusedInput && !state.lastFocusedInput.disabled
+          ? state.lastFocusedInput
+          : document.querySelector('.ans-field:not(:disabled)');
+        if (!target) return;
+        const idx = parseInt(target.id.replace('ans-', ''), 10);
+
+        if (key === 'next') {
+          verifyTask(idx);
+          return;
+        }
+        target.focus();
+        const start = target.selectionStart == null ? target.value.length : target.selectionStart;
+        const end = target.selectionEnd == null ? start : target.selectionEnd;
+        if (key === 'back') {
+          const cutFrom = start === end ? Math.max(0, start - 1) : start;
+          target.value = target.value.slice(0, cutFrom) + target.value.slice(end);
+          target.setSelectionRange(cutFrom, cutFrom);
+        } else {
+          const ch = key === 'space' ? ' ' : key;
+          target.value = target.value.slice(0, start) + ch + target.value.slice(end);
+          target.setSelectionRange(start + ch.length, start + ch.length);
+        }
+      });
+
+      /* Indítás és beküldés */
+      document.getElementById('btn-start').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-start');
+        btn.disabled = true;
+
+        if (window.UJITAS && typeof window.UJITAS.run === 'function') {
+          const allowed = await window.UJITAS.run('indulas');
+          if (!allowed) {
+            btn.disabled = false;
+            return;
+          }
+        }
+
+        document.getElementById('start-section').hidden = true;
+        document.getElementById('tasks-section').hidden = false;
+
+        const now = Date.now();
+        state.items.forEach(item => { item.lastCheckAt = now; });
+        state.active = true;
+        renderTaskRows();
+        updatePadVisibility();
+      });
+
+      document.getElementById('btn-submit').addEventListener('click', () => {
+        const remaining = state.items.filter(x => !x.solved).length;
+        if (remaining > 0) {
+          const ok = confirm(`Még ${remaining} feladat nincs helyesen megoldva. Biztosan beküldöd most?`);
+          if (!ok) return;
+        }
+        finalize('befejezve');
+      });
+
+      /* Kapcsolat a kozos/v1 keretrendszerrel */
+      function bindKeret() {
+        if (!window.UJITAS) return;
+        window.UJITAS.aktiv = () => !!(state.active && !state.ended);
+
+        window.UJITAS.on('lapvaltas', () => {
+          if (state.active && !state.ended) {
+            finalize('lapvaltas');
+          }
+        });
+
+        window.UJITAS.on('kilepes', () => {
+          if (state.active && !state.ended) {
+            state.ended = true;
+            state.active = false;
+            window.UJITAS.kuldes(buildPayload('lapvaltas'), { csendes: true });
+          }
+        });
+      }
+
+      if (window.UJITAS) {
+        bindKeret();
+      } else {
+        window.addEventListener('DOMContentLoaded', bindKeret);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Helyettesítési érték – 7. osztály, házi feladat</title>
+<style>
+:root{
+  --paper:#f8faf6; --grid:#dbe6ef; --card:#fff; --ink:#1d2433; --muted:#5b6578;
+  --blue:#1f4fa8; --blue-soft:#e6eefb; --red:#c0312b; --red-soft:#fdeceb; --green:#1d7a46; --green-soft:#e5f5ec; --line:#cfd8e3;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151a23; --grid:#202938; --card:#1d2431; --ink:#e8ecf3; --muted:#9aa5b8; --blue:#8fb4ff; --blue-soft:#222e47;
+    --red:#ff8d86; --red-soft:#3a2224; --green:#6fd19a; --green-soft:#1c3328; --line:#323c4f; color-scheme:dark;
+  }
+}
+html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box}
+body{margin:0; font:17px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif; color:var(--ink); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:24px 24px}
+header{position:fixed; top:0; left:0; right:0; z-index:20; background:var(--blue); color:#fff; display:flex; align-items:center; gap:12px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px; box-shadow:0 2px 0 rgba(0,0,0,.15)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header{background:#16264a; color:#e8ecf3}}
+header a{flex:none; color:inherit; text-decoration:none; font-weight:600; font-size:.9rem; border:1.5px solid currentColor; border-radius:8px; padding:6px 12px; white-space:nowrap}
+header a:hover,header a:focus-visible{background:rgba(255,255,255,.18)}
+header h1{margin:0; font-size:1.1rem; line-height:1.25}
+main{max-width:780px; margin:0 auto; padding:calc(84px + env(safe-area-inset-top,0px)) 16px 56px}
+section{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px 22px; margin:0 0 22px}
+h2{margin:0 0 .6em; font-size:1.3rem; color:var(--blue); line-height:1.3}
+h3{margin:1.1em 0 .4em; font-size:1.05rem}
+p{margin:.6em 0}
+.def{background:var(--blue-soft); border-left:5px solid var(--blue); border-radius:6px; padding:12px 16px; margin:.8em 0}
+.term{color:var(--red); font-weight:700}
+.m{font-family:"Cambria Math","Latin Modern Math",Cambria,Georgia,serif; font-size:1.08em}
+.ex{background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin:.6em 0; overflow-x:auto}
+.ex p{margin:.25em 0; white-space:nowrap}
+.order{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:.6em 0; font-weight:600; color:var(--green)}
+.order span{border:1.5px solid var(--red); background:var(--red-soft); color:var(--ink); border-radius:6px; padding:2px 10px}
+.fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 3px; font-size:.95em; line-height:1.3}
+.fr>span:first-child{border-bottom:1.5px solid currentColor; padding:0 4px}
+.fr>span:last-child{padding:0 4px}
+.hz-btn{font:inherit; font-size:.95rem; font-weight:600; cursor:pointer; border-radius:8px; padding:8px 16px; border:1.5px solid var(--blue); background:var(--blue); color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hz-btn{color:#101725}}
+.hz-btn:hover{filter:brightness(1.1)} .hz-btn:disabled{opacity:.45; cursor:not-allowed}
+.hz-rules{font-size:.92rem; color:var(--muted); padding-left:20px}
+.hz-bar{position:sticky; top:calc(60px + env(safe-area-inset-top,0px)); z-index:5; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 12px; margin-bottom:12px; font-weight:600}
+.hz-ins button{font:inherit; min-width:36px; margin-left:4px; padding:3px 8px; border:1px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink); cursor:pointer}
+.hz-task{border-top:1px dashed var(--line); padding:14px 0}
+.hz-task:first-child{border-top:0}
+.hz-task.ok{background:var(--green-soft); border-radius:8px; padding:14px 10px}
+.hz-q{margin:0 0 8px; font-size:1.1rem} .hz-ha{margin-left:14px; color:var(--muted); font-family:"Cambria Math",Cambria,Georgia,serif}
+.hz-row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.hz-row label{font-weight:600}
+.hz-row input{font:inherit; font-size:1.05rem; width:min(100%,200px); padding:8px 12px; border-radius:8px; border:1.5px solid var(--line); background:var(--paper); color:var(--ink)}
+.hz-fb{display:none; margin-top:8px; padding:8px 12px; border-radius:8px; font-size:.95rem}
+.hz-fb.ok,.hz-fb.no{display:block}
+.hz-fb.ok{border-left:5px solid var(--green); color:var(--green); font-weight:600}
+.hz-fb.no{background:var(--red-soft); border-left:5px solid var(--red)}
+#hzSend{margin-top:14px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--red); outline-offset:2px}
+@media (max-width:480px){body{font-size:16px} main{padding-left:10px; padding-right:10px} section{padding:16px 12px} header h1{font-size:1rem}}
+</style>
+</head>
+<body>
+<header>
+  <a href="../index.html" aria-label="Vissza a 7. osztály oldalára">← Vissza</a>
+  <h1>Helyettesítési érték – házi feladat</h1>
+</header>
+
+<main>
+<section>
+  <h2>Algebrai kifejezések helyettesítési értékének meghatározása</h2>
+  <div class="def">A betűk (változók) helyére az <span class="term">alaphalmazból</span> különböző elemeket írhatunk, amelyekkel a kijelölt műveleteket elvégezve megkapjuk az algebrai kifejezés <span class="term">helyettesítési értékeit</span>.</div>
+
+  <h3>1. példa</h3>
+  <p>Határozzuk meg a <span class="m">4x</span> kifejezés helyettesítési értékét, ha a) <span class="m">x = 2</span>; b) <span class="m">x = −3</span>.</p>
+  <div class="ex m">
+    <p><b>a)</b> x = 2 esetén: 4x = 4·x = 4·2 = 8</p>
+    <p><b>b)</b> x = −3 esetén: 4x = 4·x = 4·(−3) = −12</p>
+  </div>
+
+  <h3>2. példa</h3>
+  <p>Határozzuk meg a kifejezések helyettesítési értékét, ha <span class="m">a = 5; b = −2</span>.</p>
+  <div class="ex m">
+    <p><b>a)</b> 0,5a − 2b² = 0,5·a − 2·b² = 0,5·5 − 2·(−2)² = 2,5 − 2·4 = 2,5 − 8 = −5,5</p>
+  </div>
+  <p><b style="color:var(--green)">A műveletek elvégzésének sorrendje, ha nincs zárójel:</b></p>
+  <div class="order"><span>hatványozás</span>→<span>szorzás, osztás</span>→<span>összeadás, kivonás</span></div>
+  <div class="ex m">
+    <p><b>b)</b> 0,5a − (2b)² = 0,5·a − (2·b)² = 0,5·5 − [2·(−2)]² = 2,5 − (−4)² = 2,5 − 16 = −13,5</p>
+    <p><b>c)</b> 0,5a + (−2b)² = 0,5·a + (−2·b)² = 0,5·5 + [−2·(−2)]² = 2,5 + 4² = 2,5 + 16 = 18,5</p>
+  </div>
+</section>
+
+<section>
+  <h2>3.09. Határozd meg a kifejezések helyettesítési értékét!</h2>
+  <div id="feladatok"></div>
+</section>
+</main>
+
+<script>
+window.UJITAS_CFG = {
+  mod: 'elo',                                   // archíváláskor: 'archiv'
+  classId: '7',
+  assignmentType: 'Hazi',
+  taskTitle: 'Algebrai kifejezések helyettesítési értéke',
+  setId: 'alg-3.09',
+  tema: ['algebra-helyettesites'],
+};
+</script>
+<script src="../../../kozos/v1/betolto.js"></script>
+</body>
+</html>

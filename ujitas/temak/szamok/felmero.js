@@ -19,10 +19,19 @@
 
   U.css('fm-stilus',
     'body{margin:0;min-height:100vh;background:linear-gradient(135deg,#020617 0%,#1e1b4b 55%,#0f172a 100%);background-attachment:fixed;color:#e2e8f0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}' +
-    '.fm-fo{max-width:900px;margin:0 auto;padding:18px 16px 60px}' +
-    '.fm-vissza{display:inline-block;padding:8px 16px;border:1px solid #475569;border-radius:10px;background:rgba(51,65,85,.6);color:#cbd5e1;text-decoration:none;font-weight:600;font-size:14px}' +
+    '.fm-fo{max-width:900px;width:100%;margin:0 auto;padding:0 16px 60px;box-sizing:border-box}' +
+    '.fm-fejlec{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:12px 16px;margin:0 -16px 18px;background:rgba(15,23,42,.96);border-bottom:1px solid #334155;box-shadow:0 6px 20px rgba(0,0,0,.35);box-sizing:border-box}' +
+    '.fm-vissza{flex-shrink:0;display:inline-block;padding:8px 14px;border:1px solid #475569;border-radius:10px;background:rgba(51,65,85,.7);color:#e2e8f0;text-decoration:none;font-weight:600;font-size:14px;white-space:nowrap}' +
     '.fm-vissza:hover{background:#0ea5e9;border-color:#38bdf8;color:#fff}' +
-    '.fm-fo h1{margin:18px 0 4px;font-size:28px;color:#34d399;text-align:center}.fm-alcim{margin:0 0 18px;text-align:center;color:#cbd5e1}' +
+    '.fm-fejlec h1{flex:1 1 auto;min-width:0;margin:0;font-size:22px;line-height:1.25;color:#34d399;text-align:center}' +
+    '.fm-alcim{flex-basis:100%;width:100%;margin:0;font-size:13px;color:#cbd5e1;text-align:center}' +
+    '@media (max-width:600px){' +
+      '.fm-fo{padding:0 12px 60px}' +
+      '.fm-fejlec{gap:6px 10px;padding:10px 12px;margin:0 -12px 14px}' +
+      '.fm-vissza{padding:6px 10px;font-size:13px}' +
+      '.fm-fejlec h1{font-size:17px;text-align:left}' +
+      '.fm-alcim{font-size:12px;text-align:center}' +
+    '}' +
     '.fm-kartya{margin-bottom:16px;padding:18px;border:1px solid #334155;border-radius:16px;background:rgba(15,23,42,.7);box-shadow:0 8px 24px rgba(0,0,0,.3)}' +
     '.fm-kartya p{margin:0 0 10px;line-height:1.55}.fm-kartya .fm-kicsi{font-size:14px;color:#94a3b8}' +
     '.fm-gomb{padding:11px 22px;border:0;border-radius:12px;background:#34d399;color:#0f172a;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 0 18px rgba(52,211,153,.45)}' +
@@ -58,8 +67,12 @@
     ? '<p class="fm-kicsi">A házi dolgozat indításakor be kell írnod a személyes kódodat, amit a tanárodtól kaptál. Ha elhagyod az oldalt, a feladatsor lezárul.</p>' : '';
   document.body.insertAdjacentHTML('afterbegin',
     '<div class="fm-fo">' +
-    '<a class="fm-vissza" href="' + esc(cfg.visszaHref || '../../../7-osztaly.html') + '">⬅ Vissza a 7. osztály oldalára</a>' +
-    '<h1>' + esc(cfg.cim || 'Házi dolgozat') + '</h1><p class="fm-alcim">' + esc(cfg.alcim || '') + '</p>' + SZABALYOK +
+    '<header class="fm-fejlec">' +
+      '<a class="fm-vissza" href="' + esc(cfg.visszaHref || '../../../7-osztaly.html') + '">⬅ Vissza</a>' +
+      '<h1>' + esc(cfg.cim || 'Házi dolgozat') + '</h1>' +
+      (cfg.alcim ? '<p class="fm-alcim">' + esc(cfg.alcim) + '</p>' : '') +
+    '</header>' +
+    SZABALYOK +
     '<section id="fm-start" class="fm-kartya"><p>Ez a lap házi dolgozatként működik. A feladatok egyenként, külön ablakban nyílnak meg, és az Értékelés gombbal zárhatók le.</p>' + KOD_SZOVEG +
     '<button type="button" id="fm-inditas" class="fm-gomb">Házi dolgozat indítása</button></section>' +
     '<section id="fm-lista" hidden><p id="fm-megjegyzes" class="fm-kicsi" role="status"></p><div id="fm-grid" class="fm-grid"></div>' +
